@@ -1,0 +1,675 @@
+/* =========================================================================
+ * PROTEIN ATLAS SIBIU — 05 STAT BARS
+ *
+ * The videogame HUD layer: RPG stat bars, tier badges, pip meters,
+ * macro distribution bars and taste-profile meters.
+ *
+ * Every bar is driven by two custom properties set inline by JS:
+ *   --v : the value, 0–100 (unitless number)
+ *   --c : the accent colour for the fill
+ * ========================================================================= */
+
+/* =========================================================================
+ * 1. THE STAT BAR
+ * ========================================================================= */
+.pf-stat {
+  display: grid;
+  grid-template-columns: 74px minmax(0, 1fr) 34px;
+  align-items: center;
+  gap: var(--sp-2);
+  min-height: 18px;
+}
+
+.pf-stat__label {
+  font-size: var(--fs-3xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-4);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pf-stat__track {
+  position: relative;
+  height: 10px;
+  border-radius: 3px;
+  background: var(--stat-track);
+  border: 1px solid var(--stat-track-edge);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.pf-stat__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(var(--v, 0) * 1%);
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--c, var(--accent)) 55%, transparent),
+    var(--c, var(--accent))
+  );
+  box-shadow: 0 0 10px -2px color-mix(in srgb, var(--c, var(--accent)) 70%, transparent);
+  transform-origin: left center;
+  animation: pf-bar-grow var(--dur-bar) var(--ease-out) both;
+}
+
+/* The segment notches that make it read as a game bar, not a progress bar. */
+.pf-stat__track::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    to right,
+    transparent 0,
+    transparent calc(10% - 1.5px),
+    var(--stat-notch) calc(10% - 1.5px),
+    var(--stat-notch) 10%
+  );
+}
+
+/* A moving specular highlight along the filled portion. */
+.pf-stat__fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.28) 48%,
+    transparent 76%
+  );
+  transform: translateX(-100%);
+  animation: pf-bar-sheen 3.4s var(--ease-both) 0.6s infinite;
+}
+
+:root[data-fx='off'] .pf-stat__fill::after {
+  display: none;
+}
+
+.pf-stat__val {
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  font-weight: var(--fw-bold);
+  text-align: right;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- size variants --- */
+.pf-stat--lg {
+  grid-template-columns: 104px minmax(0, 1fr) 46px;
+  min-height: 24px;
+}
+
+.pf-stat--lg .pf-stat__track {
+  height: 14px;
+  border-radius: 4px;
+}
+
+.pf-stat--lg .pf-stat__label,
+.pf-stat--lg .pf-stat__val {
+  font-size: var(--fs-2xs);
+}
+
+.pf-stat--xs {
+  grid-template-columns: 56px minmax(0, 1fr) 26px;
+}
+
+.pf-stat--xs .pf-stat__track {
+  height: 7px;
+}
+
+/* Label-less variant used inside dense cards. */
+.pf-stat--bare {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.pf-stat--bare .pf-stat__label,
+.pf-stat--bare .pf-stat__val {
+  display: none;
+}
+
+/* Colour-by-value helper: JS adds one of these when no explicit --c given. */
+.pf-stat[data-grade='s'] { --c: var(--tier-s); }
+.pf-stat[data-grade='a'] { --c: var(--tier-a); }
+.pf-stat[data-grade='b'] { --c: var(--tier-b); }
+.pf-stat[data-grade='c'] { --c: var(--tier-c); }
+.pf-stat[data-grade='d'] { --c: var(--tier-d); }
+.pf-stat[data-grade='e'] { --c: var(--tier-e); }
+
+.pf-statlist {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* =========================================================================
+ * 2. TIER BADGE — the S/A/B/C/D/E rank stamp
+ * ========================================================================= */
+.pf-tier {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--r-md);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-black);
+  line-height: 1;
+  color: var(--tier-fg, var(--tier-e));
+  background: linear-gradient(
+    150deg,
+    color-mix(in srgb, var(--tier-fg, var(--tier-e)) 22%, transparent),
+    color-mix(in srgb, var(--tier-bg, var(--tier-e-2)) 12%, transparent)
+  );
+  border: 1px solid color-mix(in srgb, var(--tier-fg, var(--tier-e)) 45%, transparent);
+  box-shadow: 0 0 18px -6px var(--tier-glow, transparent),
+              inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  text-shadow: 0 0 12px var(--tier-glow, transparent);
+}
+
+.pf-tier[data-tier='S'] {
+  --tier-fg: var(--tier-s);
+  --tier-bg: var(--tier-s-2);
+  --tier-glow: var(--tier-s-glow);
+}
+
+.pf-tier[data-tier='A'] {
+  --tier-fg: var(--tier-a);
+  --tier-bg: var(--tier-a-2);
+  --tier-glow: var(--tier-a-glow);
+}
+
+.pf-tier[data-tier='B'] {
+  --tier-fg: var(--tier-b);
+  --tier-bg: var(--tier-b-2);
+  --tier-glow: var(--tier-b-glow);
+}
+
+.pf-tier[data-tier='C'] {
+  --tier-fg: var(--tier-c);
+  --tier-bg: var(--tier-c-2);
+  --tier-glow: var(--tier-c-glow);
+}
+
+.pf-tier[data-tier='D'] {
+  --tier-fg: var(--tier-d);
+  --tier-bg: var(--tier-d-2);
+  --tier-glow: var(--tier-d-glow);
+}
+
+.pf-tier[data-tier='E'] {
+  --tier-fg: var(--tier-e);
+  --tier-bg: var(--tier-e-2);
+  --tier-glow: var(--tier-e-glow);
+}
+
+/* S-rank gets an animated shimmer — it should feel like a prize. */
+.pf-tier[data-tier='S']::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    115deg,
+    transparent 28%,
+    var(--tier-s) 46%,
+    var(--raw-yellow-200) 52%,
+    transparent 70%
+  );
+  background-size: 260% 100%;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: pf-tier-shine 3.2s linear infinite;
+  pointer-events: none;
+}
+
+:root[data-fx='off'] .pf-tier[data-tier='S']::before {
+  animation: none;
+  opacity: 0.5;
+}
+
+.pf-tier__sub {
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0 5px;
+  border-radius: var(--r-full);
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.03em;
+  color: var(--bg-panel);
+  background: var(--tier-fg, var(--tier-e));
+  white-space: nowrap;
+}
+
+.pf-tier--sm {
+  width: 28px;
+  height: 28px;
+  font-size: var(--fs-md);
+  border-radius: var(--r-sm);
+}
+
+.pf-tier--lg {
+  width: 62px;
+  height: 62px;
+  font-size: var(--fs-3xl);
+  border-radius: var(--r-lg);
+}
+
+/* =========================================================================
+ * 3. PIP METER — 0..5 discrete rating (timing slots, taste axes)
+ * ========================================================================= */
+.pf-pips {
+  display: inline-flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.pf-pip {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--stat-track);
+  border: 1px solid var(--stat-track-edge);
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.pf-pip.is-on {
+  background: var(--c, var(--accent));
+  border-color: transparent;
+  box-shadow: 0 0 7px -1px color-mix(in srgb, var(--c, var(--accent)) 75%, transparent);
+}
+
+.pf-pips--round .pf-pip {
+  border-radius: 50%;
+}
+
+.pf-pips--lg .pf-pip {
+  width: 11px;
+  height: 11px;
+}
+
+/* =========================================================================
+ * 4. MACRO BAR — stacked share-of-calories bar
+ * ========================================================================= */
+.pf-macrobar {
+  display: flex;
+  height: 9px;
+  border-radius: var(--r-full);
+  overflow: hidden;
+  background: var(--stat-track);
+  border: 1px solid var(--stat-track-edge);
+}
+
+.pf-macrobar__seg {
+  height: 100%;
+  transition: width var(--dur-slow) var(--ease-out);
+  position: relative;
+}
+
+/* 2px surface-coloured gap between stacked segments, so adjacent macros
+ * stay separable without relying on hue contrast alone. */
+.pf-macrobar__seg + .pf-macrobar__seg {
+  border-left: 2px solid var(--bg-panel);
+}
+
+.pf-macrobar__seg--protein { background: linear-gradient(180deg, var(--macro-protein), var(--macro-protein-2)); }
+.pf-macrobar__seg--carbs   { background: linear-gradient(180deg, var(--macro-carbs),   var(--macro-carbs-2)); }
+.pf-macrobar__seg--fat     { background: linear-gradient(180deg, var(--macro-fat),     var(--macro-fat-2)); }
+.pf-macrobar__seg--fiber   { background: linear-gradient(180deg, var(--macro-fiber),   var(--macro-fiber-2)); }
+
+.pf-macrobar--tall {
+  height: 16px;
+  border-radius: var(--r-sm);
+}
+
+.pf-macrobar--tall .pf-macrobar__seg {
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: var(--fw-bold);
+  color: rgba(4, 12, 20, 0.82);
+  overflow: hidden;
+}
+
+.pf-macrolegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  font-size: var(--fs-3xs);
+  color: var(--text-4);
+}
+
+.pf-macrolegend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.pf-macrolegend__swatch {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  background: var(--c);
+  flex-shrink: 0;
+}
+
+/* =========================================================================
+ * 5. MACRO NUMBER STRIP — the P / C / F / kcal readout
+ * ========================================================================= */
+.pf-macros {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+.pf-macro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 5px 2px 6px;
+  background: var(--bg-panel-2);
+  position: relative;
+}
+
+.pf-macro::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--c, var(--text-4));
+  opacity: 0.85;
+}
+
+.pf-macro__v {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--text-1);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.pf-macro__k {
+  font-size: 9px;
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-4);
+}
+
+.pf-macro--protein { --c: var(--macro-protein); }
+.pf-macro--carbs   { --c: var(--macro-carbs); }
+.pf-macro--fat     { --c: var(--macro-fat); }
+.pf-macro--kcal    { --c: var(--macro-kcal); }
+.pf-macro--fiber   { --c: var(--macro-fiber); }
+.pf-macro--salt    { --c: var(--macro-salt); }
+
+.pf-macro--protein .pf-macro__v { color: var(--macro-protein); }
+
+.pf-macros--6 {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+/* =========================================================================
+ * 6. EFFORT / TIME METERS
+ * ========================================================================= */
+.pf-effort {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fs-2xs);
+  color: var(--text-4);
+}
+
+.pf-effort__flames {
+  display: inline-flex;
+  gap: 1px;
+  font-size: 10px;
+  line-height: 1;
+}
+
+.pf-effort__flame {
+  opacity: 0.22;
+  filter: grayscale(1);
+}
+
+.pf-effort__flame.is-on {
+  opacity: 1;
+  filter: none;
+}
+
+.pf-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-semi);
+  color: var(--text-3);
+}
+
+.pf-time--instant { color: var(--ok); }
+.pf-time--quick   { color: var(--stat-convenience); }
+.pf-time--slow    { color: var(--stat-speed); }
+
+/* =========================================================================
+ * 7. TIMING RING — 24h clock showing when to eat
+ * ========================================================================= */
+.pf-timing {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 3px;
+}
+
+.pf-timing__slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 5px 2px;
+  border-radius: var(--r-sm);
+  background: var(--bg-inset);
+  border: 1px solid transparent;
+  transition: border-color var(--dur-fast) var(--ease-out),
+              background var(--dur-fast) var(--ease-out);
+}
+
+.pf-timing__slot[data-score='5'],
+.pf-timing__slot[data-score='4'] {
+  background: color-mix(in srgb, var(--ok) 12%, transparent);
+  border-color: color-mix(in srgb, var(--ok) 28%, transparent);
+}
+
+.pf-timing__slot[data-score='0'],
+.pf-timing__slot[data-score='1'] {
+  opacity: 0.42;
+}
+
+.pf-timing__slot.is-now {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent-dim), 0 0 16px -6px var(--accent-glow);
+}
+
+.pf-timing__icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.pf-timing__name {
+  font-size: 8px;
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--text-4);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.pf-timing__bar {
+  width: 100%;
+  height: 3px;
+  border-radius: var(--r-full);
+  background: var(--stat-track);
+  overflow: hidden;
+}
+
+.pf-timing__bar span {
+  display: block;
+  height: 100%;
+  width: calc(var(--v, 0) * 20%);
+  background: var(--ok);
+  border-radius: inherit;
+}
+
+/* =========================================================================
+ * 8. TASTE PROFILE METERS
+ * ========================================================================= */
+.pf-taste {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: var(--sp-2) var(--sp-4);
+}
+
+.pf-taste__axis {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  font-size: var(--fs-2xs);
+  color: var(--text-3);
+}
+
+.pf-taste__axis[data-axis='sweetness']  { --c: #f0abfc; }
+.pf-taste__axis[data-axis='saltiness']  { --c: #93c5fd; }
+.pf-taste__axis[data-axis='umami']      { --c: #fca5a5; }
+.pf-taste__axis[data-axis='richness']   { --c: #fcd34d; }
+.pf-taste__axis[data-axis='intensity']  { --c: #a78bfa; }
+
+/* =========================================================================
+ * 9. SCORE ORB — the single headline number
+ * ========================================================================= */
+.pf-orb {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  flex-shrink: 0;
+}
+
+.pf-orb svg {
+  position: absolute;
+  inset: 0;
+  transform: rotate(-90deg);
+  overflow: visible;
+}
+
+.pf-orb__track {
+  fill: none;
+  stroke: var(--stat-track);
+  stroke-width: 5;
+}
+
+.pf-orb__ring {
+  fill: none;
+  stroke: var(--c, var(--accent));
+  stroke-width: 5;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--c, var(--accent)) 60%, transparent));
+  transition: stroke-dashoffset var(--dur-bar) var(--ease-out);
+}
+
+.pf-orb__value {
+  position: relative;
+  font-family: var(--font-mono);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-black);
+  color: var(--text-1);
+  line-height: 1;
+}
+
+.pf-orb__unit {
+  position: relative;
+  font-size: 8px;
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-4);
+  margin-top: 1px;
+}
+
+.pf-orb--lg {
+  width: 92px;
+  height: 92px;
+}
+
+.pf-orb--lg .pf-orb__value {
+  font-size: var(--fs-2xl);
+}
+
+/* =========================================================================
+ * 10. DENSITY METER — protein as % of calories, the "purity" gauge
+ * ========================================================================= */
+.pf-purity {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.pf-purity__track {
+  position: relative;
+  flex: 1 1 auto;
+  height: 6px;
+  border-radius: var(--r-full);
+  background: linear-gradient(
+    90deg,
+    var(--bad) 0%,
+    var(--warn) 32%,
+    var(--ok) 62%,
+    var(--stat-protein) 100%
+  );
+  opacity: 0.28;
+}
+
+.pf-purity__marker {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--v, 0) * 1%);
+  transform: translate(-50%, -50%);
+  width: 3px;
+  height: 14px;
+  border-radius: var(--r-full);
+  background: var(--text-1);
+  box-shadow: 0 0 0 2px var(--bg-panel), 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.pf-purity__label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  color: var(--text-2);
+  min-width: 40px;
+  text-align: right;
+}

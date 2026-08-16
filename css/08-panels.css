@@ -1,0 +1,850 @@
+/* =========================================================================
+ * PROTEIN ATLAS SIBIU — 08 PANELS
+ * Hero HUD, target calculator, meal tray, compare grid, leaderboards,
+ * shopping list, toasts, "what should I eat now" oracle.
+ * ========================================================================= */
+
+/* =========================================================================
+ * 1. HERO HUD
+ * ========================================================================= */
+.pf-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--r-xl);
+  border: 1px solid var(--border);
+  background:
+    linear-gradient(150deg, rgba(30, 201, 159, 0.09), transparent 46%),
+    linear-gradient(300deg, rgba(56, 189, 248, 0.09), transparent 46%),
+    var(--bg-panel);
+  padding: var(--sp-6);
+  box-shadow: var(--shadow-md), var(--shadow-inset);
+}
+
+.pf-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(140, 175, 225, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(140, 175, 225, 0.055) 1px, transparent 1px);
+  background-size: 34px 34px;
+  mask-image: radial-gradient(circle at 22% 0%, #000, transparent 72%);
+  -webkit-mask-image: radial-gradient(circle at 22% 0%, #000, transparent 72%);
+  pointer-events: none;
+}
+
+.pf-hero > * {
+  position: relative;
+}
+
+.pf-hero__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-6);
+  flex-wrap: wrap;
+}
+
+.pf-hero__title {
+  font-size: var(--fs-3xl);
+  font-weight: var(--fw-black);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--text-1);
+}
+
+.pf-hero__title em {
+  font-style: normal;
+  background: linear-gradient(100deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.pf-hero__sub {
+  margin-top: var(--sp-2);
+  max-width: 62ch;
+  color: var(--text-3);
+  line-height: var(--lh-loose);
+}
+
+/* ---- stat counters ---- */
+.pf-hero__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
+  gap: var(--sp-2);
+  margin-top: var(--sp-5);
+}
+
+.pf-kpi {
+  padding: var(--sp-3);
+  border-radius: var(--r-md);
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.pf-kpi::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--c, var(--accent));
+  opacity: 0.7;
+}
+
+.pf-kpi__v {
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-black);
+  line-height: 1;
+  color: var(--text-1);
+  font-variant-numeric: tabular-nums;
+}
+
+.pf-kpi__k {
+  font-size: var(--fs-3xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-4);
+}
+
+.pf-kpi--protein { --c: var(--macro-protein); }
+.pf-kpi--stores  { --c: var(--stat-satiety); }
+.pf-kpi--cats    { --c: var(--stat-versatility); }
+.pf-kpi--ready   { --c: var(--stat-convenience); }
+.pf-kpi--cheap   { --c: var(--stat-value); }
+
+/* =========================================================================
+ * 2. TARGET CALCULATOR
+ * ========================================================================= */
+.pf-calc {
+  min-width: 268px;
+  flex: 0 1 340px;
+  padding: var(--sp-4);
+  border-radius: var(--r-lg);
+  background: var(--bg-inset);
+  border: 1px solid var(--border-strong);
+}
+
+.pf-calc__title {
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-4);
+  margin-bottom: var(--sp-3);
+}
+
+.pf-calc__row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-2);
+}
+
+.pf-calc__row label {
+  font-size: var(--fs-2xs);
+  color: var(--text-3);
+}
+
+.pf-calc__result {
+  margin-top: var(--sp-3);
+  padding: var(--sp-3);
+  border-radius: var(--r-md);
+  background: var(--macro-protein-soft);
+  border: 1px solid color-mix(in srgb, var(--macro-protein) 30%, transparent);
+  text-align: center;
+}
+
+.pf-calc__result b {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-black);
+  color: var(--macro-protein);
+  line-height: 1.1;
+}
+
+.pf-calc__result span {
+  font-size: var(--fs-2xs);
+  color: var(--text-3);
+}
+
+.pf-calc__split {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3px;
+  margin-top: var(--sp-2);
+  font-size: var(--fs-3xs);
+  text-align: center;
+  color: var(--text-4);
+}
+
+.pf-calc__split b {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-2);
+}
+
+/* =========================================================================
+ * 3. ORACLE — "ce mănânc acum?"
+ * ========================================================================= */
+.pf-oracle {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-4) var(--sp-5);
+  border-radius: var(--r-lg);
+  border: 1px solid color-mix(in srgb, var(--accent) 26%, transparent);
+  background: linear-gradient(
+    115deg,
+    color-mix(in srgb, var(--accent) 11%, var(--bg-panel)),
+    var(--bg-panel) 62%
+  );
+  flex-wrap: wrap;
+}
+
+.pf-oracle__icon {
+  font-size: 30px;
+  line-height: 1;
+}
+
+.pf-oracle__txt {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.pf-oracle__txt h3 {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  color: var(--text-1);
+}
+
+.pf-oracle__txt p {
+  font-size: var(--fs-xs);
+  color: var(--text-4);
+  margin-top: 2px;
+}
+
+.pf-oracle__slot {
+  padding: 2px 9px;
+  border-radius: var(--r-full);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+
+/* =========================================================================
+ * 4. MEAL TRAY — the docked builder
+ * ========================================================================= */
+.pf-tray {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 60;
+  /* Default state: only the handle peeks above the bottom edge, so the
+   * running protein total is always visible without covering the grid. */
+  transform: translateY(calc(100% - var(--tray-peek, 52px)));
+  transition: transform var(--dur-slow) var(--ease-out);
+  background: color-mix(in srgb, var(--bg-panel) 94%, transparent);
+  backdrop-filter: blur(18px) saturate(1.5);
+  -webkit-backdrop-filter: blur(18px) saturate(1.5);
+  border-top: 1px solid var(--border-strong);
+  box-shadow: 0 -18px 50px rgba(0, 0, 0, 0.45);
+  max-height: 74vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.pf-tray.is-open {
+  transform: translateY(0);
+}
+
+/* Fully out of the way when there is nothing in it. */
+.pf-tray.is-hidden {
+  transform: translateY(100%);
+}
+
+.pf-tray__handle {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-3) var(--sp-5);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  cursor: pointer;
+}
+
+.pf-tray__grip {
+  width: 34px;
+  height: 4px;
+  border-radius: var(--r-full);
+  background: var(--border-loud);
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.pf-tray__title {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-2);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.pf-tray__badge {
+  min-width: 20px;
+  padding: 1px 6px;
+  border-radius: var(--r-full);
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  font-weight: var(--fw-bold);
+  text-align: center;
+  color: var(--accent-ink);
+  background: var(--accent);
+}
+
+.pf-tray__totals {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+
+.pf-tray__total {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.1;
+}
+
+.pf-tray__total b {
+  font-family: var(--font-mono);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  color: var(--c, var(--text-1));
+}
+
+.pf-tray__total span {
+  font-size: 9px;
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-4);
+}
+
+.pf-tray__body {
+  overflow-y: auto;
+  padding: var(--sp-4) var(--sp-5) var(--sp-5);
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: var(--sp-5);
+  align-items: start;
+}
+
+.pf-tray__items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.pf-trayitem {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto auto;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--r-md);
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+}
+
+.pf-trayitem__emoji {
+  font-size: 18px;
+}
+
+.pf-trayitem__name {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.pf-trayitem__name b {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semi);
+  color: var(--text-1);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pf-trayitem__name small {
+  font-size: var(--fs-3xs);
+  color: var(--text-4);
+}
+
+.pf-trayitem__macros {
+  display: flex;
+  gap: var(--sp-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  white-space: nowrap;
+}
+
+.pf-trayitem__macros i {
+  font-style: normal;
+  color: var(--text-4);
+}
+
+/* ---- progress panel ---- */
+.pf-progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  border-radius: var(--r-md);
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+}
+
+.pf-progress__row {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.pf-progress__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: var(--fs-2xs);
+  color: var(--text-3);
+}
+
+.pf-progress__head b {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-bold);
+  color: var(--text-1);
+}
+
+.pf-progress__track {
+  position: relative;
+  height: 12px;
+  border-radius: var(--r-full);
+  background: var(--stat-track);
+  border: 1px solid var(--stat-track-edge);
+  overflow: hidden;
+}
+
+.pf-progress__fill {
+  height: 100%;
+  width: calc(min(var(--v, 0), 100) * 1%);
+  border-radius: inherit;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--c) 55%, transparent), var(--c));
+  transition: width var(--dur-slow) var(--ease-out);
+}
+
+.pf-progress__over {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    color-mix(in srgb, var(--bad) 55%, transparent) 0 6px,
+    transparent 6px 12px
+  );
+  opacity: 0;
+}
+
+.pf-progress__row.is-over .pf-progress__over {
+  opacity: 1;
+}
+
+/* =========================================================================
+ * 5. COMPARE GRID
+ * ========================================================================= */
+.pf-compare {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  background: var(--bg-panel);
+}
+
+.pf-compare table {
+  width: 100%;
+  min-width: 640px;
+}
+
+.pf-compare th,
+.pf-compare td {
+  padding: var(--sp-3);
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+  text-align: center;
+}
+
+.pf-compare thead th {
+  position: sticky;
+  top: 0;
+  background: var(--bg-panel-2);
+  z-index: 2;
+}
+
+.pf-compare tbody th {
+  text-align: left;
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-semi);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-4);
+  white-space: nowrap;
+  position: sticky;
+  left: 0;
+  background: var(--bg-panel);
+  z-index: 1;
+  min-width: 150px;
+}
+
+.pf-compare td {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-2);
+  min-width: 140px;
+}
+
+.pf-compare td.is-best {
+  color: var(--macro-protein);
+  font-weight: var(--fw-bold);
+  background: var(--macro-protein-soft);
+}
+
+.pf-compare td.is-worst {
+  color: var(--text-4);
+}
+
+.pf-compare__head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.pf-compare__head .pf-card__icon {
+  width: 32px;
+  height: 32px;
+  font-size: 17px;
+}
+
+.pf-compare__name {
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-semi);
+  color: var(--text-1);
+  line-height: 1.25;
+  max-width: 150px;
+}
+
+.pf-compare__remove {
+  font-size: var(--fs-3xs);
+  color: var(--text-4);
+}
+
+.pf-compare__remove:hover {
+  color: var(--bad);
+}
+
+/* =========================================================================
+ * 6. LEADERBOARDS
+ * ========================================================================= */
+.pf-boards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: var(--sp-4);
+}
+
+.pf-board {
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  background: var(--bg-panel);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.pf-board__head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(
+    120deg,
+    color-mix(in srgb, var(--c, var(--accent)) 13%, var(--bg-panel-2)),
+    var(--bg-panel-2) 65%
+  );
+}
+
+.pf-board__icon {
+  font-size: var(--fs-lg);
+}
+
+.pf-board__title {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--text-1);
+}
+
+.pf-board__unit {
+  margin-left: auto;
+  font-size: var(--fs-3xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-4);
+}
+
+.pf-board__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.pf-board__row {
+  display: grid;
+  grid-template-columns: 26px auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out);
+  text-align: left;
+  width: 100%;
+}
+
+.pf-board__row:last-child {
+  border-bottom: none;
+}
+
+.pf-board__row:hover {
+  background: var(--bg-hover);
+}
+
+.pf-board__rank {
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  color: var(--text-4);
+  text-align: center;
+}
+
+.pf-board__row:nth-child(1) .pf-board__rank { color: var(--tier-s); }
+.pf-board__row:nth-child(2) .pf-board__rank { color: var(--text-2); }
+.pf-board__row:nth-child(3) .pf-board__rank { color: var(--stat-speed); }
+
+.pf-board__emoji {
+  font-size: 15px;
+}
+
+.pf-board__name {
+  min-width: 0;
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pf-board__val {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--c, var(--accent));
+  white-space: nowrap;
+}
+
+/* =========================================================================
+ * 7. SHOPPING LIST
+ * ========================================================================= */
+.pf-shop {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--sp-4);
+}
+
+.pf-shop__store {
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: var(--bg-panel);
+}
+
+.pf-shop__head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--store-color, var(--accent)) 12%, var(--bg-panel-2));
+}
+
+.pf-shop__name {
+  font-weight: var(--fw-bold);
+  color: var(--text-1);
+}
+
+.pf-shop__cost {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--stat-value);
+}
+
+.pf-shop__list {
+  list-style: none;
+  padding: var(--sp-2);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pf-shop__item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-sm);
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.pf-shop__item:hover {
+  background: var(--bg-hover);
+}
+
+.pf-shop__item input {
+  accent-color: var(--accent);
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+  cursor: pointer;
+}
+
+.pf-shop__item.is-done {
+  opacity: 0.45;
+  text-decoration: line-through;
+}
+
+.pf-shop__qty {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  color: var(--text-4);
+  white-space: nowrap;
+}
+
+/* =========================================================================
+ * 8. TOASTS
+ * ========================================================================= */
+.pf-toasts {
+  position: fixed;
+  right: var(--sp-4);
+  /* --tray-lift is the tray's REAL height (peek or fully open), set by JS.
+   * --tray-h is only the page's bottom padding, so trusting it here put
+   * toasts on top of the open tray. */
+  bottom: calc(var(--sp-4) + var(--tray-lift, var(--tray-h)));
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  pointer-events: none;
+  max-width: min(360px, calc(100vw - 2rem));
+}
+
+.pf-toast {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-md);
+  background: var(--bg-raised);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-lg);
+  font-size: var(--fs-sm);
+  color: var(--text-1);
+  pointer-events: auto;
+  animation: pf-toast-in var(--dur-base) var(--ease-pop);
+}
+
+.pf-toast.is-leaving {
+  animation: pf-toast-out var(--dur-base) var(--ease-in) forwards;
+}
+
+.pf-toast__icon {
+  font-size: var(--fs-md);
+}
+
+.pf-toast--ok   { border-left: 3px solid var(--ok); }
+.pf-toast--warn { border-left: 3px solid var(--warn); }
+.pf-toast--bad  { border-left: 3px solid var(--bad); }
+
+/* =========================================================================
+ * 9. HELP / SHORTCUTS SHEET
+ * ========================================================================= */
+.pf-help {
+  width: min(560px, calc(100vw - 2rem));
+  margin: auto;
+  border-radius: var(--r-xl);
+  background: var(--bg-panel);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+}
+
+.pf-help__body {
+  padding: var(--sp-5) var(--sp-6) var(--sp-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.pf-help__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding: var(--sp-2) 0;
+  border-bottom: 1px solid var(--border);
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+}
+
+.pf-help__row:last-child {
+  border-bottom: none;
+}
+
+.pf-help__keys {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}

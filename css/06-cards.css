@@ -1,0 +1,517 @@
+/* =========================================================================
+ * PROTEIN ATLAS SIBIU — 06 CARDS
+ * The food card: an RPG item card built out of real nutrition data.
+ * ========================================================================= */
+
+.pf-card {
+  --cat: var(--text-4);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  border-radius: var(--r-lg);
+  background:
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--cat) 7%, var(--bg-panel)) 0%,
+      var(--bg-panel) 42%
+    );
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md), var(--shadow-inset);
+  isolation: isolate;
+  overflow: hidden;
+  transition: transform var(--dur-base) var(--ease-out),
+              border-color var(--dur-base) var(--ease-out),
+              box-shadow var(--dur-base) var(--ease-out);
+  content-visibility: auto;
+  /* Measured card height is ~442px on a phone and ~566px on desktop; the
+   * `auto` keyword then remembers each card's real size after first paint,
+   * so this only has to be a decent first guess to avoid scrollbar jump. */
+  contain-intrinsic-size: auto 470px;
+}
+
+/* Category accent stripe down the left edge. */
+.pf-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(
+    180deg,
+    var(--cat),
+    color-mix(in srgb, var(--cat) 20%, transparent)
+  );
+  opacity: 0.9;
+  z-index: 2;
+}
+
+/* Soft radial bloom behind the header, tinted by category. */
+.pf-card::after {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--cat) 24%, transparent),
+    transparent 68%
+  );
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity var(--dur-base) var(--ease-out);
+}
+
+.pf-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.pf-card:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--cat) 42%, transparent);
+  box-shadow: var(--shadow-lg),
+              0 0 0 1px color-mix(in srgb, var(--cat) 22%, transparent),
+              var(--shadow-inset);
+}
+
+.pf-card:hover::after {
+  opacity: 0.85;
+}
+
+.pf-card.is-selected {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-lg), var(--ring-accent);
+}
+
+.pf-card.is-dimmed {
+  opacity: 0.42;
+  filter: saturate(0.5);
+}
+
+/* Category colour binding. */
+.pf-card[data-cat='dairy-eggs']           { --cat: var(--cat-dairy-eggs); }
+.pf-card[data-cat='fresh-meat']           { --cat: var(--cat-fresh-meat); }
+.pf-card[data-cat='deli-processed']       { --cat: var(--cat-deli-processed); }
+.pf-card[data-cat='fish-seafood']         { --cat: var(--cat-fish-seafood); }
+.pf-card[data-cat='plant-protein']        { --cat: var(--cat-plant-protein); }
+.pf-card[data-cat='supplements-snacks']   { --cat: var(--cat-supplements-snacks); }
+.pf-card[data-cat='ready-meals']          { --cat: var(--cat-ready-meals); }
+.pf-card[data-cat='bakery-drinks-sweets'] { --cat: var(--cat-bakery-drinks-sweets); }
+
+/* =========================================================================
+ * HEADER
+ * ========================================================================= */
+.pf-card__head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
+  gap: var(--sp-3);
+}
+
+.pf-card__icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--r-md);
+  font-size: 21px;
+  line-height: 1;
+  background: color-mix(in srgb, var(--cat) 14%, var(--bg-inset));
+  border: 1px solid color-mix(in srgb, var(--cat) 26%, transparent);
+  flex-shrink: 0;
+}
+
+.pf-card__id {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: 1px;
+}
+
+.pf-card__name {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  line-height: 1.22;
+  color: var(--text-1);
+  overflow-wrap: anywhere;
+}
+
+.pf-card__name mark {
+  background: color-mix(in srgb, var(--accent) 30%, transparent);
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+.pf-card__brand {
+  font-size: var(--fs-2xs);
+  color: var(--text-4);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.pf-card__brand b {
+  font-weight: var(--fw-semi);
+  color: var(--text-3);
+}
+
+.pf-card__sep {
+  opacity: 0.4;
+}
+
+/* =========================================================================
+ * PROTEIN HEADLINE
+ * ========================================================================= */
+.pf-card__hero {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3);
+  border-radius: var(--r-md);
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+}
+
+.pf-card__protein {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.pf-card__protein b {
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-black);
+  line-height: 0.95;
+  color: var(--macro-protein);
+  text-shadow: 0 0 18px color-mix(in srgb, var(--macro-protein) 40%, transparent);
+  font-variant-numeric: tabular-nums;
+}
+
+.pf-card__protein span {
+  font-size: var(--fs-3xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.02em;
+  color: var(--text-4);
+  white-space: nowrap;
+}
+
+.pf-card__herobars {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.pf-card__heroline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  font-size: var(--fs-3xs);
+  color: var(--text-4);
+}
+
+.pf-card__heroline b {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-bold);
+  color: var(--text-2);
+}
+
+/* =========================================================================
+ * BODY BLOCKS
+ * ========================================================================= */
+.pf-card__block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.pf-card__blocktitle {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: 9px;
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-4);
+}
+
+.pf-card__blocktitle::after {
+  content: '';
+  flex: 1 1 auto;
+  height: 1px;
+  background: var(--border);
+}
+
+/* =========================================================================
+ * META ROW — effort, time, availability
+ * ========================================================================= */
+.pf-card__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+  font-size: var(--fs-2xs);
+  color: var(--text-4);
+}
+
+.pf-card__metaitem {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.pf-card__metaitem b {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-bold);
+  color: var(--text-2);
+}
+
+.pf-card__stores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.pf-card__price {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  color: var(--stat-value);
+  white-space: nowrap;
+}
+
+/* =========================================================================
+ * TAG STRIP
+ * ========================================================================= */
+.pf-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.pf-tag {
+  padding: 1px 6px;
+  border-radius: var(--r-xs);
+  font-size: 9px;
+  font-weight: var(--fw-semi);
+  letter-spacing: 0.02em;
+  color: var(--text-4);
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.pf-tag--hot {
+  color: var(--macro-protein);
+  background: var(--macro-protein-soft);
+  border-color: color-mix(in srgb, var(--macro-protein) 28%, transparent);
+}
+
+.pf-tag--warn {
+  color: var(--warn);
+  background: var(--warn-soft);
+  border-color: color-mix(in srgb, var(--warn) 26%, transparent);
+}
+
+.pf-tag--diet {
+  color: var(--macro-fiber);
+  background: var(--macro-fiber-soft);
+  border-color: color-mix(in srgb, var(--macro-fiber) 26%, transparent);
+}
+
+/* =========================================================================
+ * FOOTER ACTIONS
+ * ========================================================================= */
+.pf-card__foot {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-top: auto;
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--border);
+}
+
+.pf-card__foot .pf-btn {
+  flex: 1 1 auto;
+}
+
+.pf-card__fav {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--r-sm);
+  color: var(--text-4);
+  border: 1px solid var(--border);
+  background: var(--bg-inset);
+  font-size: 13px;
+  transition: color var(--dur-fast) var(--ease-out),
+              background var(--dur-fast) var(--ease-out),
+              transform var(--dur-fast) var(--ease-pop);
+}
+
+.pf-card__fav:hover {
+  color: var(--tier-s);
+  background: color-mix(in srgb, var(--tier-s) 14%, transparent);
+}
+
+.pf-card__fav.is-on {
+  color: var(--tier-s);
+  background: color-mix(in srgb, var(--tier-s) 18%, transparent);
+  border-color: color-mix(in srgb, var(--tier-s) 40%, transparent);
+  transform: scale(1.06);
+}
+
+.pf-card__cmp.is-on {
+  color: var(--accent);
+  background: var(--accent-dim);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+/* =========================================================================
+ * CORNER FLAGS
+ * ========================================================================= */
+.pf-card__flag {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 3;
+  padding: 3px 10px 4px;
+  border-bottom-left-radius: var(--r-md);
+  font-size: 9px;
+  font-weight: var(--fw-black);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--accent-ink);
+  background: var(--accent);
+}
+
+.pf-card__flag--local {
+  background: var(--tier-s);
+  color: #2a1a00;
+}
+
+.pf-card__flag--cheap {
+  background: var(--stat-value);
+  color: #14210a;
+}
+
+/* The corner ribbon sits in the same corner as the tier badge, so give the
+ * header a little extra headroom on flagged cards only. Purely cosmetic —
+ * browsers without :has() just get the tighter original spacing. */
+.pf-card:has(.pf-card__flag) .pf-card__head {
+  padding-top: 12px;
+}
+
+/* =========================================================================
+ * COMPACT LIST ROW (table view)
+ * ========================================================================= */
+.pf-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  background: var(--bg-panel);
+}
+
+.pf-table {
+  width: 100%;
+  min-width: 1080px;
+  font-size: var(--fs-sm);
+}
+
+.pf-table thead th {
+  position: sticky;
+  top: var(--topbar-h);
+  z-index: 5;
+  padding: var(--sp-3);
+  text-align: left;
+  font-size: var(--fs-3xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-4);
+  background: var(--bg-panel-2);
+  border-bottom: 1px solid var(--border-strong);
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+}
+
+.pf-table thead th:hover {
+  color: var(--text-1);
+  background: var(--bg-hover);
+}
+
+.pf-table thead th[data-sorted]::after {
+  content: ' ▾';
+  color: var(--accent);
+}
+
+.pf-table thead th[data-sorted='asc']::after {
+  content: ' ▴';
+}
+
+.pf-table tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background var(--dur-fast) var(--ease-out);
+  cursor: pointer;
+}
+
+.pf-table tbody tr:hover {
+  background: var(--bg-hover);
+}
+
+.pf-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.pf-table td {
+  padding: var(--sp-2) var(--sp-3);
+  vertical-align: middle;
+}
+
+.pf-table .num {
+  font-family: var(--font-mono);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.pf-table .pf-td-name {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-width: 240px;
+}
+
+.pf-table .pf-td-name b {
+  font-weight: var(--fw-semi);
+  color: var(--text-1);
+}
+
+.pf-table .pf-td-name small {
+  display: block;
+  font-size: var(--fs-3xs);
+  color: var(--text-4);
+}
+
+.pf-td-bar {
+  min-width: 90px;
+}

@@ -1,0 +1,488 @@
+/* =========================================================================
+ * PROTEIN ATLAS SIBIU — 03 LAYOUT
+ * App shell: top bar, filter rail, main stage, meal tray, footer.
+ * ========================================================================= */
+
+.pf-app {
+  position: relative;
+  z-index: 1;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* =========================================================================
+ * TOP BAR
+ * ========================================================================= */
+.pf-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: var(--topbar-h);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 0 var(--sp-4);
+  background: color-mix(in srgb, var(--bg-app) 84%, transparent);
+  backdrop-filter: blur(14px) saturate(1.4);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  border-bottom: 1px solid var(--border);
+}
+
+.pf-topbar::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--accent-dim) 20%,
+    var(--accent-dim) 80%,
+    transparent
+  );
+  pointer-events: none;
+}
+
+.pf-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.pf-brand__mark {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--r-md);
+  font-size: 18px;
+  background: linear-gradient(145deg, var(--accent), var(--accent-2));
+  color: var(--accent-ink);
+  box-shadow: 0 0 0 1px var(--accent-dim), 0 6px 18px -6px var(--accent-glow);
+}
+
+.pf-brand__text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.05;
+}
+
+.pf-brand__title {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-black);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-1);
+}
+
+.pf-brand__sub {
+  font-size: var(--fs-3xs);
+  font-weight: var(--fw-semi);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-4);
+}
+
+/* ---- global search ---- */
+.pf-search {
+  position: relative;
+  /* A flex item's automatic minimum size is its min-content width, which for
+   * this input is its 110px of padding. Without min-width:0 the field could
+   * never shrink below that, so it stayed a 112px box with ZERO usable text
+   * width while the rest of the bar overflowed the screen. */
+  flex: 1 1 220px;
+  min-width: 0;
+  max-width: 560px;
+}
+
+.pf-search__icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-4);
+  pointer-events: none;
+  font-size: var(--fs-sm);
+}
+
+.pf-search__input {
+  width: 100%;
+  height: 38px;
+  padding: 0 76px 0 34px;
+  border-radius: var(--r-md);
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  color: var(--text-1);
+  font-size: var(--fs-base);
+  transition: border-color var(--dur-fast) var(--ease-out),
+              box-shadow var(--dur-fast) var(--ease-out),
+              background var(--dur-fast) var(--ease-out);
+}
+
+.pf-search__input::placeholder {
+  color: var(--text-4);
+}
+
+.pf-search__input:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.pf-search__input:focus {
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  box-shadow: var(--ring-accent);
+  background: var(--bg-panel);
+}
+
+.pf-search__hint {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 3px;
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+.pf-search__clear {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--r-full);
+  color: var(--text-4);
+  background: var(--bg-hover);
+}
+
+.pf-search__clear:hover {
+  color: var(--text-1);
+  background: var(--bg-active);
+}
+
+.pf-topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  margin-left: auto;
+  /* Must be allowed to shrink, otherwise it imposes a hard min-content width
+   * on the whole bar and the page gains a horizontal scrollbar. The icon
+   * buttons opt back out of shrinking so they stay square. */
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+.pf-topbar__actions .pf-iconbtn {
+  flex-shrink: 0;
+}
+
+/* =========================================================================
+ * SHELL: RAIL + STAGE
+ * ========================================================================= */
+.pf-shell {
+  display: grid;
+  grid-template-columns: var(--rail-w) minmax(0, 1fr);
+  gap: 0;
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  flex: 1 1 auto;
+  align-items: start;
+}
+
+/* ---- filter rail ---- */
+.pf-rail {
+  position: sticky;
+  top: var(--topbar-h);
+  height: calc(100vh - var(--topbar-h));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--sp-4) var(--sp-3) calc(var(--sp-10) + var(--tray-h));
+  border-right: 1px solid var(--border);
+  background: color-mix(in srgb, var(--bg-panel) 55%, transparent);
+}
+
+.pf-rail__group {
+  margin-bottom: var(--sp-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg-panel);
+  overflow: hidden;
+}
+
+.pf-rail__summary {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-3);
+  user-select: none;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.pf-rail__summary:hover {
+  background: var(--bg-hover);
+  color: var(--text-1);
+}
+
+.pf-rail__summary::before {
+  content: '▸';
+  font-size: 10px;
+  color: var(--text-4);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+details[open] > .pf-rail__summary::before {
+  transform: rotate(90deg);
+}
+
+.pf-rail__count {
+  margin-left: auto;
+  padding: 0 6px;
+  border-radius: var(--r-full);
+  font-size: var(--fs-3xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0;
+  color: var(--accent-ink);
+  background: var(--accent);
+  min-width: 18px;
+  text-align: center;
+}
+
+.pf-rail__count[data-empty='true'] {
+  display: none;
+}
+
+.pf-rail__body {
+  padding: 0 var(--sp-3) var(--sp-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+/* The off-canvas scrim only exists below 920px. It MUST stay out of the
+ * layout above that width — it is a direct child of the .pf-shell grid, so
+ * leaving it displayed would consume a grid cell and push the stage into
+ * the next row at the rail's width. */
+.pf-rail-scrim {
+  display: none;
+}
+
+/* ---- main stage ---- */
+.pf-stage {
+  min-width: 0;
+  /* `clip` rather than `hidden`: it contains the invisible tooltip
+   * pseudo-elements that would otherwise widen the document, WITHOUT
+   * creating a scroll container (which would break sticky table headers). */
+  overflow-x: clip;
+  overflow-clip-margin: 24px;
+  padding: var(--sp-5) var(--sp-5) calc(var(--sp-16) + var(--tray-h));
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.pf-stage__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+}
+
+.pf-resultbar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg-panel);
+}
+
+.pf-resultbar__count {
+  font-family: var(--font-mono);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  color: var(--text-1);
+}
+
+.pf-resultbar__count em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.pf-activefilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+  align-items: center;
+}
+
+.pf-chip-active {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 6px 2px 9px;
+  border-radius: var(--r-full);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-semi);
+  color: var(--accent);
+  background: var(--accent-dim);
+  border: 1px solid color-mix(in srgb, var(--accent) 34%, transparent);
+}
+
+.pf-chip-active button {
+  display: grid;
+  place-items: center;
+  width: 15px;
+  height: 15px;
+  border-radius: var(--r-full);
+  color: inherit;
+  opacity: 0.7;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.pf-chip-active button:hover {
+  opacity: 1;
+  background: color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+/* =========================================================================
+ * VIEW CONTAINERS
+ * ========================================================================= */
+.pf-view {
+  display: none;
+  animation: pf-fade-up var(--dur-base) var(--ease-out);
+}
+
+.pf-view.is-active {
+  display: block;
+}
+
+.pf-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--card-min), 1fr));
+  gap: var(--sp-4);
+  align-items: start;
+}
+
+/* =========================================================================
+ * EMPTY STATE
+ * ========================================================================= */
+.pf-empty {
+  display: grid;
+  place-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-16) var(--sp-6);
+  text-align: center;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--r-lg);
+  background: var(--bg-inset);
+}
+
+.pf-empty__icon {
+  font-size: 46px;
+  filter: grayscale(0.35);
+  opacity: 0.85;
+}
+
+.pf-empty__title {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  color: var(--text-1);
+}
+
+.pf-empty__text {
+  color: var(--text-4);
+  max-width: 46ch;
+}
+
+/* =========================================================================
+ * SECTION HEADERS INSIDE VIEWS
+ * ========================================================================= */
+.pf-section {
+  margin-bottom: var(--sp-8);
+}
+
+.pf-section__head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-4);
+  padding-bottom: var(--sp-2);
+  border-bottom: 1px solid var(--border);
+}
+
+.pf-section__title {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  color: var(--text-1);
+}
+
+.pf-section__meta {
+  font-size: var(--fs-xs);
+  color: var(--text-4);
+  margin-left: auto;
+}
+
+/* =========================================================================
+ * FOOTER
+ * ========================================================================= */
+.pf-footer {
+  border-top: 1px solid var(--border);
+  background: color-mix(in srgb, var(--bg-panel) 60%, transparent);
+  padding: var(--sp-8) var(--sp-5) calc(var(--sp-10) + var(--tray-h));
+  margin-top: auto;
+}
+
+.pf-footer__inner {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--sp-6);
+}
+
+.pf-footer__col h4 {
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: var(--sp-3);
+}
+
+.pf-footer__col ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  font-size: var(--fs-xs);
+  color: var(--text-4);
+}
+
+.pf-footer__legal {
+  max-width: var(--content-max);
+  margin: var(--sp-6) auto 0;
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--border);
+  font-size: var(--fs-2xs);
+  color: var(--text-4);
+  line-height: var(--lh-loose);
+}

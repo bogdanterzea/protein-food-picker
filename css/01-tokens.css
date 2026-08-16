@@ -1,0 +1,458 @@
+/* =========================================================================
+ * PROTEIN ATLAS SIBIU — 01 DESIGN TOKENS
+ *
+ * One source of truth for colour, type, space, motion and elevation.
+ * Two themes: `dark` (default, the "HUD" look) and `light` (daylight mode).
+ * Theme is set with `data-theme` on <html>. Nothing else may hardcode a hex.
+ * ========================================================================= */
+
+:root {
+  color-scheme: dark;
+
+  /* ---------------------------------------------------------------------
+   * 1. RAW PALETTE — the only place raw hexes are allowed.
+   * ------------------------------------------------------------------- */
+  --raw-void:        #05070d;
+  --raw-abyss:       #080c15;
+  --raw-ink:         #0b1020;
+  --raw-slate-950:   #0e1424;
+  --raw-slate-900:   #121a2c;
+  --raw-slate-850:   #16203a;
+  --raw-slate-800:   #1b2740;
+  --raw-slate-700:   #24334f;
+  --raw-slate-600:   #33455f;
+  --raw-slate-500:   #4a5f7d;
+  --raw-slate-400:   #6d829f;
+  --raw-slate-300:   #94a7c0;
+  --raw-slate-200:   #c0cddd;
+  --raw-slate-100:   #e2eaf4;
+  --raw-white:       #f7fbff;
+
+  --raw-green-400:   #4ade80;
+  --raw-green-500:   #22c55e;
+  --raw-green-600:   #16a34a;
+  --raw-emerald-300: #6ee7b7;
+  --raw-teal-400:    #2dd4bf;
+  --raw-cyan-400:    #22d3ee;
+  --raw-sky-400:     #38bdf8;
+  --raw-blue-500:    #3b82f6;
+  --raw-indigo-400:  #818cf8;
+  --raw-violet-400:  #a78bfa;
+  --raw-purple-500:  #a855f7;
+  --raw-fuchsia-400: #e879f9;
+  --raw-pink-400:    #f472b6;
+  --raw-rose-500:    #f43f5e;
+  --raw-red-500:     #ef4444;
+  --raw-orange-400:  #fb923c;
+  --raw-amber-400:   #fbbf24;
+  --raw-amber-300:   #fcd34d;
+  --raw-yellow-200:  #fef08a;
+  --raw-lime-400:    #a3e635;
+
+  /* ---------------------------------------------------------------------
+   * 2. SURFACES & TEXT (dark theme values)
+   * ------------------------------------------------------------------- */
+  --bg-root:        var(--raw-void);
+  --bg-app:         var(--raw-abyss);
+  --bg-panel:       var(--raw-slate-950);
+  --bg-panel-2:     var(--raw-slate-900);
+  --bg-raised:      var(--raw-slate-850);
+  --bg-inset:       rgba(0, 0, 0, 0.28);
+  --bg-hover:       rgba(120, 160, 220, 0.07);
+  --bg-active:      rgba(120, 160, 220, 0.13);
+  --bg-scrim:       rgba(3, 6, 14, 0.78);
+
+  --text-1:         var(--raw-white);
+  --text-2:         var(--raw-slate-200);
+  --text-3:         var(--raw-slate-300);
+  --text-4:         #8195af;   /* ≥5.2:1 on every dark surface (was #6d829f, 4.10) */
+  --text-inverse:   #04121a;
+
+  --border:         rgba(140, 175, 225, 0.13);
+  --border-strong:  rgba(140, 175, 225, 0.26);
+  --border-loud:    rgba(140, 175, 225, 0.42);
+
+  --focus:          var(--raw-sky-400);
+  --sel-bg:         rgba(30, 201, 159, 0.3);
+  --sel-fg:         var(--raw-white);
+
+  /* ---------------------------------------------------------------------
+   * 3. BRAND / ACCENT
+   * ------------------------------------------------------------------- */
+  --accent:         #1ec99f;
+  --accent-2:       #5b86e8;
+  --accent-dim:     rgba(30, 201, 159, 0.2);
+  --accent-glow:    rgba(30, 201, 159, 0.42);
+  --accent-ink:     #032019;
+
+  /* ---------------------------------------------------------------------
+   * 4. MACRO COLOURS — the categorical data palette.
+   *
+   * These four are the ONLY colours allowed to encode macronutrient
+   * identity, and they are used in the same fixed order everywhere:
+   *   protein → carbs → fat → fiber
+   * They are never cycled, never reassigned by rank, never reused for
+   * anything that is not that macro.
+   *
+   * VALIDATED with the palette validator (OKLCH lightness band, chroma
+   * floor, CVD adjacent-pair separation, normal-vision floor, contrast):
+   *   dark  #0ea885,#e56a12,#e0429c,#5b86e8  → all checks pass
+   *   light #0a7d63,#b5510c,#b32b77,#3f63b8  → all checks pass
+   * Worst adjacent CVD pair is carbs↔protein at ΔE 13.1 (deutan), well
+   * above the ΔE 8 target. Do not "brighten" these by hand — re-run
+   * the validator if you ever need to change them.
+   * ------------------------------------------------------------------- */
+  --macro-protein:      #0ea885;
+  --macro-protein-2:    #0a7d63;
+  --macro-protein-soft: rgba(14, 168, 133, 0.17);
+
+  --macro-carbs:        #e56a12;
+  --macro-carbs-2:      #b5510c;
+  --macro-carbs-soft:   rgba(229, 106, 18, 0.17);
+
+  --macro-fat:          #e0429c;
+  --macro-fat-2:        #b32b77;
+  --macro-fat-soft:     rgba(224, 66, 156, 0.17);
+
+  --macro-fiber:        #5b86e8;
+  --macro-fiber-2:      #3f63b8;
+  --macro-fiber-soft:   rgba(91, 134, 232, 0.17);
+
+  /* kcal is a different measure, not a 5th macro slot. It only ever
+   * appears with its own text label, never as an unlabelled series. */
+  --macro-kcal:         #a78bfa;
+  --macro-kcal-2:       #7c3aed;
+  --macro-kcal-soft:    rgba(167, 139, 250, 0.16);
+
+  --macro-salt:         #94a3b8;
+  --macro-sugar:        #f0a35e;
+
+  /* ---------------------------------------------------------------------
+   * 5. STAT BAR COLOURS — the videogame RPG bars.
+   *    Every stat bar carries its own text label and numeric value, so
+   *    identity is never colour-alone; these are emphasis, not encoding.
+   * ------------------------------------------------------------------- */
+  --stat-protein:     var(--macro-protein);
+  --stat-satiety:     #5b86e8;
+  --stat-convenience: #e5a50a;
+  --stat-taste:       #e0429c;
+  --stat-value:       #86b81f;
+  --stat-versatility: #a06ee8;
+  --stat-leanness:    #22b8c4;
+  --stat-speed:       #e56a12;
+
+  --stat-track:       rgba(140, 175, 225, 0.11);
+  --stat-track-edge:  rgba(140, 175, 225, 0.2);
+  --stat-notch:       rgba(5, 7, 13, 0.55);
+
+  /* ---------------------------------------------------------------------
+   * 6. TIER COLOURS — S / A / B / C / D / E rank badges.
+   * ------------------------------------------------------------------- */
+  --tier-s:      #fcd34d;
+  --tier-s-2:    #f59e0b;
+  --tier-s-glow: rgba(252, 211, 77, 0.55);
+
+  --tier-a:      #f472b6;
+  --tier-a-2:    #db2777;
+  --tier-a-glow: rgba(244, 114, 182, 0.42);
+
+  --tier-b:      #a78bfa;
+  --tier-b-2:    #7c3aed;
+  --tier-b-glow: rgba(167, 139, 250, 0.38);
+
+  --tier-c:      #38bdf8;
+  --tier-c-2:    #0284c7;
+  --tier-c-glow: rgba(56, 189, 248, 0.34);
+
+  --tier-d:      #4ade80;
+  --tier-d-2:    #16a34a;
+  --tier-d-glow: rgba(30, 201, 159, 0.3);
+
+  --tier-e:      #94a3b8;
+  --tier-e-2:    #64748b;
+  --tier-e-glow: rgba(148, 163, 184, 0.26);
+
+  /* ---------------------------------------------------------------------
+   * 7. CATEGORY ACCENTS — one identity per data file.
+   *
+   * IMPORTANT: these eight are UI *accents*, not a categorical data
+   * palette. Eight hues cannot clear the colourblind separation bar —
+   * the validator fails red↔amber at ΔE 2.9 (deutan) no matter how they
+   * are stepped, and the guidance for that case is to cut the series or
+   * facet rather than to ship indistinguishable colours.
+   *
+   * So category colour is NEVER the only thing carrying identity here.
+   * It tints a card's left stripe and its icon tile, always beside the
+   * category name in text. No chart in this app encodes category by hue:
+   * the scatter uses a sequential ramp on protein purity instead, with
+   * category coming from the tooltip and the filter chips.
+   *
+   * They are stepped into the mode's lightness band and pass chroma and
+   * contrast in both themes.
+   * ------------------------------------------------------------------- */
+  --cat-dairy-eggs:            #4d8fd6;
+  --cat-fresh-meat:            #d1483f;
+  --cat-deli-processed:        #b0741a;
+  --cat-fish-seafood:          #0e97a8;
+  --cat-plant-protein:         #5a9c22;
+  --cat-supplements-snacks:    #9163e0;
+  --cat-ready-meals:           #cd54a0;
+  --cat-bakery-drinks-sweets:  #a89019;
+
+  /* ---------------------------------------------------------------------
+   * 8. SEMANTIC FEEDBACK
+   * ------------------------------------------------------------------- */
+  --ok:       var(--raw-green-400);
+  --ok-soft:  rgba(74, 222, 128, 0.14);
+  --warn:     var(--raw-amber-400);
+  --warn-soft: rgba(251, 191, 36, 0.14);
+  --bad:      var(--raw-rose-500);
+  --bad-soft: rgba(244, 63, 94, 0.14);
+  --info:     var(--raw-sky-400);
+  --info-soft: rgba(56, 189, 248, 0.14);
+
+  /* ---------------------------------------------------------------------
+   * 9. TYPOGRAPHY
+   * ------------------------------------------------------------------- */
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+  --font-mono:
+    ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Monaco, Consolas,
+    'Liberation Mono', 'Courier New', monospace;
+  --font-display: var(--font-sans);
+
+  --fs-3xs:  0.625rem;   /* 10px — micro labels inside bars       */
+  --fs-2xs:  0.6875rem;  /* 11px — chip text, table micro copy    */
+  --fs-xs:   0.75rem;    /* 12px — meta, captions                 */
+  --fs-sm:   0.8125rem;  /* 13px — dense UI                       */
+  --fs-base: 0.875rem;   /* 14px — body                           */
+  --fs-md:   1rem;       /* 16px — card titles                    */
+  --fs-lg:   1.125rem;   /* 18px                                  */
+  --fs-xl:   1.375rem;   /* 22px — section heads                  */
+  --fs-2xl:  1.75rem;    /* 28px                                  */
+  --fs-3xl:  2.25rem;    /* 36px — hero                           */
+  --fs-4xl:  3rem;       /* 48px — counters                       */
+
+  --lh-tight: 1.15;
+  --lh-snug:  1.3;
+  --lh-base:  1.55;
+  --lh-loose: 1.7;
+
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-semi:   600;
+  --fw-bold:   700;
+  --fw-black:  800;
+
+  --tracking-tight: -0.01em;
+  --tracking-wide:  0.04em;
+  --tracking-caps:  0.09em;
+
+  /* ---------------------------------------------------------------------
+   * 10. SPACE — 4px base scale
+   * ------------------------------------------------------------------- */
+  --sp-0:  0;
+  --sp-1:  0.25rem;
+  --sp-2:  0.5rem;
+  --sp-3:  0.75rem;
+  --sp-4:  1rem;
+  --sp-5:  1.25rem;
+  --sp-6:  1.5rem;
+  --sp-7:  1.75rem;
+  --sp-8:  2rem;
+  --sp-10: 2.5rem;
+  --sp-12: 3rem;
+  --sp-16: 4rem;
+  --sp-20: 5rem;
+
+  /* ---------------------------------------------------------------------
+   * 11. RADII, SHADOWS, EFFECTS
+   * ------------------------------------------------------------------- */
+  --r-xs:   4px;
+  --r-sm:   6px;
+  --r-md:   10px;
+  --r-lg:   14px;
+  --r-xl:   20px;
+  --r-2xl:  28px;
+  --r-full: 999px;
+
+  --shadow-sm:  0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md:  0 4px 14px rgba(0, 0, 0, 0.45);
+  --shadow-lg:  0 14px 40px rgba(0, 0, 0, 0.55);
+  --shadow-xl:  0 28px 70px rgba(0, 0, 0, 0.6);
+  --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+  --ring-accent: 0 0 0 1px rgba(30, 201, 159, 0.35),
+                 0 0 22px -4px var(--accent-glow);
+
+  /* ---------------------------------------------------------------------
+   * 12. MOTION
+   * ------------------------------------------------------------------- */
+  --dur-instant: 80ms;
+  --dur-fast:    140ms;
+  --dur-base:    220ms;
+  --dur-slow:    380ms;
+  --dur-bar:     900ms;   /* stat bar fill animation */
+
+  --ease-out:  cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in:   cubic-bezier(0.5, 0, 0.75, 0);
+  --ease-both: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-pop:  cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ---------------------------------------------------------------------
+   * 13. LAYOUT METRICS
+   * ------------------------------------------------------------------- */
+  --topbar-h:     58px;
+  --rail-w:       310px;
+  --tray-h:       0px;      /* page bottom padding, raised by JS with the tray */
+  --tray-peek:    58px;     /* height of the collapsed tray handle */
+  --tray-lift:    0px;      /* the tray's REAL height; keeps toasts above it */
+  --content-max:  1680px;
+  --card-min:     310px;
+}
+
+/* =========================================================================
+ * LIGHT THEME
+ * ========================================================================= */
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --bg-root:      #eef2f8;
+  --bg-app:       #f4f7fb;
+  --bg-panel:     #ffffff;
+  --bg-panel-2:   #f8fafd;
+  --bg-raised:    #ffffff;
+  --bg-inset:     rgba(15, 30, 55, 0.045);
+  --bg-hover:     rgba(15, 30, 55, 0.05);
+  --bg-active:    rgba(15, 30, 55, 0.09);
+  --bg-scrim:     rgba(230, 236, 245, 0.8);
+
+  --text-1:       #0b1524;
+  --text-2:       #24344a;
+  --text-3:       #46586f;
+  --text-4:       #59697e;   /* ≥4.7:1 on every light surface (was #6b7c93, 3.79) */
+  --text-inverse: #ffffff;
+
+  --border:        rgba(15, 30, 55, 0.12);
+  --border-strong: rgba(15, 30, 55, 0.2);
+  --border-loud:   rgba(15, 30, 55, 0.32);
+
+  --accent:      #0a7d63;
+  --accent-2:    #3f63b8;
+  --accent-dim:  rgba(10, 125, 99, 0.14);
+  --accent-glow: rgba(10, 125, 99, 0.3);
+  --accent-ink:  #ffffff;
+
+  /* Light-mode steps of the SAME ramps — separately validated against a
+   * near-white surface, not an automatic flip of the dark values. */
+  --macro-protein:      #0a7d63;
+  --macro-protein-2:    #075a48;
+  --macro-protein-soft: rgba(10, 125, 99, 0.13);
+  --macro-carbs:        #b5510c;
+  --macro-carbs-2:      #8a3d09;
+  --macro-carbs-soft:   rgba(181, 81, 12, 0.13);
+  --macro-fat:          #b32b77;
+  --macro-fat-2:        #8a205c;
+  --macro-fat-soft:     rgba(179, 43, 119, 0.12);
+  --macro-fiber:        #3f63b8;
+  --macro-fiber-2:      #2f4b8c;
+  --macro-fiber-soft:   rgba(63, 99, 184, 0.12);
+  --macro-kcal:         #7c3aed;
+  --macro-kcal-2:       #5b21b6;
+  --macro-kcal-soft:    rgba(124, 58, 237, 0.13);
+  --macro-salt:         #64748b;
+  --macro-sugar:        #b5510c;
+
+  --stat-protein:     #0a7d63;
+  --stat-satiety:     #3f63b8;
+  --stat-convenience: #9a6a06;
+  --stat-taste:       #b32b77;
+  --stat-value:       #55700f;
+  --stat-versatility: #6d3fb8;
+  --stat-leanness:    #0d7a86;
+  --stat-speed:       #b5510c;
+
+  --stat-track:      rgba(15, 30, 55, 0.09);
+  --stat-track-edge: rgba(15, 30, 55, 0.16);
+  --stat-notch:      rgba(255, 255, 255, 0.75);
+
+  --tier-s:   #b45309;  --tier-s-2: #92400e;  --tier-s-glow: rgba(180, 83, 9, 0.28);
+  --tier-a:   #be185d;  --tier-a-2: #9d174d;  --tier-a-glow: rgba(190, 24, 93, 0.24);
+  --tier-b:   #6d28d9;  --tier-b-2: #5b21b6;  --tier-b-glow: rgba(109, 40, 217, 0.22);
+  --tier-c:   #0369a1;  --tier-c-2: #075985;  --tier-c-glow: rgba(3, 105, 161, 0.22);
+  --tier-d:   #15803d;  --tier-d-2: #166534;  --tier-d-glow: rgba(21, 128, 61, 0.2);
+  --tier-e:   #64748b;  --tier-e-2: #475569;  --tier-e-glow: rgba(100, 116, 139, 0.18);
+
+  --cat-dairy-eggs:           #2f6fb8;
+  --cat-fresh-meat:           #b3382f;
+  --cat-deli-processed:       #8f5c0f;
+  --cat-fish-seafood:         #087f8d;
+  --cat-plant-protein:        #457a17;
+  --cat-supplements-snacks:   #7048c4;
+  --cat-ready-meals:          #a83b80;
+  --cat-bakery-drinks-sweets: #85700f;
+
+  --ok:   #15803d;  --ok-soft:   rgba(21, 128, 61, 0.12);
+  --warn: #b45309;  --warn-soft: rgba(180, 83, 9, 0.12);
+  --bad:  #be123c;  --bad-soft:  rgba(190, 18, 60, 0.1);
+  --info: #0369a1;  --info-soft: rgba(3, 105, 161, 0.1);
+
+  --focus: #0369a1;
+  --sel-bg: rgba(21, 163, 74, 0.2);
+  --sel-fg: #0b1524;
+
+  --shadow-sm: 0 1px 2px rgba(15, 30, 55, 0.08);
+  --shadow-md: 0 4px 14px rgba(15, 30, 55, 0.1);
+  --shadow-lg: 0 14px 40px rgba(15, 30, 55, 0.13);
+  --shadow-xl: 0 28px 70px rgba(15, 30, 55, 0.16);
+  --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  --ring-accent: 0 0 0 1px rgba(21, 163, 74, 0.4), 0 0 18px -6px var(--accent-glow);
+}
+
+/* =========================================================================
+ * DENSITY MODES — set with data-density on <html>
+ * ========================================================================= */
+:root[data-density='compact'] {
+  --fs-base: 0.8125rem;
+  --sp-4: 0.75rem;
+  --sp-5: 0.875rem;
+  --sp-6: 1.125rem;
+  --card-min: 268px;
+}
+
+:root[data-density='cozy'] {
+  --card-min: 360px;
+  --sp-4: 1.125rem;
+  --sp-5: 1.375rem;
+}
+
+/* =========================================================================
+ * ACCESSIBILITY PREFERENCES
+ * ========================================================================= */
+@media (prefers-contrast: more) {
+  /* `:root` alone (0,1,0) loses to `:root[data-theme='light']` (0,2,0), so
+   * the light theme silently ignored this block entirely. */
+  :root,
+  :root[data-theme='dark'] {
+    --border: rgba(160, 195, 240, 0.35);
+    --border-strong: rgba(160, 195, 240, 0.55);
+    --text-3: var(--raw-slate-200);
+    --text-4: var(--raw-slate-300);
+    --stat-track: rgba(160, 195, 240, 0.2);
+  }
+
+  :root[data-theme='light'] {
+    --border: rgba(15, 30, 55, 0.3);
+    --border-strong: rgba(15, 30, 55, 0.45);
+    --text-3: #2b3b52;
+    --text-4: #46586f;
+    --stat-track: rgba(15, 30, 55, 0.16);
+  }
+}
+
+:root[data-motion='off'] * {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+}

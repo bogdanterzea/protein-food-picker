@@ -1,0 +1,138 @@
+/* =========================================================================
+ * PROTEIN ATLAS SIBIU — 12 PRINT
+ * Printing is a real use case here: you take the shopping list to the store.
+ * ========================================================================= */
+
+@media print {
+  :root {
+    --bg-root: #fff;
+    --bg-app: #fff;
+    --bg-panel: #fff;
+    --bg-panel-2: #fff;
+    --bg-raised: #fff;
+    --bg-inset: #f4f4f4;
+    --text-1: #000;
+    --text-2: #1a1a1a;
+    --text-3: #3a3a3a;
+    --text-4: #5a5a5a;
+    --border: #c8c8c8;
+    --border-strong: #999;
+  }
+
+  body {
+    background: #fff !important;
+    color: #000;
+    font-size: 10pt;
+  }
+
+  body::before {
+    display: none;
+  }
+
+  /* Hide everything interactive. */
+  .pf-topbar,
+  .pf-rail,
+  .pf-rail-scrim,
+  .pf-tray,
+  .pf-toasts,
+  .pf-oracle,
+  .pf-footer,
+  .pf-btn,
+  .pf-iconbtn,
+  .pf-seg,
+  .pf-card__foot,
+  .pf-modal__tabs,
+  .pf-modal__foot,
+  .pf-modal__close,
+  .pf-chart__toggle,
+  .pf-search {
+    display: none !important;
+  }
+
+  .pf-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .pf-stage {
+    padding: 0;
+  }
+
+  .pf-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8pt;
+  }
+
+  .pf-card,
+  .pf-panel,
+  .pf-board,
+  .pf-shop__store {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    box-shadow: none;
+    border: 1pt solid #c8c8c8;
+  }
+
+  .pf-card::after,
+  .pf-hero::before {
+    display: none;
+  }
+
+  /* Bars must still print: force the ink. */
+  .pf-stat__fill,
+  .pf-macrobar__seg,
+  .pf-rankbar__fill,
+  .pf-progress__fill,
+  .pf-histo__bar,
+  .pf-donut__seg {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .pf-stat__fill::after {
+    display: none;
+  }
+
+  /* The shopping list is the main thing people print. */
+  .pf-shop {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .pf-shop__item {
+    border-bottom: 0.5pt dotted #bbb;
+  }
+
+  .pf-shop__item input {
+    -webkit-appearance: checkbox;
+    appearance: checkbox;
+  }
+
+  /* Expand every collapsed section so nothing is lost on paper. */
+  details {
+    display: block !important;
+  }
+
+  details > *:not(summary) {
+    display: block !important;
+  }
+
+  .pf-view {
+    display: block !important;
+  }
+
+  .pf-modal {
+    position: static;
+    width: 100%;
+    max-height: none;
+    border: none;
+  }
+
+  a[href^='http']::after {
+    content: ' (' attr(href) ')';
+    font-size: 8pt;
+    color: #666;
+  }
+
+  @page {
+    margin: 14mm;
+  }
+}

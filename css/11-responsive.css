@@ -1,0 +1,539 @@
+/* =========================================================================
+ * PROTEIN ATLAS SIBIU — 11 RESPONSIVE
+ * Breakpoints: 1400 / 1180 / 920 / 700 / 480.
+ * The rail collapses into an off-canvas drawer below 920px.
+ * ========================================================================= */
+
+/* =========================================================================
+ * ≤ 1400px — narrow the rail, tighten the stage
+ * ========================================================================= */
+@media (max-width: 1400px) {
+  :root {
+    --rail-w: 272px;
+    --card-min: 292px;
+  }
+
+  .pf-stage {
+    padding: var(--sp-4) var(--sp-4) calc(var(--sp-16) + var(--tray-h));
+  }
+}
+
+/* =========================================================================
+ * ≤ 1180px — modal and tray go single column
+ * ========================================================================= */
+/* The hero calculator is `flex: 0 1 340px` beside a 62ch lede, so the pair
+ * genuinely stops fitting at ~1265px, not at 1180. Between those two widths
+ * it wrapped to its own row but kept its 340px basis, leaving 59% of the row
+ * empty. Stack it a little earlier instead. */
+@media (max-width: 1280px) {
+  .pf-hero__top {
+    flex-direction: column;
+  }
+
+  .pf-calc {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+}
+
+@media (max-width: 1180px) {
+  .pf-dossier {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pf-tray__body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Below this width the bar cannot hold six labelled view buttons plus the
+   * search box. Drop to icons only; the ≤700 block brings the labels back
+   * once the bar is allowed to wrap onto two rows. */
+  .pf-topbar__actions .pf-seg__btn span {
+    display: none;
+  }
+
+  .pf-topbar__actions .pf-seg__btn {
+    padding: 0 var(--sp-2);
+  }
+}
+
+/* =========================================================================
+ * ≤ 920px — the rail becomes an off-canvas drawer
+ * ========================================================================= */
+@media (max-width: 920px) {
+  .pf-shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pf-rail {
+    position: fixed;
+    top: var(--topbar-h);
+    left: 0;
+    bottom: 0;
+    width: min(330px, 86vw);
+    z-index: 70;
+    background: var(--bg-panel);
+    border-right: 1px solid var(--border-strong);
+    box-shadow: var(--shadow-xl);
+    transform: translateX(-102%);
+    transition: transform var(--dur-base) var(--ease-out);
+    height: auto;
+  }
+
+  .pf-rail.is-open {
+    transform: translateX(0);
+  }
+
+  .pf-rail-scrim {
+    display: block;
+    position: fixed;
+    inset: var(--topbar-h) 0 0;
+    z-index: 69;
+    background: var(--bg-scrim);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--dur-base) var(--ease-out);
+  }
+
+  .pf-rail-scrim.is-on {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .pf-railtoggle {
+    display: inline-grid !important;
+  }
+
+  .pf-brand__text {
+    display: none;
+  }
+
+  .pf-modal {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+    border: none;
+  }
+
+  .pf-modal__body,
+  .pf-modal__head,
+  .pf-modal__foot {
+    padding-left: var(--sp-4);
+    padding-right: var(--sp-4);
+  }
+
+  /* ...but the head still has to clear the absolutely positioned close
+   * button, or the tier badge slides underneath it. */
+  .pf-modal__head {
+    padding-right: 52px;
+  }
+
+  .pf-modal__tabs {
+    padding-left: var(--sp-4);
+    padding-right: var(--sp-4);
+  }
+
+  /* Fullscreen means there is no backdrop to tap, so the ✕ is the only way
+   * out — it has to be a real target. */
+  .pf-modal__close {
+    width: 40px;
+    height: 40px;
+    top: var(--sp-2);
+    right: var(--sp-2);
+  }
+}
+
+/* =========================================================================
+ * ≤ 700px — phone layout
+ * ========================================================================= */
+@media (max-width: 700px) {
+  :root {
+    /* Two rows on phones. Everything that offsets against the bar — rail
+     * top, rail height, scrim inset, sticky table header — reads this. */
+    --topbar-h: 96px;
+    --card-min: 100%;
+    --fs-3xl: 1.75rem;
+    --fs-2xl: 1.4rem;
+  }
+
+  /* One line cannot hold brand + search + six view buttons + three icons:
+   * it measured 848px inside a 390px viewport. Wrap to two rows — search on
+   * top, view switcher underneath — and let the switcher scroll sideways. */
+  .pf-topbar {
+    height: auto;
+    min-height: var(--topbar-h);
+    flex-wrap: wrap;
+    align-content: center;
+    row-gap: 6px;
+    padding: 6px var(--sp-3);
+    gap: var(--sp-2);
+  }
+
+  .pf-search {
+    flex: 1 1 140px;
+    max-width: none;
+  }
+
+  .pf-search__hint {
+    display: none;
+  }
+
+  /* The hint is hidden here, so reclaim its 76px gutter — otherwise the
+   * padding alone exceeds the width of the field. */
+  .pf-search__input {
+    padding-right: 38px;
+  }
+
+  .pf-topbar__actions {
+    order: 3;
+    flex: 1 1 100%;
+    margin-left: 0;
+    min-width: 0;
+  }
+
+  /* Two rows buy enough room to put the labels back, which beats six
+   * ambiguous emoji. The strip scrolls when it does not fit. */
+  .pf-topbar__actions .pf-seg {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+    overscroll-behavior-x: contain;
+    -webkit-mask-image: linear-gradient(to right, #000 88%, transparent);
+    mask-image: linear-gradient(to right, #000 88%, transparent);
+  }
+
+  .pf-topbar__actions .pf-seg::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pf-topbar__actions .pf-seg__btn {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    padding: 0 var(--sp-3);
+  }
+
+  .pf-topbar__actions .pf-seg__btn span {
+    display: inline;
+  }
+
+  /* Touch sizing keyed to WIDTH, not to `hover: none`. Plenty of touch
+   * laptops and tablets report hover support, so the hover query alone
+   * leaves 26–27px targets under real fingers. */
+  .pf-btn--sm,
+  .pf-select--sm select {
+    min-height: 36px;
+    height: auto;
+  }
+
+  .pf-seg__btn {
+    height: 34px;
+  }
+
+  .pf-iconbtn {
+    width: 38px;
+    height: 38px;
+  }
+
+  .pf-chip {
+    padding: 8px 12px;
+  }
+
+  .pf-card__fav {
+    width: 36px;
+    height: 36px;
+  }
+
+  .pf-stepper button,
+  .pf-stepper input {
+    height: 36px;
+  }
+
+  .pf-search__clear {
+    width: 30px;
+    height: 30px;
+  }
+
+  /* Range sliders were an 18px-tall hit area with a 15px thumb. */
+  .pf-range input[type='range'] {
+    height: 40px;
+  }
+
+  .pf-range input[type='range']::-webkit-slider-thumb {
+    width: 20px;
+    height: 20px;
+    margin-top: -8px;
+  }
+
+  /* "Încarcă încă 60 produse" is nowrap at 344px intrinsic width, which is
+   * wider than a 320–375px screen's content box. */
+  .pf-btn--lg {
+    height: auto;
+    min-height: 42px;
+    padding: var(--sp-2) var(--sp-4);
+    white-space: normal;
+    max-width: 100%;
+  }
+
+  .pf-stage {
+    padding: var(--sp-3) var(--sp-3) calc(var(--sp-20) + var(--tray-h));
+    gap: var(--sp-4);
+  }
+
+  /* On a phone the point is to reach the food fast. The full hero pushed the
+   * first card 1388px down — more than a screen and a half of preamble — so
+   * tighten it and clamp the intro copy. */
+  .pf-hero {
+    padding: var(--sp-4);
+    border-radius: var(--r-lg);
+  }
+
+  .pf-hero__sub {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: var(--fs-sm);
+    line-height: 1.5;
+  }
+
+  .pf-hero__stats {
+    margin-top: var(--sp-4);
+  }
+
+  .pf-oracle {
+    padding: var(--sp-3) var(--sp-4);
+    gap: var(--sp-3);
+  }
+
+  .pf-oracle__icon {
+    font-size: 22px;
+  }
+
+  .pf-hero__stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .pf-grid {
+    gap: var(--sp-3);
+  }
+
+  .pf-card {
+    padding: var(--sp-3);
+  }
+
+  .pf-modal__icon {
+    width: 46px;
+    height: 46px;
+    font-size: 25px;
+  }
+
+  .pf-modal__title {
+    font-size: var(--fs-xl);
+  }
+
+  /* The dossier chrome was eating 67% of a 740px screen, leaving a 244px
+   * slot to read 2650px of content through. */
+  .pf-modal__head {
+    /* 52px clears the 40px close button plus its 8px inset. */
+    padding: var(--sp-3) 52px var(--sp-3) var(--sp-4);
+    gap: var(--sp-3);
+  }
+
+  /* Badges 3–5 (kcal, % of calories, lei/100g) are all repeated verbatim in
+   * the Nutriție tab, so on a phone they are pure height. */
+  .pf-modal__badges .pf-badge:nth-child(n + 3) {
+    display: none;
+  }
+
+  .pf-modal__subtitle {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .pf-modal__foot {
+    padding: var(--sp-2) var(--sp-4);
+    gap: var(--sp-2);
+  }
+
+  .pf-tray {
+    max-height: 68vh;
+  }
+
+  /* The handle wrapped to three lines (143px) while only 58px of it peeked
+   * above the fold — so the running totals it exists to show were invisible. */
+  .pf-tray__handle {
+    flex-wrap: nowrap;
+    gap: var(--sp-2);
+    padding: var(--sp-2) var(--sp-3);
+  }
+
+  .pf-tray__title {
+    flex: 0 0 auto;
+  }
+
+  .pf-tray__totals {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    gap: var(--sp-3);
+  }
+
+  .pf-tray__totals::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pf-tray__body {
+    padding: var(--sp-3);
+  }
+
+  .pf-trayitem {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    row-gap: var(--sp-2);
+  }
+
+  .pf-trayitem__macros {
+    grid-column: 1 / -1;
+    justify-content: space-between;
+  }
+
+  .pf-boards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pf-donut {
+    justify-content: center;
+  }
+
+  .pf-toasts {
+    left: var(--sp-3);
+    right: var(--sp-3);
+    max-width: none;
+  }
+
+  .pf-stat {
+    grid-template-columns: 84px minmax(0, 1fr) 30px;
+  }
+
+  /* Uppercase + wide tracking is what pushed "COMODITATE" past the column. */
+  .pf-stat__label {
+    letter-spacing: 0;
+  }
+}
+
+/* =========================================================================
+ * ≤ 480px — very small phones
+ * ========================================================================= */
+@media (max-width: 480px) {
+  :root {
+    --fs-base: 0.8125rem;
+  }
+
+  .pf-brand__mark {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+  }
+
+  .pf-card__hero {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--sp-2);
+  }
+
+  .pf-card__protein {
+    justify-content: center;
+  }
+
+  .pf-macros {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .pf-macros--6 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .pf-timing {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+  }
+
+  .pf-hero__stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pf-modal__tab {
+    padding: var(--sp-3) var(--sp-3);
+    font-size: var(--fs-2xs);
+  }
+}
+
+/* =========================================================================
+ * TOUCH DEVICES — no hover-dependent affordances
+ * ========================================================================= */
+/* Hover-dependent affordances are only wrong on devices with NO mouse at
+ * all. A touch laptop still has a pointer, and hiding its tooltips would
+ * remove real information (the tier badge's score breakdown lives there). */
+@media (hover: none) {
+  .pf-card:hover {
+    transform: none;
+  }
+
+  [data-tip]::after {
+    display: none;
+  }
+}
+
+/* Target size is a different question. `hover: none` misses touch laptops
+ * and hybrids, which advertise a mouse (`hover: hover`, `pointer: fine`)
+ * while still being poked with a finger. `any-pointer: coarse` is true
+ * whenever ANY available input is a finger — which is the condition that
+ * actually governs how big a tap target has to be. */
+@media (hover: none), (any-pointer: coarse) {
+  .pf-btn,
+  .pf-iconbtn,
+  .pf-chip,
+  .pf-seg__btn,
+  .pf-select--sm select,
+  .pf-stepper button,
+  .pf-search__clear {
+    min-height: 38px;
+  }
+
+  .pf-chip {
+    padding: 8px 12px;
+  }
+
+  .pf-card__fav {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+/* =========================================================================
+ * LARGE SCREENS — use the space
+ * ========================================================================= */
+@media (min-width: 1800px) {
+  :root {
+    --content-max: 1860px;
+    --rail-w: 340px;
+  }
+
+  /* Keep a gutter: raising --content-max to 1860 made the shell sit flush
+   * against both window edges between 1800 and 1860px. */
+  .pf-shell {
+    max-width: min(var(--content-max), calc(100vw - 2 * var(--sp-6)));
+  }
+}
+
+/* The rail toggle only exists on small screens. */
+.pf-railtoggle {
+  display: none;
+}

@@ -1,0 +1,585 @@
+/* =========================================================================
+ * PROTEIN ATLAS SIBIU — 07 MODAL
+ * The full item dossier: everything known about one food.
+ * ========================================================================= */
+
+.pf-modal {
+  width: min(1080px, calc(100vw - 2rem));
+  max-height: calc(100vh - 3rem);
+  margin: auto;
+  border-radius: var(--r-xl);
+  background: var(--bg-panel);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* A class selector beats the UA's `dialog:not([open]) { display: none }`, so
+ * setting `display: flex` above kept the dossier laid out and PAINTED after
+ * it was closed — it stayed on screen behind the page. Put the closed state
+ * back explicitly. */
+.pf-modal:not([open]) {
+  display: none;
+}
+
+.pf-modal[open] {
+  animation: pf-modal-in var(--dur-base) var(--ease-out);
+}
+
+/* =========================================================================
+ * MODAL HEADER
+ * ========================================================================= */
+.pf-modal__head {
+  --cat: var(--text-4);
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--sp-4);
+  /* Extra right inset keeps the tier badge clear of the absolutely
+   * positioned close button, which sits outside this grid. */
+  padding: var(--sp-5) calc(var(--sp-6) + 34px) var(--sp-5) var(--sp-6);
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(
+    140deg,
+    color-mix(in srgb, var(--cat) 16%, var(--bg-panel-2)),
+    var(--bg-panel-2) 62%
+  );
+  flex-shrink: 0;
+}
+
+.pf-modal__head[data-cat='dairy-eggs']           { --cat: var(--cat-dairy-eggs); }
+.pf-modal__head[data-cat='fresh-meat']           { --cat: var(--cat-fresh-meat); }
+.pf-modal__head[data-cat='deli-processed']       { --cat: var(--cat-deli-processed); }
+.pf-modal__head[data-cat='fish-seafood']         { --cat: var(--cat-fish-seafood); }
+.pf-modal__head[data-cat='plant-protein']        { --cat: var(--cat-plant-protein); }
+.pf-modal__head[data-cat='supplements-snacks']   { --cat: var(--cat-supplements-snacks); }
+.pf-modal__head[data-cat='ready-meals']          { --cat: var(--cat-ready-meals); }
+.pf-modal__head[data-cat='bakery-drinks-sweets'] { --cat: var(--cat-bakery-drinks-sweets); }
+
+.pf-modal__icon {
+  display: grid;
+  place-items: center;
+  width: 62px;
+  height: 62px;
+  border-radius: var(--r-lg);
+  font-size: 34px;
+  background: color-mix(in srgb, var(--cat) 16%, var(--bg-inset));
+  border: 1px solid color-mix(in srgb, var(--cat) 30%, transparent);
+}
+
+.pf-modal__titles {
+  min-width: 0;
+}
+
+.pf-modal__title {
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-black);
+  line-height: 1.12;
+  letter-spacing: var(--tracking-tight);
+  color: var(--text-1);
+}
+
+.pf-modal__subtitle {
+  margin-top: 3px;
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.pf-modal__badges {
+  display: flex;
+  gap: var(--sp-2);
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: var(--sp-2);
+}
+
+.pf-modal__headright {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+/* The tier tooltip is centred on a badge that sits ~47px from the modal
+ * edge, and .pf-modal has overflow:hidden — so centre-anchoring clipped it.
+ * Anchor it to the right edge instead. */
+.pf-modal__headright [data-tip]::after {
+  left: auto;
+  right: 0;
+  transform: translateY(4px);
+}
+
+.pf-modal__headright [data-tip]:hover::after,
+.pf-modal__headright [data-tip]:focus-visible::after {
+  transform: translateY(0);
+}
+
+.pf-modal__close {
+  position: absolute;
+  top: var(--sp-3);
+  right: var(--sp-3);
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-sm);
+  color: var(--text-3);
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  font-size: var(--fs-md);
+  line-height: 1;
+}
+
+.pf-modal__close:hover {
+  color: var(--text-1);
+  background: var(--bg-active);
+}
+
+/* =========================================================================
+ * MODAL TABS
+ * ========================================================================= */
+.pf-modal__tabs {
+  display: flex;
+  gap: 2px;
+  padding: 0 var(--sp-6);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-panel-2);
+  overflow-x: auto;
+  flex-shrink: 0;
+  scrollbar-width: none;
+}
+
+.pf-modal__tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.pf-modal__tab {
+  position: relative;
+  padding: var(--sp-3) var(--sp-4);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semi);
+  color: var(--text-4);
+  white-space: nowrap;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.pf-modal__tab:hover {
+  color: var(--text-2);
+}
+
+.pf-modal__tab.is-active {
+  color: var(--text-1);
+}
+
+.pf-modal__tab.is-active::after {
+  content: '';
+  position: absolute;
+  left: var(--sp-3);
+  right: var(--sp-3);
+  bottom: -1px;
+  height: 2px;
+  border-radius: var(--r-full);
+  background: var(--accent);
+  box-shadow: 0 0 12px -2px var(--accent-glow);
+}
+
+/* =========================================================================
+ * MODAL BODY
+ * ========================================================================= */
+.pf-modal__body {
+  padding: var(--sp-6);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  flex: 1 1 auto;
+}
+
+.pf-modal__pane {
+  display: none;
+  animation: pf-fade-up var(--dur-base) var(--ease-out);
+}
+
+.pf-modal__pane.is-active {
+  display: block;
+}
+
+.pf-dossier {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: var(--sp-6);
+  align-items: start;
+}
+
+.pf-dossier--single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.pf-block {
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg-panel-2);
+  overflow: hidden;
+  margin-bottom: var(--sp-4);
+}
+
+.pf-block__head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--border);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-3);
+  background: var(--bg-inset);
+}
+
+.pf-block__head .pf-badge {
+  margin-left: auto;
+}
+
+.pf-block__body {
+  padding: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  /* The parent .pf-block clips with overflow:hidden. Without this the store
+   * price table simply LOSES its last two columns on a phone — 117px of
+   * prices gone, with no scrollbar to hint that anything is missing. */
+  overflow-x: auto;
+}
+
+/* =========================================================================
+ * NUTRITION TABLE
+ * ========================================================================= */
+.pf-nutri {
+  width: 100%;
+  font-size: var(--fs-sm);
+}
+
+.pf-nutri th {
+  text-align: left;
+  font-weight: var(--fw-medium);
+  color: var(--text-3);
+  padding: 5px var(--sp-2) 5px 0;
+}
+
+.pf-nutri td {
+  text-align: right;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-1);
+  font-weight: var(--fw-semi);
+  padding: 5px 0;
+  white-space: nowrap;
+}
+
+.pf-nutri td.pf-nutri__pct {
+  width: 58px;
+  color: var(--text-4);
+  font-weight: var(--fw-normal);
+  font-size: var(--fs-2xs);
+}
+
+.pf-nutri tr.is-major th {
+  font-weight: var(--fw-bold);
+  color: var(--text-1);
+}
+
+.pf-nutri tr.is-major td {
+  font-size: var(--fs-md);
+}
+
+.pf-nutri tr.is-sub th {
+  padding-left: var(--sp-4);
+  color: var(--text-4);
+  font-size: var(--fs-2xs);
+}
+
+.pf-nutri tr.is-sub td {
+  color: var(--text-3);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-normal);
+}
+
+.pf-nutri tr.is-divider td,
+.pf-nutri tr.is-divider th {
+  border-top: 1px solid var(--border);
+  padding-top: var(--sp-3);
+}
+
+.pf-nutri__swatch {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  margin-right: 7px;
+  background: var(--c, var(--text-4));
+  vertical-align: middle;
+}
+
+/* =========================================================================
+ * STEPS LIST — cooking protocol
+ * ========================================================================= */
+.pf-steps {
+  counter-reset: pf-step;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  list-style: none;
+}
+
+.pf-steps li {
+  counter-increment: pf-step;
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: var(--sp-3);
+  align-items: start;
+  font-size: var(--fs-sm);
+  line-height: var(--lh-base);
+  color: var(--text-2);
+}
+
+.pf-steps li::before {
+  content: counter(pf-step);
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--r-sm);
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  color: var(--accent);
+  background: var(--accent-dim);
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+}
+
+/* =========================================================================
+ * BULLET LISTS — tips, warnings, pairings
+ * ========================================================================= */
+.pf-bullets {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-base);
+  color: var(--text-2);
+}
+
+.pf-bullets li {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  gap: var(--sp-2);
+  align-items: start;
+}
+
+.pf-bullets li::before {
+  content: var(--bullet, '▸');
+  color: var(--bullet-color, var(--accent));
+  font-size: var(--fs-xs);
+  line-height: 1.5;
+}
+
+.pf-bullets--tips    { --bullet: '💡'; }
+.pf-bullets--warn    { --bullet: '⚠️'; --bullet-color: var(--warn); }
+.pf-bullets--pair    { --bullet: '🤝'; }
+.pf-bullets--sources { --bullet: '📄'; }
+
+.pf-bullets--warn li {
+  color: var(--text-2);
+}
+
+/* =========================================================================
+ * STORE PRICE TABLE
+ * ========================================================================= */
+.pf-stores-table {
+  width: 100%;
+  font-size: var(--fs-sm);
+}
+
+.pf-stores-table th {
+  text-align: left;
+  padding: 6px var(--sp-2) 6px 0;
+  font-size: var(--fs-3xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-4);
+  border-bottom: 1px solid var(--border);
+}
+
+.pf-stores-table td {
+  padding: var(--sp-2) var(--sp-2) var(--sp-2) 0;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.pf-stores-table tr:last-child td {
+  border-bottom: none;
+}
+
+.pf-stores-table .num {
+  font-family: var(--font-mono);
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.pf-stores-table__note {
+  display: block;
+  font-size: var(--fs-3xs);
+  color: var(--text-4);
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
+.pf-avail {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--fs-3xs);
+  font-weight: var(--fw-semi);
+}
+
+.pf-avail::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.pf-avail[data-a='always']     { color: var(--ok); }
+.pf-avail[data-a='usual']      { color: var(--stat-satiety); }
+.pf-avail[data-a='seasonal']   { color: var(--warn); }
+.pf-avail[data-a='occasional'] { color: var(--stat-speed); }
+.pf-avail[data-a='online']     { color: var(--stat-versatility); }
+
+/* =========================================================================
+ * SERVING SWITCHER
+ * ========================================================================= */
+.pf-servingbar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-md);
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  margin-bottom: var(--sp-4);
+}
+
+.pf-servingbar__label {
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-4);
+}
+
+.pf-servingbar__out {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--macro-protein);
+}
+
+/* =========================================================================
+ * SIMILAR ITEMS STRIP
+ * ========================================================================= */
+.pf-similar {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--sp-2);
+}
+
+.pf-similar__item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2);
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-inset);
+  text-align: left;
+  transition: border-color var(--dur-fast) var(--ease-out),
+              background var(--dur-fast) var(--ease-out);
+}
+
+.pf-similar__item:hover {
+  border-color: var(--border-loud);
+  background: var(--bg-hover);
+}
+
+.pf-similar__emoji {
+  font-size: 17px;
+  flex-shrink: 0;
+}
+
+.pf-similar__txt {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.pf-similar__name {
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-semi);
+  color: var(--text-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pf-similar__p {
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xs);
+  color: var(--macro-protein);
+}
+
+/* =========================================================================
+ * MODAL FOOTER
+ * ========================================================================= */
+.pf-modal__foot {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-4) var(--sp-6);
+  border-top: 1px solid var(--border);
+  background: var(--bg-panel-2);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.pf-modal__foot .pf-spacer {
+  flex: 1 1 auto;
+}
+
+.pf-modal__nav {
+  display: flex;
+  gap: var(--sp-1);
+}
+
+.pf-confidence {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--fs-2xs);
+  color: var(--text-4);
+}
+
+.pf-confidence[data-c='high']   { color: var(--ok); }
+.pf-confidence[data-c='medium'] { color: var(--warn); }
+.pf-confidence[data-c='low']    { color: var(--bad); }

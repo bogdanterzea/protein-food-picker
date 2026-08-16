@@ -1,0 +1,428 @@
+/* =========================================================================
+ * PROTEIN ATLAS SIBIU — 09 CHARTS
+ *
+ * Hand-written inline SVG. No chart library, no external requests.
+ *
+ * Rules applied throughout (see docs/CHARTS.md for the reasoning):
+ *  - One axis per chart. There is no dual-axis chart anywhere in this app.
+ *  - Categorical colour = the four macro tokens, in fixed order, never cycled.
+ *  - Sequential magnitude = one hue, light → dark.
+ *  - 2px surface-coloured gap between stacked segments and adjacent bars.
+ *  - 2px surface ring around overlapping marks (scatter dots).
+ *  - Marks are thin; grid and axes are recessive.
+ *  - Chart text wears text tokens, never a series colour. Identity comes
+ *    from a legend plus direct labels, never from colour alone.
+ * ========================================================================= */
+
+.pf-chart {
+  position: relative;
+  width: 100%;
+}
+
+.pf-chart svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.pf-chart__title {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semi);
+  color: var(--text-1);
+  margin-bottom: 2px;
+}
+
+.pf-chart__sub {
+  font-size: var(--fs-2xs);
+  color: var(--text-4);
+  margin-bottom: var(--sp-3);
+}
+
+/* Axis and grid furniture — deliberately recessive. */
+.pf-axis-line {
+  stroke: var(--border-strong);
+  stroke-width: 1;
+}
+
+.pf-grid-line {
+  stroke: var(--border);
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+}
+
+.pf-axis-text {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  fill: var(--text-4);
+}
+
+.pf-axis-title {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: var(--fw-semi);
+  fill: var(--text-3);
+}
+
+/* =========================================================================
+ * 1. MACRO DONUT — part-to-whole, share of calories
+ * ========================================================================= */
+.pf-donut {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+  flex-wrap: wrap;
+}
+
+.pf-donut__svg {
+  width: 158px;
+  height: 158px;
+  flex-shrink: 0;
+}
+
+.pf-donut__seg {
+  fill: none;
+  stroke-width: 22;
+  /* The 2px surface gap between adjacent segments is drawn as a stroke
+   * dash offset in JS; this keeps the ring readable without outlines. */
+  transition: stroke-width var(--dur-fast) var(--ease-out),
+              opacity var(--dur-fast) var(--ease-out);
+}
+
+.pf-donut__seg:hover {
+  stroke-width: 26;
+}
+
+.pf-donut__seg--protein { stroke: var(--macro-protein); }
+.pf-donut__seg--carbs   { stroke: var(--macro-carbs); }
+.pf-donut__seg--fat     { stroke: var(--macro-fat); }
+.pf-donut__seg--fiber   { stroke: var(--macro-fiber); }
+
+.pf-donut__track {
+  fill: none;
+  stroke: var(--stat-track);
+  stroke-width: 22;
+}
+
+.pf-donut__center-v {
+  font-family: var(--font-mono);
+  font-size: 25px;
+  font-weight: 800;
+  fill: var(--text-1);
+  text-anchor: middle;
+}
+
+.pf-donut__center-k {
+  font-family: var(--font-sans);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  fill: var(--text-4);
+  text-anchor: middle;
+  text-transform: uppercase;
+}
+
+/* Legend: always present, always with the number written out, so the
+ * chart is readable with no colour perception at all. */
+.pf-donut__legend {
+  flex: 1 1 190px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.pf-legend-row {
+  display: grid;
+  grid-template-columns: 10px minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-2xs);
+  color: var(--text-3);
+}
+
+.pf-legend-row__swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--c);
+}
+
+.pf-legend-row__name {
+  color: var(--text-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pf-legend-row__g,
+.pf-legend-row__pct {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-1);
+  font-weight: var(--fw-semi);
+  white-space: nowrap;
+}
+
+.pf-legend-row__pct {
+  color: var(--text-4);
+  font-weight: var(--fw-normal);
+  min-width: 42px;
+  text-align: right;
+}
+
+/* =========================================================================
+ * 2. STAT RADAR — hexagon, one series, six labelled axes
+ * ========================================================================= */
+.pf-radar {
+  display: grid;
+  place-items: center;
+  /* The axis labels are drawn beyond the plot radius, so the container needs
+   * room for them — without this the left and right labels get clipped. */
+  padding: var(--sp-2) var(--sp-6) var(--sp-4);
+}
+
+.pf-radar__svg {
+  width: min(100%, 268px);
+  height: auto;
+  overflow: visible;
+}
+
+.pf-radar__web {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.pf-radar__spoke {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.pf-radar__area {
+  fill: color-mix(in srgb, var(--accent) 22%, transparent);
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.pf-radar__dot {
+  fill: var(--accent);
+  stroke: var(--bg-panel);
+  stroke-width: 2;
+}
+
+.pf-radar__label {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  fill: var(--text-3);
+}
+
+.pf-radar__value {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  fill: var(--text-1);
+}
+
+/* =========================================================================
+ * 3. SCATTER — protein per 100 g vs kcal per 100 g
+ * ========================================================================= */
+.pf-scatter {
+  position: relative;
+  /* The SVG has a fixed 980px design width and scales with its container,
+   * so on a narrow screen the 9px axis text scaled down to ~4px. Give it a
+   * floor and let the chart scroll sideways instead, exactly like the table
+   * view does. */
+  overflow-x: auto;
+}
+
+.pf-scatter__svg {
+  /* 620px is the width the dossier actually passes to the chart, so at that
+   * floor it renders 1:1 and needs no scrolling on desktop, while narrow
+   * screens still scroll rather than shrinking the axis text to 4px. */
+  width: 100%;
+  min-width: 620px;
+  height: auto;
+}
+
+.pf-scatter__dot {
+  r: 5;
+  stroke: var(--bg-panel);
+  stroke-width: 2;             /* the 2px surface ring on overlapping marks */
+  opacity: 0.9;
+  cursor: pointer;
+  transition: r var(--dur-fast) var(--ease-out),
+              opacity var(--dur-fast) var(--ease-out);
+}
+
+.pf-scatter__dot:hover {
+  r: 8;
+  opacity: 1;
+}
+
+.pf-scatter__dot.is-dim {
+  opacity: 0.16;
+}
+
+.pf-scatter__guide {
+  stroke: var(--border-strong);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+  fill: none;
+}
+
+.pf-scatter__guide-label {
+  font-family: var(--font-sans);
+  font-size: 9px;
+  font-weight: 600;
+  fill: var(--text-4);
+}
+
+.pf-scatter__zone {
+  fill: var(--macro-protein);
+  opacity: 0.05;
+}
+
+/* =========================================================================
+ * 4. RANKED BAR — leaderboard bars
+ * ========================================================================= */
+.pf-rankbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 56px;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.pf-rankbar__track {
+  height: 12px;
+  border-radius: 4px;          /* 4px rounded data-end, anchored at zero */
+  background: var(--stat-track);
+  overflow: hidden;
+}
+
+.pf-rankbar__fill {
+  height: 100%;
+  width: calc(var(--v, 0) * 1%);
+  border-radius: 4px;
+  background: var(--c, var(--macro-protein));
+  transition: width var(--dur-slow) var(--ease-out);
+}
+
+.pf-rankbar__val {
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  color: var(--text-1);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* =========================================================================
+ * 5. HISTOGRAM / DISTRIBUTION STRIP
+ * ========================================================================= */
+.pf-histo {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;                    /* the 2px gap between adjacent bars */
+  height: 64px;
+}
+
+.pf-histo__bar {
+  flex: 1 1 0;
+  min-width: 2px;
+  border-radius: 3px 3px 0 0;
+  background: var(--macro-protein);
+  opacity: 0.55;
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+
+.pf-histo__bar:hover,
+.pf-histo__bar.is-active {
+  opacity: 1;
+}
+
+/* =========================================================================
+ * 6. CHART TOOLTIP
+ * ========================================================================= */
+.pf-charttip {
+  position: absolute;
+  z-index: 40;
+  padding: 7px 10px;
+  border-radius: var(--r-sm);
+  background: var(--bg-raised);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-lg);
+  font-size: var(--fs-2xs);
+  color: var(--text-1);
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -120%);
+  transition: opacity var(--dur-fast) var(--ease-out);
+  white-space: nowrap;
+  max-width: 250px;
+}
+
+.pf-charttip.is-on {
+  opacity: 1;
+}
+
+.pf-charttip b {
+  display: block;
+  font-size: var(--fs-xs);
+  margin-bottom: 2px;
+  white-space: normal;
+}
+
+.pf-charttip span {
+  font-family: var(--font-mono);
+  color: var(--text-3);
+}
+
+/* =========================================================================
+ * 7. TABLE VIEW TOGGLE — every chart has a data-table alternative
+ * ========================================================================= */
+.pf-chart__toggle {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--sp-2);
+}
+
+.pf-chart__table {
+  margin-top: var(--sp-3);
+  width: 100%;
+  font-size: var(--fs-2xs);
+}
+
+.pf-chart__table th {
+  text-align: left;
+  padding: 4px 8px 4px 0;
+  color: var(--text-4);
+  font-weight: var(--fw-semi);
+  border-bottom: 1px solid var(--border);
+}
+
+.pf-chart__table td {
+  padding: 4px 8px 4px 0;
+  font-family: var(--font-mono);
+  color: var(--text-2);
+  border-bottom: 1px solid var(--border);
+}
+
+/* =========================================================================
+ * 8. FORCED COLORS / PRINT SAFETY
+ *    When colour is unavailable, the pattern fills carry the identity.
+ * ========================================================================= */
+@media (forced-colors: active) {
+  .pf-donut__seg,
+  .pf-macrobar__seg,
+  .pf-rankbar__fill,
+  .pf-stat__fill {
+    forced-color-adjust: none;
+  }
+
+  .pf-macrobar__seg--protein { background: repeating-linear-gradient(45deg,  CanvasText 0 2px, Canvas 2px 5px); }
+  .pf-macrobar__seg--carbs   { background: repeating-linear-gradient(135deg, CanvasText 0 2px, Canvas 2px 6px); }
+  .pf-macrobar__seg--fat     { background: repeating-linear-gradient(90deg,  CanvasText 0 1px, Canvas 1px 4px); }
+  .pf-macrobar__seg--fiber   { background: repeating-linear-gradient(0deg,   CanvasText 0 1px, Canvas 1px 5px); }
+}

@@ -1,0 +1,157 @@
+/* =========================================================================
+ * PROTEIN ATLAS SIBIU — 10 ANIMATIONS
+ * All keyframes live here. Everything respects prefers-reduced-motion.
+ * ========================================================================= */
+
+@keyframes pf-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pf-shimmer {
+  0%   { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* The stat bar filling up — the signature "level up" motion. */
+@keyframes pf-bar-grow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* A specular highlight sweeping along a filled bar. */
+@keyframes pf-bar-sheen {
+  0%   { transform: translateX(-100%); }
+  55%  { transform: translateX(100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* S-rank badge border shine. */
+@keyframes pf-tier-shine {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -60% 0; }
+}
+
+@keyframes pf-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pf-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes pf-modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pf-toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(28px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes pf-toast-out {
+  to {
+    opacity: 0;
+    transform: translateX(28px) scale(0.96);
+  }
+}
+
+@keyframes pf-pop {
+  0%   { transform: scale(1); }
+  45%  { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+
+@keyframes pf-pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 var(--accent-glow);
+  }
+  70% {
+    box-shadow: 0 0 0 12px transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+@keyframes pf-count-flash {
+  0%   { color: var(--accent); transform: scale(1.06); }
+  100% { color: inherit; transform: scale(1); }
+}
+
+/* Card entrance stagger — driven by --i set per card in JS. */
+@keyframes pf-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.pf-card--enter {
+  animation: pf-card-in var(--dur-base) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 18ms);
+}
+
+.pf-pop {
+  animation: pf-pop var(--dur-base) var(--ease-pop);
+}
+
+.pf-pulse {
+  animation: pf-pulse-ring 1.4s var(--ease-out) 2;
+}
+
+.pf-flash {
+  animation: pf-count-flash var(--dur-slow) var(--ease-out);
+}
+
+/* -------------------------------------------------------------------------
+ * REDUCED MOTION — collapse everything to an instant state change.
+ * ---------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    /* Without this, `pf-card-in` (fill-mode: both) holds its from-state —
+     * opacity 0 — for up to 1062ms of stagger delay, leaving 59 of 60 cards
+     * blank for a full second for exactly the users who asked for less motion. */
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+
+  .pf-stat__fill {
+    transform: scaleX(1);
+  }
+
+  .pf-stat__fill::after,
+  .pf-tier[data-tier='S']::before {
+    display: none;
+  }
+}
