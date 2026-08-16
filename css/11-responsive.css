@@ -515,6 +515,12 @@
     width: 38px;
     height: 38px;
   }
+
+  /* A round button cannot take min-height without going oval — size it. */
+  .pf-chip-active button {
+    width: 26px;
+    height: 26px;
+  }
 }
 
 /* =========================================================================

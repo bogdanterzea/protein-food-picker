@@ -348,21 +348,55 @@ details[open] > .pf-rail__summary::before {
   border: 1px solid color-mix(in srgb, var(--accent) 34%, transparent);
 }
 
+/* The ✕ is DRAWN, not typed.
+ *
+ * As a text glyph at 11px the character falls back to a font whose side
+ * bearings pushed the ink 2.7px right of centre — an 18% offset in a 15px
+ * button. Invisible until you hover, at which point the round background is
+ * centred on the button and the ✕ visibly is not. Two rotated bars are
+ * centred by construction, at any size, in any font.
+ *
+ * The label stays accessible through the button's aria-label. */
 .pf-chip-active button {
+  position: relative;
   display: grid;
   place-items: center;
-  width: 15px;
-  height: 15px;
+  width: 18px;
+  height: 18px;
   border-radius: var(--r-full);
   color: inherit;
-  opacity: 0.7;
-  font-size: 11px;
-  line-height: 1;
+  opacity: 0.72;
+  font-size: 0;
+  line-height: 0;
+  transition: opacity var(--dur-fast) var(--ease-out),
+              background var(--dur-fast) var(--ease-out);
 }
 
-.pf-chip-active button:hover {
+.pf-chip-active button::before,
+.pf-chip-active button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 9px;
+  height: 1.5px;
+  margin: -0.75px 0 0 -4.5px;
+  border-radius: 1px;
+  background: currentColor;
+}
+
+.pf-chip-active button::before {
+  transform: rotate(45deg);
+}
+
+.pf-chip-active button::after {
+  transform: rotate(-45deg);
+}
+
+.pf-chip-active button:hover,
+.pf-chip-active button:focus-visible {
   opacity: 1;
-  background: color-mix(in srgb, var(--accent) 25%, transparent);
+  background: color-mix(in srgb, var(--accent) 28%, transparent);
 }
 
 /* =========================================================================
