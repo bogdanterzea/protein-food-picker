@@ -1,7 +1,31 @@
 # Proteina ieftină — clasamentul complet
 
 Toate cifrele sunt **lei per 100 g de proteină pură**, calculate din prețul
-pachetului și conținutul real de proteină, la cel mai bun preț găsit în Sibiu.
+estimat al pachetului și conținutul real de proteină.
+
+> ## ⚠️ Despre prețuri — citește asta întâi
+>
+> **Niciun preț din acest proiect nu este verificat.** Sunt estimări pentru
+> 2026, calibrate pe intervale realiste — nu au fost citite de pe un raft și
+> nu vin dintr-un API.
+>
+> Nu există un API public de prețuri pentru retailul alimentar din România.
+> Singurul deschis (Open Prices / Open Food Facts) conținea, în august 2026,
+> **84 de prețuri în RON pentru toată țara**, aproape toate dulciuri și
+> băuturi — practic nicio suprapunere cu un atlas de proteine.
+> `tools/verify-prices.js` interoghează acel API și raportează potrivirile;
+> astăzi nu găsește niciuna suficient de sigură.
+>
+> De aceea aplicația afișează peste tot `≈` și o marjă de **±20%** (lanțuri de
+> retail și online) sau **±30%** (piață, măcelărie, pescărie, restaurant,
+> farmacie). Un preț apare fără `≈` doar dacă are `verified: true` — momentan
+> niciunul nu are.
+>
+> **Ce poți face cu ele:** să compari produse între ele. Ordinea clasamentelor
+> e aproape sigur corectă, pentru că diferențele sunt de ordinul zecilor de
+> ori, nu de procente.
+> **Ce NU poți face:** să-ți faci bugetul, sau să te aștepți la prețul ăsta la casă.
+
 Colagenul și gelatina sunt excluse (vezi `METHODOLOGY.md` §4).
 
 **Intervalul din atlas merge de la 3,69 lei la peste 1800 lei.** E o diferență de

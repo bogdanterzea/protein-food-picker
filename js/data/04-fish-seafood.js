@@ -1232,7 +1232,7 @@
       storage: 'Cămară.',
       shelfLife: '1–2 ani sigilat',
       dataConfidence: 'low',
-      sources: ['riomare.ro', 'estimare din produse similare din raft']
+      sources: ['riomare.ro', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -2560,7 +2560,7 @@
       storage: 'Frigider 2–6 °C, ambalată în hârtie apoi pungă. 5–7 zile.',
       shelfLife: '~1 săptămână la frigider, 3 luni congelată',
       dataConfidence: 'low',
-      sources: ['Piața Cibin, observație directă', 'valori tipice Alosa immaculata afumată']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'valori tipice Alosa immaculata afumată']
     },
 
     {
@@ -3289,7 +3289,7 @@
       storage: 'Frigider 0–2 °C, pe gheață, maximum 24 de ore. Congelat, până la 3 luni.',
       shelfLife: '1 zi proaspăt',
       dataConfidence: 'medium',
-      sources: ['Piața Cibin, observație de piață', 'pastravariasfaras.ro', 'USDA rainbow trout farmed']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'pastravariasfaras.ro', 'USDA rainbow trout farmed']
     },
 
     {
@@ -3658,7 +3658,7 @@
       storage: 'Frigider 0–4 °C, în hârtie apoi pungă. 4–5 zile.',
       shelfLife: '~5 zile refrigerat, 2 luni congelat',
       dataConfidence: 'low',
-      sources: ['Piața Cibin, observație directă', 'valori tipice păstrăv afumat la cald']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'valori tipice păstrăv afumat la cald']
     },
 
     {
@@ -3791,7 +3791,7 @@
       storage: 'Frigider 0–2 °C, maximum 24–48 de ore. Feliile se pot congela 3 luni.',
       shelfLife: '1–2 zile proaspăt',
       dataConfidence: 'medium',
-      sources: ['Piața Cibin, observație de piață', 'USDA carp raw']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'USDA carp raw']
     },
 
     {
@@ -3917,7 +3917,7 @@
       storage: 'Frigider 0–2 °C, maximum 24 de ore. Congelat, 4 luni.',
       shelfLife: '1 zi proaspăt',
       dataConfidence: 'medium',
-      sources: ['Piața Cibin, observație de piață', 'USDA walleye/pike-perch raw']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'USDA walleye/pike-perch raw']
     },
 
     {
@@ -4037,7 +4037,7 @@
       storage: 'Frigider 0–2 °C, maximum 24 de ore.',
       shelfLife: '1 zi proaspăt',
       dataConfidence: 'medium',
-      sources: ['Piața Cibin, observație de piață', 'USDA perch raw']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'USDA perch raw']
     },
 
     {
@@ -4164,7 +4164,7 @@
       storage: 'Frigider 0–2 °C, maximum 48 de ore. Congelat, 4 luni.',
       shelfLife: '1–2 zile proaspăt',
       dataConfidence: 'medium',
-      sources: ['Piața Cibin, observație de piață', 'USDA catfish farmed raw']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'USDA catfish farmed raw']
     },
 
     {
@@ -4285,7 +4285,7 @@
       storage: 'Frigider 0–2 °C, maximum 24 de ore.',
       shelfLife: '1 zi proaspăt',
       dataConfidence: 'low',
-      sources: ['Piața Cibin, observație de piață', 'valori tipice Carassius gibelio']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'valori tipice Carassius gibelio']
     },
 
     {
@@ -6667,7 +6667,7 @@
       storage: 'Frigider 0–4 °C, în borcan închis. 2 săptămâni.',
       shelfLife: '~2–3 săptămâni refrigerat',
       dataConfidence: 'low',
-      sources: ['Piața Cibin, observație de piață', 'valori tipice icre de crap sărate']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'valori tipice icre de crap sărate']
     },
 
     {
@@ -6914,7 +6914,7 @@
       storage: 'Frigider 0–4 °C. 2 săptămâni în borcan închis.',
       shelfLife: '~2 săptămâni refrigerat',
       dataConfidence: 'low',
-      sources: ['Piața Cibin, observație de piață', 'valori tipice icre de știucă sărate']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'valori tipice icre de știucă sărate']
     },
 
     {
@@ -7280,7 +7280,7 @@
       storage: 'Frigider 0–4 °C. Se consumă în ziua cumpărării.',
       shelfLife: '24 de ore',
       dataConfidence: 'low',
-      sources: ['kaufland.ro', 'observație stand sushi Sibiu', 'valori tipice mix maki/nigiri']
+      sources: ['kaufland.ro', 'estimare de preț 2026 — neconfirmată la raft', 'valori tipice mix maki/nigiri']
     },
 
     // ---INSERT-NEW-ITEMS-ABOVE---

@@ -412,11 +412,12 @@
           (s.note ? '<span class="pf-stores-table__note">' + fmt.esc(s.note) + '</span>' : '') +
           '</td>' +
           '<td>' + ui.availability(s.availability) + '</td>' +
-          '<td class="num">' + (s.priceRon ? fmt.ron(s.priceRon) : '—') +
+          '<td class="num">' + (s.priceRon
+            ? fmt.ronApprox(s.priceRon, { verified: s.verified === true }) : '—') +
           (s.packLabel ? '<span class="pf-stores-table__note">' + fmt.esc(s.packLabel) + '</span>' : '') +
           '</td>' +
-          '<td class="num">' + (p ? fmt.num(p.pricePerKg, 0) + ' lei/kg' : '—') + '</td>' +
-          '<td class="num">' + (p ? fmt.num(p.ronPer100gProtein, 1) : '—') + '</td>' +
+          '<td class="num">' + (p ? (p.verified ? '' : '≈') + fmt.num(p.pricePerKg, 0) + ' lei/kg' : '—') + '</td>' +
+          '<td class="num">' + (p ? (p.verified ? '' : '≈') + fmt.num(p.ronPer100gProtein, 1) : '—') + '</td>' +
           '</tr>'
         );
       })
@@ -430,9 +431,16 @@
 
     /* Store-level context pulled from the registry. */
     const registry = window.PF_STORES || [];
+    const seenStore = {};
     const notes = stores
       .map(s => registry.filter(r => r.name === s.name)[0])
-      .filter(Boolean)
+      .filter(function (r) {
+        /* A product can list the same chain twice (two pack formats); the
+         * shop description only needs saying once. */
+        if (!r || seenStore[r.name]) return false;
+        seenStore[r.name] = true;
+        return true;
+      })
       .slice(0, 3)
       .map(
         r =>
@@ -446,25 +454,35 @@
     return (
       '<div class="pf-dossier">' +
       '<div>' +
-      block(t('sec.stores'), table) +
+      block(t('sec.stores'), table +
+        (d.priceVerified ? '' :
+          '<p class="pf-muted" style="font-size:var(--fs-2xs);line-height:1.5;margin-top:var(--sp-2)">' +
+          '⚠️ <b>Prețurile sunt estimări, nu prețuri de raft.</b> Niciunul nu a fost ' +
+          'citit dintr-un magazin și nu există un API public de prețuri pentru retailul ' +
+          'alimentar din România. Marja folosită aici este de ±' +
+          Math.round((d.priceBand || 0.2) * 100) + '%. Folosește-le ca să compari produse ' +
+          'între ele, nu ca să-ți faci bugetul.</p>')) +
       (food.sibiuNote ? block('Nota de Sibiu', '<p>' + fmt.esc(food.sibiuNote) + '</p>') : '') +
       '</div>' +
       '<div>' +
       block('Cost real',
         '<div class="pf-macros">' +
         '<div class="pf-macro pf-macro--protein"><span class="pf-macro__v">' +
-        (d.ronPer100gProtein ? fmt.num(d.ronPer100gProtein, 1) : '—') +
+        (d.ronPer100gProtein ? (d.priceVerified ? '' : '≈') + fmt.num(d.ronPer100gProtein, 1) : '—') +
         '</span><span class="pf-macro__k">lei/100g P</span></div>' +
         '<div class="pf-macro pf-macro--carbs"><span class="pf-macro__v">' +
         (d.proteinPerRon ? fmt.num(d.proteinPerRon, 1) : '—') +
         '</span><span class="pf-macro__k">g P / leu</span></div>' +
         '<div class="pf-macro pf-macro--kcal"><span class="pf-macro__v">' +
-        (d.costPerServing ? fmt.num(d.costPerServing, 2) : '—') +
+        (d.costPerServing ? (d.priceVerified ? '' : '≈') + fmt.num(d.costPerServing, 2) : '—') +
         '</span><span class="pf-macro__k">lei/porție</span></div>' +
         '<div class="pf-macro pf-macro--fat"><span class="pf-macro__v">' +
-        (d.pricePerKg ? Math.round(d.pricePerKg) : '—') +
+        (d.pricePerKg ? (d.priceVerified ? '' : '≈') + Math.round(d.pricePerKg) : '—') +
         '</span><span class="pf-macro__k">lei/kg</span></div>' +
         '</div>' +
+        '<p class="pf-muted" style="font-size:var(--fs-2xs);margin-top:var(--sp-2)">' +
+        'Interval realist: ' + fmt.ronRange(d.ronPer100gProtein, d.ronPer100gProteinLo,
+          d.ronPer100gProteinHi, { verified: d.priceVerified }) + ' la 100 g de proteină.</p>' +
         ui.statBar({ label: t('stat.value'), value: d.bars.value, color: 'var(--stat-value)', size: 'lg', tip: t('stat.value.tip') })) +
       (notes ? block('Despre magazine', notes) : '') +
       '</div>' +
@@ -558,7 +576,9 @@
       '<span class="pf-badge pf-badge--accent">' + fmt.num(d.protein100, 1) + ' g proteină / 100 ' + food.unit + '</span>' +
       '<span class="pf-badge">' + Math.round(d.kcal100) + ' kcal</span>' +
       '<span class="pf-badge">' + Math.round(d.purityPct) + '% din calorii</span>' +
-      (d.ronPer100gProtein ? '<span class="pf-badge">' + fmt.num(d.ronPer100gProtein, 1) + ' lei / 100 g proteină</span>' : '') +
+      (d.ronPer100gProtein ? '<span class="pf-badge">' +
+        (d.priceVerified ? '' : '≈ ') + fmt.num(d.ronPer100gProtein, 1) +
+        ' lei / 100 g proteină</span>' : '') +
       '<span class="pf-badge">' + fmt.minutes(food.timeMin, PF.i18n.lang()) + '</span>' +
       '</div>' +
       '</div>' +
@@ -704,9 +724,13 @@
       'Porție: ' + ((f.serving && f.serving.label) || d.servingGrams + ' ' + f.unit) +
         ' → ' + fmt.num(d.perServing.protein, 1) + ' g proteină',
       d.bestPrice
-        ? 'Preț: ' + fmt.ron(d.bestPrice.packPrice) + ' la ' + d.bestPrice.name +
-          ' (' + fmt.num(d.ronPer100gProtein, 1) + ' lei / 100 g proteină)'
-        : 'Preț: necunoscut',
+        ? 'Pret (ESTIMARE, nu pret de raft): ' +
+          fmt.ronApprox(d.bestPrice.packPrice, { verified: d.priceVerified }) +
+          ' la ' + d.bestPrice.name + ' (' +
+          fmt.ronRange(d.ronPer100gProtein, d.ronPer100gProteinLo,
+                       d.ronPer100gProteinHi, { verified: d.priceVerified }) +
+          ' / 100 g proteina)'
+        : 'Pret: necunoscut',
       'Timp: ' + fmt.minutes(f.timeMin, 'ro') + ' · efort ' + f.effort + '/5',
       'Găsești la: ' + (f.stores || []).map(s => s.name).join(', ')
     ];

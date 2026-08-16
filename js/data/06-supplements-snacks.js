@@ -1467,7 +1467,7 @@
       storage: 'Loc uscat, temperatura camerei.',
       shelfLife: '~9 luni',
       dataConfidence: 'low',
-      sources: ['Etichete Sano Vita gama fitness', 'Estimare pe baza produselor de raft 2026']
+      sources: ['Etichete Sano Vita gama fitness', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {

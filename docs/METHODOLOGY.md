@@ -79,8 +79,15 @@ lei_per_100g_proteină = preț_pachet / proteină_în_pachet × 100
 ```
 
 Aplicația calculează asta pentru **fiecare magazin** din intrare și păstrează cel
-mai bun preț găsit. Bara e logaritmică, pentru că distribuția e brutal
-asimetrică:
+mai bun preț găsit.
+
+> **Prețurile sunt estimări, nu date.** Niciunul nu a fost verificat într-un
+> magazin, iar pentru retailul alimentar din România nu există un API public de
+> prețuri. Fiecare preț poartă o marjă (±20% la lanțuri, ±30% la piață și
+> restaurant) și e afișat cu `≈`. Bara de preț și clasamentul de cost sunt deci
+> ordonări relative, corecte ca ierarhie, aproximative ca valoare absolută.
+
+Bara e logaritmică, pentru că distribuția e brutal asimetrică:
 
 ```
 bara = 100 × (1 − (ln(cost) − ln(2,5)) / (ln(80) − ln(2,5)))

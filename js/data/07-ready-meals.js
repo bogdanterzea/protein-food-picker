@@ -1684,7 +1684,7 @@
       storage: 'Se mănâncă imediat. La frigider maxim 2 zile.',
       shelfLife: 'Aceeași zi',
       dataConfidence: 'low',
-      sources: ['Kaufland Grill prețuri 2026', 'valori estimate ceafă de porc la grătar']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'valori estimate ceafă de porc la grătar']
     },
 
     {
@@ -1793,7 +1793,7 @@
       storage: 'Se mănâncă imediat.',
       shelfLife: 'Aceeași zi',
       dataConfidence: 'low',
-      sources: ['Kaufland Grill prețuri 2026', 'valori estimate mici comerciali']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'valori estimate mici comerciali']
     },
 
     {
@@ -1896,7 +1896,7 @@
       storage: 'Frigider maxim 24 h.',
       shelfLife: 'Aceeași zi, ideal',
       dataConfidence: 'low',
-      sources: ['Kaufland Grill prețuri 2026', 'valori estimate șnițel de pui pane']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'valori estimate șnițel de pui pane']
     },
 
     {
@@ -1999,7 +1999,7 @@
       storage: 'Frigider maxim 2 zile.',
       shelfLife: 'Aceeași zi, ideal',
       dataConfidence: 'low',
-      sources: ['Prețuri bistro Kaufland / Carrefour 2026', 'valori estimate chiftele tradiționale']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'valori estimate chiftele tradiționale']
     },
 
     {
@@ -2106,7 +2106,7 @@
       storage: 'Frigider maxim 24 h, reîncălzire o singură dată.',
       shelfLife: 'Aceeași zi',
       dataConfidence: 'low',
-      sources: ['Prețuri bistro Kaufland 2026', 'valori estimate pilaf comercial']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'valori estimate pilaf comercial']
     },
 
     {
@@ -2216,7 +2216,7 @@
       storage: 'Frigider 2 zile.',
       shelfLife: 'Aceeași zi, ideal',
       dataConfidence: 'low',
-      sources: ['Prețuri bistro Kaufland 2026', 'valori estimate varză cu ciolan']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'valori estimate varză cu ciolan']
     },
 
     {
@@ -2326,7 +2326,7 @@
       storage: 'Frigider maxim 2 zile.',
       shelfLife: 'Aceeași zi, ideal',
       dataConfidence: 'low',
-      sources: ['Kaufland Grill prețuri 2026', 'valori estimate pulpe de pui dezosate la grătar']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'valori estimate pulpe de pui dezosate la grătar']
     },
 
     {
@@ -6801,7 +6801,7 @@
       storage: 'Componentele separate: puiul maxim 3 zile la frigider, salata în ziua deschiderii.',
       shelfLife: 'Se asamblează la momentul mesei',
       dataConfidence: 'medium',
-      sources: ['Calcul pe baza valorilor din acest atlas', 'prețuri Sibiu 2026']
+      sources: ['Calcul pe baza valorilor din acest atlas', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     // ---INSERT-NEW-ITEMS-ABOVE---

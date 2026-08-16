@@ -55,10 +55,11 @@
       color: 'var(--stat-value)',
       value: f => f._d.ronPer100gProtein,
       asc: true,
-      display: f => fmt.num(f._d.ronPer100gProtein, 1) + ' lei',
+      display: f => (f._d.priceVerified ? '' : '≈') + fmt.num(f._d.ronPer100gProtein, 1) + ' lei',
       filter: f => usableProtein(f) && f._d.ronPer100gProtein !== null && f._d.protein100 >= 5,
-      desc: 'Cât te costă 100 g de proteină pură. Aici se vede diferența brutală ' +
-        'între leguminoase uscate și batoanele proteice.'
+      desc: 'Cât te costă 100 g de proteină pură. ATENȚIE: toate prețurile sunt ' +
+        'estimări (±20–30%), nu prețuri de raft. Ordinea e aproape sigur corectă — ' +
+        'diferența dintre linte și un baton proteic e de 20×, nu de 5%.'
     },
     {
       key: 'serving',

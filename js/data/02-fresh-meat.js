@@ -272,7 +272,7 @@
       storage: 'Frigider 0–4 °C.',
       shelfLife: '2–3 zile în frigider; 6 luni congelat',
       dataConfidence: 'high',
-      sources: ['USDA SR Legacy 05091', 'Preț raft Kaufland/Penny Sibiu 2026']
+      sources: ['USDA SR Legacy 05091', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -335,7 +335,7 @@
       storage: 'Frigider 0–4 °C.',
       shelfLife: '2–3 zile în frigider; 6 luni congelat',
       dataConfidence: 'high',
-      sources: ['USDA SR Legacy 05098', 'Prețuri raft Penny/Kaufland Sibiu 2026']
+      sources: ['USDA SR Legacy 05098', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -398,7 +398,7 @@
       storage: 'Frigider 0–4 °C.',
       shelfLife: '2–3 zile în frigider; 6 luni congelat',
       dataConfidence: 'high',
-      sources: ['USDA SR Legacy 05144', 'Prețuri raft Kaufland/Metro Sibiu 2026']
+      sources: ['USDA SR Legacy 05144', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -467,7 +467,7 @@
       storage: 'Frigider 0–4 °C, în tăviță. Carnea gătită se ține 3 zile.',
       shelfLife: '2–3 zile crud în frigider; 9 luni congelat întreg',
       dataConfidence: 'high',
-      sources: ['USDA SR Legacy 05006', 'transavia.ro', 'Prețuri raft Lidl/Penny Sibiu 2026']
+      sources: ['USDA SR Legacy 05006', 'transavia.ro', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -598,7 +598,7 @@
       storage: 'Frigider 0–2 °C.',
       shelfLife: '1–2 zile în frigider; 3 luni congelat',
       dataConfidence: 'high',
-      sources: ['USDA SR Legacy 05028', 'Prețuri raft Kaufland Sibiu 2026']
+      sources: ['USDA SR Legacy 05028', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -661,7 +661,7 @@
       storage: 'Frigider 0–2 °C.',
       shelfLife: '1–2 zile în frigider; 4 luni congelat',
       dataConfidence: 'high',
-      sources: ['USDA SR Legacy 05029', 'Prețuri raft Selgros Sibiu 2026']
+      sources: ['USDA SR Legacy 05029', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -724,7 +724,7 @@
       storage: 'Frigider 0–2 °C sau direct la congelator.',
       shelfLife: '1–2 zile în frigider; 6 luni congelat',
       dataConfidence: 'medium',
-      sources: ['USDA SR Legacy 05031', 'Piața Cibin Sibiu, observație directă']
+      sources: ['USDA SR Legacy 05031', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -1042,7 +1042,7 @@
       storage: 'Frigider 0–2 °C maximum 24 h, sau direct congelator.',
       shelfLife: '1 zi crud; supa 4 zile la frigider, 6 luni congelată',
       dataConfidence: 'low',
-      sources: ['Piața Cibin Sibiu, observație directă', 'USDA SR Legacy 05010']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'USDA SR Legacy 05010']
     },
 
     {
@@ -1108,7 +1108,7 @@
       storage: 'Frigider 0–2 °C; ideal gătit în ziua cumpărării.',
       shelfLife: '1–2 zile în frigider; 6 luni congelat',
       dataConfidence: 'medium',
-      sources: ['Piața Cibin Sibiu, observație directă', 'CIQUAL 36104 (poulet fermier)']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'CIQUAL 36104 (poulet fermier)']
     },
 
     {
@@ -1297,7 +1297,7 @@
       storage: 'Frigider 0–2 °C.',
       shelfLife: '2 zile în frigider; 4 luni congelat',
       dataConfidence: 'medium',
-      sources: ['USDA SR Legacy 05165', 'Prețuri raft Kaufland Sibiu 2026']
+      sources: ['USDA SR Legacy 05165', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -1492,7 +1492,7 @@
       storage: 'Frigider 0–4 °C maximum 2 zile crud; congelator −18 °C.',
       shelfLife: '2 zile crud refrigerat; 12 luni congelat întreg',
       dataConfidence: 'medium',
-      sources: ['USDA SR Legacy 05192', 'agricola.ro', 'Prețuri sezon sărbători Kaufland 2025']
+      sources: ['USDA SR Legacy 05192', 'agricola.ro', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -1964,7 +1964,7 @@
       storage: 'Frigider 0–4 °C.',
       shelfLife: '3–4 zile refrigerate; 6 luni congelate',
       dataConfidence: 'high',
-      sources: ['USDA SR Legacy 10036', 'Prețuri raft Kaufland/Metro Sibiu 2026']
+      sources: ['USDA SR Legacy 10036', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -2030,7 +2030,7 @@
       storage: 'Frigider 0–4 °C.',
       shelfLife: '2–3 zile crud; 4 luni congelat',
       dataConfidence: 'low',
-      sources: ['USDA SR Legacy 10195', 'Piața Cibin Sibiu, observație directă']
+      sources: ['USDA SR Legacy 10195', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -2367,7 +2367,7 @@
       storage: 'Frigider 0–4 °C.',
       shelfLife: '3–4 zile proaspăt; 6 luni congelat',
       dataConfidence: 'medium',
-      sources: ['USDA SR Legacy 10046', 'Prețuri raft Kaufland/Selgros Sibiu 2026']
+      sources: ['USDA SR Legacy 10046', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -2896,7 +2896,7 @@
       storage: 'Frigider 0–2 °C.',
       shelfLife: '2 zile crudă; 6 luni congelată; fiartă și feliată, 4 zile',
       dataConfidence: 'medium',
-      sources: ['USDA SR Legacy 13324', 'Piața Cibin Sibiu, observație directă']
+      sources: ['USDA SR Legacy 13324', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -2963,7 +2963,7 @@
       storage: 'Frigider 0–2 °C.',
       shelfLife: '1–2 zile crudă; 4 luni congelată',
       dataConfidence: 'medium',
-      sources: ['USDA SR Legacy 13321', 'Piața Cibin Sibiu, observație directă']
+      sources: ['USDA SR Legacy 13321', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -3030,7 +3030,7 @@
       storage: 'Frigider 0–4 °C sau congelator.',
       shelfLife: '2–3 zile refrigerate; 6 luni congelate',
       dataConfidence: 'low',
-      sources: ['USDA FDC 174733 (bone marrow)', 'Piața Cibin Sibiu, observație directă']
+      sources: ['USDA FDC 174733 (bone marrow)', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -3301,7 +3301,7 @@
       storage: 'Frigider 0–2 °C, maximum 24 h.',
       shelfLife: '1 zi refrigerată; 3 luni congelată',
       dataConfidence: 'medium',
-      sources: ['USDA SR Legacy 17224', 'Prețuri sezon pascal Sibiu 2026']
+      sources: ['USDA SR Legacy 17224', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -3368,7 +3368,7 @@
       storage: 'Frigider 0–4 °C.',
       shelfLife: '3 zile crudă; 8 luni congelată',
       dataConfidence: 'medium',
-      sources: ['USDA SR Legacy 17017', 'Piața Cibin Sibiu, sezon pascal']
+      sources: ['USDA SR Legacy 17017', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -3435,7 +3435,7 @@
       storage: 'Frigider 0–4 °C.',
       shelfLife: '3 zile refrigerată; 8 luni congelată',
       dataConfidence: 'low',
-      sources: ['USDA SR Legacy 17224 (adaptat pentru mutton)', 'Piața Cibin Sibiu, observație directă']
+      sources: ['USDA SR Legacy 17224 (adaptat pentru mutton)', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -4111,7 +4111,7 @@
       storage: 'Congelator −18 °C.',
       shelfLife: '9–12 luni la −18 °C',
       dataConfidence: 'medium',
-      sources: ['USDA SR Legacy 05098', 'Prețuri congelator Selgros/Metro Sibiu 2026']
+      sources: ['USDA SR Legacy 05098', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -4178,7 +4178,7 @@
       storage: 'Congelator −18 °C.',
       shelfLife: '3–4 luni la −18 °C (grăsimea râncezește mai repede decât carnea întreagă)',
       dataConfidence: 'low',
-      sources: ['Prețuri congelator Selgros/Metro Sibiu 2026', 'USDA SR Legacy 10219 + 13020']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'USDA SR Legacy 10219 + 13020']
     },
 
     {

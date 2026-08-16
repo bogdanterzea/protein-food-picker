@@ -20,7 +20,7 @@ Fiecare produs din atlas are:
 | Ce | De ce contează |
 |---|---|
 | Macro-uri complete la 100 g **și** pe porție reală | „25 g proteină la 100 g” nu ajută dacă porția e de 30 g |
-| Preț pe **100 g de proteină pură** | Singura comparație corectă între un baton proteic și un piept de pui |
+| Preț **estimat** pe 100 g de proteină pură (`≈`, ±20–30%) | Singura comparație corectă între un baton proteic și un piept de pui — dar vezi nota de mai jos |
 | Efort (0–5) și timp total vs. timp activ | 45 de minute la cuptor nu e același lucru cu 45 de minute de tăiat |
 | Gust, sațietate, comoditate, versatilitate (0–100) | Evaluări subiective, dar asumate și consistente |
 | Magazine din Sibiu + raionul + prețul pachetului | Ca să știi unde te duci, nu doar ce cauți |
@@ -89,6 +89,30 @@ poți trimite un link cu exact ce vezi pe ecran.
 
 **262 de produse (52%) au efort zero** — le deschizi și le mănânci.
 **47 sunt gata de mâncat în 0 minute**, fără nici măcar încălzit.
+
+
+> ## ⚠️ Despre prețuri — citește asta întâi
+>
+> **Niciun preț din acest proiect nu este verificat.** Sunt estimări pentru
+> 2026, calibrate pe intervale realiste — nu au fost citite de pe un raft și
+> nu vin dintr-un API.
+>
+> Nu există un API public de prețuri pentru retailul alimentar din România.
+> Singurul deschis (Open Prices / Open Food Facts) conținea, în august 2026,
+> **84 de prețuri în RON pentru toată țara**, aproape toate dulciuri și
+> băuturi — practic nicio suprapunere cu un atlas de proteine.
+> `tools/verify-prices.js` interoghează acel API și raportează potrivirile;
+> astăzi nu găsește niciuna suficient de sigură.
+>
+> De aceea aplicația afișează peste tot `≈` și o marjă de **±20%** (lanțuri de
+> retail și online) sau **±30%** (piață, măcelărie, pescărie, restaurant,
+> farmacie). Un preț apare fără `≈` doar dacă are `verified: true` — momentan
+> niciunul nu are.
+>
+> **Ce poți face cu ele:** să compari produse între ele. Ordinea clasamentelor
+> e aproape sigur corectă, pentru că diferențele sunt de ordinul zecilor de
+> ori, nu de procente.
+> **Ce NU poți face:** să-ți faci bugetul, sau să te aștepți la prețul ăsta la casă.
 
 Media pe atlas e de **19,8 g proteină / 100 g**. Prețul median al proteinei e de
 **29,5 lei / 100 g de proteină pură**; cel mai ieftin produs coboară la

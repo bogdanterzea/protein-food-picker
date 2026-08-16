@@ -67,6 +67,32 @@
     return ron(v, v < 10 ? 2 : 1);
   }
 
+  /**
+   * A price the app is NOT sure about.
+   *
+   * Every price in this project is an estimate, so the default rendering
+   * carries `≈`. Passing `verified: true` drops the marker — that is the
+   * only way an exact-looking price can ever appear on screen.
+   */
+  function ronApprox(v, opts) {
+    if (v === null || v === undefined || Number.isNaN(v) || v === 0) return '—';
+    const o = opts || {};
+    const body = o.short ? ronShort(v) : ron(v, o.decimals);
+    return o.verified ? body : '≈ ' + body;
+  }
+
+  /** "≈ 30 lei (24–36)" — the number plus the honest spread around it. */
+  function ronRange(v, lo, hi, opts) {
+    if (v === null || v === undefined || Number.isNaN(v)) return '—';
+    const o = opts || {};
+    if (o.verified) return ron(v, o.decimals);
+    if (lo === null || lo === undefined || hi === null || hi === undefined) {
+      return ronApprox(v, o);
+    }
+    const d = v < 10 ? 1 : 0;
+    return '≈ ' + num(v, d) + ' lei (' + num(lo, d) + '–' + num(hi, d) + ')';
+  }
+
   /* -----------------------------------------------------------------------
    * TIME
    * -------------------------------------------------------------------- */
@@ -224,6 +250,8 @@
     kcal: kcal,
     ron: ron,
     ronShort: ronShort,
+    ronApprox: ronApprox,
+    ronRange: ronRange,
     minutes: minutes,
     timeBucket: timeBucket,
     esc: esc,

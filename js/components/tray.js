@@ -175,7 +175,7 @@
       '<div class="pf-tray__total" style="--c:var(--macro-fat)"><b>' +
       fmt.num(tot.fat, 0) + ' g</b><span>' + t('card.fat') + '</span></div>' +
       '<div class="pf-tray__total" style="--c:var(--stat-value)"><b>' +
-      fmt.ronShort(tot.cost) + '</b><span>' + t('tray.cost') + '</span></div>' +
+      fmt.ronApprox(tot.cost, { short: true }) + '</b><span>' + t('tray.cost') + '</span></div>' +
       '<button class="pf-iconbtn" data-act="toggle-tray" aria-label="' +
       (isOpen ? 'Închide' : 'Deschide') + '">' + (isOpen ? '▾' : '▴') + '</button>' +
       '</div>' +
@@ -247,10 +247,10 @@
       '<div class="pf-macro pf-macro--kcal"><span class="pf-macro__v">' + fmt.num(tot.kcal, 0) +
       '</span><span class="pf-macro__k">kcal</span></div>' +
       '</div>' +
-      (tot.unknownCost
-        ? '<p class="pf-muted" style="font-size:var(--fs-3xs)">⚠️ ' + tot.unknownCost +
-          ' produse fără preț cunoscut — costul total e subestimat.</p>'
-        : '') +
+      '<p class="pf-muted" style="font-size:var(--fs-3xs);line-height:1.5">' +
+      '≈ Costul e o estimare (±20–30%), nu un preț de raft.' +
+      (tot.unknownCost ? ' ' + tot.unknownCost + ' produse nu au niciun preț, deci totalul e și subestimat.' : '') +
+      '</p>' +
       '<div class="pf-row" style="gap:var(--sp-2);margin-top:var(--sp-2)">' +
       '<button class="pf-btn pf-btn--sm" data-act="tray-export">📋 ' + t('tray.export') + '</button>' +
       '<button class="pf-btn pf-btn--sm" data-act="tray-shop">🛒 Listă</button>' +
@@ -290,7 +290,7 @@
           '<header class="pf-shop__head" style="--store-color:' + color + '">' +
           '<span class="pf-shop__name">' + fmt.esc(g.name) + '</span>' +
           '<span class="pf-badge">' + g.items.length + '</span>' +
-          '<span class="pf-shop__cost">' + fmt.ronShort(g.cost) + '</span>' +
+          '<span class="pf-shop__cost">' + fmt.ronApprox(g.cost, { short: true }) + '</span>' +
           '</header>' +
           '<ul class="pf-shop__list">' +
           g.items
@@ -302,7 +302,7 @@
                 (done ? ' checked' : '') + '>' +
                 '<span>' + (it.food.emoji || '') + ' ' + fmt.esc(it.food.nameRo || it.food.name) + '</span>' +
                 '<span class="pf-shop__qty">' + fmt.num(it.grams, 0) + ' ' + it.food.unit +
-                (it.cost ? ' · ' + fmt.ronShort(it.cost) : '') + '</span>' +
+                (it.cost ? ' · ' + fmt.ronApprox(it.cost, { short: true }) : '') + '</span>' +
                 '</li>'
               );
             })
@@ -317,7 +317,7 @@
     container.innerHTML =
       '<div class="pf-resultbar" style="margin-bottom:var(--sp-4)">' +
       '<span class="pf-resultbar__count"><em>' + Object.keys(items).length + '</em> produse · ' +
-      fmt.num(tot.protein, 0) + ' g proteină · ' + fmt.ronShort(tot.cost) + '</span>' +
+      fmt.num(tot.protein, 0) + ' g proteină · ' + fmt.ronApprox(tot.cost, { short: true }) + '</span>' +
       '<span class="pf-grow"></span>' +
       '<button class="pf-btn pf-btn--sm" data-act="print">🖨️ ' + t('tray.print') + '</button>' +
       '<button class="pf-btn pf-btn--sm" data-act="tray-export">📋 ' + t('tray.export') + '</button>' +
@@ -340,10 +340,10 @@
           '  • ' + (it.food.nameRo || it.food.name) +
           ' — ' + fmt.num(it.grams, 0) + ' ' + it.food.unit +
           ' (' + fmt.num(it.food._d.perServing.protein * it.servings, 1) + ' g proteină' +
-          (it.cost ? ', ' + fmt.ron(it.cost) : '') + ')'
+          (it.cost ? ', ' + fmt.ronApprox(it.cost) : '') + ')'
         );
       });
-      lines.push('  Subtotal: ' + fmt.ron(g.cost));
+      lines.push('  Subtotal: ' + fmt.ronApprox(g.cost));
       lines.push('');
     });
 
@@ -355,7 +355,10 @@
     lines.push('Fibre: ' + fmt.num(tot.fiber, 1) + ' g');
     lines.push('Sare: ' + fmt.num(tot.salt, 2) + ' g');
     lines.push('Calorii: ' + fmt.num(tot.kcal, 0) + ' kcal');
-    lines.push('Cost estimat: ' + fmt.ron(tot.cost));
+    lines.push('Cost estimat: ' + fmt.ronApprox(tot.cost));
+    lines.push('');
+    lines.push('NOTA: preturile sunt ESTIMARI (+/-20-30%), nu preturi de raft.');
+    lines.push('Niciun pret din acest atlas nu a fost verificat intr-un magazin.');
 
     return lines.join('\n');
   }
@@ -389,6 +392,9 @@
       }
     });
 
+    /* A width change can rewrap the handle, so re-measure the peek. */
+    window.addEventListener('resize', function () { setOpen(isOpen); });
+
     el.addEventListener('change', function (ev) {
       const inp = ev.target.closest('[data-act="qty"]');
       if (!inp) return;
@@ -420,19 +426,27 @@
     const empty = count() === 0;
     el.classList.toggle('is-open', open && !empty);
     el.classList.toggle('is-hidden', empty && !open);
-    const peek = getComputedStyle(document.documentElement)
-      .getPropertyValue('--tray-peek').trim() || '58px';
+    render();
+
+    /* Measure the handle instead of trusting a hard-coded peek height.
+     * The handle's content changes (the running cost gained a `≈`, totals
+     * gain digits), and any fixed value eventually becomes too short — which
+     * pushes the totals the handle exists to show below the fold. */
+    const handle = el.querySelector('.pf-tray__handle');
+    const measured = handle ? Math.ceil(handle.getBoundingClientRect().height) : 0;
+    const peek = Math.max(measured, 52) + 'px';
+    document.documentElement.style.setProperty('--tray-peek', peek);
     document.documentElement.style.setProperty(
       '--tray-h',
       empty && !open ? '0px' : peek
     );
-    render();
 
     /* --tray-h is only the page's bottom padding. Toasts need the tray's
      * ACTUAL height, otherwise they render on top of the open panel. */
     const lift = empty && !open
       ? '0px'
       : (open ? Math.round(el.getBoundingClientRect().height) + 'px' : peek);
+    /* keep it in sync when the window changes width */
     document.documentElement.style.setProperty('--tray-lift', lift);
   }
 

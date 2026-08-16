@@ -49,11 +49,17 @@
       priceLine =
         '<span class="pf-card__price" data-tip="' +
         fmt.esc(
-          'Cel mai bun preț găsit: ' + fmt.ron(d.bestPrice.packPrice) + ' / ' +
+          (d.priceVerified
+            ? 'Preț confirmat: '
+            : 'ESTIMARE, nu preț de raft. Niciun preț din atlas nu e verificat. ') +
+          fmt.ronApprox(d.bestPrice.packPrice, { verified: d.priceVerified }) + ' / ' +
           d.bestPrice.packGrams + ' ' + food.unit + ' la ' + d.bestPrice.name +
-          ' → ' + fmt.ron(d.ronPer100gProtein) + ' pentru 100 g de proteină pură.'
+          ' → ' + fmt.ronRange(d.ronPer100gProtein, d.ronPer100gProteinLo,
+                               d.ronPer100gProteinHi, { verified: d.priceVerified }) +
+          ' pentru 100 g de proteină pură.'
         ) + '">' +
-        fmt.ronShort(d.ronPer100gProtein) + ' /100g P</span>';
+        fmt.ronApprox(d.ronPer100gProtein, { short: true, verified: d.priceVerified }) +
+        ' /100g P</span>';
     }
 
     /* ---- serving readout ---------------------------------------------- */
@@ -163,7 +169,8 @@
       '<td class="num">' + fmt.num(d.carbs100, 1) + '</td>' +
       '<td class="num">' + fmt.num(d.fat100, 1) + '</td>' +
       '<td class="num">' + fmt.num(d.perServing.protein, 1) + '</td>' +
-      '<td class="num">' + (d.ronPer100gProtein ? fmt.num(d.ronPer100gProtein, 1) : '—') + '</td>' +
+      '<td class="num">' + (d.ronPer100gProtein
+        ? (d.priceVerified ? '' : '≈') + fmt.num(d.ronPer100gProtein, 1) : '—') + '</td>' +
       '<td class="num">' + fmt.minutes(food.timeMin, PF.i18n.lang()) + '</td>' +
       '<td class="num">' + Math.round(d.score) + '</td>' +
       '</tr>'

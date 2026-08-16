@@ -113,7 +113,7 @@
       storage: 'Frigider 0–4 °C, 2–3 zile după deschidere.',
       shelfLife: '~21 zile sigilat',
       dataConfidence: 'medium',
-      sources: ['caroli.ro portofoliu', 'Etichete raft Kaufland Sibiu']
+      sources: ['caroli.ro portofoliu', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -162,7 +162,7 @@
       storage: 'Frigider 0–4 °C. Feliată la vitrină, se consumă în 3 zile.',
       shelfLife: '3 zile de la feliere / ~25 zile în ambalaj vidat',
       dataConfidence: 'medium',
-      sources: ['Etichete vitrină Kaufland Sibiu', 'cristim.ro']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'cristim.ro']
     },
 
     {
@@ -211,7 +211,7 @@
       storage: 'Frigider 0–4 °C, 3 zile feliată.',
       shelfLife: '~30 zile baton vidat',
       dataConfidence: 'medium',
-      sources: ['elit.ro', 'Etichete vitrină Kaufland Sibiu']
+      sources: ['elit.ro', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -258,7 +258,7 @@
       storage: 'Frigider 0–4 °C, 2 zile după deschidere.',
       shelfLife: '~18 zile sigilat',
       dataConfidence: 'medium',
-      sources: ['lidl.ro sortiment Pikok', 'Etichete raft Lidl Sibiu']
+      sources: ['lidl.ro sortiment Pikok', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -305,7 +305,7 @@
       storage: 'Frigider 0–4 °C, caserola resigilată 3–4 zile.',
       shelfLife: '~21 zile sigilat',
       dataConfidence: 'medium',
-      sources: ['kaufland.ro K-Classic', 'Etichete raft Kaufland Sibiu']
+      sources: ['kaufland.ro K-Classic', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -402,7 +402,7 @@
       storage: 'Frigider 0–4 °C, 3 zile după deschidere.',
       shelfLife: '~21 zile sigilat',
       dataConfidence: 'medium',
-      sources: ['carrefour.ro', 'Etichete raft Carrefour Sibiu']
+      sources: ['carrefour.ro', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -451,7 +451,7 @@
       storage: 'Frigider 0–4 °C, 2 zile după deschidere.',
       shelfLife: '~21 zile sigilat',
       dataConfidence: 'low',
-      sources: ['Etichete raft Penny Sibiu', 'Estimare tip produs']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'Estimare tip produs']
     },
 
     {
@@ -551,7 +551,7 @@
       storage: 'Frigider 0–4 °C, 2 zile după deschidere.',
       shelfLife: '~20 zile sigilat',
       dataConfidence: 'medium',
-      sources: ['caroli.ro', 'Etichete raft Sibiu']
+      sources: ['caroli.ro', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -601,7 +601,7 @@
       storage: 'Frigider 0–4 °C, 2 zile după deschidere.',
       shelfLife: '~21 zile sigilat',
       dataConfidence: 'medium',
-      sources: ['calo.ro fișă pastramă curcan', 'Etichete raft Sibiu']
+      sources: ['calo.ro fișă pastramă curcan', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -650,7 +650,7 @@
       storage: 'Frigider 0–4 °C, 2–3 zile după deschidere.',
       shelfLife: '~21 zile sigilat / 45 zile baton vidat',
       dataConfidence: 'medium',
-      sources: ['elit.ro', 'Etichete raft Kaufland Sibiu']
+      sources: ['elit.ro', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -699,7 +699,7 @@
       storage: 'Frigider 0–4 °C, 3 zile de la feliere.',
       shelfLife: '3 zile feliată la vitrină',
       dataConfidence: 'medium',
-      sources: ['calo.ro pastramă de vită', 'Observație vitrine Sibiu']
+      sources: ['calo.ro pastramă de vită', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -758,7 +758,7 @@
       storage: 'Frigider 0–4 °C, 4–5 zile. Congelator 3 luni.',
       shelfLife: '~7 zile la vitrină / 3 luni congelată',
       dataConfidence: 'medium',
-      sources: ['calo.ro pastramă de oaie', 'Observație Piața Cibin Sibiu']
+      sources: ['calo.ro pastramă de oaie', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -808,7 +808,7 @@
       storage: 'Frigider 0–4 °C, 5–7 zile. Se poate congela.',
       shelfLife: '~10 zile la vitrină',
       dataConfidence: 'low',
-      sources: ['Etichete vitrină Kaufland Sibiu', 'Valori tipice CIQUAL pentru ceafă afumată']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'Valori tipice CIQUAL pentru ceafă afumată']
     },
 
     {
@@ -959,7 +959,7 @@
       storage: 'Frigider 0–7 °C, 5 zile după deschidere.',
       shelfLife: '~30 zile sigilat',
       dataConfidence: 'medium',
-      sources: ['Etichete raft Kaufland Sibiu', 'Valori tipice salam semi-uscat românesc']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'Valori tipice salam semi-uscat românesc']
     },
 
     {
@@ -1009,7 +1009,7 @@
       storage: 'Loc răcoros și uscat, sau frigider. Rezistă foarte bine.',
       shelfLife: '2–4 luni',
       dataConfidence: 'medium',
-      sources: ['klorii.ro Ghiudem-Babic Aldis', 'Etichete raft Sibiu']
+      sources: ['klorii.ro Ghiudem-Babic Aldis', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -1059,7 +1059,7 @@
       storage: 'Loc răcoros și uscat, în hârtie. Frigider după feliere.',
       shelfLife: '2–4 luni baton',
       dataConfidence: 'medium',
-      sources: ['lalexandru.ro fișă babic', 'Etichete raft Sibiu']
+      sources: ['lalexandru.ro fișă babic', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -1109,7 +1109,7 @@
       storage: 'Loc răcoros, uscat. După deschidere, frigider, 7 zile.',
       shelfLife: '~45 zile sigilat',
       dataConfidence: 'medium',
-      sources: ['lidl.ro gama Pikok', 'Etichete raft Sibiu']
+      sources: ['lidl.ro gama Pikok', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -1159,7 +1159,7 @@
       storage: 'Loc răcoros și uscat sau frigider. Congelator 3–4 luni.',
       shelfLife: '~30 zile la rece',
       dataConfidence: 'low',
-      sources: ['Observație Piața Cibin Sibiu', 'Valori tipice cârnat crud-uscat de porc']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'Valori tipice cârnat crud-uscat de porc']
     },
 
     {
@@ -1210,7 +1210,7 @@
       storage: 'Frigider 0–4 °C, 3 zile după deschidere; ține feliile în hârtia originală.',
       shelfLife: '~40 zile sigilat',
       dataConfidence: 'medium',
-      sources: ['Etichete raft Kaufland Sibiu', 'Valori tipice prosciutto crudo']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'Valori tipice prosciutto crudo']
     },
 
     {
@@ -1260,7 +1260,7 @@
       storage: 'Frigider după deschidere, 7 zile. Batonul întreg se ține la loc răcoros.',
       shelfLife: '~60 zile baton sigilat',
       dataConfidence: 'medium',
-      sources: ['campofrio.es fișă produs', 'Etichete raft Carrefour Sibiu']
+      sources: ['campofrio.es fișă produs', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -1310,7 +1310,7 @@
       storage: 'Loc răcoros și uscat pentru baton; frigider după feliere, 5 zile.',
       shelfLife: '4–6 luni baton întreg',
       dataConfidence: 'medium',
-      sources: ['pick.hu fișă produs', 'Etichete raft Kaufland Sibiu']
+      sources: ['pick.hu fișă produs', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -1532,7 +1532,7 @@
       storage: 'Frigider sau loc răcoros; rezistă săptămâni.',
       shelfLife: '~30 zile la rece',
       dataConfidence: 'medium',
-      sources: ['Valori tipice CIQUAL slănină afumată', 'Observație Piața Cibin']
+      sources: ['Valori tipice CIQUAL slănină afumată', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -1581,7 +1581,7 @@
       storage: 'Frigider 0–4 °C, 5 zile de la feliere.',
       shelfLife: '~25 zile vidat',
       dataConfidence: 'medium',
-      sources: ['Etichete vitrină Kaufland Sibiu', 'cristim.ro']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'cristim.ro']
     },
 
     {
@@ -1681,7 +1681,7 @@
       storage: 'Frigider 0–4 °C, 3 zile.',
       shelfLife: '~14 zile',
       dataConfidence: 'low',
-      sources: ['Etichete raft discount Sibiu', 'Valori tipice parizer economic']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'Valori tipice parizer economic']
     },
 
     {
@@ -1740,7 +1740,7 @@
       storage: 'Frigider 0–4 °C; după deschidere, 3 zile în apă rece schimbată zilnic sau ambalaj închis.',
       shelfLife: '~21 zile sigilat',
       dataConfidence: 'low',
-      sources: ['Etichete raft discount Sibiu', 'Valori tipice crenvurști economici']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'Valori tipice crenvurști economici']
     },
 
     {
@@ -1852,7 +1852,7 @@
       storage: 'Frigider 0–4 °C, 3 zile după deschidere.',
       shelfLife: '~25 zile sigilat',
       dataConfidence: 'medium',
-      sources: ['caroli.ro', 'Etichete raft Carrefour Sibiu']
+      sources: ['caroli.ro', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -1906,7 +1906,7 @@
       storage: 'Frigider 0–4 °C, 3 zile după deschidere.',
       shelfLife: '~21 zile sigilat',
       dataConfidence: 'low',
-      sources: ['Etichete raft Kaufland Sibiu', 'Valori tipice crenvurști de curcan']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'Valori tipice crenvurști de curcan']
     },
 
     {
@@ -1964,7 +1964,7 @@
       storage: 'Frigider 0–4 °C, 3 zile după deschidere.',
       shelfLife: '~25 zile sigilat',
       dataConfidence: 'low',
-      sources: ['Etichete raft Carrefour Sibiu', 'Valori tipice frankfurter premium']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'Valori tipice frankfurter premium']
     },
 
     {
@@ -2014,7 +2014,7 @@
       storage: 'Frigider 0–4 °C, 3–4 zile. Nu se congelează bine (aspicul se separă).',
       shelfLife: '~7 zile',
       dataConfidence: 'low',
-      sources: ['Etichete vitrină Kaufland Sibiu', 'Valori tipice tobă de porc']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'Valori tipice tobă de porc']
     },
 
     {
@@ -2065,7 +2065,7 @@
       storage: 'Frigider 0–4 °C, 3 zile după deschidere; se oxidează la suprafață (devine gri).',
       shelfLife: '~14 zile',
       dataConfidence: 'medium',
-      sources: ['Etichete vitrină Kaufland Sibiu', 'Valori tipice lebărvurst']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'Valori tipice lebărvurst']
     },
 
     {
@@ -2115,7 +2115,7 @@
       storage: 'Frigider 0–4 °C, 4 zile.',
       shelfLife: '~25 zile sigilat',
       dataConfidence: 'low',
-      sources: ['Etichete vitrină Kaufland Sibiu', 'Valori tipice salam de vară']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'Valori tipice salam de vară']
     },
 
     {
@@ -2286,7 +2286,7 @@
       storage: 'Loc uscat. După deschidere, frigider, 2 zile, în recipient închis.',
       shelfLife: '3 ani sigilată',
       dataConfidence: 'high',
-      sources: ['shop.scandia.ro Bucegi 65% carne', 'Etichete raft Sibiu']
+      sources: ['shop.scandia.ro Bucegi 65% carne', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -2340,7 +2340,7 @@
       storage: 'Loc uscat. După deschidere, frigider, 2 zile.',
       shelfLife: '3 ani sigilată',
       dataConfidence: 'high',
-      sources: ['shop.scandia.ro Bucegi carne pasăre 65%', 'Etichete raft Sibiu']
+      sources: ['shop.scandia.ro Bucegi carne pasăre 65%', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -2393,7 +2393,7 @@
       storage: 'Loc uscat. După deschidere, frigider, 2 zile în recipient închis.',
       shelfLife: '3 ani sigilată',
       dataConfidence: 'medium',
-      sources: ['scandia.ro conserve carne', 'Etichete raft Sibiu']
+      sources: ['scandia.ro conserve carne', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -2496,7 +2496,7 @@
       storage: 'Loc uscat. După deschidere, frigider, 2 zile.',
       shelfLife: '2 ani sigilată',
       dataConfidence: 'high',
-      sources: ['shop.scandia.ro Sadu pate', 'Etichete raft Sibiu']
+      sources: ['shop.scandia.ro Sadu pate', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -2857,7 +2857,7 @@
       storage: 'Frigider în 2 ore de la cumpărare, dezosat. 3 zile la 0–4 °C.',
       shelfLife: '3 zile dezosat la frigider',
       dataConfidence: 'low',
-      sources: ['Observație raft cald Carrefour Sibiu', 'Estimare nutrițională pui rotisat']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'Estimare nutrițională pui rotisat']
     },
 
     {
@@ -2907,7 +2907,7 @@
       storage: 'Frigider în 2 ore. 2 zile la 0–4 °C.',
       shelfLife: '2 zile la frigider',
       dataConfidence: 'low',
-      sources: ['Observație raft cald Kaufland Sibiu', 'Estimare nutrițională aripioare rotisate']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'Estimare nutrițională aripioare rotisate']
     },
 
     {
@@ -2957,7 +2957,7 @@
       storage: 'Frigider 0–4 °C, 2 zile. Dezosat, 3 zile.',
       shelfLife: '2 zile la frigider',
       dataConfidence: 'low',
-      sources: ['Observație raft cald Kaufland Sibiu', 'Estimare nutrițională pulpă de pui rotisată']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'Estimare nutrițională pulpă de pui rotisată']
     },
 
     {
@@ -3108,7 +3108,7 @@
       storage: 'Frigider în 2 ore, 2 zile.',
       shelfLife: '2 zile la frigider',
       dataConfidence: 'low',
-      sources: ['Observație vitrină caldă Kaufland Sibiu', 'Estimare nutrițională șnițel de pui pane']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'Estimare nutrițională șnițel de pui pane']
     },
 
     {
@@ -3158,7 +3158,7 @@
       storage: 'Frigider în 2 ore, 2 zile.',
       shelfLife: '2 zile la frigider',
       dataConfidence: 'low',
-      sources: ['Observație vitrină caldă Sibiu', 'Estimare nutrițională chiftele de porc/pui']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'Estimare nutrițională chiftele de porc/pui']
     },
 
     {
@@ -3208,7 +3208,7 @@
       storage: 'Frigider în 2 ore, 2 zile.',
       shelfLife: '2 zile la frigider',
       dataConfidence: 'low',
-      sources: ['Observație vitrină caldă Sibiu', 'Estimare nutrițională cordon bleu']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'Estimare nutrițională cordon bleu']
     },
 
     {
@@ -3316,7 +3316,7 @@
       storage: 'Frigider 0–4 °C, 2–3 zile. Se congelează bine.',
       shelfLife: '~7 zile sigilat la frigider',
       dataConfidence: 'low',
-      sources: ['Observație raft Kaufland Sibiu', 'Estimare nutrițională burger de vită gătit']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'Estimare nutrițională burger de vită gătit']
     },
 
     // ---INSERT-NEW-ITEMS-ABOVE---

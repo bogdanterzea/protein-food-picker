@@ -161,7 +161,7 @@
       '</div>' +
       '<div class="pf-rcard__line"><span>' + Math.round(per.kcal) + ' kcal · ' +
       Math.round(c.purityPct) + '% din calorii</span><b>' +
-      fmt.ronShort(c.costPerServing) + ' / porție</b></div>' +
+      fmt.ronApprox(c.costPerServing, { short: true }) + ' / porție</b></div>' +
       '</span></div>' +
 
       PF.ui.macroStrip({
@@ -260,7 +260,7 @@
       '<td class="num">' + fmt.num(it.grams, 0) + ' g</td>' +
       '<td class="num">' + (it.free ? '—' : fmt.num((it.per100.protein || 0) * k, 1) + ' g') + '</td>' +
       '<td class="num">' + (it.free ? '—' : Math.round((it.per100.kcal || 0) * k)) + '</td>' +
-      '<td class="num">' + (it.cost !== null && it.cost !== undefined ? fmt.ronShort(it.cost) : '—') + '</td>' +
+      '<td class="num">' + (it.cost !== null && it.cost !== undefined ? fmt.ronApprox(it.cost, { short: true }) : '—') + '</td>' +
       '</tr>'
     );
   }
@@ -290,7 +290,7 @@
       '<span class="pf-badge pf-badge--accent">' + Math.round(per.protein) + ' g proteină / porție</span>' +
       '<span class="pf-badge">' + Math.round(per.kcal) + ' kcal</span>' +
       '<span class="pf-badge">' + Math.round(c.purityPct) + '% din calorii</span>' +
-      '<span class="pf-badge">' + fmt.ronShort(c.costPerServing) + ' / porție</span>' +
+      '<span class="pf-badge">' + fmt.ronApprox(c.costPerServing, { short: true }) + ' / porție</span>' +
       '<span class="pf-badge">' + fmt.minutes(r.timeMin, 'ro') + '</span>' +
       '</div></div>' +
       '</div>' +
@@ -307,10 +307,11 @@
       '<tr><th><b>Total</b></th><td class="num"><b>' + fmt.num(c.items.reduce((a, i) => a + i.grams, 0), 0) + ' g</b></td>' +
       '<td class="num"><b>' + fmt.num(c.total.protein, 0) + ' g</b></td>' +
       '<td class="num"><b>' + Math.round(c.total.kcal) + '</b></td>' +
-      '<td class="num"><b>' + fmt.ronShort(c.cost) + '</b></td></tr>' +
+      '<td class="num"><b>' + fmt.ronApprox(c.cost, { short: true }) + '</b></td></tr>' +
       '</tbody></table>' +
-      (c.unpricedCount ? '<p class="pf-muted" style="font-size:var(--fs-3xs)">⚠️ ' + c.unpricedCount +
-        ' ingrediente fără preț cunoscut — costul e subestimat.</p>' : '') +
+      '<p class="pf-muted" style="font-size:var(--fs-3xs);line-height:1.5">' +
+      '≈ Costurile sunt estimări (±20–30%), nu prețuri de raft.' +
+      (c.unpricedCount ? ' ' + c.unpricedCount + ' ingrediente nu au niciun preț.' : '') + '</p>' +
       '</div></section>' +
 
       '<section class="pf-block"><div class="pf-block__head">Cum se face</div>' +
@@ -367,7 +368,7 @@
       '</div></div>' +
 
       '<div class="pf-modal__foot">' +
-      '<span class="pf-muted" style="font-size:var(--fs-2xs)">Valorile sunt calculate din produsele din atlas, pentru cantitățile de mai sus.</span>' +
+      '<span class="pf-muted" style="font-size:var(--fs-2xs)">Macro-urile sunt calculate din produsele din atlas. Prețurile sunt estimări, nu prețuri de raft.</span>' +
       '<span class="pf-spacer"></span>' +
       '<button class="pf-btn pf-btn--sm" data-recipe-shop="' + fmt.esc(r.id) + '">+ Adaugă ingredientele la masă</button>' +
       '<button class="pf-btn pf-btn--sm" data-recipe-close>Închide</button>' +

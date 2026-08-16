@@ -74,10 +74,10 @@
     { label: 'Calorii / porție', get: f => f._d.perServing.kcal, fmt: v => Math.round(v) + ' kcal', better: 'low' },
 
     { group: 'Bani' },
-    { label: 'lei / 100 g proteină', get: f => f._d.ronPer100gProtein, fmt: v => (v ? fmt.num(v, 1) + ' lei' : '—'), better: 'low' },
+    { label: 'lei / 100 g proteină (est.)', get: f => f._d.ronPer100gProtein, fmt: (v, f) => (v ? fmt.ronApprox(v, { short: true, verified: f._d.priceVerified }) : '—'), better: 'low' },
     { label: 'g proteină / leu', get: f => f._d.proteinPerRon, fmt: v => (v ? fmt.num(v, 1) + ' g' : '—'), better: 'high' },
-    { label: 'lei / kg', get: f => f._d.pricePerKg, fmt: v => (v ? Math.round(v) + ' lei' : '—'), better: 'low' },
-    { label: 'Cost / porție', get: f => f._d.costPerServing, fmt: v => (v ? fmt.ron(v) : '—'), better: 'low' },
+    { label: 'lei / kg (est.)', get: f => f._d.pricePerKg, fmt: (v, f) => (v ? fmt.ronApprox(v, { short: true, verified: f._d.priceVerified }) : '—'), better: 'low' },
+    { label: 'Cost / porție (est.)', get: f => f._d.costPerServing, fmt: (v, f) => (v ? fmt.ronApprox(v, { verified: f._d.priceVerified }) : '—'), better: 'low' },
 
     { group: 'Efort' },
     { label: 'Timp total', get: f => f.timeMin, fmt: v => fmt.minutes(v, PF.i18n.lang()), better: 'low' },

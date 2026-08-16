@@ -139,6 +139,40 @@
   }
 
   /* =======================================================================
+   * PRICE UNCERTAINTY
+   *
+   * NOT ONE PRICE IN THIS DATABASE IS VERIFIED.
+   *
+   * They were assembled as plausible 2026 estimates, calibrated against
+   * realistic ranges — not read off a shelf and not pulled from an API.
+   * There is no public price API for Romanian grocery retail; the only open
+   * one (Open Prices / Open Food Facts) holds 84 price points for the whole
+   * country, almost none of them protein foods.
+   *
+   * So the app must never render a price as if it were exact. Every price
+   * carries a band, and the UI prints `≈` and the range. A row that is ever
+   * genuinely verified sets `verified: true` on the store entry, and then its
+   * band collapses to zero and the `≈` disappears.
+   *
+   * The band is per sales channel, because the uncertainty differs:
+   *   chains publish prices and run promo cycles → a good estimate lands
+   *   within about a fifth; a market stall or a restaurant has no printed
+   *   price at all, so the spread is wider.
+   * ==================================================================== */
+  const PRICE_BAND_DEFAULT = 0.20;
+  const PRICE_BAND = {
+    'Piața Cibin': 0.30,
+    'Măcelărie locală': 0.30,
+    'Pescărie': 0.30,
+    'Restaurant Sibiu': 0.30,
+    'Farmacie': 0.25
+  };
+
+  function priceBandFor(storeName) {
+    return PRICE_BAND[storeName] !== undefined ? PRICE_BAND[storeName] : PRICE_BAND_DEFAULT;
+  }
+
+  /* =======================================================================
    * PRICE NORMALISATION
    * A store entry gives a pack price and a pack weight. From that we get
    * the only cost number that actually matters: what 100 g of protein costs.
@@ -147,6 +181,7 @@
     if (!store || !store.priceRon || !store.packGrams) return null;
     const proteinInPack = (per100g.protein || 0) * (store.packGrams / 100);
     if (proteinInPack <= 0) return null;
+    const verified = store.verified === true;
     return {
       name: store.name,
       pricePerKg: (store.priceRon / store.packGrams) * 1000,
@@ -154,7 +189,11 @@
       proteinPerRon: proteinInPack / store.priceRon,
       ronPer100gProtein: (store.priceRon / proteinInPack) * 100,
       packPrice: store.priceRon,
-      packGrams: store.packGrams
+      packGrams: store.packGrams,
+      verified: verified,
+      band: verified ? 0 : priceBandFor(store.name),
+      priceDate: store.priceDate || null,
+      priceSource: store.priceSource || null
     };
   }
 
@@ -303,6 +342,11 @@
     d.prices = priced;
     d.bestPrice = priced[0] || null;
     d.ronPer100gProtein = d.bestPrice ? d.bestPrice.ronPer100gProtein : null;
+    /* Everything the UI needs to render the number honestly. */
+    d.priceVerified = d.bestPrice ? d.bestPrice.verified : false;
+    d.priceBand = d.bestPrice ? d.bestPrice.band : null;
+    d.ronPer100gProteinLo = d.bestPrice ? d.ronPer100gProtein * (1 - d.bestPrice.band) : null;
+    d.ronPer100gProteinHi = d.bestPrice ? d.ronPer100gProtein * (1 + d.bestPrice.band) : null;
     d.proteinPerRon = d.bestPrice ? d.bestPrice.proteinPerRon : null;
     d.pricePerKg = d.bestPrice ? d.bestPrice.pricePerKg : null;
     d.costPerServing = d.bestPrice ? (d.bestPrice.pricePer100g * sg) / 100 : null;
@@ -530,6 +574,8 @@
     atwaterKcal: atwaterKcal,
     findSimilar: findSimilar,
     findUpgrade: findUpgrade,
-    priceForStore: priceForStore
+    priceForStore: priceForStore,
+    priceBandFor: priceBandFor,
+    PRICE_BAND_DEFAULT: PRICE_BAND_DEFAULT
   };
 })();

@@ -1109,7 +1109,7 @@
       storage: 'Frigider 2–6 °C, în recipient închis, maximum 3–4 zile.',
       shelfLife: '3–4 zile',
       dataConfidence: 'low',
-      sources: ['Observație directă Piața Cibin', 'Valori generice brânză de vaci presată slabă']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'Valori generice brânză de vaci presată slabă']
     },
 
     {
@@ -1388,7 +1388,7 @@
       storage: 'Frigider 2–8 °C, învelit în hârtie.',
       shelfLife: '~6 săptămâni sigilat',
       dataConfidence: 'medium',
-      sources: ['Valori tipice cașcaval afumat românesc', 'Observație Piața Cibin']
+      sources: ['Valori tipice cașcaval afumat românesc', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -1830,7 +1830,7 @@
       storage: 'Frigider 2–8 °C, în saramură sau înfoliată.',
       shelfLife: '~1–2 luni în saramură',
       dataConfidence: 'medium',
-      sources: ['eatntrack.ro — Telemea de vacă', 'dieta.romedic.ro', 'Observație Piața Cibin']
+      sources: ['eatntrack.ro — Telemea de vacă', 'dieta.romedic.ro', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -1871,7 +1871,7 @@
       storage: 'Frigider 2–8 °C, în saramură.',
       shelfLife: '~2 luni în saramură',
       dataConfidence: 'low',
-      sources: ['Valori tipice telemea de oaie', 'Observație Piața Cibin']
+      sources: ['Valori tipice telemea de oaie', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -1912,7 +1912,7 @@
       storage: 'Frigider 2–8 °C, în recipient închis (mirosul migrează).',
       shelfLife: '~1 lună în frigider',
       dataConfidence: 'medium',
-      sources: ['bacaniamariucai.ro — valori brânză de burduf', 'Observație Piața Cibin']
+      sources: ['bacaniamariucai.ro — valori brânză de burduf', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -1952,7 +1952,7 @@
       storage: 'Frigider 2–6 °C, în recipient închis, maximum 3 zile.',
       shelfLife: '3–5 zile',
       dataConfidence: 'medium',
-      sources: ['Valori tipice caș de vacă', 'jurnalul.ro', 'Observație Piața Cibin']
+      sources: ['Valori tipice caș de vacă', 'jurnalul.ro', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -1992,7 +1992,7 @@
       storage: 'Frigider 2–6 °C, maximum 2–3 zile; se congelează pentru gătit.',
       shelfLife: '2–3 zile proaspătă',
       dataConfidence: 'medium',
-      sources: ['jurnalul.ro — valori urdă 4 % grăsime', 'Observație Piața Cibin']
+      sources: ['jurnalul.ro — valori urdă 4 % grăsime', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -2531,7 +2531,7 @@
       storage: 'Frigider 2–8 °C, în cofrajul original.',
       shelfLife: '~4 săptămâni de la ouat',
       dataConfidence: 'medium',
-      sources: ['Valori standard ou free-range', 'gandul.ro — prețuri ouă ecologice Kaufland 2026']
+      sources: ['Valori standard ou free-range', 'estimare de preț 2026 — neconfirmată la raft']
     },
 
     {
@@ -2576,7 +2576,7 @@
       storage: 'Frigider 2–8 °C sau loc răcoros, nespălate. Se spală doar înainte de folosire.',
       shelfLife: '~3 săptămâni nespălate',
       dataConfidence: 'low',
-      sources: ['Observație directă Piața Cibin', 'Valori standard ou de curte']
+      sources: ['estimare de preț 2026 — neconfirmată la raft', 'Valori standard ou de curte']
     },
 
     {
