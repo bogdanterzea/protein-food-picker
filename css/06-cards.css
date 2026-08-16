@@ -424,6 +424,14 @@
  * COMPACT LIST ROW (table view)
  * ========================================================================= */
 .pf-table-wrap {
+  /* Cap the table so it owns its vertical scrolling. Short tables (a filtered
+   * handful of rows) never reach the cap and show no scrollbar; long ones get
+   * a pinned header instead of one lost far above the viewport. */
+  max-height: calc(100vh - var(--topbar-h) - var(--sp-8));
+  overscroll-behavior: contain;
+  /* Anything that scrolls this box into view must clear the sticky topbar,
+   * otherwise the box lands at y=0 and its pinned header sits behind it. */
+  scroll-margin-top: calc(var(--topbar-h) + var(--sp-3));
   overflow-x: auto;
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
@@ -438,7 +446,16 @@
 
 .pf-table thead th {
   position: sticky;
-  top: var(--topbar-h);
+  /* Zero, NOT --topbar-h.
+   *
+   * `.pf-table-wrap` sets `overflow: auto` so the 1080px-wide table can scroll
+   * sideways — but `overflow` makes it a scroll container on BOTH axes, so a
+   * sticky header inside it resolves against the wrap, not against the page.
+   * A --topbar-h offset there does not clear the topbar; it parks the header
+   * 58px down inside the table, permanently covering the first two rows.
+   * The wrap now caps its own height and scrolls vertically, so the header
+   * pins to the top of that box. */
+  top: 0;
   z-index: 5;
   padding: var(--sp-3);
   text-align: left;
