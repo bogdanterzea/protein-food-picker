@@ -20,6 +20,42 @@
    * SMALL BUILDERS
    * ==================================================================== */
 
+  /* Median of a numeric list. Medians, not means, because a handful of
+   * protein isolates at 90 g would drag every category average upwards and
+   * make an ordinary yoghurt look worse than it is. */
+  function median(vals) {
+    const v = vals.filter(x => typeof x === 'number' && isFinite(x)).sort((a, b) => a - b);
+    if (!v.length) return 0;
+    const m = Math.floor(v.length / 2);
+    return v.length % 2 ? v[m] : (v[m - 1] + v[m]) / 2;
+  }
+
+  /* Category medians, computed once per category. The atlas is static after
+   * load, so a plain object cache needs no invalidation. */
+  const catStatsCache = {};
+  function categoryStats(category) {
+    if (catStatsCache[category]) return catStatsCache[category];
+    const peers = PF.data.foods.filter(f => f.category === category);
+    const s = {
+      count: peers.length,
+      protein: median(peers.map(f => f._d.protein100)),
+      purity: median(peers.map(f => f._d.purityPct)),
+      kcal: median(peers.map(f => f._d.kcal100)),
+      price: median(peers.map(f => f._d.ronPer100gProtein).filter(v => v))
+    };
+    catStatsCache[category] = s;
+    return s;
+  }
+
+  /* Short forms of the confidence levels. The full sentence lives in
+   * i18n and is kept for the tooltip; in the footer it wrapped to three
+   * lines on a phone and cost more height than the buttons next to it. */
+  const CONF_SHORT = {
+    high: 'de pe etichetă',
+    medium: 'valori tipice',
+    low: 'estimare'
+  };
+
   function block(title, bodyHtml, badge) {
     if (!bodyHtml) return '';
     return (
@@ -38,6 +74,69 @@
       '<ul class="pf-bullets' + (variant ? ' pf-bullets--' + variant : '') + '">' +
       list.map(x => '<li><span>' + fmt.esc(x) + '</span></li>').join('') +
       '</ul>'
+    );
+  }
+
+  /* A slim, loud strip for `dataConfidence: 'low'`. 78 of the 512 entries are
+   * estimates rather than transcribed labels, and until now the only sign of
+   * that was one line of grey text in the footer, in the same style whether
+   * the numbers came off a package or out of a guess. */
+  function lowConfidenceStrip(food) {
+    if (food.dataConfidence !== 'low') return '';
+    const src = (food.sources || []).join(' · ');
+    return (
+      '<div class="pf-lowconf">' +
+      '<span class="pf-lowconf__mark">⚠️</span>' +
+      '<span><b>Cifre estimate, nu citite de pe etichetă.</b> ' +
+      'Valorile de mai jos sunt tipice pentru acest tip de produs, nu ale unui ' +
+      'ambalaj anume. Bune ca să compari, nesigure ca să numeri exact.' +
+      (src ? '<span class="pf-lowconf__src">Bazat pe: ' + fmt.esc(src) + '</span>' : '') +
+      '</span></div>'
+    );
+  }
+
+  /* ui.js hardcodes "un factor de 0,25" in its collagen note. That was true
+   * when every gelatinous entry got the flat penalty, but compute.js now
+   * blends the two protein pools through `collagenShare`, so a part-gelatin
+   * product lands somewhere in between — b-jeleu-proteic sits at 0,699. The
+   * quality bar directly beneath the sentence renders the real number, so the
+   * two contradicted each other on the same screen. Rewrite the tail from
+   * `d.quality`; ui.js belongs to another agent. Idempotent: once that note
+   * becomes dynamic this substitutes the same value back in.
+   *
+   * Also names the collagen share, which is what explains an in-between
+   * factor to someone reading "70%" under a collagen warning. */
+  function qualityText(note, d) {
+    const real = String(Math.round(d.quality * 1000) / 1000).replace('.', ',');
+    let text = note.text.replace(
+      /Scorul(?: din atlas)? e ajustat cu un factor de [0-9]+(?:[.,][0-9]+)?/,
+      'Scorul din atlas e ajustat cu un factor de ' + real
+    );
+    if (d.collagenShare > 0 && d.collagenShare < 1) {
+      text += ' Aici doar ~' + Math.round(d.collagenShare * 100) +
+        '% din proteină e colagen, de aceea penalizarea e parțială.';
+    }
+    return text;
+  }
+
+  /* One "this product vs. its category" row. `betterIsHigher` drives the
+   * colour; pass null when neither direction is a win. */
+  function deltaRow(label, mine, med, unit, decimals, betterIsHigher) {
+    if (!med || !isFinite(mine)) return '';
+    const pct = ((mine - med) / med) * 100;
+    const near = Math.abs(pct) < 5;
+    const cls = near ? 'is-near' : (betterIsHigher === null ? 'is-flat'
+      : ((betterIsHigher ? pct > 0 : pct < 0) ? 'is-good' : 'is-bad'));
+    return (
+      '<tr>' +
+      '<th>' + fmt.esc(label) + '</th>' +
+      '<td>' + fmt.num(mine, decimals) + (unit ? ' ' + unit : '') + '</td>' +
+      '<td class="pf-delta ' + cls + '">' +
+      (near ? '≈ ca media'
+            : (pct > 0 ? '▲ +' : '▼ −') + Math.round(Math.abs(pct)) + '%') +
+      '</td>' +
+      '<td class="pf-nutri__pct">' + fmt.num(med, decimals) + '</td>' +
+      '</tr>'
     );
   }
 
@@ -69,7 +168,7 @@
         '<div class="pf-block__head" style="color:var(--' + qNote.level + ')">' +
         (qNote.level === 'bad' ? '⛔ ' : '⚠️ ') + fmt.esc(qNote.short) +
         '<span class="pf-badge">calitatea proteinei</span></div>' +
-        '<div class="pf-block__body"><p>' + fmt.esc(qNote.text) + '</p>' +
+        '<div class="pf-block__body"><p>' + fmt.esc(qualityText(qNote, food._d)) + '</p>' +
         ui.statBar({
           label: 'Calitate',
           value: food._d.quality * 100,
@@ -130,6 +229,7 @@
       : '';
 
     return (
+      lowConfidenceStrip(food) +
       '<div class="pf-dossier"><div>' + left + '</div><div>' + right + '</div></div>' +
       similarHtml
     );
@@ -233,7 +333,43 @@
         'Poate fi rotunjire de etichetă, polioli, sau o eroare de transcriere.</p>';
     }
 
+    /* --- how this compares with the rest of its category ---------------- */
+    const cs = categoryStats(food.category);
+    const catName = PF.i18n.catName(food.category);
+    const compare = block(
+      'Față de restul categoriei',
+      '<table class="pf-nutri pf-nutri--cmp">' +
+      '<thead><tr><th>' + fmt.esc(catName) + '</th><th>acesta</th>' +
+      '<th>diferența</th><th class="pf-nutri__pct">mediana</th></tr></thead>' +
+      deltaRow(t('card.protein') + ' / 100 ' + food.unit, d.protein100, cs.protein, 'g', 1, true) +
+      deltaRow('Proteină din kcal', d.purityPct, cs.purity, '%', 0, true) +
+      deltaRow('Calorii / 100 ' + food.unit, d.kcal100, cs.kcal, '', 0, false) +
+      (d.ronPer100gProtein
+        ? deltaRow('Lei / 100 g proteină', d.ronPer100gProtein, cs.price, '', 1, false)
+        : '') +
+      '</table>' +
+      '<p class="pf-muted" style="font-size:var(--fs-2xs);line-height:1.5">' +
+      'Comparat cu mediana celor ' + cs.count + ' produse din categorie. Mediana, nu ' +
+      'media: câteva izolate proteice ar trage media în sus și ar face orice ' +
+      'aliment obișnuit să pară slab.</p>',
+      cs.count + ' produse'
+    );
+
+    /* The scatter has a 620px design floor (below that its axis labels shrink
+     * to 4px), and a dossier column is only ~470px wide even at 1440. Given
+     * its own full-width row it renders 1:1 instead of always needing a swipe. */
+    const mapBlock = block(
+      'Unde stă pe hartă · ' + catName,
+      '<p class="pf-muted" style="font-size:var(--fs-2xs)">Poziția acestui produs față de ' +
+      'restul categoriei, pe axa proteină/calorii.</p>' +
+      PF.charts.scatter(
+        PF.data.foods.filter(f => f.category === food.category),
+        { width: 620, height: 340 }
+      )
+    );
+
     return (
+      lowConfidenceStrip(food) +
       '<div class="pf-servingbar">' +
       '<span class="pf-servingbar__label">Valori pentru</span>' +
       '<div class="pf-seg" data-serving-switch>' +
@@ -247,16 +383,9 @@
       '</div>' +
       '<div class="pf-dossier">' +
       '<div>' + block('Tabel nutrițional · ' + basis, table + derived + quality) + micros + '</div>' +
-      '<div>' + block(t('sec.energy'), PF.charts.donut(food)) +
-      block('Unde stă pe hartă',
-        '<p class="pf-muted" style="font-size:var(--fs-2xs)">Poziția acestui produs față de ' +
-        'restul atlasului, pe axa proteină/calorii.</p>' +
-        PF.charts.scatter(
-          PF.data.foods.filter(f => f.category === food.category),
-          { width: 620, height: 340 }
-        )
-      ) + '</div>' +
-      '</div>'
+      '<div>' + block(t('sec.energy'), PF.charts.donut(food)) + compare + '</div>' +
+      '</div>' +
+      mapBlock
     );
   }
 
@@ -399,11 +528,26 @@
     const d = food._d;
     const stores = food.stores || [];
 
-    const rows = stores
-      .map(function (s) {
-        const p = PF.compute.priceForStore(s, food.per100g);
-        const isBest = d.bestPrice && d.bestPrice.name === s.name &&
-          p && Math.abs(p.ronPer100gProtein - d.bestPrice.ronPer100gProtein) < 0.001;
+    /* Cheapest protein first. The question this table answers is "where do I
+     * buy this", and the answer is an ordering — reading it off an arbitrary
+     * authoring order meant comparing five numbers by eye every time. */
+    const priced = stores
+      .map(s => ({ s: s, p: PF.compute.priceForStore(s, food.per100g) }))
+      .sort(function (a, b) {
+        const av = a.p ? a.p.ronPer100gProtein : Infinity;
+        const bv = b.p ? b.p.ronPer100gProtein : Infinity;
+        return av - bv;
+      });
+    const cheapest = priced.length && priced[0].p ? priced[0].p.ronPer100gProtein : null;
+
+    const rows = priced
+      .map(function (row, i) {
+        const s = row.s;
+        const p = row.p;
+        const isBest = i === 0 && !!p;
+        /* What the shopper actually loses by picking this shelf instead. */
+        const over = p && cheapest && !isBest
+          ? Math.round(((p.ronPer100gProtein - cheapest) / cheapest) * 100) : 0;
         return (
           '<tr>' +
           '<td><b style="color:' + ui.storeColor(s.name) + '">' + fmt.esc(s.name) + '</b>' +
@@ -416,8 +560,10 @@
             ? fmt.ronApprox(s.priceRon, { verified: s.verified === true }) : '—') +
           (s.packLabel ? '<span class="pf-stores-table__note">' + fmt.esc(s.packLabel) + '</span>' : '') +
           '</td>' +
-          '<td class="num">' + (p ? (p.verified ? '' : '≈') + fmt.num(p.pricePerKg, 0) + ' lei/kg' : '—') + '</td>' +
-          '<td class="num">' + (p ? (p.verified ? '' : '≈') + fmt.num(p.ronPer100gProtein, 1) : '—') + '</td>' +
+          '<td class="num pf-col--kg">' + (p ? (p.verified ? '' : '≈') + fmt.num(p.pricePerKg, 0) + ' lei/kg' : '—') + '</td>' +
+          '<td class="num">' + (p ? (p.verified ? '' : '≈') + fmt.num(p.ronPer100gProtein, 1) : '—') +
+          (over >= 3 ? '<span class="pf-stores-table__note">+' + over + '%</span>' : '') +
+          '</td>' +
           '</tr>'
         );
       })
@@ -426,8 +572,10 @@
     const table =
       '<table class="pf-stores-table">' +
       '<thead><tr><th>Magazin</th><th>Disp.</th><th class="num">Preț</th>' +
-      '<th class="num">lei/kg</th><th class="num">lei/100g P</th></tr></thead>' +
-      '<tbody>' + rows + '</tbody></table>';
+      '<th class="num pf-col--kg">lei/kg</th><th class="num">lei/100g P</th></tr></thead>' +
+      '<tbody>' + rows + '</tbody></table>' +
+      '<p class="pf-muted" style="font-size:var(--fs-2xs)">Sortat după lei / 100 g ' +
+      'proteină — rândul de sus e cea mai ieftină proteină, nu cel mai mic preț pe raft.</p>';
 
     /* Store-level context pulled from the registry. */
     const registry = window.PF_STORES || [];
@@ -558,6 +706,9 @@
     return t('misc.confidence.' + c, c);
   }
 
+  const tabId = k => 'pf-tab-' + k;
+  const paneId = k => 'pf-pane-' + k;
+
   function renderShell(food) {
     const d = food._d;
     const idx = currentList.indexOf(food);
@@ -587,36 +738,52 @@
       '</div>' +
       '</div>' +
 
-      '<nav class="pf-modal__tabs" role="tablist">' +
-      TABS.map(
-        tb =>
-          '<button class="pf-modal__tab' + (tb.key === activeTab ? ' is-active' : '') +
-          '" data-tab="' + tb.key + '" role="tab" aria-selected="' +
-          (tb.key === activeTab ? 'true' : 'false') + '">' + t(tb.label) + '</button>'
-      ).join('') +
+      /* The six labels never fit a phone, so the strip scrolls. The wrapper
+       * exists purely to hang the edge fades on something that does NOT
+       * scroll with the content. */
+      '<div class="pf-modal__tabsbar" data-fade="none">' +
+      '<nav class="pf-modal__tabs" role="tablist" aria-label="Secțiunile dosarului">' +
+      TABS.map(function (tb) {
+        const on = tb.key === activeTab;
+        return '<button class="pf-modal__tab' + (on ? ' is-active' : '') +
+          '" id="' + tabId(tb.key) + '" data-tab="' + tb.key + '" role="tab"' +
+          ' aria-selected="' + (on ? 'true' : 'false') + '"' +
+          ' aria-controls="' + paneId(tb.key) + '"' +
+          /* Roving tabindex: Tab reaches the strip once, arrows move inside. */
+          ' tabindex="' + (on ? '0' : '-1') + '">' + t(tb.label) + '</button>';
+      }).join('') +
       '</nav>' +
+      '</div>' +
 
       '<div class="pf-modal__body" id="pf-modal-body">' +
-      TABS.map(
-        tb =>
-          '<div class="pf-modal__pane' + (tb.key === activeTab ? ' is-active' : '') +
-          '" data-pane="' + tb.key + '" role="tabpanel">' +
-          (tb.key === activeTab ? tb.render(food) : '') +
-          '</div>'
-      ).join('') +
+      TABS.map(function (tb) {
+        const on = tb.key === activeTab;
+        return '<div class="pf-modal__pane' + (on ? ' is-active' : '') +
+          '" id="' + paneId(tb.key) + '" data-pane="' + tb.key + '" role="tabpanel"' +
+          ' aria-labelledby="' + tabId(tb.key) + '" tabindex="0"' +
+          (on ? '' : ' hidden') + '>' +
+          (on ? tb.render(food) : '') +
+          '</div>';
+      }).join('') +
       '</div>' +
 
       '<div class="pf-modal__foot">' +
-      '<span class="pf-confidence" data-c="' + fmt.esc(food.dataConfidence) + '" ' +
-      'data-tip="' + fmt.esc((food.sources || []).join(' · ')) + '">' +
-      '◆ ' + t('misc.confidence') + ': ' + fmt.esc(confidenceLabel(food.dataConfidence)) + '</span>' +
+      '<span class="pf-confidence' + (food.dataConfidence === 'low' ? ' pf-confidence--loud' : '') +
+      '" data-c="' + fmt.esc(food.dataConfidence) + '" ' +
+      'data-tip="' + fmt.esc(t('misc.confidence') + ': ' + confidenceLabel(food.dataConfidence) +
+        ((food.sources || []).length ? ' — ' + (food.sources || []).join(' · ') : '')) + '">' +
+      (food.dataConfidence === 'low' ? '⚠️ ' : '◆ ') +
+      'date: ' + fmt.esc(CONF_SHORT[food.dataConfidence] || food.dataConfidence) + '</span>' +
       '<span class="pf-spacer"></span>' +
       '<div class="pf-modal__nav">' +
-      '<button class="pf-btn pf-btn--sm" data-act="prev"' + (idx <= 0 ? ' disabled' : '') + '>‹ ' + t('misc.prev') + '</button>' +
-      '<button class="pf-btn pf-btn--sm" data-act="next"' +
-      (idx < 0 || idx >= currentList.length - 1 ? ' disabled' : '') + '>' + t('misc.next') + ' ›</button>' +
+      '<button class="pf-btn pf-btn--sm" data-act="prev" aria-label="' + t('misc.prev') + '"' +
+      (idx <= 0 ? ' disabled' : '') + '>‹<span class="pf-modal__lbl"> ' + t('misc.prev') + '</span></button>' +
+      '<button class="pf-btn pf-btn--sm" data-act="next" aria-label="' + t('misc.next') + '"' +
+      (idx < 0 || idx >= currentList.length - 1 ? ' disabled' : '') +
+      '><span class="pf-modal__lbl">' + t('misc.next') + ' </span>›</button>' +
       '</div>' +
-      '<button class="pf-btn pf-btn--sm" data-act="copy">Copiază datele</button>' +
+      '<button class="pf-btn pf-btn--sm" data-act="copy" aria-label="Copiază datele" ' +
+      'data-tip="Copiază fișa în clipboard, ca text">⧉<span class="pf-modal__lbl"> Copiază</span></button>' +
       '<button class="pf-btn pf-btn--sm pf-btn--primary" data-act="add">+ ' + t('card.add') + '</button>' +
       '</div>'
     );
@@ -633,11 +800,13 @@
     document.body.appendChild(dlg);
 
     dlg.addEventListener('click', onClick);
+    dlg.addEventListener('keydown', onKeydown);
     /* `close` fires however it was dismissed — Escape, the ✕, or the
      * backdrop — whereas `cancel` only covers Escape, which left the tab
      * selection inconsistent between the three exits. */
     dlg.addEventListener('close', function () {
       activeTab = 'overview';
+      unlockPage();
     });
     /* Click on the backdrop closes. */
     dlg.addEventListener('mousedown', function (ev) {
@@ -646,27 +815,99 @@
     return dlg;
   }
 
-  function paint() {
-    dlg.innerHTML = renderShell(currentFood);
+  /* =======================================================================
+   * PAGE SCROLL LOCK
+   * `showModal()` makes the page inert but does not stop it scrolling, so a
+   * wheel or a swipe over the backdrop moved the grid behind the dossier and
+   * lost the reader's place. The rail already parks `overflow` on <body>, so
+   * this uses <html> instead of fighting it for the same inline style.
+   * ==================================================================== */
+  function lockPage() {
+    document.documentElement.classList.add('pf-scroll-locked');
   }
 
-  function switchTab(key) {
+  function unlockPage() {
+    document.documentElement.classList.remove('pf-scroll-locked');
+  }
+
+  function paint() {
+    dlg.innerHTML = renderShell(currentFood);
+    const nav = dlg.querySelector('.pf-modal__tabs');
+    if (nav) nav.addEventListener('scroll', updateTabFades, { passive: true });
+    updateTabFades();
+  }
+
+  /* Tell the reader there are tabs past the edge. Six labels need ~490px and
+   * a 360px phone gives the strip 328px, so two of them sat off-screen with
+   * nothing to suggest they existed. */
+  function updateTabFades() {
+    const nav = dlg && dlg.querySelector('.pf-modal__tabs');
+    const bar = dlg && dlg.querySelector('.pf-modal__tabsbar');
+    if (!nav || !bar) return;
+    const max = nav.scrollWidth - nav.clientWidth;
+    if (max <= 2) return bar.setAttribute('data-fade', 'none');
+    const left = nav.scrollLeft > 2;
+    const right = nav.scrollLeft < max - 2;
+    bar.setAttribute('data-fade', left && right ? 'both' : left ? 'left' : 'right');
+  }
+
+  function switchTab(key, focusTab) {
     activeTab = key;
     const body = dlg.querySelector('#pf-modal-body');
     dlg.querySelectorAll('.pf-modal__tab').forEach(function (b) {
       const on = b.getAttribute('data-tab') === key;
       b.classList.toggle('is-active', on);
       b.setAttribute('aria-selected', on ? 'true' : 'false');
+      b.tabIndex = on ? 0 : -1;
+      if (on) {
+        /* Keeps the selected tab reachable on the scrolling strip. */
+        if (b.scrollIntoView) b.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+        if (focusTab) b.focus();
+      }
     });
     dlg.querySelectorAll('.pf-modal__pane').forEach(function (p) {
       const on = p.getAttribute('data-pane') === key;
       p.classList.toggle('is-active', on);
+      p.hidden = !on;
       if (on && !p.innerHTML.trim()) {
         const tab = TABS.filter(x => x.key === key)[0];
         p.innerHTML = tab.render(currentFood);
       }
     });
     if (body) body.scrollTop = 0;
+    updateTabFades();
+  }
+
+  /* =======================================================================
+   * KEYBOARD — the WAI-ARIA tabs pattern
+   * Arrows move between tabs (wrapping), Home/End jump to the ends. The
+   * events are stopped here because app.js binds the same arrows on
+   * `document` to page through products, which used to hijack every press
+   * and blow away the focused tab.
+   * ==================================================================== */
+  const ARROW_STEP = { ArrowRight: 1, ArrowLeft: -1, ArrowDown: 1, ArrowUp: -1 };
+
+  function onKeydown(ev) {
+    const tabBtn = ev.target.closest && ev.target.closest('.pf-modal__tab');
+    if (!tabBtn) return;
+    const keys = TABS.map(x => x.key);
+    const i = keys.indexOf(tabBtn.getAttribute('data-tab'));
+    if (i < 0) return;
+
+    let next = -1;
+    if (ARROW_STEP[ev.key] !== undefined) {
+      next = (i + ARROW_STEP[ev.key] + keys.length) % keys.length;
+    } else if (ev.key === 'Home') {
+      next = 0;
+    } else if (ev.key === 'End') {
+      next = keys.length - 1;
+    } else {
+      return;
+    }
+
+    ev.preventDefault();
+    ev.stopPropagation();
+    switchTab(keys[next], true);
   }
 
   function onClick(ev) {
@@ -712,46 +953,111 @@
     }
   }
 
-  function copyData() {
-    const f = currentFood;
+  /* What someone actually pastes into a shopping list or a chat: name, the
+   * numbers that decide, where it is cheapest, and — because half the atlas
+   * is estimated — how much to trust it. */
+  function copyText(f) {
     const d = f._d;
+    const branded = f.brand && f.brand !== 'generic' ? ' — ' + f.brand : '';
     const lines = [
-      (f.nameRo || f.name) + (f.brand !== 'generic' ? ' — ' + f.brand : ''),
+      (f.nameRo || f.name) + branded,
+      'Rang ' + d.tier + ' · ' + Math.round(d.purityPct) + '% din calorii din proteină',
       'La 100 ' + f.unit + ': ' + fmt.num(d.protein100, 1) + ' g proteină, ' +
-        fmt.num(d.carbs100, 1) + ' g carbo, ' + fmt.num(d.fat100, 1) + ' g grăsimi, ' +
+        fmt.num(d.carbs100, 1) + ' g carbohidrați, ' + fmt.num(d.fat100, 1) + ' g grăsimi, ' +
         Math.round(d.kcal100) + ' kcal',
-      Math.round(d.purityPct) + '% din calorii din proteină · rang ' + d.tier,
       'Porție: ' + ((f.serving && f.serving.label) || d.servingGrams + ' ' + f.unit) +
-        ' → ' + fmt.num(d.perServing.protein, 1) + ' g proteină',
+        ' → ' + fmt.num(d.perServing.protein, 1) + ' g proteină, ' +
+        Math.round(d.perServing.kcal) + ' kcal'
+    ];
+
+    if (d.qualityReason === 'collagen') {
+      lines.push('ATENȚIE: proteina e colagen — incompletă, nu o socoti la aportul zilnic.');
+    } else if (d.quality < 1) {
+      lines.push('Sursă vegetală incompletă — combin-o cu o cereală sau o leguminoasă.');
+    }
+
+    lines.push(
       d.bestPrice
-        ? 'Pret (ESTIMARE, nu pret de raft): ' +
+        ? 'Preț (ESTIMARE, nu preț de raft): ' +
           fmt.ronApprox(d.bestPrice.packPrice, { verified: d.priceVerified }) +
-          ' la ' + d.bestPrice.name + ' (' +
+          ' la ' + d.bestPrice.name + ' → ' +
           fmt.ronRange(d.ronPer100gProtein, d.ronPer100gProteinLo,
                        d.ronPer100gProteinHi, { verified: d.priceVerified }) +
-          ' / 100 g proteina)'
-        : 'Pret: necunoscut',
+          ' / 100 g proteină'
+        : 'Preț: necunoscut',
       'Timp: ' + fmt.minutes(f.timeMin, 'ro') + ' · efort ' + f.effort + '/5',
-      'Găsești la: ' + (f.stores || []).map(s => s.name).join(', ')
-    ];
-    const text = lines.join('\n');
+      /* Cheapest shelf first, same order as the "Unde cumperi" tab. */
+      'Găsești la: ' + (d.prices.length
+        ? d.prices.map(p => p.name).concat(
+            (f.stores || []).filter(s => !d.prices.some(p => p.name === s.name)).map(s => s.name)
+          ).join(', ')
+        : (f.stores || []).map(s => s.name).join(', ')),
+      'Încredere în date: ' + confidenceLabel(f.dataConfidence) +
+        ((f.sources || []).length ? ' (' + (f.sources || []).join('; ') + ')' : ''),
+      '— Atlasul Proteinelor Sibiu'
+    );
+    return lines.join('\n');
+  }
+
+  function copyData() {
+    const text = copyText(currentFood);
+    const okToast = () => PF.app.toast(t('misc.copied'), 'ok');
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).then(
-        () => PF.app.toast(t('misc.copied'), 'ok'),
-        () => PF.app.toast('Nu am putut copia', 'bad')
-      );
+      navigator.clipboard.writeText(text).then(okToast, function () {
+        if (!legacyCopy(text)) PF.app.toast('Nu am putut copia', 'bad');
+        else okToast();
+      });
+    } else if (legacyCopy(text)) {
+      okToast();
     } else {
       PF.app.toast('Clipboard indisponibil', 'warn');
     }
   }
 
+  /* The atlas is meant to run from a file:// path with no server, where the
+   * async Clipboard API is often refused outright. execCommand still works
+   * there, so the button does its job instead of apologising. */
+  function legacyCopy(text) {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.cssText = 'position:fixed;top:0;left:-9999px;opacity:0';
+      /* Inside a modal <dialog> only descendants can hold selection. */
+      (dlg && dlg.open ? dlg : document.body).appendChild(ta);
+      ta.select();
+      const done = document.execCommand('copy');
+      ta.remove();
+      return done;
+    } catch (e) {
+      return false;
+    }
+  }
+
   function open(food, list) {
     ensureDialog();
+    /* Remember which control had focus so a repaint (prev/next, a jump to a
+     * similar item) can hand it back — otherwise focus fell to <body> and the
+     * next keystroke went nowhere. */
+    const wasIn = dlg.open && dlg.contains(document.activeElement)
+      ? document.activeElement.getAttribute('data-act') : null;
+
     currentFood = food;
     currentList = list || PF.data.foods;
     servingMode = 'per100';
     paint();
-    if (!dlg.open) dlg.showModal();
+    if (!dlg.open) {
+      dlg.showModal();
+      lockPage();
+      /* showModal() lands on the ✕, which announces "Închide" before the
+       * title. The selected tab is both a better first stop and the place
+       * the arrow keys work from. */
+      const tab = dlg.querySelector('.pf-modal__tab.is-active');
+      if (tab) tab.focus();
+    } else if (wasIn) {
+      const again = dlg.querySelector('[data-act="' + wasIn + '"]:not([disabled])');
+      (again || dlg.querySelector('.pf-modal__tab.is-active') || dlg).focus();
+    }
     const body = dlg.querySelector('#pf-modal-body');
     if (body) body.scrollTop = 0;
     try {

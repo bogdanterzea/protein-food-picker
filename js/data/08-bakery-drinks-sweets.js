@@ -57,7 +57,7 @@
       stats: { taste: 55, satiety: 82, convenience: 88, versatility: 70 },
       timing: { breakfast: 5, preWorkout: 3, postWorkout: 3, lunch: 5, snack: 4, dinner: 4, beforeBed: 2 },
       timingNote: 'Ideală la micul dejun și la sandvișul de birou — fibra plus proteina țin 4 ore.',
-      tags: ['ready-to-eat', 'high-protein', 'high-fiber', 'low-carb', 'portable', 'office-lunch', 'shelf-stable', 'processed', 'mid-price'],
+      tags: ['ready-to-eat', 'high-protein', 'high-fiber', 'portable', 'office-lunch', 'shelf-stable', 'processed', 'mid-price'],
       diet: { vegan: false, vegetarian: true, glutenFree: false, lactoseFree: true, keto: false, halal: true, porkFree: true },
       pairings: ['Brânză de vaci degresată', 'Ou fiert', 'Șuncă de curcan', 'Humus', 'Avocado'],
       tips: [
@@ -529,7 +529,7 @@
       stats: { taste: 58, satiety: 76, convenience: 82, versatility: 68 },
       timing: { breakfast: 5, preWorkout: 3, postWorkout: 3, lunch: 4, snack: 4, dinner: 3, beforeBed: 2 },
       timingNote: 'Micul dejun rapid: chiflă + 2 ouă = 28 g proteină în 6 minute.',
-      tags: ['ready-to-eat', 'high-protein', 'high-fiber', 'low-carb', 'portable', 'breakfast', 'mid-price'],
+      tags: ['ready-to-eat', 'high-protein', 'high-fiber', 'portable', 'breakfast', 'mid-price'],
       diet: { vegan: false, vegetarian: true, glutenFree: false, lactoseFree: true, keto: false, halal: true, porkFree: true },
       pairings: ['Ou ochi', 'Brânză de vaci', 'Șuncă de curcan', 'Muștar'],
       tips: [
@@ -1474,7 +1474,7 @@
       stats: { taste: 64, satiety: 30, convenience: 96, versatility: 38 },
       timing: { breakfast: 2, preWorkout: 2, postWorkout: 3, lunch: 4, snack: 3, dinner: 3, beforeBed: 2 },
       timingNote: 'Vara, cu mâncare sărată — reface și electroliții pierduți la transpirat.',
-      tags: ['ready-to-eat', 'grab-and-go', 'budget', 'low-kcal', 'summer', 'portable', 'high-sodium'],
+      tags: ['ready-to-eat', 'grab-and-go', 'budget', 'low-kcal', 'summer', 'portable'],
       diet: { vegan: false, vegetarian: true, glutenFree: true, lactoseFree: false, keto: false, halal: true, porkFree: true },
       pairings: ['Shaorma', 'Grătar', 'Salată de castraveți'],
       tips: [
@@ -1482,7 +1482,7 @@
         'Sarea de 0,6 g/100 ml se adună repede dacă bei două pahare.',
         'Varianta din comerț e iaurt diluat cu apă — plătești apa.'
       ],
-      warnings: ['Conține lactoză.', 'Sare adăugată.'],
+      warnings: ['Conține lactoză.', '0,6 g sare la 100 ml — paharul de 250 ml aduce 1,5 g sare, cât o pungă de chipsuri. Nu e „apă cu iaurt".'],
       storage: 'Frigider; agită înainte.',
       shelfLife: '~2 săptămâni',
       dataConfidence: 'medium',
@@ -1525,7 +1525,7 @@
       stats: { taste: 48, satiety: 40, convenience: 95, versatility: 80 },
       timing: { breakfast: 5, preWorkout: 3, postWorkout: 3, lunch: 3, snack: 3, dinner: 2, beforeBed: 3 },
       timingNote: 'Singura alternativă vegetală care merită într-un shake — restul sunt apă aromată.',
-      tags: ['ready-to-eat', 'budget', 'low-carb', 'low-kcal', 'shelf-stable', 'calcium-rich', 'b12', 'complete-protein', 'whole-food'],
+      tags: ['ready-to-eat', 'budget', 'low-carb', 'low-kcal', 'shelf-stable', 'calcium-rich', 'b12', 'complete-protein', 'whole-food', 'protein-dense'],
       diet: { vegan: true, vegetarian: true, glutenFree: true, lactoseFree: true, keto: false, halal: true, porkFree: true },
       pairings: ['Fulgi de ovăz', 'Cafea', 'Proteină vegetală pudră', 'Cacao'],
       tips: [
@@ -1577,7 +1577,7 @@
       timingNote: 'Doar ca zahăr rapid pre/intra-antrenament. În rest, mănâncă portocala.',
       tags: ['ready-to-eat', 'grab-and-go', 'budget', 'shelf-stable', 'fast-digesting', 'processed'],
       diet: { vegan: true, vegetarian: true, glutenFree: true, lactoseFree: true, keto: false, halal: true, porkFree: true },
-      pairings: ['—'],
+      pairings: ['Whey (mascat de aciditate)', 'Colagen pudră (are nevoie de vitamina C)', 'Ovăz cu iaurt', 'Apă, jumătate-jumătate'],
       tips: [
         'Cazul-școală de calorii lichide: 600 ml suc + o granolă mică = 600 kcal cu sub 10 g proteină, și îți este foame în 40 de minute.',
         'O portocală întreagă are 3 g fibră și te satură. 250 ml de suc sunt 3 portocale fără fibră.',
@@ -1731,7 +1731,7 @@
       stats: { taste: 72, satiety: 55, convenience: 88, versatility: 25 },
       timing: { breakfast: 1, preWorkout: 2, postWorkout: 4, lunch: 1, snack: 5, dinner: 2, beforeBed: 4 },
       timingNote: 'Vara, seara — înlocuiește o caserolă de 900 kcal cu una de 500.',
-      tags: ['ready-to-eat', 'frozen', 'low-fat', 'high-fiber', 'summer', 'night-snack', 'cutting', 'processed', 'mid-price'],
+      tags: ['ready-to-eat', 'frozen', 'low-fat', 'summer', 'night-snack', 'cutting', 'processed', 'mid-price'],
       diet: { vegan: false, vegetarian: true, glutenFree: true, lactoseFree: false, keto: false, halal: true, porkFree: true },
       pairings: ['Fructe de pădure congelate', 'Pastă de arahide (1 linguriță)', 'Cafea espresso turnată peste'],
       tips: [
@@ -1780,7 +1780,7 @@
       stats: { taste: 60, satiety: 58, convenience: 92, versatility: 30 },
       timing: { breakfast: 2, preWorkout: 3, postWorkout: 3, lunch: 1, snack: 4, dinner: 1, beforeBed: 3 },
       timingNote: 'Gustare de poftă. Nu e sursă principală de proteină la 450 kcal/100 g.',
-      tags: ['ready-to-eat', 'grab-and-go', 'very-high-protein', 'high-fiber', 'high-kcal', 'low-carb', 'portable', 'shelf-stable', 'premium', 'processed'],
+      tags: ['ready-to-eat', 'grab-and-go', 'very-high-protein', 'high-fiber', 'high-kcal', 'portable', 'shelf-stable', 'premium', 'processed'],
       diet: { vegan: false, vegetarian: true, glutenFree: true, lactoseFree: false, keto: false, halal: true, porkFree: true },
       pairings: ['Cafea', 'Iaurt grecesc', 'Nuci'],
       tips: [
@@ -1788,7 +1788,7 @@
         'Maltitolul din multe variante e laxativ peste 40 g — nu mânca tableta întreagă.',
         'Pentru aceeași proteină, 200 g budincă proteică costă de 5 ori mai puțin și are 165 kcal.'
       ],
-      warnings: ['Conține lapte, adesea soia și nuci.', 'Alcooli de zahăr (maltitol) — efect laxativ la doze mari.'],
+      warnings: ['Conține lapte, adesea soia și nuci.', 'Alcooli de zahăr (maltitol) — efect laxativ la doze mari.', '13 g grăsimi saturate la 100 g — la fel ca ciocolata obișnuită. „Proteică" schimbă doar eticheta, nu grăsimea.'],
       storage: 'Loc răcoros, sub 20 °C; vara se topește.',
       shelfLife: '~12 luni',
       dataConfidence: 'medium',
@@ -1889,7 +1889,7 @@
         'Cea „cu cacao" are aproape aceleași valori; cea cu adaos de glucoză ieftină e mai dulce și mai săracă în semințe — citește ingredientele.',
         'Excelentă la drumeții în Munții Cindrel: 200 kcal pe 35 g, nu se strică, nu se topește.'
       ],
-      warnings: ['Foarte calorică — ușor de mâncat 300 kcal fără să observi.', 'Poate conține urme de susan și arahide.'],
+      warnings: ['30 g zahăr la 100 g — mai mult decât o ciocolată cu lapte. Cele 12,5 g proteină nu compensează asta.', 'Foarte calorică (549 kcal/100 g) — ușor de mâncat 300 kcal fără să observi.', 'Poate conține urme de susan și arahide.'],
       storage: 'Loc răcoros și uscat, ambalaj închis; uleiul se separă la căldură.',
       shelfLife: '~6 luni',
       dataConfidence: 'medium',
@@ -2147,6 +2147,8 @@
       ],
       sibiuNote: 'Toate ingredientele sunt banale în Sibiu. E cel mai ieftin desert proteic pe care îl poți face: sub 2 lei porția.',
       per100g: { kcal: 40, protein: 8.5, carbs: 1, sugars: 0.5, fat: 0.2, satFat: 0.1, fiber: 0, salt: 0.1 },
+      // 15 g gelatină (~12,9 g proteină) + 30 g whey (~27 g proteină) la ~450 g jeleu
+      collagenShare: 0.33,
       serving: { grams: 200, label: '1 bol (200 g)' },
       effort: 1,
       timeMin: 130,
@@ -2175,7 +2177,7 @@
       },
       stats: { taste: 58, satiety: 55, convenience: 45, versatility: 40 },
       timing: { breakfast: 2, preWorkout: 2, postWorkout: 3, lunch: 1, snack: 5, dinner: 2, beforeBed: 5 },
-      timingNote: 'Seara, în deficit caloric: 17 g proteină pentru 80 kcal e imbatabil.',
+      timingNote: 'Seara, în deficit caloric: ~11 g proteină utilă (din whey) pentru 80 kcal e imbatabil.',
       tags: ['protein-dense', 'low-fat', 'low-carb', 'low-kcal', 'cutting', 'night-snack', 'meal-prep', 'budget', 'cheap-protein'],
       diet: { vegan: false, vegetarian: false, glutenFree: true, lactoseFree: false, keto: true, halal: false, porkFree: false },
       pairings: ['Fructe de pădure', 'Iaurt grecesc', 'Frișcă light'],
@@ -2184,7 +2186,7 @@
         'Gelatina în sine e proteină (colagen), dar incompletă — nu o socoti la aportul zilnic. Whey-ul face treaba.',
         'Fă o tavă întreagă duminica, taie cuburi: gustare de 5 zile la 2 lei porția.'
       ],
-      warnings: ['Gelatina e de obicei din porc sau vită — verifică sursa dacă ai restricții religioase.', 'Nu e vegetarian.'],
+      warnings: ['Din cele 8,5 g proteină/100 g, ~2,8 g sunt colagen din gelatină și NU se pun la ținta zilnică (zero triptofan). Numără doar partea din whey: ~5,7 g/100 g, adică ~11 g pe bolul de 200 g.', 'Gelatina e de obicei din porc sau vită — verifică sursa dacă ai restricții religioase.', 'Nu e vegetarian.'],
       storage: 'Frigider, acoperit, 4–5 zile.',
       shelfLife: '5 zile',
       dataConfidence: 'medium',
@@ -2234,7 +2236,7 @@
         'Versiunea de casă cu 500 g brânză de vaci degresată + 2 ouă + îndulcitor + gelatină, fără blat: 12 g proteină/100 g la 110 kcal.',
         '„Cheesecake proteic" din cofetărie e aproape întotdeauna cheesecake normal cu nume nou — cere valorile.'
       ],
-      warnings: ['Conține gluten, lapte, ou.', '12 g grăsimi saturate/100 g — mai mult decât într-o ciocolată cu lapte.'],
+      warnings: ['22 g zahăr la 100 g: felia de 120 g aduce 26 g zahăr și doar 7 g proteină. Nu e desert „cu brânză, deci proteic".', 'Conține gluten, lapte, ou.', '12 g grăsimi saturate/100 g — mai mult decât într-o ciocolată cu lapte.'],
       storage: 'Frigider 2–3 zile; congelat până la 3 luni.',
       shelfLife: '2–3 zile la frigider',
       dataConfidence: 'medium',
@@ -2261,7 +2263,7 @@
       per100g: { kcal: 354, protein: 36, carbs: 52, sugars: 52, fat: 1, satFat: 0.6, fiber: 0, salt: 1.2 },
       micros: { calciumMg: 1250, b12Ug: 4, potassiumMg: 1700, zincMg: 4, cholesterolMg: 20 },
       serving: { grams: 25, label: '2 linguri rase (25 g)' },
-      effort: 0,
+      effort: 1,
       timeMin: 1,
       activeTimeMin: 1,
       cooking: {
@@ -2350,7 +2352,7 @@
       stats: { taste: 35, satiety: 78, convenience: 70, versatility: 82 },
       timing: { breakfast: 5, preWorkout: 3, postWorkout: 4, lunch: 4, snack: 4, dinner: 4, beforeBed: 4 },
       timingNote: 'Booster universal pentru orice masă gătită — nu se simte în terci sau clătite.',
-      tags: ['very-high-protein', 'protein-dense', 'low-fat', 'low-carb', 'cheap-protein', 'shelf-stable', 'complete-protein', 'bulk-buy', 'cutting', 'meal-prep'],
+      tags: ['very-high-protein', 'protein-dense', 'low-fat', 'cheap-protein', 'shelf-stable', 'complete-protein', 'bulk-buy', 'cutting', 'meal-prep', 'high-sodium'],
       diet: { vegan: false, vegetarian: true, glutenFree: true, lactoseFree: true, keto: true, halal: true, porkFree: true },
       pairings: ['Fulgi de ovăz', 'Clătite proteice', 'Omletă', 'Cacao'],
       tips: [
@@ -2359,7 +2361,7 @@
         'Nu-l pune direct în lichid fierbinte: coagulează instant. Hidratează rece, apoi gătește.',
         'Sarea de 3,5 g/100 g pare mare, dar la 15 g pe porție înseamnă doar 0,5 g.'
       ],
-      warnings: ['Alergen: ou.', 'Albușul crud reconstituit trebuie gătit — pudra e pasteurizată, dar textura crudă e neplăcută oricum.'],
+      warnings: ['3,5 g sare la 100 g — cea mai sărată pudră din tot atlasul. La 15 g porție înseamnă 0,5 g sare; nu depăși 2 porții pe zi dacă ai tensiune.', 'Alergen: ou.', 'Albușul crud reconstituit trebuie gătit — pudra e pasteurizată, dar textura crudă e neplăcută oricum.'],
       storage: 'Recipient etanș, loc uscat.',
       shelfLife: '~18 luni',
       dataConfidence: 'medium',
@@ -2446,7 +2448,7 @@
       sibiuNote: 'Farmaciile din Sibiu îl vând la preț dublu față de online. Există și apă cu colagen la sticlă (Carrefour, ~9 lei/500 ml, 5 g colagen) — cel mai prost raport preț/proteină din tot fișierul.',
       per100g: { kcal: 350, protein: 88, carbs: 0, sugars: 0, fat: 0, satFat: 0, fiber: 0, salt: 0.3 },
       serving: { grams: 10, label: '1 măsură (10 g)' },
-      effort: 0,
+      effort: 1,
       timeMin: 1,
       activeTimeMin: 1,
       cooking: {
@@ -2481,7 +2483,7 @@
         'Ia-l cu vitamina C — sinteza de colagen o cere obligatoriu.',
         'Apa cu colagen din raft (5 g la sticlă, 9 lei) costă ~180 lei per 100 g proteină incompletă. Evită.'
       ],
-      warnings: ['Proteină incompletă — fără triptofan.', 'De origine bovină sau porcină; verifică sursa pentru restricții religioase.', 'Nu e vegetarian.'],
+      warnings: ['NU se pune la ținta zilnică de proteină. Fără triptofan, colagenul nu poate susține sinteza musculară: cele 88 g de pe etichetă sunt azot, nu proteină utilizabilă.', 'De origine bovină sau porcină; verifică sursa pentru restricții religioase.', 'Nu e vegetarian.'],
       storage: 'Recipient etanș, loc uscat.',
       shelfLife: '~24 luni',
       dataConfidence: 'medium',
@@ -2523,7 +2525,7 @@
       stats: { taste: 68, satiety: 40, convenience: 90, versatility: 78 },
       timing: { breakfast: 3, preWorkout: 2, postWorkout: 2, lunch: 4, snack: 2, dinner: 4, beforeBed: 1 },
       timingNote: 'Condiment, nu masă. Se presară la final, peste mâncarea caldă.',
-      tags: ['very-high-protein', 'high-fiber', 'b12', 'iron-rich', 'shelf-stable', 'processed'],
+      tags: ['very-high-protein', 'high-fiber', 'b12', 'iron-rich', 'shelf-stable', 'processed', 'protein-dense'],
       diet: { vegan: true, vegetarian: true, glutenFree: true, lactoseFree: true, keto: false, halal: true, porkFree: true },
       pairings: ['Paste', 'Popcorn', 'Supă', 'Seitan', 'Cartofi copți'],
       tips: [
@@ -2573,7 +2575,7 @@
       stats: { taste: 72, satiety: 10, convenience: 96, versatility: 88 },
       timing: { breakfast: 1, preWorkout: 2, postWorkout: 2, lunch: 4, snack: 2, dinner: 4, beforeBed: 1 },
       timingNote: 'Condiment de prânz și cină. Nu contează caloric, contează la sodiu.',
-      tags: ['ready-to-eat', 'shelf-stable', 'high-sodium', 'low-kcal', 'budget', 'processed'],
+      tags: ['ready-to-eat', 'shelf-stable', 'high-sodium', 'low-kcal', 'budget', 'processed', 'protein-dense'],
       diet: { vegan: true, vegetarian: true, glutenFree: false, lactoseFree: true, keto: true, halal: true, porkFree: true },
       pairings: ['Piept de pui', 'Tofu', 'Orez', 'Ouă', 'Seitan'],
       tips: [
@@ -2674,7 +2676,7 @@
       stats: { taste: 80, satiety: 58, convenience: 96, versatility: 82 },
       timing: { breakfast: 3, preWorkout: 3, postWorkout: 2, lunch: 4, snack: 4, dinner: 3, beforeBed: 2 },
       timingNote: 'Gustare de birou cu morcovi și crackers, sau bază de wrap.',
-      tags: ['ready-to-eat', 'high-fiber', 'portable', 'office-lunch', 'whole-food', 'mid-price'],
+      tags: ['ready-to-eat', 'portable', 'office-lunch', 'whole-food', 'mid-price'],
       diet: { vegan: true, vegetarian: true, glutenFree: true, lactoseFree: true, keto: false, halal: true, porkFree: true },
       pairings: ['Lipie integrală', 'Morcovi', 'Crackers integrali', 'Ou fiert', 'Piept de pui'],
       tips: [
@@ -2782,7 +2784,7 @@
         'Diluează cu 2 linguri de iaurt grecesc: obții același gust cu jumătate de calorii și +3 g proteină.',
         'Verifică ingredientele: multe pesto ieftine au ulei de floarea-soarelui și caju în loc de ulei de măsline și pin.'
       ],
-      warnings: ['Conține lapte (parmezan) și adesea nuci/caju.', 'Sare 2,2 g/100 g.'],
+      warnings: ['Conține lapte (parmezan) și adesea nuci/caju.', 'Sare 2,2 g/100 g.', '8 g grăsimi saturate la 100 g, plus 2,2 g sare — folosește-l ca aromă (25 g), nu ca sos generos.'],
       storage: 'Frigider după deschidere, acoperit cu un strat de ulei; 7 zile.',
       shelfLife: '~12 luni sigilat',
       dataConfidence: 'medium',
@@ -2824,7 +2826,7 @@
       stats: { taste: 66, satiety: 8, convenience: 98, versatility: 86 },
       timing: { breakfast: 3, preWorkout: 2, postWorkout: 2, lunch: 4, snack: 2, dinner: 4, beforeBed: 1 },
       timingNote: 'Oricând ai nevoie să faci proteina slabă gustoasă fără calorii.',
-      tags: ['ready-to-eat', 'low-kcal', 'low-carb', 'budget', 'shelf-stable', 'high-sodium', 'cutting'],
+      tags: ['ready-to-eat', 'low-kcal', 'budget', 'shelf-stable', 'high-sodium', 'cutting'],
       diet: { vegan: true, vegetarian: true, glutenFree: true, lactoseFree: true, keto: true, halal: true, porkFree: true },
       pairings: ['Piept de pui', 'Ou fiert', 'Sandviș cu curcan', 'Marinade'],
       tips: [
@@ -3106,7 +3108,7 @@
       stats: { taste: 74, satiety: 92, convenience: 70, versatility: 55 },
       timing: { breakfast: 5, preWorkout: 3, postWorkout: 4, lunch: 5, snack: 3, dinner: 4, beforeBed: 2 },
       timingNote: 'Cel mai săturător mic dejun din fișier — fibra pâinii proteice plus cazeina din brânză țin 5 ore.',
-      tags: ['protein-dense', 'high-fiber', 'low-carb', 'breakfast', 'office-lunch', 'cheap-protein', 'calcium-rich', 'b12', 'complete-protein', 'cutting'],
+      tags: ['protein-dense', 'low-carb', 'breakfast', 'office-lunch', 'cheap-protein', 'calcium-rich', 'b12', 'complete-protein', 'cutting'],
       diet: { vegan: false, vegetarian: true, glutenFree: false, lactoseFree: false, keto: false, halal: true, porkFree: true },
       pairings: ['Roșii', 'Castraveți', 'Muștar', 'Sriracha', 'Ridichi'],
       tips: [
@@ -3231,7 +3233,7 @@
       stats: { taste: 62, satiety: 98, convenience: 55, versatility: 65 },
       timing: { breakfast: 5, preWorkout: 5, postWorkout: 5, lunch: 4, snack: 3, dinner: 3, beforeBed: 3 },
       timingNote: 'Micul dejun de referință pentru cine se antrenează: carbohidrat lent plus 35 g proteină completă.',
-      tags: ['high-fiber', 'low-fat', 'cheap-protein', 'budget', 'complete-protein', 'slow-digesting', 'breakfast', 'pre-workout', 'post-workout', 'whole-food'],
+      tags: ['low-fat', 'cheap-protein', 'budget', 'complete-protein', 'slow-digesting', 'breakfast', 'pre-workout', 'post-workout', 'whole-food'],
       diet: { vegan: false, vegetarian: true, glutenFree: false, lactoseFree: false, keto: false, halal: true, porkFree: true },
       pairings: ['Scorțișoară', 'Cacao neîndulcită', 'Fructe de pădure congelate', 'Pastă de arahide (1 linguriță)'],
       tips: [

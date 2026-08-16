@@ -105,6 +105,11 @@ rewrite the whole file.
     cholesterolMg: 5
   },
 
+  // Optional — ONLY for products that mix collagen protein with real protein.
+  // Fraction (0–1) of the declared protein that comes from collagen/gelatin.
+  // Omit it entirely for everything else; see the note under the schema.
+  collagenShare: 0.33,
+
   // ---- PORTION --------------------------------------------------------
   serving: {
     grams: 200,                    // a realistic single portion, in the same unit as above
@@ -193,6 +198,39 @@ rewrite the whole file.
   sources: ['Eticheta Milbona Skyr', 'lidl.ro']   // 1–3 short strings
 }
 ```
+
+### `collagenShare` — when a product is only *partly* gelatin
+
+Collagen and gelatin contain no tryptophan, so the app writes their protein down to
+a factor of **0,25** (see `docs/METHODOLOGY.md` §4). It normally recognises them from
+the name — *colagen, gelatină, piftie, răcituri, aspic*, plus the cuts that are
+structurally collagen without saying so: *burtă / tripe, tendon, șorici*.
+
+That works for a product that **is** collagen. It fails for a product that merely
+**contains** some, and it fails hard, because the whole entry drops to 0,25:
+
+```js
+// b-jeleu-proteic — 15 g gelatină + 30 g whey per ~450 g of jelly
+per100g: { kcal: 40, protein: 8.5, /* … */ },
+collagenShare: 0.33,   // ~2,8 g of the 8,5 g protein is gelatin; the rest is whey
+```
+
+Without the field, the word "gelatină" in the name pushed this dessert to rank **E**.
+With it, the quality factor becomes a weighted average —
+`0,33 × 0,25 + 0,67 × 0,92 = 0,70` — and it lands at rank **D**, which is what a
+40 kcal / 8,5 g-protein dessert actually deserves.
+
+Rules:
+
+- **Omit the field** unless the product genuinely mixes the two protein pools. The
+  name-matching stays the fallback, so leaving it out changes nothing.
+- `collagenShare: 1` is identical to being caught by the name — use it only when the
+  name would not catch a pure-collagen product.
+- Estimate it from the recipe or the ingredient list, in grams of *protein*, not grams
+  of ingredient (gelatin is ~86 % protein, whey isolate ~90 %), and write the arithmetic
+  in a comment next to the field.
+- The dossier still shows the red "proteină incompletă" warning and the product is
+  still excluded from the protein leaderboards. Only the score is nuanced.
 
 ---
 

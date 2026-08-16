@@ -65,7 +65,7 @@
       stats: { taste: 45, satiety: 88, convenience: 55, versatility: 95 },
       timing: { breakfast: 2, preWorkout: 3, postWorkout: 5, lunch: 5, snack: 3, dinner: 5, beforeBed: 3 },
       timingNote: 'Proteină rapidă și săracă în grăsime — ideal post-antrenament sau la prânz când vrei să nu te îngreuneze.',
-      tags: ['very-high-protein', 'low-fat', 'protein-dense', 'meal-prep', 'batch-cook', 'cheap-protein', 'whole-food', 'complete-protein', 'cutting', 'post-workout'],
+      tags: ['low-fat', 'protein-dense', 'meal-prep', 'batch-cook', 'cheap-protein', 'whole-food', 'complete-protein', 'cutting', 'post-workout'],
       diet: { vegan: false, vegetarian: false, glutenFree: true, lactoseFree: true, keto: true, halal: false, porkFree: true },
       pairings: ['Orez basmati', 'Broccoli la abur', 'Iaurt grecesc cu usturoi', 'Salată de varză', 'Cartofi dulci'],
       tips: [
@@ -131,7 +131,7 @@
       stats: { taste: 52, satiety: 88, convenience: 58, versatility: 95 },
       timing: { breakfast: 2, preWorkout: 3, postWorkout: 5, lunch: 5, snack: 3, dinner: 5, beforeBed: 3 },
       timingNote: 'Același profil ca pieptul generic — proteină slabă, digestie rapidă, bun oricând în afară de micul dejun clasic.',
-      tags: ['very-high-protein', 'low-fat', 'protein-dense', 'meal-prep', 'whole-food', 'mid-price', 'complete-protein', 'romanian-classic'],
+      tags: ['low-fat', 'protein-dense', 'meal-prep', 'whole-food', 'mid-price', 'complete-protein', 'romanian-classic'],
       diet: { vegan: false, vegetarian: false, glutenFree: true, lactoseFree: true, keto: true, halal: false, porkFree: true },
       pairings: ['Mămăligă', 'Salată de roșii cu ceapă', 'Cartofi la cuptor', 'Mujdei de usturoi'],
       tips: [
@@ -520,7 +520,7 @@
       stats: { taste: 32, satiety: 78, convenience: 45, versatility: 40 },
       timing: { breakfast: 2, preWorkout: 1, postWorkout: 3, lunch: 4, snack: 1, dinner: 4, beforeBed: 2 },
       timingNote: 'O dată pe săptămână, maximum de două ori — vitamina A se acumulează în ficat.',
-      tags: ['high-protein', 'iron-rich', 'b12', 'budget', 'cheap-protein', 'whole-food', 'low-fat', 'romanian-classic'],
+      tags: ['high-protein', 'iron-rich', 'b12', 'budget', 'cheap-protein', 'whole-food', 'romanian-classic'],
       diet: { vegan: false, vegetarian: false, glutenFree: true, lactoseFree: true, keto: true, halal: false, porkFree: true },
       pairings: ['Ceapă caramelizată', 'Mămăligă', 'Muștar', 'Vin roșu sec', 'Pătrunjel verde'],
       tips: [
@@ -840,7 +840,7 @@
       stats: { taste: 66, satiety: 84, convenience: 78, versatility: 55 },
       timing: { breakfast: 1, preWorkout: 3, postWorkout: 5, lunch: 5, snack: 2, dinner: 5, beforeBed: 3 },
       timingNote: 'Cina de marți seara când ai ajuns acasă la 19:30 — 14 minute și e gata.',
-      tags: ['high-protein', 'low-fat', 'grab-and-go', 'processed', 'mid-price', 'post-workout', 'summer'],
+      tags: ['high-protein', 'grab-and-go', 'processed', 'mid-price', 'post-workout', 'summer'],
       diet: { vegan: false, vegetarian: false, glutenFree: true, lactoseFree: true, keto: false, halal: false, porkFree: true },
       pairings: ['Salată verde', 'Lipie', 'Iaurt cu usturoi', 'Cartofi la cuptor', 'Legume la grătar'],
       tips: [
@@ -968,7 +968,7 @@
       stats: { taste: 46, satiety: 86, convenience: 72, versatility: 90 },
       timing: { breakfast: 1, preWorkout: 3, postWorkout: 5, lunch: 5, snack: 2, dinner: 5, beforeBed: 3 },
       timingNote: 'Cea mai rapidă masă cu proteină reală: 12 minute din frigider în farfurie.',
-      tags: ['very-high-protein', 'low-fat', 'protein-dense', 'grab-and-go', 'mid-price', 'post-workout', 'cutting'],
+      tags: ['low-fat', 'protein-dense', 'grab-and-go', 'mid-price', 'post-workout', 'cutting'],
       diet: { vegan: false, vegetarian: false, glutenFree: true, lactoseFree: true, keto: true, halal: false, porkFree: true },
       pairings: ['Legume asiatice congelate', 'Sos de soia', 'Orez', 'Ghimbir', 'Susan'],
       tips: [
@@ -1160,7 +1160,7 @@
       stats: { taste: 50, satiety: 90, convenience: 45, versatility: 80 },
       timing: { breakfast: 2, preWorkout: 3, postWorkout: 5, lunch: 5, snack: 3, dinner: 5, beforeBed: 3 },
       timingNote: 'Cea mai slabă carne obișnuită din raft — 90% din calorii vin din proteină. Ideal pe deficit caloric strict.',
-      tags: ['very-high-protein', 'low-fat', 'protein-dense', 'cutting', 'meal-prep', 'whole-food', 'complete-protein', 'mid-price'],
+      tags: ['low-fat', 'protein-dense', 'cutting', 'meal-prep', 'whole-food', 'complete-protein', 'mid-price'],
       diet: { vegan: false, vegetarian: false, glutenFree: true, lactoseFree: true, keto: true, halal: false, porkFree: true },
       pairings: ['Sos de merișoare', 'Salvie', 'Piure de cartofi', 'Sparanghel', 'Orez sălbatic'],
       tips: [
@@ -1223,7 +1223,7 @@
       stats: { taste: 70, satiety: 87, convenience: 40, versatility: 78 },
       timing: { breakfast: 1, preWorkout: 2, postWorkout: 4, lunch: 5, snack: 2, dinner: 5, beforeBed: 3 },
       timingNote: 'Meal prep de duminică — se feliază rece excelent pentru sandvișuri de birou.',
-      tags: ['high-protein', 'low-fat', 'meal-prep', 'batch-cook', 'whole-food', 'mid-price', 'iron-rich', 'office-lunch'],
+      tags: ['high-protein', 'meal-prep', 'batch-cook', 'whole-food', 'mid-price', 'iron-rich', 'office-lunch'],
       diet: { vegan: false, vegetarian: false, glutenFree: true, lactoseFree: true, keto: true, halal: false, porkFree: true },
       pairings: ['Cartofi dulci', 'Varză roșie călită', 'Muștar cu miere', 'Ciuperci', 'Orez brun'],
       tips: [
@@ -1285,7 +1285,7 @@
       stats: { taste: 55, satiety: 88, convenience: 62, versatility: 72 },
       timing: { breakfast: 2, preWorkout: 3, postWorkout: 5, lunch: 5, snack: 3, dinner: 5, beforeBed: 3 },
       timingNote: 'Când ai 10 minute și vrei 38 g proteină, asta e opțiunea.',
-      tags: ['very-high-protein', 'low-fat', 'protein-dense', 'cutting', 'post-workout', 'mid-price'],
+      tags: ['low-fat', 'protein-dense', 'cutting', 'post-workout', 'mid-price'],
       diet: { vegan: false, vegetarian: false, glutenFree: true, lactoseFree: true, keto: true, halal: false, porkFree: true },
       pairings: ['Lămâie', 'Capere', 'Salată rucola', 'Piure de mazăre', 'Unt cu ierburi'],
       tips: [
@@ -1348,7 +1348,7 @@
       stats: { taste: 48, satiety: 88, convenience: 48, versatility: 82 },
       timing: { breakfast: 2, preWorkout: 2, postWorkout: 5, lunch: 5, snack: 2, dinner: 5, beforeBed: 3 },
       timingNote: 'Alegerea de deficit caloric — 150 g crud dau 32 g proteină pentru 168 kcal.',
-      tags: ['very-high-protein', 'low-fat', 'protein-dense', 'cutting', 'meal-prep', 'batch-cook', 'mid-price'],
+      tags: ['low-fat', 'protein-dense', 'cutting', 'meal-prep', 'batch-cook', 'mid-price'],
       diet: { vegan: false, vegetarian: false, glutenFree: true, lactoseFree: true, keto: true, halal: false, porkFree: true },
       pairings: ['Sos de roșii picant', 'Iaurt grecesc', 'Ardei copt', 'Ovăz măcinat', 'Chimen'],
       tips: [
@@ -1544,7 +1544,7 @@
       stats: { taste: 82, satiety: 86, convenience: 45, versatility: 85 },
       timing: { breakfast: 1, preWorkout: 2, postWorkout: 4, lunch: 5, snack: 2, dinner: 5, beforeBed: 3 },
       timingNote: 'Proteină slabă cu gust — cina ideală când vrei să mănânci bine fără să depășești caloriile.',
-      tags: ['very-high-protein', 'low-fat', 'protein-dense', 'meal-prep', 'whole-food', 'mid-price', 'cutting', 'complete-protein'],
+      tags: ['protein-dense', 'meal-prep', 'whole-food', 'mid-price', 'cutting', 'complete-protein'],
       diet: { vegan: false, vegetarian: false, glutenFree: true, lactoseFree: true, keto: true, halal: false, porkFree: false },
       pairings: ['Piure de cartofi', 'Sos de muștar', 'Mere caramelizate', 'Varză călită', 'Cimbru'],
       tips: [
@@ -1916,7 +1916,7 @@
       sibiuNote: 'Coastele de porc sunt cea mai bună mâncare de grătar din Sibiu raportat la efort: le bagi 3 ore în cuptor la 150 °C și ies perfecte. Metro are cel mai bun preț la bax, dar oasele reprezintă 40% din greutate.',
       per100g: { kcal: 275, protein: 17, carbs: 0, sugars: 0, fat: 23, satFat: 8.5, fiber: 0, salt: 0.14 },
       micros: { ironMg: 1, zincMg: 2.5, b12Ug: 0.7, potassiumMg: 270, cholesterolMg: 78 },
-      serving: { grams: 350, label: '5–6 coaste (350 g crud, cu os)' },
+      serving: { grams: 250, label: '5–6 coaste (~250 g carne, fără os)' },
       effort: 4,
       timeMin: 210,
       activeTimeMin: 25,
@@ -1943,7 +1943,7 @@
         umami: 5,
         richness: 5,
         texture: 'Moale, umedă, cu crustă caramelizată la exterior',
-        notes: 'Mâncare de mare plăcere și de macro prost. 350 g de coaste crude = 60 g proteină, 80 g grăsime, ~960 kcal.'
+        notes: 'Mâncare de mare plăcere și de macro prost. O porție de 250 g de carne de pe coaste = ~43 g proteină, 58 g grăsime, ~690 kcal.'
       },
       stats: { taste: 91, satiety: 62, convenience: 25, versatility: 40 },
       timing: { breakfast: 0, preWorkout: 0, postWorkout: 2, lunch: 3, snack: 1, dinner: 5, beforeBed: 1 },
@@ -2081,7 +2081,7 @@
       stats: { taste: 22, satiety: 80, convenience: 35, versatility: 32 },
       timing: { breakfast: 1, preWorkout: 1, postWorkout: 3, lunch: 3, snack: 1, dinner: 3, beforeBed: 1 },
       timingNote: 'O dată la două săptămâni e suficient — vitamina A și cuprul se acumulează.',
-      tags: ['very-high-protein', 'low-fat', 'protein-dense', 'iron-rich', 'b12', 'budget', 'cheap-protein', 'whole-food'],
+      tags: ['protein-dense', 'iron-rich', 'b12', 'budget', 'cheap-protein', 'whole-food'],
       diet: { vegan: false, vegetarian: false, glutenFree: true, lactoseFree: true, keto: true, halal: false, porkFree: false },
       pairings: ['Ceapă caramelizată', 'Mămăligă', 'Muștar', 'Oțet balsamic', 'Vin roșu'],
       tips: [
@@ -2284,7 +2284,7 @@
       stats: { taste: 80, satiety: 86, convenience: 12, versatility: 78 },
       timing: { breakfast: 5, preWorkout: 2, postWorkout: 3, lunch: 5, snack: 4, dinner: 4, beforeBed: 3 },
       timingNote: 'Odată făcut, e cel mai bun mic dejun cu proteină din frigider — 150 g feliate dau 30 g proteină.',
-      tags: ['high-protein', 'low-fat', 'meal-prep', 'batch-cook', 'whole-food', 'bulk-buy', 'office-lunch', 'breakfast'],
+      tags: ['high-protein', 'meal-prep', 'batch-cook', 'whole-food', 'bulk-buy', 'office-lunch', 'breakfast'],
       diet: { vegan: false, vegetarian: false, glutenFree: true, lactoseFree: true, keto: true, halal: false, porkFree: false },
       pairings: ['Pâine de secară', 'Muștar', 'Brânză', 'Castraveți murați', 'Ouă'],
       tips: [
@@ -2419,7 +2419,7 @@
       stats: { taste: 90, satiety: 82, convenience: 30, versatility: 55 },
       timing: { breakfast: 1, preWorkout: 2, postWorkout: 4, lunch: 4, snack: 1, dinner: 5, beforeBed: 2 },
       timingNote: 'Cină de ocazie. Nutrițional e o carne foarte bună; economic e o extravaganță.',
-      tags: ['very-high-protein', 'low-fat', 'premium', 'iron-rich', 'b12', 'complete-protein', 'whole-food'],
+      tags: ['premium', 'iron-rich', 'b12', 'complete-protein', 'whole-food'],
       diet: { vegan: false, vegetarian: false, glutenFree: true, lactoseFree: true, keto: true, halal: false, porkFree: true },
       pairings: ['Sos de piper verde', 'Cartofi gratinați', 'Sparanghel', 'Vin roșu', 'Unt cu ierburi'],
       tips: [
@@ -2553,7 +2553,7 @@
       stats: { taste: 90, satiety: 84, convenience: 32, versatility: 62 },
       timing: { breakfast: 0, preWorkout: 2, postWorkout: 4, lunch: 4, snack: 1, dinner: 5, beforeBed: 2 },
       timingNote: '220 g crud = 46 g proteină la 422 kcal. Cel mai bun steak pentru cine numără macro.',
-      tags: ['very-high-protein', 'premium', 'iron-rich', 'b12', 'complete-protein', 'whole-food', 'bulk-buy'],
+      tags: ['premium', 'iron-rich', 'b12', 'complete-protein', 'whole-food', 'bulk-buy'],
       diet: { vegan: false, vegetarian: false, glutenFree: true, lactoseFree: true, keto: true, halal: false, porkFree: true },
       pairings: ['Piure de cartofi', 'Ciuperci sotate', 'Sos chimichurri', 'Rucola', 'Sare Maldon'],
       tips: [
@@ -2617,7 +2617,7 @@
       stats: { taste: 86, satiety: 90, convenience: 20, versatility: 55 },
       timing: { breakfast: 1, preWorkout: 0, postWorkout: 3, lunch: 5, snack: 1, dinner: 5, beforeBed: 2 },
       timingNote: 'Mâncare de duminică cu resturi excelente; sosul se gelifică la frigider.',
-      tags: ['very-high-protein', 'low-fat', 'budget', 'cheap-protein', 'iron-rich', 'b12', 'batch-cook', 'winter', 'slow-digesting'],
+      tags: ['budget', 'cheap-protein', 'iron-rich', 'b12', 'batch-cook', 'winter', 'slow-digesting'],
       diet: { vegan: false, vegetarian: false, glutenFree: true, lactoseFree: true, keto: true, halal: false, porkFree: true },
       pairings: ['Piure de cartofi', 'Risotto', 'Gremolata', 'Mămăligă', 'Vin roșu'],
       tips: [
@@ -2813,7 +2813,7 @@
       stats: { taste: 30, satiety: 82, convenience: 38, versatility: 35 },
       timing: { breakfast: 1, preWorkout: 1, postWorkout: 3, lunch: 4, snack: 1, dinner: 4, beforeBed: 1 },
       timingNote: 'O porție de 120 g o dată la 1–2 săptămâni acoperă B12 pentru mult timp.',
-      tags: ['very-high-protein', 'low-fat', 'protein-dense', 'iron-rich', 'b12', 'budget', 'cheap-protein', 'whole-food'],
+      tags: ['protein-dense', 'iron-rich', 'b12', 'budget', 'cheap-protein', 'whole-food'],
       diet: { vegan: false, vegetarian: false, glutenFree: true, lactoseFree: true, keto: true, halal: false, porkFree: true },
       pairings: ['Ceapă caramelizată', 'Oțet balsamic', 'Piure de cartofi', 'Slănină', 'Salvie'],
       tips: [
@@ -2947,7 +2947,7 @@
       stats: { taste: 62, satiety: 86, convenience: 28, versatility: 45 },
       timing: { breakfast: 1, preWorkout: 2, postWorkout: 4, lunch: 4, snack: 1, dinner: 5, beforeBed: 2 },
       timingNote: 'Proteină slabă și densă, bogată în fier și CoQ10 — foarte bună în perioade de volum mare de antrenament.',
-      tags: ['very-high-protein', 'low-fat', 'protein-dense', 'iron-rich', 'b12', 'budget', 'cheap-protein', 'whole-food', 'cutting'],
+      tags: ['protein-dense', 'iron-rich', 'b12', 'budget', 'cheap-protein', 'whole-food', 'cutting'],
       diet: { vegan: false, vegetarian: false, glutenFree: true, lactoseFree: true, keto: true, halal: false, porkFree: true },
       pairings: ['Chimichurri', 'Cartofi la cuptor', 'Lămâie', 'Ardei iute', 'Oregano'],
       tips: [
@@ -3487,7 +3487,7 @@
       stats: { taste: 72, satiety: 88, convenience: 20, versatility: 45 },
       timing: { breakfast: 1, preWorkout: 1, postWorkout: 4, lunch: 5, snack: 1, dinner: 5, beforeBed: 3 },
       timingNote: 'Cea mai slabă carne cu os din ghid — 65% din calorii vin din proteină.',
-      tags: ['very-high-protein', 'low-fat', 'protein-dense', 'iron-rich', 'b12', 'premium', 'whole-food', 'cutting'],
+      tags: ['protein-dense', 'iron-rich', 'b12', 'premium', 'whole-food', 'cutting'],
       diet: { vegan: false, vegetarian: false, glutenFree: true, lactoseFree: true, keto: true, halal: false, porkFree: true },
       pairings: ['Smântână', 'Muștar', 'Slănină afumată', 'Ciuperci', 'Vin alb sec'],
       tips: [
@@ -3657,7 +3657,7 @@
       sibiuNote: 'Gâsca e tradiție de Sfântul Martin în zona săsească din jurul Sibiului, iar în noiembrie apare atât în Piața Cibin, cât și la Selgros. E o pasăre grasă și scumpă: 55 lei/kg pentru o carne cu 33,6 g grăsime la 100 g.',
       per100g: { kcal: 368, protein: 15.9, carbs: 0, sugars: 0, fat: 33.6, satFat: 9.8, fiber: 0, salt: 0.14 },
       micros: { ironMg: 2.5, zincMg: 1.7, b12Ug: 0.4, potassiumMg: 300, cholesterolMg: 80 },
-      serving: { grams: 300, label: '1 porție (300 g crud, cu os)' },
+      serving: { grams: 200, label: '1 porție (200 g carne cu piele, crud)' },
       effort: 5,
       timeMin: 250,
       activeTimeMin: 45,
@@ -3960,7 +3960,7 @@
       stats: { taste: 76, satiety: 90, convenience: 8, versatility: 30 },
       timing: { breakfast: 0, preWorkout: 0, postWorkout: 2, lunch: 4, snack: 1, dinner: 5, beforeBed: 2 },
       timingNote: 'Mâncare de toamnă-iarnă, de sărbătoare vânătorească.',
-      tags: ['very-high-protein', 'low-fat', 'protein-dense', 'iron-rich', 'premium', 'winter', 'whole-food', 'local-sibiu'],
+      tags: ['protein-dense', 'iron-rich', 'premium', 'winter', 'whole-food', 'local-sibiu'],
       diet: { vegan: false, vegetarian: false, glutenFree: true, lactoseFree: true, keto: true, halal: false, porkFree: false },
       pairings: ['Gem de afine', 'Ienupăr', 'Mămăligă', 'Varză roșie', 'Vin roșu tanic'],
       tips: [
@@ -4027,7 +4027,7 @@
       stats: { taste: 40, satiety: 86, convenience: 68, versatility: 92 },
       timing: { breakfast: 2, preWorkout: 3, postWorkout: 5, lunch: 5, snack: 3, dinner: 5, beforeBed: 3 },
       timingNote: 'Rezerva din congelator care salvează orice seară fără plan.',
-      tags: ['very-high-protein', 'low-fat', 'protein-dense', 'frozen', 'meal-prep', 'shelf-stable', 'cheap-protein', 'bulk-buy'],
+      tags: ['low-fat', 'protein-dense', 'frozen', 'meal-prep', 'shelf-stable', 'cheap-protein', 'bulk-buy'],
       diet: { vegan: false, vegetarian: false, glutenFree: true, lactoseFree: true, keto: true, halal: false, porkFree: true },
       pairings: ['Orez', 'Legume congelate', 'Sos de soia', 'Curry', 'Iaurt'],
       tips: [
@@ -4227,7 +4227,7 @@
       stats: { taste: 38, satiety: 86, convenience: 62, versatility: 92 },
       timing: { breakfast: 2, preWorkout: 3, postWorkout: 5, lunch: 5, snack: 3, dinner: 5, beforeBed: 3 },
       timingNote: 'Coloana vertebrală a oricărui meal prep serios pe buget în Sibiu.',
-      tags: ['very-high-protein', 'low-fat', 'protein-dense', 'frozen', 'bulk-buy', 'cheap-protein', 'meal-prep', 'batch-cook', 'cutting'],
+      tags: ['low-fat', 'protein-dense', 'frozen', 'bulk-buy', 'cheap-protein', 'meal-prep', 'batch-cook', 'cutting'],
       diet: { vegan: false, vegetarian: false, glutenFree: true, lactoseFree: true, keto: true, halal: false, porkFree: true },
       pairings: ['Orez', 'Broccoli', 'Sos de iaurt', 'Legume congelate', 'Cartofi dulci'],
       tips: [

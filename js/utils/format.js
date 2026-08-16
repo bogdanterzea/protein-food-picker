@@ -21,21 +21,35 @@
 
   /**
    * Round to n decimals and drop trailing zeros.
-   * 21.0 -> "21", 21.53 -> "21.5" (n=1), 0.04 -> "0.04"
+   * 21.0 -> "21", 21.53 -> "21.5" (n=1), 0.04 -> "<0.1" (n=1) / "0.04" (n=2)
+   *
+   * Anything that is not a finite number renders as an em dash. A division by
+   * zero upstream must surface as "—", never as the literal "Infinity" or
+   * "NaN" printed into a product card.
    */
   function num(v, decimals) {
-    if (v === null || v === undefined || Number.isNaN(v)) return '—';
+    if (v === null || v === undefined) return '—';
+    const x = typeof v === 'number' ? v : Number(v);
+    if (!Number.isFinite(x)) return '—';
     const d = decimals === undefined ? 1 : decimals;
-    const rounded = Math.round(v * Math.pow(10, d)) / Math.pow(10, d);
+    const rounded = Math.round(x * Math.pow(10, d)) / Math.pow(10, d);
     // Small non-zero values must not collapse to "0".
-    if (rounded === 0 && v > 0 && v < 0.05) return '<0.1';
+    if (rounded === 0 && x > 0 && x < 0.05) return '<0.1';
+    // String(-0) is "0", so a rounded-away negative never prints as "-0".
     return String(rounded);
+  }
+
+  /** Decimal separator of the active locale: Romanian writes 5,4 not 5.4. */
+  function dec(v, decimals) {
+    return num(v, decimals).replace('.', LOCALE === 'ro-RO' ? ',' : '.');
   }
 
   /** Integer with thousands separators. */
   function int(v) {
-    if (v === null || v === undefined || Number.isNaN(v)) return '—';
-    return Math.round(v).toLocaleString(LOCALE);
+    if (v === null || v === undefined) return '—';
+    const x = typeof v === 'number' ? v : Number(v);
+    if (!Number.isFinite(x)) return '—';
+    return Math.round(x).toLocaleString(LOCALE);
   }
 
   /** Grams: "21 g", "0.4 g" */
@@ -89,23 +103,35 @@
     if (lo === null || lo === undefined || hi === null || hi === undefined) {
       return ronApprox(v, o);
     }
+    /* dec(), not num(): the range sits next to ron() output on the same card,
+     * and mixing "5,40 lei" with "(4.3–6.5)" looks like two different apps. */
     const d = v < 10 ? 1 : 0;
-    return '≈ ' + num(v, d) + ' lei (' + num(lo, d) + '–' + num(hi, d) + ')';
+    return '≈ ' + dec(v, d) + ' lei (' + dec(lo, d) + '–' + dec(hi, d) + ')';
   }
 
   /* -----------------------------------------------------------------------
    * TIME
    * -------------------------------------------------------------------- */
 
-  /** 0 -> "instant", 8 -> "8 min", 95 -> "1 h 35 min" */
-  function minutes(v, lang) {
-    const ro = lang !== 'en';
-    if (v === 0) return ro ? 'instant' : 'instant';
-    if (v < 60) return v + ' min';
-    const h = Math.floor(v / 60);
-    const m = v % 60;
-    const hLabel = ro ? 'h' : 'h';
-    return m ? h + ' ' + hLabel + ' ' + m + ' min' : h + ' ' + hLabel;
+  /**
+   * 0 -> "instant", 8 -> "8 min", 95 -> "1 h 35 min"
+   *
+   * Call sites pass a language code as a second argument; it is ignored, and
+   * always was — "instant", "h" and "min" read the same in RO and EN, so the
+   * two branches of the old ternaries were byte-identical.
+   *
+   * A missing time (an entry without `activeTimeMin`, say) must render as an
+   * em dash — the old code printed "NaN h" straight onto the card.
+   */
+  function minutes(v) {
+    if (v === null || v === undefined) return '—';
+    const n = typeof v === 'number' ? v : Number(v);
+    if (!Number.isFinite(n)) return '—';
+    if (n <= 0) return 'instant';
+    if (n < 60) return n + ' min';
+    const h = Math.floor(n / 60);
+    const m = n % 60;
+    return m ? h + ' h ' + m + ' min' : h + ' h';
   }
 
   /** A short bucket used for colour-coding the time chip. */
@@ -174,11 +200,17 @@
   };
 
   function normalize(s) {
-    let out = String(s).toLowerCase();
+    const src = String(s);
     let res = '';
-    for (let i = 0; i < out.length; i++) {
-      const ch = out[i];
-      res += DIACRITICS[ch] || ch;
+    for (let i = 0; i < src.length; i++) {
+      const ch = src[i];
+      /* Lowercase ONE character at a time and refuse any mapping that changes
+       * the character count — 'İ' (U+0130) lowercases to two code points and
+       * would shift every subsequent highlight() offset by one. Such a
+       * character keeps its original form; it does not occur in Romanian. */
+      const lower = ch.toLowerCase();
+      const one = lower.length === 1 ? lower : ch;
+      res += DIACRITICS[one] || one;
     }
     return res;
   }
@@ -225,16 +257,6 @@
     return outLo + t * (outHi - outLo);
   }
 
-  /** Deterministic pseudo-random in [0,1) from a string seed. */
-  function hashRand(str) {
-    let h = 2166136261;
-    for (let i = 0; i < str.length; i++) {
-      h ^= str.charCodeAt(i);
-      h = Math.imul(h, 16777619);
-    }
-    return ((h >>> 0) % 100000) / 100000;
-  }
-
   function slug(s) {
     return normalize(s)
       .replace(/[^a-z0-9]+/g, '-')
@@ -262,7 +284,6 @@
     plural: plural,
     clamp: clamp,
     scale: scale,
-    hashRand: hashRand,
     slug: slug
   };
 })();

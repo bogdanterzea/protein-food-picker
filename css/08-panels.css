@@ -327,6 +327,15 @@
   gap: var(--sp-4);
   margin-left: auto;
   flex-wrap: wrap;
+  /* On a phone this strip scrolls horizontally. Without min-width:0 it refuses
+   * to shrink and shoves the toggle button clean off the right edge instead. */
+  min-width: 0;
+}
+
+/* The toggle sits OUTSIDE the scrolling totals strip so it is always reachable. */
+.pf-tray__toggle {
+  flex: 0 0 auto;
+  margin-left: var(--sp-2);
 }
 
 .pf-tray__total {
@@ -476,6 +485,171 @@
 
 .pf-progress__row.is-over .pf-progress__over {
   opacity: 1;
+}
+
+/* ---- what is still missing, in whole servings ---- */
+.pf-gap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.pf-gap__head {
+  font-size: var(--fs-2xs);
+  color: var(--text-3);
+  line-height: 1.4;
+}
+
+.pf-gap__head b {
+  font-family: var(--font-mono);
+  color: var(--macro-protein);
+}
+
+.pf-gap--done {
+  font-size: var(--fs-2xs);
+  color: var(--ok);
+  line-height: 1.4;
+}
+
+.pf-gap__picks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.pf-gap__pick {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  width: 100%;
+  padding: var(--sp-2);
+  min-height: 34px;
+  border-radius: var(--r-sm);
+  border: 1px dashed var(--border-strong);
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.pf-gap__pick:hover {
+  border-style: solid;
+  border-color: var(--macro-protein);
+  background: var(--macro-protein-soft);
+}
+
+.pf-gap__emoji {
+  font-size: 16px;
+  flex: 0 0 auto;
+}
+
+.pf-gap__txt {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.pf-gap__txt b {
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-semi);
+  color: var(--text-1);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pf-gap__txt small {
+  font-size: var(--fs-3xs);
+  font-family: var(--font-mono);
+  color: var(--text-4);
+}
+
+.pf-gap__plus {
+  margin-left: auto;
+  flex: 0 0 auto;
+  font-family: var(--font-mono);
+  font-weight: var(--fw-bold);
+  color: var(--macro-protein);
+}
+
+/* ---- saved meals ---- */
+.pf-meals {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin-top: var(--sp-3);
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--border);
+}
+
+.pf-meals__save {
+  display: flex;
+  gap: var(--sp-2);
+  align-items: center;
+}
+
+.pf-meals__save .pf-input {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.pf-meals__save .pf-btn {
+  flex: 0 0 auto;
+}
+
+.pf-meals__list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 168px;
+  overflow-y: auto;
+}
+
+.pf-meal {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.pf-meal__load {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 34px;
+  justify-content: center;
+  padding: var(--sp-2);
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-panel);
+  color: inherit;
+  text-align: left;
+  line-height: 1.25;
+  cursor: pointer;
+}
+
+.pf-meal__load:hover {
+  border-color: var(--accent);
+  background: var(--bg-raised);
+}
+
+.pf-meal__load b {
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-semi);
+  color: var(--text-1);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pf-meal__load small {
+  font-size: var(--fs-3xs);
+  font-family: var(--font-mono);
+  color: var(--text-4);
 }
 
 /* =========================================================================

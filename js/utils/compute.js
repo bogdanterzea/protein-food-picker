@@ -101,20 +101,69 @@
     'bakery-drinks-sweets': 0.92
   };
 
-  /* Matches the products whose declared protein is structurally unusable. */
+  /* What one gram of collagen protein is worth next to one gram of egg. */
+  const COLLAGEN_FACTOR = 0.25;
+
+  /* Products that ARE collagen: a supplement, a jelly, an aspic, a piftie. */
   const COLLAGEN_RE = /colagen|collagen|gelatin|piftie|r[ăa]cituri|aspic/i;
 
-  function proteinQuality(f) {
+  /* Cuts that are structurally collagen even though nothing in the name says
+   * so: tripe, tendon, pork rind. Their nitrogen is real and the label counts
+   * it as protein, but it is the same unusable protein as a gelatin sachet,
+   * and canned tripe soup was scoring as if it were beef.
+   *
+   * Tested against the name with parenthesised notes REMOVED. A parenthesis in
+   * this dataset is a clarification, not the identity of the product: "Piept de
+   * porc (panceta, cu șorici)" is a pork belly that happens to carry rind, and
+   * penalising the whole cut for the note would repeat, in reverse, the very
+   * mistake this correction exists to fix. */
+  const COLLAGEN_CUT_RE = /burt[ăa]|tripe|tendon|[șs]orici/i;
+  const PARENTHETICAL_RE = /\([^)]*\)/g;
+
+  /**
+   * Fraction of the declared protein that is collagen, 0–1.
+   *
+   * An explicit `collagenShare` on the entry always wins. It is the only way
+   * to describe a MIXED product, and no amount of regex refining can replace
+   * it: a whey-and-gelatin jelly declares 8.5 g of protein of which about 2.8 g
+   * is gelatin. Matching the word "gelatină" would write the whole entry down
+   * to 0.25 and bury a genuinely decent protein dessert.
+   */
+  function collagenShareOf(f) {
+    if (typeof f.collagenShare === 'number' && Number.isFinite(f.collagenShare)) {
+      return clamp(f.collagenShare, 0, 1);
+    }
     const haystack = (f.id || '') + ' ' + (f.name || '') + ' ' + (f.nameRo || '');
-    if (COLLAGEN_RE.test(haystack)) {
-      return { factor: 0.25, reason: 'collagen' };
-    }
-    let factor = QUALITY_BY_CATEGORY[f.category];
-    if (factor === undefined) factor = 1.0;
+    if (COLLAGEN_RE.test(haystack)) return 1;
+    if (COLLAGEN_CUT_RE.test(haystack.replace(PARENTHETICAL_RE, ' '))) return 1;
+    return 0;
+  }
+
+  function proteinQuality(f) {
+    /* The factor the NON-collagen part of the protein deserves. */
+    let base = QUALITY_BY_CATEGORY[f.category];
+    if (base === undefined) base = 1.0;
     if (f.category === 'plant-protein' && (f.tags || []).indexOf('complete-protein') !== -1) {
-      factor = 1.0;
+      base = 1.0;
     }
-    return { factor: factor, reason: factor < 1 ? 'incomplete' : 'complete' };
+
+    const share = collagenShareOf(f);
+    if (share <= 0) {
+      return { factor: base, reason: base < 1 ? 'incomplete' : 'complete', collagenShare: 0 };
+    }
+
+    /* Weighted average of the two protein pools. A share of 1 reproduces the
+     * flat 0.25 exactly, so nothing moves for the entries that carry no field.
+     *
+     * `reason` stays 'collagen' for ANY share above zero: the dossier warning,
+     * the "no collagen" filter and the exclusion from the protein leaderboards
+     * all key off this string, and a product with gelatin in it should keep
+     * saying so even when only a third of its protein is gelatin. */
+    return {
+      factor: share * COLLAGEN_FACTOR + (1 - share) * base,
+      reason: 'collagen',
+      collagenShare: share
+    };
   }
 
   /* =======================================================================
@@ -252,14 +301,17 @@
    * them instead of trusting eight different agents to agree.
    * ==================================================================== */
   function derivedTags(f, d) {
+    /* Same tolerance for a missing nutrition block as enrich() itself: a
+     * half-written entry must degrade to zeros, not take the whole boot down. */
+    const n = f.per100g || {};
     const t = [];
     if (d.protein100 >= 25) t.push('very-high-protein');
     else if (d.protein100 >= 15) t.push('high-protein');
     if (d.purityPct >= 40) t.push('protein-dense');
-    if ((f.per100g.fat || 0) <= 3) t.push('low-fat');
-    if ((f.per100g.carbs || 0) <= 5) t.push('low-carb');
-    if ((f.per100g.fiber || 0) >= 6) t.push('high-fiber');
-    if ((f.per100g.salt || 0) >= 1.5) t.push('high-sodium');
+    if ((n.fat || 0) <= 3) t.push('low-fat');
+    if ((n.carbs || 0) <= 5) t.push('low-carb');
+    if ((n.fiber || 0) >= 6) t.push('high-fiber');
+    if ((n.salt || 0) >= 1.5) t.push('high-sodium');
     if (f.timeMin === 0) t.push('no-cook');
     if (d.ronPer100gProtein && d.ronPer100gProtein <= 6) t.push('cheap-protein');
     return t;
@@ -355,6 +407,7 @@
     const q = proteinQuality(f);
     d.quality = q.factor;
     d.qualityReason = q.reason;
+    d.collagenShare = q.collagenShare;
 
     /* --- the six axes -------------------------------------------------- */
     const authored = f.stats || {};
@@ -432,6 +485,9 @@
   /* =======================================================================
    * COLLECTION-LEVEL STATISTICS
    * ==================================================================== */
+  /* Flags that describe our coverage or our scoring, not the data itself. */
+  const NON_DATA_FLAGS = ['no-price', 'collagen-protein'];
+
   function summarize(foods) {
     const s = {
       count: foods.length,
@@ -477,8 +533,13 @@
         s.tags[t] = (s.tags[t] || 0) + 1;
       });
 
-      if (d.flags.length && d.flags.indexOf('no-price') === -1) {
-        s.flagged.push({ id: f.id, name: f.nameRo || f.name, flags: d.flags });
+      /* Two flags are not transcription errors: `no-price` is a gap in our
+       * research and `collagen-protein` is a deliberate scoring correction.
+       * Filter them OUT of the report instead of skipping the whole entry —
+       * an item that has no price AND a broken label must still be reported. */
+      const dataFlags = d.flags.filter(x => NON_DATA_FLAGS.indexOf(x) === -1);
+      if (dataFlags.length) {
+        s.flagged.push({ id: f.id, name: f.nameRo || f.name, flags: dataFlags });
       }
     });
 

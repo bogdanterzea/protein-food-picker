@@ -509,7 +509,10 @@
         '24,5 g proteină/100 g e valoarea uscată; fiartă ai ~9 g/100 g.',
         'Mazărea galbenă e mai dulce, cea verde mai ierboasă — la macro sunt identice.'
       ],
-      warnings: [],
+      warnings: [
+        'Cea mai flatulentă leguminoasă din raft: 15 g fibră și mult galactooligozaharid la 100 g. Dacă nu mănânci leguminoase în mod curent, începe cu 40 g uscate, nu cu 80.',
+        'Bogată în purine — o porție mare zilnic nu e ideală dacă ai gută sau acid uric crescut.'
+      ],
       storage: 'Borcan etanș.',
       shelfLife: '18–24 luni',
       dataConfidence: 'high',
@@ -625,7 +628,10 @@
       stats: { taste: 40, satiety: 92, convenience: 12, versatility: 66 },
       timing: { breakfast: 1, preWorkout: 1, postWorkout: 4, lunch: 4, snack: 2, dinner: 4, beforeBed: 2 },
       timingNote: 'Singura proteină vegetală completă din secțiunea de leguminoase — utilă post-antrenament dacă nu consumi lactate.',
-      tags: ['very-high-protein', 'protein-dense', 'complete-protein', 'high-fiber', 'cheap-protein', 'shelf-stable', 'whole-food', 'iron-rich', 'calcium-rich', 'omega3', 'batch-cook'],
+      // No 'protein-dense': soybeans are 36 g protein but 446 kcal, so only 32 %
+      // of the energy comes from protein — below the 40 % threshold. The fat is
+      // what disqualifies it, not the protein.
+      tags: ['very-high-protein', 'complete-protein', 'high-fiber', 'cheap-protein', 'shelf-stable', 'whole-food', 'iron-rich', 'calcium-rich', 'omega3', 'batch-cook'],
       diet: { vegan: true, vegetarian: true, glutenFree: true, lactoseFree: true, keto: false, halal: true, porkFree: true },
       pairings: ['Sos de soia', 'Ghimbir', 'Ulei de susan', 'Morcov', 'Alge kombu'],
       tips: [
@@ -686,7 +692,9 @@
       stats: { taste: 55, satiety: 84, convenience: 55, versatility: 80 },
       timing: { breakfast: 2, preWorkout: 3, postWorkout: 4, lunch: 5, snack: 3, dinner: 5, beforeBed: 3 },
       timingNote: 'Deja hidratată — mai ușor de digerat decât leguminoasa uscată gătită repede.',
-      tags: ['high-fiber', 'cheap-protein', 'budget', 'whole-food', 'meal-prep', 'batch-cook', 'low-fat', 'iron-rich'],
+      // No 'high-fiber': 4 g/100 g cooked, below the 6 g threshold. Boiling
+      // dilutes the 9 g of the dry lentil by the same ~2.3x as the protein.
+      tags: ['cheap-protein', 'budget', 'whole-food', 'meal-prep', 'batch-cook', 'low-fat', 'iron-rich'],
       diet: { vegan: true, vegetarian: true, glutenFree: true, lactoseFree: true, keto: false, halal: true, porkFree: true },
       pairings: ['Orez', 'Iaurt', 'Ceapă prăjită', 'Spanac', 'Lămâie'],
       tips: [
@@ -1000,7 +1008,9 @@
         '7,2 g proteină/100 g — o conservă = cam cât un ou și jumătate ca proteină, dar cu 7 g fibră.',
         'Se congelează după deschidere, spre deosebire de multe conserve: textura rezistă.'
       ],
-      warnings: [],
+      warnings: [
+        'Sare 0,65 g/100 g: o conservă scursă înseamnă ~1,6 g de sare, adică o treime din norma zilnică. Clătește boabele sub jet de apă — scazi sarea cu ~40%.'
+      ],
       storage: 'Cămară; deschisă la frigider 3 zile.',
       shelfLife: '3 ani sigilată',
       dataConfidence: 'medium',
@@ -1053,7 +1063,9 @@
       stats: { taste: 48, satiety: 76, convenience: 60, versatility: 92 },
       timing: { breakfast: 4, preWorkout: 3, postWorkout: 4, lunch: 5, snack: 3, dinner: 5, beforeBed: 3 },
       timingNote: 'Proteină completă cu digestie medie — funcționează la orice masă, inclusiv ca scrambled la micul dejun.',
-      tags: ['high-protein', 'complete-protein', 'calcium-rich', 'whole-food', 'meal-prep', 'mid-price', 'low-carb'],
+      // 12.5 g/100 g is below the 15 g 'high-protein' threshold, but 40 % of the
+      // calories come from protein, so 'protein-dense' is the honest tag here.
+      tags: ['protein-dense', 'complete-protein', 'calcium-rich', 'whole-food', 'meal-prep', 'mid-price', 'low-carb'],
       diet: { vegan: true, vegetarian: true, glutenFree: true, lactoseFree: true, keto: false, halal: true, porkFree: true },
       pairings: ['Sos de soia', 'Ghimbir', 'Ulei de susan', 'Ardei', 'Broccoli', 'Orez'],
       tips: [
@@ -1113,7 +1125,8 @@
       stats: { taste: 72, satiety: 78, convenience: 94, versatility: 84 },
       timing: { breakfast: 4, preWorkout: 3, postWorkout: 4, lunch: 5, snack: 5, dinner: 5, beforeBed: 4 },
       timingNote: 'Gustare rece cu 13 g proteină/100 g, fără gătit — util la birou sau în drumeție.',
-      tags: ['ready-to-eat', 'high-protein', 'complete-protein', 'grab-and-go', 'portable', 'calcium-rich', 'no-cook', 'office-lunch', 'premium'],
+      // 13 g/100 g and 39 % of kcal from protein: misses both thresholds.
+      tags: ['ready-to-eat', 'complete-protein', 'grab-and-go', 'portable', 'calcium-rich', 'no-cook', 'office-lunch', 'premium'],
       diet: { vegan: true, vegetarian: true, glutenFree: true, lactoseFree: true, keto: false, halal: true, porkFree: true },
       pairings: ['Pâine de secară', 'Muștar', 'Castraveți murați', 'Roșii', 'Rucola', 'Avocado'],
       tips: [
@@ -1173,7 +1186,8 @@
       stats: { taste: 74, satiety: 80, convenience: 88, versatility: 82 },
       timing: { breakfast: 4, preWorkout: 3, postWorkout: 4, lunch: 5, snack: 5, dinner: 5, beforeBed: 4 },
       timingNote: 'Densitate de proteină mare per calorie — bun în faza de cutting.',
-      tags: ['high-protein', 'complete-protein', 'ready-to-eat', 'calcium-rich', 'portable', 'whole-food', 'cutting', 'premium'],
+      // 16 g/100 g and 44 % of kcal from protein: clears both thresholds.
+      tags: ['high-protein', 'protein-dense', 'complete-protein', 'ready-to-eat', 'calcium-rich', 'portable', 'whole-food', 'cutting', 'premium'],
       diet: { vegan: true, vegetarian: true, glutenFree: true, lactoseFree: true, keto: false, halal: true, porkFree: true },
       pairings: ['Varză călită', 'Cartofi la cuptor', 'Muștar Dijon', 'Salată verde', 'Orez brun'],
       tips: [
@@ -1235,7 +1249,8 @@
       stats: { taste: 64, satiety: 86, convenience: 40, versatility: 76 },
       timing: { breakfast: 3, preWorkout: 2, postWorkout: 4, lunch: 5, snack: 3, dinner: 5, beforeBed: 3 },
       timingNote: 'Fermentarea îmbunătățește digestibilitatea — cea mai ușor de digerat formă de soia întreagă.',
-      tags: ['high-protein', 'complete-protein', 'whole-food', 'high-fiber', 'premium', 'meal-prep', 'imported'],
+      // No 'high-fiber': 5 g/100 g is below the 6 g threshold.
+      tags: ['high-protein', 'complete-protein', 'whole-food', 'premium', 'meal-prep', 'imported'],
       diet: { vegan: true, vegetarian: true, glutenFree: true, lactoseFree: true, keto: false, halal: true, porkFree: true },
       pairings: ['Sos de soia', 'Sirop de arțar', 'Usturoi', 'Varză murată', 'Orez brun', 'Ghimbir'],
       tips: [
@@ -1479,7 +1494,9 @@
       stats: { taste: 78, satiety: 76, convenience: 74, versatility: 62 },
       timing: { breakfast: 1, preWorkout: 3, postWorkout: 4, lunch: 4, snack: 5, dinner: 4, beforeBed: 3 },
       timingNote: 'Gustare de seară cu 11 g proteină/100 g și doar 121 kcal — excelent raport.',
-      tags: ['high-protein', 'complete-protein', 'frozen', 'high-fiber', 'low-kcal', 'cutting', 'omega3', 'imported', 'mid-price'],
+      // 11 g/100 g in the shelled bean: below the 15 g 'high-protein' threshold.
+      // No 'high-fiber': 5 g/100 g is below the 6 g threshold.
+      tags: ['complete-protein', 'frozen', 'low-kcal', 'cutting', 'omega3', 'imported', 'mid-price'],
       diet: { vegan: true, vegetarian: true, glutenFree: true, lactoseFree: true, keto: false, halal: true, porkFree: true },
       pairings: ['Sare grunjoasă', 'Ulei de susan', 'Chili flakes', 'Lime', 'Orez', 'Sos de soia'],
       tips: [
@@ -1849,7 +1866,8 @@
       stats: { taste: 66, satiety: 66, convenience: 80, versatility: 50 },
       timing: { breakfast: 1, preWorkout: 2, postWorkout: 3, lunch: 5, snack: 2, dinner: 5, beforeBed: 1 },
       timingNote: 'Masă de prânz sau cină; nu e o sursă densă de proteină per calorie.',
-      tags: ['high-protein', 'frozen', 'processed', 'kid-friendly', 'mid-price', 'high-kcal', 'high-sodium'],
+      // 13 g/100 g: below the threshold, and the entry's own tips already say so.
+      tags: ['frozen', 'processed', 'kid-friendly', 'mid-price', 'high-kcal', 'high-sodium'],
       diet: { vegan: true, vegetarian: true, glutenFree: false, lactoseFree: true, keto: false, halal: true, porkFree: true },
       pairings: ['Cartofi la cuptor', 'Salată de varză', 'Muștar', 'Lămâie', 'Sos de usturoi'],
       tips: [
@@ -2094,7 +2112,8 @@
       stats: { taste: 60, satiety: 58, convenience: 86, versatility: 55 },
       timing: { breakfast: 2, preWorkout: 2, postWorkout: 2, lunch: 4, snack: 3, dinner: 4, beforeBed: 2 },
       timingNote: 'Garnitură vegetală, nu masă proteică — adaugă tofu sau leguminoase lângă.',
-      tags: ['processed', 'mid-price', 'high-sodium', 'kid-friendly', 'high-fiber'],
+      // No 'high-fiber': 5 g/100 g is below the 6 g threshold.
+      tags: ['processed', 'mid-price', 'high-sodium', 'kid-friendly'],
       diet: { vegan: true, vegetarian: true, glutenFree: false, lactoseFree: true, keto: false, halal: true, porkFree: true },
       pairings: ['Sos de iaurt', 'Salată verde', 'Cartofi la cuptor', 'Humus', 'Lipie'],
       tips: [
@@ -2262,7 +2281,7 @@
           'Amestecă în iaurt, terci, shake sau aluat.',
           'Bea multă apă — 15 g fibră/100 g fără lichid suficient dă constipație, nu o rezolvă.'
         ],
-        yieldNote: ''
+        yieldNote: '100 g tărâțe uscate + ~350 ml lichid → ~450 g terci. Cele 17 g proteină/100 g uscat devin ~3,8 g/100 g preparat: valoarea de pe pachet e pentru pudra uscată, nu pentru bolul din farfurie.'
       },
       taste: {
         profile: 'Pământos, ușor amărui, cu textură de rumeguș fin dacă e consumat uscat',
@@ -2463,7 +2482,9 @@
       stats: { taste: 55, satiety: 72, convenience: 45, versatility: 88 },
       timing: { breakfast: 2, preWorkout: 5, postWorkout: 5, lunch: 5, snack: 1, dinner: 5, beforeBed: 2 },
       timingNote: 'Carbohidrat de bază; combinat cu leguminoase completează profilul de aminoacizi.',
-      tags: ['cheap-protein', 'budget', 'shelf-stable', 'whole-food', 'bulk-buy', 'meal-prep', 'batch-cook', 'high-fiber'],
+      // No 'high-fiber': 3.5 g/100 g dry. Brown rice beats white rice on fibre,
+      // but it is nowhere near the 6 g threshold — and cooking dilutes it further.
+      tags: ['cheap-protein', 'budget', 'shelf-stable', 'whole-food', 'bulk-buy', 'meal-prep', 'batch-cook'],
       diet: { vegan: true, vegetarian: true, glutenFree: true, lactoseFree: true, keto: false, halal: true, porkFree: true },
       pairings: ['Fasole neagră', 'Linte', 'Tofu', 'Legume la wok', 'Sos de soia'],
       tips: [
@@ -3019,14 +3040,18 @@
       stats: { taste: 25, satiety: 55, convenience: 76, versatility: 40 },
       timing: { breakfast: 1, preWorkout: 1, postWorkout: 1, lunch: 3, snack: 2, dinner: 3, beforeBed: 3 },
       timingNote: 'Umple stomacul fără calorii — util în deficit caloric agresiv, inutil ca proteină.',
-      tags: ['low-kcal', 'low-carb', 'high-fiber', 'cutting', 'ready-to-eat', 'processed', 'imported'],
+      // No 'high-fiber': konjac IS essentially pure fibre, but the noodle is sold
+      // hydrated (~97 % water), so the product as eaten carries only 3 g/100 g.
+      // See tips — the tag would be misleading on a per-100-g basis.
+      tags: ['low-kcal', 'low-carb', 'cutting', 'ready-to-eat', 'processed', 'imported'],
       diet: { vegan: true, vegetarian: true, glutenFree: true, lactoseFree: true, keto: true, halal: true, porkFree: true },
       pairings: ['Sos de soia', 'Ulei de susan', 'Tofu', 'Ghimbir', 'Ceapă verde', 'Ou'],
       tips: [
         'CONTRAST DELIBERAT: 0,2 g proteină/100 g. E cel mai sărac aliment din întreaga bază de date.',
         'Nu îl folosi ca înlocuitor de paste dacă urmărești proteina — folosește pastele de linte.',
         'Are sens exact într-un caz: vrei volum de mâncare la 8 kcal/100 g, în timpul unui deficit agresiv.',
-        'Glucomananul absoarbe apă în stomac — bea lichid suficient sau ai disconfort.'
+        'Glucomananul absoarbe apă în stomac — bea lichid suficient sau ai disconfort.',
+        'De ce NU e etichetat „bogat în fibre": konjacul uscat e practic glucomanan pur, dar tăițeii se vând hidratați, în lichid — apa e ~97% din pungă. Rezultă 3 g fibră la 100 g de produs gata, sub pragul de 6 g. Punga scursă de 200 g îți dă totuși ~6 g fibră, adică exact cât 100 g de fasole roșie la conservă — doar că fără proteina ei.'
       ],
       warnings: ['Aproape zero valoare nutrițională. Nu este o sursă de proteină.', 'Glucomananul poate provoca obstrucție esofagiană dacă e consumat fără lichid suficient.'],
       storage: 'Cămară până la deschidere (ambalat în lichid); după deschidere, frigider 2 zile.',
@@ -3966,7 +3991,8 @@
       timeMin: 2,
       activeTimeMin: 2,
       cooking: {
-        method: 'blend',
+        // 'assemble', not 'blend': the equipment is a bowl and a whisk, no blender.
+        method: 'assemble',
         difficulty: 'trivial',
         equipment: ['bol', 'tel'],
         steps: [
@@ -4082,9 +4108,10 @@
       per100g: { kcal: 375, protein: 57, carbs: 18, sugars: 3, fat: 7.7, satFat: 2.6, fiber: 4, salt: 2.6 },
       micros: { ironMg: 28, zincMg: 2, potassiumMg: 1360, calciumMg: 120, b12Ug: 0, cholesterolMg: 0 },
       serving: { grams: 5, label: '1 linguriță (5 g) = 2,9 g proteină' },
-      effort: 0,
-      timeMin: 1,
-      activeTimeMin: 1,
+      // effort 1, not 0: you have to run a blender or a shaker, it is not open-and-eat.
+      effort: 1,
+      timeMin: 2,
+      activeTimeMin: 2,
       cooking: {
         method: 'blend',
         difficulty: 'trivial',
@@ -4168,7 +4195,8 @@
       stats: { taste: 72, satiety: 40, convenience: 94, versatility: 84 },
       timing: { breakfast: 3, preWorkout: 2, postWorkout: 3, lunch: 4, snack: 3, dinner: 4, beforeBed: 2 },
       timingNote: 'Condiment cu bonus nutrițional; sursa vegetală practică de B12 dacă e fortificată.',
-      tags: ['very-high-protein', 'protein-dense', 'b12', 'high-fiber', 'low-fat', 'shelf-stable', 'ready-to-eat', 'whole-food'],
+      // No 'low-fat': 4 g fat/100 g is above the 3 g threshold.
+      tags: ['very-high-protein', 'protein-dense', 'b12', 'high-fiber', 'shelf-stable', 'ready-to-eat', 'whole-food'],
       diet: { vegan: true, vegetarian: true, glutenFree: true, lactoseFree: true, keto: false, halal: true, porkFree: true },
       pairings: ['Paste', 'Popcorn', 'Cartofi la cuptor', 'Supă-cremă', 'Tofu', 'Salate'],
       tips: [
@@ -4230,7 +4258,10 @@
       stats: { taste: 58, satiety: 68, convenience: 62, versatility: 82 },
       timing: { breakfast: 2, preWorkout: 2, postWorkout: 3, lunch: 5, snack: 3, dinner: 5, beforeBed: 4 },
       timingNote: 'Volum mare la calorii mici — umple farfuria fără să afecteze deficitul caloric.',
-      tags: ['low-kcal', 'high-fiber', 'whole-food', 'cutting', 'calcium-rich', 'budget', 'frozen'],
+      // No 'calcium-rich': 47 mg/100 g is a third of what milk or tofu deliver.
+      // The calcium in broccoli is unusually well absorbed, but the amount is small.
+      // No 'high-fiber': 2.6 g/100 g, well below the 6 g threshold.
+      tags: ['low-kcal', 'whole-food', 'cutting', 'budget', 'frozen'],
       diet: { vegan: true, vegetarian: true, glutenFree: true, lactoseFree: true, keto: true, halal: true, porkFree: true },
       pairings: ['Usturoi', 'Ulei de măsline', 'Lămâie', 'Migdale', 'Tofu', 'Sos de soia'],
       tips: [
@@ -4292,7 +4323,8 @@
       stats: { taste: 55, satiety: 52, convenience: 74, versatility: 86 },
       timing: { breakfast: 4, preWorkout: 2, postWorkout: 3, lunch: 5, snack: 2, dinner: 5, beforeBed: 4 },
       timingNote: 'Volum mare, calorii aproape zero — bază pentru salate și mâncăruri în deficit.',
-      tags: ['low-kcal', 'iron-rich', 'whole-food', 'cutting', 'budget', 'frozen', 'high-fiber'],
+      // No 'high-fiber': 2.2 g/100 g. Spinach is volume and micronutrients, not fibre.
+      tags: ['low-kcal', 'iron-rich', 'whole-food', 'cutting', 'budget', 'frozen'],
       diet: { vegan: true, vegetarian: true, glutenFree: true, lactoseFree: true, keto: true, halal: true, porkFree: true },
       pairings: ['Usturoi', 'Nucșoară', 'Ou', 'Ricotta', 'Linte', 'Lămâie'],
       tips: [
@@ -4354,7 +4386,8 @@
       stats: { taste: 74, satiety: 74, convenience: 88, versatility: 84 },
       timing: { breakfast: 2, preWorkout: 3, postWorkout: 4, lunch: 5, snack: 3, dinner: 5, beforeBed: 3 },
       timingNote: 'Cea mai proteică legumă obișnuită — 10,8 g proteină la o porție de 200 g.',
-      tags: ['frozen', 'high-fiber', 'low-kcal', 'cheap-protein', 'budget', 'whole-food', 'cutting', 'kid-friendly'],
+      // No 'high-fiber': 5 g/100 g is below the 6 g threshold.
+      tags: ['frozen', 'low-kcal', 'cheap-protein', 'budget', 'whole-food', 'cutting', 'kid-friendly'],
       diet: { vegan: true, vegetarian: true, glutenFree: true, lactoseFree: true, keto: false, halal: true, porkFree: true },
       pairings: ['Mentă', 'Unt', 'Ceapă verde', 'Orez', 'Ou', 'Somon'],
       tips: [

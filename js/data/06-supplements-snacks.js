@@ -677,7 +677,7 @@
         'Dovezile pentru tendoane și piele sunt modeste dar există (10–15 g/zi, împreună cu vitamina C). Nu e crema de la baie, dar nici miracol.',
         'Colagenul „marin" costă dublu față de cel bovin, fără avantaj demonstrat.'
       ],
-      warnings: ['Proteină incompletă — nu înlocuiește zerul, oul, carnea sau soia.', 'Nu e vegetarian (provine din piele/oase de animale).', 'Marketingul din farmacii îl prezintă ca supliment proteic — nu este.'],
+      warnings: ['NU se pune la ținta zilnică de proteină. Colagenul are ZERO triptofan, deci nu poate susține sinteza musculară — cele 90 g „proteină" de pe etichetă nu se adună la cele 130 g pe care ți le-ai propus azi.', 'Proteină incompletă — nu înlocuiește zerul, oul, carnea sau soia.', 'Nu e vegetarian (provine din piele/oase de animale).', 'Marketingul din farmacii îl prezintă ca supliment proteic — nu este.'],
       storage: 'Loc uscat, cutia închisă.',
       shelfLife: '~24–36 luni sigilat',
       dataConfidence: 'high',
@@ -716,7 +716,7 @@
         'Ca și colagenul, e INCOMPLETĂ — nu o pune în calculul zilnic de proteină.',
         'Folosește-o util: 5 g gelatină + 400 g skyr + cacao = un desert dens care chiar are proteină... din skyr.'
       ],
-      warnings: ['Proteină incompletă, fără valoare pentru sinteza musculară.', 'De obicei de origine porcină — verifică ambalajul dacă e o problemă pentru tine.'],
+      warnings: ['NU se pune la ținta zilnică de proteină. Gelatina este colagen: zero triptofan, deci cele 84 g „proteină" de pe plic nu contribuie la sinteza musculară.', 'Proteină incompletă, fără valoare pentru sinteza musculară.', 'De obicei de origine porcină — verifică ambalajul dacă e o problemă pentru tine.'],
       storage: 'Loc uscat, plic închis.',
       shelfLife: '~3 ani',
       dataConfidence: 'high',
@@ -783,7 +783,7 @@
       activeTimeMin: 2,
       cooking: { method: 'blend', difficulty: 'trivial', equipment: ['shaker mare', 'blender'], steps: ['Pune 400 ml lapte sau apă în shakerul mare.', 'Adaugă 100 g pudră (2–3 măsuri).', 'Agită 30 de secunde; la shaker face cocoloașe, blenderul e mai bun.'], yieldNote: '3 kg = 30 de porții de 100 g' },
       taste: { profile: 'Foarte dulce, făinos, gust de budincă diluată', intensity: 3, sweetness: 5, saltiness: 1, umami: 0, richness: 2, texture: 'Gros, lipicios, greu de băut până la capăt', notes: 'După 2 săptămâni ți se face silă. Aproape toată lumea abandonează gainerul.' },
-      stats: { taste: 42, satiety: 30, convenience: 66, versatility: 30 },
+      stats: { taste: 42, satiety: 16, convenience: 66, versatility: 30 },
       timing: { breakfast: 3, preWorkout: 4, postWorkout: 4, lunch: 2, snack: 3, dinner: 2, beforeBed: 2 },
       timingNote: 'Are sens doar dacă ești sub-ponderal și chiar nu poți mânca suficient — în jurul antrenamentului.',
       tags: ['high-protein', 'high-kcal', 'processed', 'bulking', 'shelf-stable', 'budget', 'bulk-buy'],
@@ -794,7 +794,7 @@
         'Poți face gainer acasă mai ieftin și mai bun: 60 g fulgi de ovăz măcinați + 30 g whey + 400 ml lapte + o banană = ~700 kcal, 40 g proteină.',
         'Dacă vrei să crești în greutate, mănâncă orez, paste, ulei de măsline și nuci. Gainerul e doar mâncare lichidă scumpă.'
       ],
-      warnings: ['Majoritar maltodextrină — indice glicemic foarte mare.', 'Poate provoca balonare și diaree la porții de 150–200 g.', 'Nu e „pentru masă musculară" — e pentru calorii, oricare ar fi ele.'],
+      warnings: ['NU este un supliment proteic: 76% din calorii vin din carbohidrați și doar 16% din proteină. Cumperi în principal maltodextrină.', 'Majoritar maltodextrină — indice glicemic foarte mare.', 'Nu saturează aproape deloc: 380 kcal de shake dispar în 40 de minute, apoi ți-e foame din nou. Exact opusul a ce vrei dacă nu ești sub-ponderal.', 'Poate provoca balonare și diaree la porții de 150–200 g.', 'Nu e „pentru masă musculară" — e pentru calorii, oricare ar fi ele.'],
       storage: 'Loc uscat, sacul bine închis.',
       shelfLife: '~18–24 luni sigilat',
       dataConfidence: 'medium',
@@ -821,7 +821,7 @@
       activeTimeMin: 2,
       cooking: { method: 'blend', difficulty: 'trivial', equipment: ['shaker mare'], steps: ['350 ml lapte sau apă.', 'Adaugă 80 g pudră.', 'Agită 30 de secunde.'], yieldNote: '' },
       taste: { profile: 'Dulce, cremos, mai puțin greu decât gainerul clasic', intensity: 3, sweetness: 4, saltiness: 1, umami: 0, richness: 2, texture: 'Mediu-gros, se bea rezonabil', notes: 'Cel mai apropiat de un „shake real" dintre gaineri.' },
-      stats: { taste: 52, satiety: 40, convenience: 70, versatility: 40 },
+      stats: { taste: 52, satiety: 26, convenience: 70, versatility: 40 },
       timing: { breakfast: 4, preWorkout: 4, postWorkout: 5, lunch: 3, snack: 3, dinner: 2, beforeBed: 2 },
       timingNote: 'Bun ca mic dejun lichid în zile aglomerate sau imediat după antrenamente lungi.',
       tags: ['very-high-protein', 'high-kcal', 'processed', 'bulking', 'shelf-stable', 'post-workout'],
@@ -832,7 +832,7 @@
         'Regula simplă: dacă poți mânca 3 mese pe zi, nu ai nevoie de gainer. Dacă nu poți, ai o problemă de apetit, nu de suplimente.',
         'Verifică raportul: „30% proteină" înseamnă că 70% din sac e altceva.'
       ],
-      warnings: ['Conține lapte și cereale (gluten).', 'Ușor de exagerat cu caloriile — un shake poate depăși 600 kcal.'],
+      warnings: ['Rămâne majoritar carbohidrați: 59% din calorii din carbohidrați față de 30% din proteină. „Lean" descrie raportul, nu produsul.', 'Conține lapte și cereale (gluten).', 'Ușor de exagerat cu caloriile — un shake poate depăși 600 kcal, băute în 2 minute.'],
       storage: 'Loc uscat, punga sigilată.',
       shelfLife: '~18 luni sigilat',
       dataConfidence: 'medium',
@@ -864,7 +864,7 @@
       stats: { taste: 36, satiety: 40, convenience: 72, versatility: 66 },
       timing: { breakfast: 4, preWorkout: 2, postWorkout: 4, lunch: 3, snack: 3, dinner: 3, beforeBed: 3 },
       timingNote: 'Digestie medie; e cea mai bună pudră pentru vegani care vor un profil de aminoacizi apropiat de zer.',
-      tags: ['very-high-protein', 'protein-dense', 'processed', 'iron-rich', 'shelf-stable', 'cheap-protein', 'post-workout'],
+      tags: ['very-high-protein', 'protein-dense', 'processed', 'iron-rich', 'shelf-stable', 'cheap-protein', 'post-workout', 'high-sodium'],
       diet: { vegan: true, vegetarian: true, glutenFree: true, lactoseFree: true, keto: false, halal: true, porkFree: true },
       pairings: ['Băutură de ovăz', 'Banană', 'Cacao', 'Unt de arahide', 'Curmale'],
       tips: [
@@ -873,7 +873,7 @@
         'Blenderul cu o banană rezolvă 80% din problema de textură.',
         'Are 1,8 g sare la 100 g (din procesul de izolare) — mai mult decât zerul.'
       ],
-      warnings: ['Gust dificil pentru începători — cumpără întâi un format mic.', 'Nu e proteină completă luată singură (metionină redusă).'],
+      warnings: ['1,8 g sare la 100 g pudră — de la sarea de sodiu folosită la izolare. O porție de 30 g aduce 0,55 g sare, mai mult decât un shake de zer.', 'Gust dificil pentru începători — cumpără întâi un format mic.', 'Nu e proteină completă luată singură (metionină redusă).'],
       storage: 'Loc uscat, punga închisă etanș.',
       shelfLife: '~24 luni sigilat',
       dataConfidence: 'medium',
@@ -905,7 +905,7 @@
       stats: { taste: 40, satiety: 42, convenience: 74, versatility: 74 },
       timing: { breakfast: 4, preWorkout: 2, postWorkout: 4, lunch: 3, snack: 3, dinner: 3, beforeBed: 3 },
       timingNote: 'Proteină completă cu scor DIAAS bun — direct comparabilă cu zerul pentru sinteza musculară.',
-      tags: ['very-high-protein', 'protein-dense', 'complete-protein', 'low-fat', 'processed', 'iron-rich', 'cheap-protein', 'shelf-stable'],
+      tags: ['very-high-protein', 'protein-dense', 'complete-protein', 'low-fat', 'processed', 'iron-rich', 'cheap-protein', 'shelf-stable', 'high-sodium'],
       diet: { vegan: true, vegetarian: true, glutenFree: true, lactoseFree: true, keto: true, halal: true, porkFree: true },
       pairings: ['Băutură de soia', 'Cacao', 'Banană', 'Scorțișoară'],
       tips: [
@@ -984,7 +984,7 @@
       stats: { taste: 30, satiety: 55, convenience: 60, versatility: 55 },
       timing: { breakfast: 4, preWorkout: 1, postWorkout: 2, lunch: 3, snack: 2, dinner: 3, beforeBed: 2 },
       timingNote: 'Fibrele o fac sățioasă dar lentă — nu e o alegere post-antrenament.',
-      tags: ['very-high-protein', 'high-fiber', 'omega3', 'iron-rich', 'whole-food', 'shelf-stable', 'mid-price'],
+      tags: ['very-high-protein', 'high-fiber', 'omega3', 'iron-rich', 'whole-food', 'shelf-stable', 'mid-price', 'protein-dense'],
       diet: { vegan: true, vegetarian: true, glutenFree: true, lactoseFree: true, keto: false, halal: true, porkFree: true },
       pairings: ['Smoothie verde', 'Banană', 'Ovăz', 'Unt de arahide', 'Curmale'],
       tips: [
@@ -1024,7 +1024,7 @@
       stats: { taste: 46, satiety: 44, convenience: 76, versatility: 70 },
       timing: { breakfast: 4, preWorkout: 2, postWorkout: 4, lunch: 3, snack: 4, dinner: 3, beforeBed: 3 },
       timingNote: 'Combinația mazăre+orez acoperă toți aminoacizii esențiali — echivalent funcțional cu zerul pentru vegani.',
-      tags: ['very-high-protein', 'protein-dense', 'complete-protein', 'processed', 'iron-rich', 'shelf-stable', 'post-workout'],
+      tags: ['very-high-protein', 'protein-dense', 'complete-protein', 'processed', 'iron-rich', 'shelf-stable', 'post-workout', 'high-sodium'],
       diet: { vegan: true, vegetarian: true, glutenFree: true, lactoseFree: true, keto: false, halal: true, porkFree: true },
       pairings: ['Băutură de ovăz', 'Banană', 'Unt de arahide', 'Cacao', 'Curmale'],
       tips: [
@@ -1032,7 +1032,7 @@
         'Veganii au nevoie de ~10% mai multă proteină totală pe zi din cauza digestibilității mai mici — ține cont la calcul.',
         'Nu are lactoză, deci e o alegere bună și pentru intoleranți care nu sunt vegani.'
       ],
-      warnings: ['Poate conține urme de soia și gluten în funcție de fabrică.'],
+      warnings: ['1,5 g sare la 100 g — vine din procesul de izolare, nu din aromă. Contează dacă bei 2 shake-uri pe zi.', 'Poate conține urme de soia și gluten în funcție de fabrică.'],
       storage: 'Loc uscat, punga sigilată.',
       shelfLife: '~24 luni sigilat',
       dataConfidence: 'medium',
@@ -1064,7 +1064,7 @@
       stats: { taste: 38, satiety: 50, convenience: 58, versatility: 52 },
       timing: { breakfast: 4, preWorkout: 1, postWorkout: 2, lunch: 3, snack: 3, dinner: 3, beforeBed: 3 },
       timingNote: 'Bogată în zinc și magneziu — bună seara, în ovăz sau iaurt vegetal.',
-      tags: ['very-high-protein', 'high-fiber', 'iron-rich', 'whole-food', 'shelf-stable', 'mid-price', 'local-sibiu'],
+      tags: ['very-high-protein', 'high-fiber', 'iron-rich', 'whole-food', 'shelf-stable', 'mid-price', 'local-sibiu', 'protein-dense'],
       diet: { vegan: true, vegetarian: true, glutenFree: true, lactoseFree: true, keto: false, halal: true, porkFree: true },
       pairings: ['Iaurt vegetal', 'Fulgi de ovăz', 'Miere', 'Salate', 'Supe-cremă'],
       tips: [
@@ -1149,7 +1149,7 @@
         'Fibrele sunt în mare parte inulină/oligofructoză: peste 2 batoane pe zi și vei avea probleme intestinale.',
         'Ține unul în torpedoul mașinii pentru zilele în care ai sărit peste prânz — atât, nu mai mult.'
       ],
-      warnings: ['Conține lapte, soia și de obicei gluten.', 'Are 8,5 g grăsimi saturate la 100 g — mai mult decât o ciocolată cu lapte pe porție echivalentă.', 'Fibrele adăugate provoacă balonare la unii oameni.'],
+      warnings: ['Carbohidrații care nu sunt zahăr (~29 g/100 g) sunt de obicei polioli (maltitol, izomalt) și glicerol: peste 2 batoane pe zi dau balonare, gaze și scaune moi. Caută „maltitol" sau „sirop de maltitol" în ingrediente.', 'Conține lapte, soia și de obicei gluten.', 'Are 8,5 g grăsimi saturate la 100 g — mai mult decât o ciocolată cu lapte pe porție echivalentă.', 'Fibrele adăugate provoacă balonare la unii oameni.'],
       storage: 'Temperatura camerei; vara se topește glazura în mașină.',
       shelfLife: '~9–12 luni',
       dataConfidence: 'medium',
@@ -1189,7 +1189,7 @@
         'Gustul bun vine de la 15 g grăsime/100 g — nu e un aliment „light".',
         'Are stevia în loc de zahăr, dar și 17 g fibre solubile: mănâncă-l cu apă și nu două deodată.'
       ],
-      warnings: ['Conține lapte și soia.', 'Fibrele multe pot da crampe dacă mănânci 2 batoane la rând.'],
+      warnings: ['Combinația 17 g fibre + ~22 g polioli la 100 g e cea mai agresivă digestiv din categorie. Un baton e în regulă; două la rând sunt o problemă pentru majoritatea oamenilor.', 'Conține lapte și soia.', 'Fibrele multe pot da crampe dacă mănânci 2 batoane la rând.', '9,5 g grăsimi saturate la 100 g: batonul de 60 g aduce 5,7 g — o treime din maximul zilnic, dintr-o gustare de 4 minute.'],
       storage: 'Sub 25 °C, ferit de soare.',
       shelfLife: '~12 luni',
       dataConfidence: 'high',
@@ -1228,7 +1228,7 @@
         'Are 332 kcal pe baton. Dacă ești în deficit caloric, ăsta îți mănâncă o cincime din bugetul zilei.',
         'Diferența față de Deluxe: mai mult zahăr, mai puține fibre, gust mai bun.'
       ],
-      warnings: ['12 g zahăr / 100 g — nu e produs „low sugar".', 'Conține lapte, soia, gluten și fructe cu coajă lemnoasă.'],
+      warnings: ['Cei ~21 g carbohidrați care nu sunt zahăr sunt de obicei polioli și glicerol — efect laxativ peste 1–2 batoane pe zi.', '12 g zahăr / 100 g — nu e produs „low sugar".', 'Conține lapte, soia, gluten și fructe cu coajă lemnoasă.', '8 g grăsimi saturate la 100 g, iar batonul are 85 g: 6,8 g saturate pe bucată, adică o treime din maximul zilnic.'],
       storage: 'Sub 25 °C.',
       shelfLife: '~12 luni',
       dataConfidence: 'medium',
@@ -1264,9 +1264,9 @@
       tips: [
         '5,5 RON / 16,5 g proteină = ~33 RON per 100 g proteină. Bun pentru un baton, prost față de mâncare reală.',
         'Citește lista de ingrediente: unele variante conțin colagen hidrolizat ca a doua sursă de proteină. Alege-le pe cele cu zer pe primul loc.',
-        'Verifică data de expirare la cutiile din promoție.'
+        'Se vinde practic doar la cutie de 20, deci plătești o sumă mare dintr-o dată pentru o singură aromă. Verifică termenul de valabilitate înainte de comandă: 20 de batoane înseamnă 3–5 săptămâni de consum, iar glazura se sfărâmă în ultimele luni de raft.'
       ],
-      warnings: ['Unele arome conțin gelatină/colagen care umflă artificial cifra de proteină.', 'Conține lapte, soia, gluten.'],
+      warnings: ['Cei ~30 g carbohidrați fără zahăr de la 100 g sunt aproape sigur polioli (maltitol) — cel mai frecvent motiv de balonare după un baton „fără zahăr".', 'Unele arome conțin gelatină/colagen care umflă artificial cifra de proteină.', 'Conține lapte, soia, gluten.'],
       storage: 'Loc răcoros, sub 25 °C.',
       shelfLife: '~9–12 luni',
       dataConfidence: 'medium',
@@ -1306,7 +1306,7 @@
         'Are doar 3 g fibre — de asta e cremos, dar și de asta te lasă flămând peste 40 de minute.',
         'Dacă îl cumperi ca desert în locul unei ciocolate, e o alegere bună. Dacă îl cumperi ca „supliment", e o alegere scumpă.'
       ],
-      warnings: ['Conține lapte, soia, arahide (majoritatea aromelor).', 'Cel mai scump mod de a lua 20 g proteină din supermarket.'],
+      warnings: ['Are doar 2 g zahăr, dar ~27 g polioli și glicerol la 100 g. Dulceața vine de acolo, la fel și crampele dacă mănânci două batoane.', 'Conține lapte, soia, arahide (majoritatea aromelor).', 'Cel mai scump mod de a lua 20 g proteină din supermarket.'],
       storage: 'Sub 20 °C — se topește ușor vara.',
       shelfLife: '~12 luni',
       dataConfidence: 'high',
@@ -1345,7 +1345,7 @@
         'Conține polioli (maltitol) — la 2 batoane într-o zi mulți oameni au balonare și scaune moi.',
         'Dacă îl vrei, comandă cutia de 12 online: scade la ~11 RON/baton.'
       ],
-      warnings: ['Polioli — efect laxativ la doze mari.', 'Conține lapte, soia, gluten, arahide.', 'Cel mai scump raport preț/proteină din categorie.'],
+      warnings: ['Polioli — efect laxativ la doze mari.', 'Conține lapte, soia, gluten, arahide.', 'Cel mai scump raport preț/proteină din categorie.', '9 g grăsimi saturate la 100 g (5,4 g pe baton) — vin din glazură, nu din proteină.'],
       storage: 'Sub 25 °C.',
       shelfLife: '~12 luni',
       dataConfidence: 'medium',
@@ -1375,7 +1375,7 @@
       stats: { taste: 52, satiety: 66, convenience: 92, versatility: 16 },
       timing: { breakfast: 3, preWorkout: 3, postWorkout: 4, lunch: 3, snack: 5, dinner: 1, beforeBed: 2 },
       timingNote: 'Cele 14 g fibre pe baton îl fac cel mai sățios baton din categorie — util în deficit caloric.',
-      tags: ['very-high-protein', 'protein-dense', 'high-fiber', 'low-carb', 'grab-and-go', 'portable', 'shelf-stable', 'cutting', 'premium', 'imported'],
+      tags: ['very-high-protein', 'protein-dense', 'high-fiber', 'grab-and-go', 'portable', 'shelf-stable', 'cutting', 'premium', 'imported'],
       diet: { vegan: false, vegetarian: true, glutenFree: true, lactoseFree: false, keto: true, halal: true, porkFree: true },
       pairings: ['Cafea', 'Apă multă'],
       tips: [
@@ -1423,7 +1423,7 @@
         'Corny clasic are 6 g proteină la 100 g și costă 3,85 RON — adică ~126 RON / 100 g proteină. Diferența dintre rafturi e uriașă.',
         'Are 10 g grăsimi saturate/100 g, în mare parte ulei de palmier și nucă de cocos.'
       ],
-      warnings: ['Conține gluten (ovăz/grâu), lapte, soia și fructe cu coajă lemnoasă.', '12 g zahăr la 100 g.'],
+      warnings: ['~18 g/100 g carbohidrați care nu sunt zahăr — de obicei polioli. Împreună cu cele 12 g zahăr real, nu e un baton „de dietă".', 'Conține gluten (ovăz/grâu), lapte, soia și fructe cu coajă lemnoasă.', '12 g zahăr la 100 g.', '10 g grăsimi saturate la 100 g, în principal ulei de palmier din glazură.'],
       storage: 'Loc uscat, sub 25 °C.',
       shelfLife: '~10 luni',
       dataConfidence: 'medium',
@@ -1463,7 +1463,7 @@
         '20 g zahăr la 100 g — mai mult decât unele ciocolate. „Românesc" și „natural" nu înseamnă „proteic".',
         'Dacă vrei proteină reală din același magazin, ia un iaurt grecesc de 200 g: 20 g proteină, 6 RON.'
       ],
-      warnings: ['Densitate proteică mică pentru un produs vândut ca „proteic".', 'Zahăr mult.', 'Poate conține gluten, semințe și fructe cu coajă lemnoasă.'],
+      warnings: ['Densitate proteică mică pentru un produs vândut ca „proteic".', 'Zahăr mult.', 'Poate conține gluten, semințe și fructe cu coajă lemnoasă.', '10 g grăsimi saturate la 100 g — cel mai mare din categorie, la cea mai mică densitate proteică.'],
       storage: 'Loc uscat, temperatura camerei.',
       shelfLife: '~9 luni',
       dataConfidence: 'low',
@@ -1503,7 +1503,7 @@
         'Al doilea semnal: 25 g zahăr la 100 g. Un baton proteic serios are sub 10.',
         'Al treilea semnal: „glazură cu gust de ciocolată" în loc de „ciocolată".'
       ],
-      warnings: ['Cifra de proteină de pe ambalaj este înșelătoare — o parte e colagen fără valoare musculară.', 'Zahăr mult, fibre puține.', 'Conține gelatină de origine animală (adesea porcină).'],
+      warnings: ['Partea de colagen/gelatină NU se pune la ținta zilnică de proteină — zero triptofan, deci zero contribuție la sinteza musculară. Din 12,5 g declarate pe baton, numără cel mult 7 g.', 'Cifra de proteină de pe ambalaj este înșelătoare — o parte e colagen fără valoare musculară.', 'Zahăr mult (25 g/100 g = 12,5 g pe baton), fibre puține.', 'Conține gelatină de origine animală (adesea porcină).', '8 g grăsimi saturate la 100 g, din glazura cu grăsime vegetală ieftină.'],
       storage: 'Temperatura camerei.',
       shelfLife: '~12 luni',
       dataConfidence: 'low',
@@ -1581,7 +1581,7 @@
         'Are 15 g zahăr la 100 g — mai mult decât batonul Lidl, care are 2,5.',
         'Decathlon vinde și cutii de 6; diferența de preț e mică, dar ai stoc acasă.'
       ],
-      warnings: ['Conține lapte, soia și de obicei gluten.', '15 g zahăr la 100 g.'],
+      warnings: ['~18 g/100 g carbohidrați care nu sunt zahăr — de obicei polioli. Verifică lista de ingrediente dacă ai intestin sensibil.', 'Conține lapte, soia și de obicei gluten.', '15 g zahăr la 100 g.'],
       storage: 'Sub 25 °C.',
       shelfLife: '~12 luni',
       dataConfidence: 'low',
@@ -1615,7 +1615,7 @@
       stats: { taste: 74, satiety: 34, convenience: 100, versatility: 22 },
       timing: { breakfast: 4, preWorkout: 3, postWorkout: 5, lunch: 2, snack: 5, dinner: 1, beforeBed: 3 },
       timingNote: 'Perfectă imediat după sală când nu ai shaker; 25 g proteină, zero efort.',
-      tags: ['ready-to-eat', 'grab-and-go', 'portable', 'low-fat', 'post-workout', 'processed', 'calcium-rich', 'b12'],
+      tags: ['ready-to-eat', 'grab-and-go', 'portable', 'low-fat', 'post-workout', 'processed', 'calcium-rich', 'b12', 'protein-dense'],
       diet: { vegan: false, vegetarian: true, glutenFree: true, lactoseFree: true, keto: false, halal: true, porkFree: true },
       pairings: ['Baton proteic', 'Banană', 'Cafea'],
       tips: [
@@ -1657,7 +1657,7 @@
       stats: { taste: 76, satiety: 48, convenience: 100, versatility: 24 },
       timing: { breakfast: 3, preWorkout: 2, postWorkout: 4, lunch: 2, snack: 5, dinner: 2, beforeBed: 4 },
       timingNote: 'Cazeină din lapte — se digeră lent, bună seara ca desert care ține de foame.',
-      tags: ['ready-to-eat', 'grab-and-go', 'low-fat', 'low-kcal', 'processed', 'night-snack', 'calcium-rich'],
+      tags: ['ready-to-eat', 'grab-and-go', 'low-fat', 'low-kcal', 'processed', 'night-snack', 'calcium-rich', 'protein-dense'],
       diet: { vegan: false, vegetarian: true, glutenFree: true, lactoseFree: true, keto: false, halal: true, porkFree: true },
       pairings: ['Fructe de pădure', 'Nuci', 'Fulgi de ovăz'],
       tips: [
@@ -1696,7 +1696,7 @@
       stats: { taste: 72, satiety: 32, convenience: 100, versatility: 18 },
       timing: { breakfast: 2, preWorkout: 2, postWorkout: 3, lunch: 1, snack: 5, dinner: 2, beforeBed: 4 },
       timingNote: 'Desert de seară cu 9 g proteină — mic, dar mai bun decât o ciocolată.',
-      tags: ['ready-to-eat', 'grab-and-go', 'low-kcal', 'processed', 'night-snack'],
+      tags: ['ready-to-eat', 'grab-and-go', 'low-kcal', 'processed', 'night-snack', 'protein-dense'],
       diet: { vegan: false, vegetarian: true, glutenFree: true, lactoseFree: true, keto: false, halal: true, porkFree: true },
       pairings: ['Fructe de pădure', 'Fulgi de migdale'],
       tips: [
@@ -1737,7 +1737,7 @@
       stats: { taste: 70, satiety: 38, convenience: 100, versatility: 26 },
       timing: { breakfast: 4, preWorkout: 3, postWorkout: 5, lunch: 2, snack: 5, dinner: 2, beforeBed: 3 },
       timingNote: 'Sticla de 500 ml acoperă complet nevoia post-antrenament, fără shaker.',
-      tags: ['ready-to-eat', 'grab-and-go', 'portable', 'low-fat', 'post-workout', 'processed', 'calcium-rich'],
+      tags: ['ready-to-eat', 'grab-and-go', 'portable', 'low-fat', 'post-workout', 'processed', 'calcium-rich', 'protein-dense'],
       diet: { vegan: false, vegetarian: true, glutenFree: true, lactoseFree: false, keto: false, halal: true, porkFree: true },
       pairings: ['Fulgi de ovăz', 'Baton proteic', 'Banană'],
       tips: [
@@ -1776,7 +1776,7 @@
       stats: { taste: 64, satiety: 38, convenience: 100, versatility: 26 },
       timing: { breakfast: 4, preWorkout: 3, postWorkout: 5, lunch: 2, snack: 5, dinner: 2, beforeBed: 3 },
       timingNote: 'Cea mai ieftină cale de a bea 30 g proteină fără să prepari nimic.',
-      tags: ['ready-to-eat', 'grab-and-go', 'portable', 'low-fat', 'post-workout', 'processed', 'cheap-protein', 'budget'],
+      tags: ['ready-to-eat', 'grab-and-go', 'portable', 'low-fat', 'post-workout', 'processed', 'cheap-protein', 'budget', 'protein-dense'],
       diet: { vegan: false, vegetarian: true, glutenFree: true, lactoseFree: false, keto: false, halal: true, porkFree: true },
       pairings: ['Fulgi de ovăz', 'Banană', 'Baton proteic'],
       tips: [
@@ -1815,7 +1815,7 @@
       stats: { taste: 74, satiety: 50, convenience: 100, versatility: 26 },
       timing: { breakfast: 3, preWorkout: 2, postWorkout: 4, lunch: 2, snack: 5, dinner: 2, beforeBed: 5 },
       timingNote: 'Proteina din lapte se digeră lent — ideală ca desert înainte de culcare.',
-      tags: ['ready-to-eat', 'grab-and-go', 'low-kcal', 'processed', 'night-snack', 'cheap-protein', 'calcium-rich', 'budget'],
+      tags: ['ready-to-eat', 'grab-and-go', 'low-kcal', 'processed', 'night-snack', 'cheap-protein', 'calcium-rich', 'budget', 'protein-dense'],
       diet: { vegan: false, vegetarian: true, glutenFree: true, lactoseFree: false, keto: false, halal: true, porkFree: true },
       pairings: ['Fructe de pădure congelate', 'Nuci', 'Fulgi de ovăz', 'Unt de arahide'],
       tips: [
@@ -1856,7 +1856,7 @@
       stats: { taste: 78, satiety: 50, convenience: 100, versatility: 24 },
       timing: { breakfast: 3, preWorkout: 2, postWorkout: 4, lunch: 2, snack: 5, dinner: 2, beforeBed: 5 },
       timingNote: 'La fel ca celelalte budinci: cazeină, digestie lentă, bună seara.',
-      tags: ['ready-to-eat', 'grab-and-go', 'low-kcal', 'processed', 'night-snack', 'calcium-rich', 'imported'],
+      tags: ['ready-to-eat', 'grab-and-go', 'low-kcal', 'processed', 'night-snack', 'calcium-rich', 'imported', 'protein-dense'],
       diet: { vegan: false, vegetarian: true, glutenFree: true, lactoseFree: false, keto: false, halal: true, porkFree: true },
       pairings: ['Zmeură', 'Nuci', 'Granola proteică'],
       tips: [
@@ -1896,7 +1896,7 @@
       stats: { taste: 72, satiety: 40, convenience: 100, versatility: 22 },
       timing: { breakfast: 4, preWorkout: 3, postWorkout: 5, lunch: 2, snack: 5, dinner: 2, beforeBed: 3 },
       timingNote: 'Post-antrenament sau gustare; ceva mai caloric decât variantele degresate.',
-      tags: ['ready-to-eat', 'grab-and-go', 'portable', 'post-workout', 'processed', 'calcium-rich', 'imported'],
+      tags: ['ready-to-eat', 'grab-and-go', 'portable', 'post-workout', 'processed', 'calcium-rich', 'imported', 'protein-dense'],
       diet: { vegan: false, vegetarian: true, glutenFree: true, lactoseFree: false, keto: false, halal: true, porkFree: true },
       pairings: ['Baton proteic', 'Fulgi de ovăz'],
       tips: [
@@ -2022,7 +2022,7 @@
         '2 g sare la 100 g — o pungă îți dă 0,6 g sare. Nu par mult până mănânci trei.',
         'Verifică sursa de proteină: multe chipsuri „proteice" sunt din soia texturată ieftină, nu din zer.'
       ],
-      warnings: ['Foarte sărate.', 'Preț per gram de proteină extrem.', 'Pot conține gluten și lapte.'],
+      warnings: ['2 g sare la 100 g. Punga de 30 g aduce 0,6 g sare — la 2 pungi ai consumat 25% din limita zilnică doar din gustare.', 'Foarte sărate.', 'Preț per gram de proteină extrem.', 'Pot conține gluten și lapte.'],
       storage: 'Loc uscat; după deschidere se înmoaie în câteva ore.',
       shelfLife: '~9 luni',
       dataConfidence: 'low',
@@ -2052,7 +2052,7 @@
       stats: { taste: 58, satiety: 30, convenience: 98, versatility: 12 },
       timing: { breakfast: 1, preWorkout: 2, postWorkout: 2, lunch: 1, snack: 5, dinner: 2, beforeBed: 2 },
       timingNote: 'Gustare de film. Contribuția proteică e simbolică.',
-      tags: ['high-protein', 'grab-and-go', 'shelf-stable', 'ready-to-eat', 'processed', 'high-fiber', 'premium', 'imported'],
+      tags: ['high-protein', 'grab-and-go', 'shelf-stable', 'ready-to-eat', 'processed', 'high-fiber', 'premium', 'imported', 'high-sodium'],
       diet: { vegan: false, vegetarian: true, glutenFree: true, lactoseFree: false, keto: false, halal: true, porkFree: true },
       pairings: ['Film', 'Bere fără alcool', 'Iaurt'],
       tips: [
@@ -2060,7 +2060,7 @@
         'Fă-ți popcorn acasă: 50 g boabe (1,5 RON) = 5,5 g proteină, 10 g fibre și controlul total al sării.',
         'Dacă vrei „popcorn proteic" real, presară drojdie inactivă peste popcornul de casă: gust de brânză, 8 g proteină la 20 g.'
       ],
-      warnings: ['Cost per gram de proteină foarte prost.', 'Disponibilitate slabă în RO.'],
+      warnings: ['1,5 g sare la 100 g; punga mică de 30 g aduce 0,45 g. Formatul mare de 100 g se mănâncă din reflex și adaugă 1,5 g sare.', 'Cost per gram de proteină foarte prost.', 'Disponibilitate slabă în RO.'],
       storage: 'Loc uscat, punga închisă.',
       shelfLife: '~6 luni',
       dataConfidence: 'low',
@@ -2176,7 +2176,7 @@
       tips: [
         '12,9 RON / 36 g proteină în pachet = ~36 RON per 100 g proteină. Nu e catastrofal, dar nici bun.',
         'Pericolul real e porția: 100 g de biscuiți sunt 454 kcal și dispar în 5 minute în fața laptopului.',
-        'Cântărește porția înainte. Serios.'
+        'Scoate 30 g într-o farfurioară și pune punga înapoi în dulap înainte să te așezi. Mâncat direct din pungă, pachetul de 180 g dispare într-o seară: 817 kcal pentru 36 g proteină.'
       ],
       warnings: ['Conține gluten și de obicei lapte și soia.', 'Ușor de mâncat în exces.'],
       storage: 'Loc uscat, ambalaj resigilat.',
@@ -2291,7 +2291,7 @@
       stats: { taste: 48, satiety: 74, convenience: 92, versatility: 62 },
       timing: { breakfast: 5, preWorkout: 2, postWorkout: 3, lunch: 5, snack: 4, dinner: 4, beforeBed: 2 },
       timingNote: 'Baza unui sandviș care chiar are proteină; 12 g fibre la 100 g o fac foarte sățioasă.',
-      tags: ['high-protein', 'high-fiber', 'low-carb', 'shelf-stable', 'processed', 'breakfast', 'office-lunch', 'meal-prep'],
+      tags: ['high-protein', 'high-fiber', 'shelf-stable', 'processed', 'breakfast', 'office-lunch', 'meal-prep'],
       diet: { vegan: false, vegetarian: true, glutenFree: false, lactoseFree: true, keto: false, halal: true, porkFree: true },
       pairings: ['Brânză de vaci', 'Ou fiert', 'Piept de curcan', 'Avocado', 'Hummus'],
       tips: [

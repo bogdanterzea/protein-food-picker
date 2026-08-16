@@ -232,19 +232,23 @@
  * ========================================================================= */
 .pf-scatter {
   position: relative;
-  /* The SVG has a fixed 980px design width and scales with its container,
-   * so on a narrow screen the 9px axis text scaled down to ~4px. Give it a
-   * floor and let the chart scroll sideways instead, exactly like the table
-   * view does. */
+}
+
+/* Only the plot scrolls. Title, subtitle, legend and the table alternative
+ * stay anchored, so scrolling right does not push the caption out of view. */
+.pf-scatter__scroll {
   overflow-x: auto;
+  overscroll-behavior-x: contain;
 }
 
 .pf-scatter__svg {
-  /* 620px is the width the dossier actually passes to the chart, so at that
-   * floor it renders 1:1 and needs no scrolling on desktop, while narrow
-   * screens still scroll rather than shrinking the axis text to 4px. */
+  /* A single hardcoded 620px floor was wrong for the 980px chart-view SVG:
+   * it let the 9px axis text scale down to 5.7px on a phone and 6.4px on a
+   * tablet. The floor now IS the chart's own design width (published by the
+   * JS as --pf-chart-w), so text renders at its design size and the plot
+   * scrolls sideways instead of shrinking — the documented trade-off. */
   width: 100%;
-  min-width: 620px;
+  min-width: var(--pf-chart-w, 620px);
   height: auto;
 }
 
@@ -289,11 +293,24 @@
 /* =========================================================================
  * 4. RANKED BAR — leaderboard bars
  * ========================================================================= */
+/* The value column used to be a hard 56px plus a 12px gap. Inside the table
+ * view's 68px-wide cell that consumed the whole row and left the track at
+ * 0px — the bar column rendered nothing at all. The value column now sizes
+ * to its content and disappears when the caller prints the number in a
+ * neighbouring column, which gives the track the full cell. */
 .pf-rankbar {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 56px;
+  grid-template-columns: minmax(24px, 1fr) auto;
   align-items: center;
-  gap: var(--sp-3);
+}
+
+.pf-rankbar__val:not(:empty) {
+  padding-left: var(--sp-3);
+  min-width: 44px;
+}
+
+.pf-rankbar__val:empty {
+  display: none;
 }
 
 .pf-rankbar__track {
@@ -390,6 +407,35 @@
   margin-top: var(--sp-2);
 }
 
+/* A chart that owns its table alternative ships it collapsed underneath. */
+.pf-chart__details {
+  margin-top: var(--sp-3);
+}
+
+.pf-chart__details > summary {
+  cursor: pointer;
+  font-size: var(--fs-2xs);
+  color: var(--text-4);
+  padding: 4px 0;
+}
+
+.pf-chart__details > summary:hover,
+.pf-chart__details > summary:focus-visible {
+  color: var(--text-2);
+}
+
+/* A wide table scrolls inside the disclosure, never widens the panel.
+ * (The scroll lives on the container so the table stays a real table.) */
+.pf-chart__details[open] {
+  overflow-x: auto;
+}
+
+/* The chart view renders its own toggle button beside the scatter; don't
+ * offer the same table twice on that screen. */
+.pf-scatter:has(~ .pf-chart__toggle) > .pf-chart__details {
+  display: none;
+}
+
 .pf-chart__table {
   margin-top: var(--sp-3);
   width: 100%;
@@ -419,12 +465,56 @@
   .pf-donut__seg,
   .pf-macrobar__seg,
   .pf-rankbar__fill,
-  .pf-stat__fill {
+  .pf-stat__fill,
+  /* Without this the four legend swatches all collapse to CanvasText and the
+   * donut's colour key stops keying anything. The written name and number in
+   * the same row still carry the meaning, but the swatch should not lie. */
+  .pf-legend-row__swatch,
+  /* The scatter's whole point is the sequential lightness ramp; forcing every
+   * dot to one colour would delete the encoding the chart exists for. */
+  .pf-scatter__dot {
     forced-color-adjust: none;
   }
 
+  /* Four DIFFERENT textures, so the macros stay separable with no colour:
+   * 45°, 135°, vertical, horizontal, at three different pitches. */
   .pf-macrobar__seg--protein { background: repeating-linear-gradient(45deg,  CanvasText 0 2px, Canvas 2px 5px); }
   .pf-macrobar__seg--carbs   { background: repeating-linear-gradient(135deg, CanvasText 0 2px, Canvas 2px 6px); }
   .pf-macrobar__seg--fat     { background: repeating-linear-gradient(90deg,  CanvasText 0 1px, Canvas 1px 4px); }
   .pf-macrobar__seg--fiber   { background: repeating-linear-gradient(0deg,   CanvasText 0 1px, Canvas 1px 5px); }
+
+  /* Grid and guides must not vanish into the forced background. */
+  .pf-grid-line,
+  .pf-radar__web,
+  .pf-radar__spoke { stroke: CanvasText; opacity: 0.45; }
+
+  .pf-axis-line,
+  .pf-scatter__guide { stroke: CanvasText; }
+}
+
+/* Printing: the bars already force their ink in 12-print.css, but the SVG
+ * charts were left out and came off the printer as empty frames. */
+@media print {
+  .pf-scatter__dot,
+  .pf-radar__area,
+  .pf-radar__dot,
+  .pf-donut__track {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* The plot must print whole rather than clipped at the scroll edge. */
+  .pf-scatter__scroll {
+    overflow-x: visible;
+  }
+
+  .pf-scatter__svg {
+    min-width: 0;
+    width: 100%;
+  }
+
+  /* Paper has no disclosure triangles — print the data. */
+  .pf-chart__details {
+    overflow-x: visible;
+  }
 }

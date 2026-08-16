@@ -1,0 +1,217 @@
+/* =========================================================================
+ * 13 — „CE AM ÎN FRIGIDER”
+ *
+ * Un panou pliabil deasupra listei de mese. Închis, e o singură linie care
+ * spune câte mese poți găti chiar acum. Deschis, e o grilă de ingrediente
+ * grupate, pe care le bifezi.
+ *
+ * Regula de design: cât e închis nu are voie să coste mai mult de o linie
+ * de spațiu vertical. Pe telefon ecranul e deja plin de carduri, iar asta e
+ * o unealtă pe care o folosești o dată, nu ceva ce citești de fiecare dată.
+ * ========================================================================= */
+
+.pf-fridge {
+  margin-bottom: var(--sp-4);
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+.pf-fridge.is-open {
+  border-color: var(--border-strong);
+}
+
+/* ---------------------------------------------------------------- head -- */
+
+.pf-fridge__head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  width: 100%;
+  padding: var(--sp-3) var(--sp-4);
+  background: none;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--dur-fast) ease;
+}
+
+.pf-fridge__head:hover {
+  background: var(--bg-hover);
+}
+
+.pf-fridge__head:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.pf-fridge__icon {
+  flex: none;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.pf-fridge__title {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex: none;
+  font-weight: 650;
+  color: var(--text-1);
+}
+
+/* The summary is the whole point of the collapsed state, so it gets the
+ * flexible space and truncates rather than wrapping the header to two lines. */
+.pf-fridge__summary {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: var(--fs-xs);
+  color: var(--text-4);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pf-fridge__summary b {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.pf-fridge__chev {
+  flex: none;
+  color: var(--text-4);
+  font-size: var(--fs-xs);
+}
+
+/* ---------------------------------------------------------------- body -- */
+
+.pf-fridge__body {
+  padding: 0 var(--sp-4) var(--sp-4);
+  border-top: 1px solid var(--border);
+  padding-top: var(--sp-3);
+}
+
+.pf-fridge__group + .pf-fridge__group {
+  margin-top: var(--sp-3);
+}
+
+.pf-fridge__group .pf-eyebrow {
+  margin-bottom: var(--sp-2);
+}
+
+/* Count badge on each ingredient chip — how many meals use it. Dims when the
+ * chip is on, so the checked state reads as one solid block of colour. */
+.pf-fridge .pf-chip__n {
+  opacity: 0.6;
+}
+
+.pf-fridge .pf-chip.is-on .pf-chip__n {
+  opacity: 0.85;
+}
+
+/* The "+ încă 14" chip. Reads as an action, not as an ingredient you own —
+ * dashed border and no fill keep it out of the tick-me scanning path. */
+.pf-fridge .pf-chip--ghost {
+  background: none;
+  border-style: dashed;
+  color: var(--text-4);
+  font-weight: 600;
+}
+
+.pf-fridge .pf-chip--ghost:hover {
+  color: var(--text-2);
+  border-color: var(--border-loud);
+}
+
+/* Total count for the group, beside its label. */
+.pf-fridge__count {
+  margin-left: 6px;
+  padding: 1px 6px;
+  border-radius: var(--r-full);
+  background: var(--bg-active);
+  color: var(--text-4);
+  font-size: var(--fs-3xs);
+  font-weight: 700;
+}
+
+/* ------------------------------------------------- coverage, on a card -- */
+
+.pf-rcard__cov {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 0 0 var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--bg-inset);
+  border-radius: var(--r-sm);
+  border-left: 3px solid var(--border-strong);
+}
+
+.pf-rcard__cov.is-close {
+  border-left-color: var(--warn);
+}
+
+.pf-rcard__cov.is-full {
+  border-left-color: var(--ok);
+  background: var(--ok-soft);
+}
+
+.pf-rcard__covbar {
+  display: block;
+  height: 3px;
+  border-radius: var(--r-full);
+  background: var(--bg-active);
+  overflow: hidden;
+}
+
+.pf-rcard__covbar i {
+  display: block;
+  height: 100%;
+  border-radius: var(--r-full);
+  background: var(--text-4);
+  transition: width var(--dur-base) ease;
+}
+
+.pf-rcard__cov.is-close .pf-rcard__covbar i { background: var(--warn); }
+.pf-rcard__cov.is-full  .pf-rcard__covbar i { background: var(--ok); }
+
+.pf-rcard__covtxt {
+  font-size: var(--fs-xs);
+  line-height: 1.35;
+  color: var(--text-3);
+}
+
+.pf-rcard__cov.is-full .pf-rcard__covtxt {
+  color: var(--ok);
+  font-weight: 650;
+}
+
+/* ---------------------------------------------------------------- ≤620 -- */
+
+@media (max-width: 620px) {
+  .pf-fridge__head {
+    flex-wrap: wrap;
+    row-gap: 2px;
+    padding: var(--sp-3);
+  }
+
+  /* On a phone the summary drops to its own line rather than being clipped
+   * to nothing — it is the only text worth reading while collapsed. */
+  .pf-fridge__summary {
+    flex: 1 0 100%;
+    order: 3;
+    white-space: normal;
+  }
+
+  .pf-fridge__title { flex: 1 1 auto; }
+  .pf-fridge__body { padding: var(--sp-3); padding-top: var(--sp-3); }
+}
+
+/* ------------------------------------------------------------ a11y/mo -- */
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-rcard__covbar i { transition: none; }
+}

@@ -12,6 +12,34 @@
 
   const MAX = 5;
   let ids = [];
+  /* When on, rows where every product shows the same thing are folded away so
+   * only the actual differences are left on screen. */
+  let diffOnly = false;
+
+  /* =======================================================================
+   * VALUE READERS
+   *
+   * A missing field and a declared 0 are NOT the same thing. `x || 0` used to
+   * collapse them, which handed the "least sugar" crown to whichever product
+   * simply failed to declare its sugars. These readers return null for
+   * "not declared" so the row skips that product entirely.
+   * ==================================================================== */
+
+  /** A per-100 g nutrient, or null when the product does not declare it. */
+  function n100(f, key) {
+    const v = f.per100g ? f.per100g[key] : undefined;
+    return typeof v === 'number' && !Number.isNaN(v) ? v : null;
+  }
+
+  /** Any plain numeric field, or null when absent. */
+  function numOr(v) {
+    return typeof v === 'number' && !Number.isNaN(v) ? v : null;
+  }
+
+  /** Formatter for a nutrient in grams that may be undeclared. */
+  function grams(decimals) {
+    return v => (v === null ? '—' : fmt.num(v, decimals) + ' g');
+  }
 
   function load() {
     const saved = PF.store.get('compare', []);
@@ -62,11 +90,11 @@
     { label: 'g proteină / 100 kcal', get: f => f._d.proteinPer100kcal, fmt: v => fmt.num(v, 1), better: 'high' },
     { label: 'Calorii', get: f => f._d.kcal100, fmt: v => Math.round(v) + ' kcal', better: 'low' },
     { label: 'Carbohidrați', get: f => f._d.carbs100, fmt: v => fmt.num(v, 1) + ' g', better: null },
-    { label: 'din care zaharuri', get: f => f.per100g.sugars || 0, fmt: v => fmt.num(v, 1) + ' g', better: 'low' },
+    { label: 'din care zaharuri', get: f => n100(f, 'sugars'), fmt: grams(1), better: 'low' },
     { label: 'Grăsimi', get: f => f._d.fat100, fmt: v => fmt.num(v, 1) + ' g', better: null },
-    { label: 'din care saturate', get: f => f.per100g.satFat || 0, fmt: v => fmt.num(v, 1) + ' g', better: 'low' },
+    { label: 'din care saturate', get: f => n100(f, 'satFat'), fmt: grams(1), better: 'low' },
     { label: 'Fibre', get: f => f._d.fiber100, fmt: v => fmt.num(v, 1) + ' g', better: 'high' },
-    { label: 'Sare', get: f => f.per100g.salt || 0, fmt: v => fmt.num(v, 2) + ' g', better: 'low' },
+    { label: 'Sare', get: f => n100(f, 'salt'), fmt: grams(2), better: 'low' },
 
     { group: 'Porție reală' },
     { label: 'Mărimea porției', get: f => f._d.servingGrams, fmt: (v, f) => (f.serving && f.serving.label) || v + ' ' + f.unit, better: null, text: true },
@@ -80,9 +108,9 @@
     { label: 'Cost / porție (est.)', get: f => f._d.costPerServing, fmt: (v, f) => (v ? fmt.ronApprox(v, { verified: f._d.priceVerified }) : '—'), better: 'low' },
 
     { group: 'Efort' },
-    { label: 'Timp total', get: f => f.timeMin, fmt: v => fmt.minutes(v, PF.i18n.lang()), better: 'low' },
-    { label: 'Timp activ', get: f => f.activeTimeMin, fmt: v => fmt.minutes(v, PF.i18n.lang()), better: 'low' },
-    { label: 'Efort', get: f => f.effort, fmt: v => v + '/5', better: 'low' },
+    { label: 'Timp total', get: f => numOr(f.timeMin), fmt: v => (v === null ? '—' : fmt.minutes(v, PF.i18n.lang())), better: 'low' },
+    { label: 'Timp activ', get: f => numOr(f.activeTimeMin), fmt: v => (v === null ? '—' : fmt.minutes(v, PF.i18n.lang())), better: 'low' },
+    { label: 'Efort', get: f => numOr(f.effort), fmt: v => (v === null ? '—' : v + '/5'), better: 'low' },
 
     { group: 'Scoruri' },
     { label: 'Rang', get: f => f._d.score, fmt: (v, f) => f._d.tier + ' (' + Math.round(v) + ')', better: 'high' },
@@ -134,45 +162,50 @@
       })
       .join('');
 
-    /* --- body --- */
-    const body = ROWS
-      .map(function (r) {
-        if (r.group) {
+    /* --- body ---
+     * Built as a list first so identical rows can be dropped together with a
+     * group heading that would otherwise be left standing over nothing. */
+    const entries = ROWS.map(function (r) {
+      if (r.group) return { group: r.group };
+
+      const values = foods.map(r.get);
+      const shown = foods.map((f, i) => String(r.fmt(values[i], f)));
+      const crown = crownIndexes(values, r.better);
+      const same = shown.every(s => s === shown[0]);
+
+      const html =
+        '<tr><th>' + fmt.esc(r.label) + '</th>' +
+        foods
+          .map(function (f, i) {
+            const cls = i === crown.best ? ' class="is-best"'
+              : i === crown.worst ? ' class="is-worst"' : '';
+            return '<td' + cls + '>' + fmt.esc(shown[i]) + '</td>';
+          })
+          .join('') +
+        '</tr>';
+
+      return { html: html, same: same };
+    });
+
+    const identical = entries.filter(e => e.same).length;
+    const keep = diffOnly ? entries.filter(e => e.group || !e.same) : entries;
+
+    /* Drop a group heading with nothing left under it. */
+    const body = keep
+      .filter(function (e, i, arr) {
+        if (!e.group) return true;
+        const next = arr[i + 1];
+        return !!next && !next.group;
+      })
+      .map(function (e) {
+        if (e.group) {
           return (
             '<tr><th colspan="' + (foods.length + 1) + '" style="background:var(--bg-inset);' +
             'color:var(--text-3);letter-spacing:var(--tracking-caps)">' +
-            fmt.esc(r.group) + '</th></tr>'
+            fmt.esc(e.group) + '</th></tr>'
           );
         }
-
-        const values = foods.map(r.get);
-        let bestIdx = -1;
-        let worstIdx = -1;
-        if (r.better) {
-          const valid = values
-            .map((v, i) => ({ v: v, i: i }))
-            .filter(x => x.v !== null && x.v !== undefined && !Number.isNaN(x.v));
-          if (valid.length > 1) {
-            valid.sort((a, b) => (r.better === 'high' ? b.v - a.v : a.v - b.v));
-            /* Only crown a winner when there is a real gap. */
-            if (valid[0].v !== valid[valid.length - 1].v) {
-              bestIdx = valid[0].i;
-              worstIdx = valid[valid.length - 1].i;
-            }
-          }
-        }
-
-        return (
-          '<tr><th>' + fmt.esc(r.label) + '</th>' +
-          foods
-            .map(function (f, i) {
-              const cls = i === bestIdx ? ' class="is-best"' : i === worstIdx ? ' class="is-worst"' : '';
-              const shown = r.fmt(values[i], f);
-              return '<td' + cls + '>' + fmt.esc(String(shown)) + '</td>';
-            })
-            .join('') +
-          '</tr>'
-        );
+        return e.html;
       })
       .join('');
 
@@ -188,8 +221,14 @@
       '</tr>';
 
     container.innerHTML =
-      '<div class="pf-row pf-row--between" style="margin-bottom:var(--sp-4)">' +
+      '<div class="pf-row pf-row--wrap" style="margin-bottom:var(--sp-4)">' +
       '<span class="pf-resultbar__count"><em>' + foods.length + '</em> produse comparate</span>' +
+      '<span class="pf-grow"></span>' +
+      '<button class="pf-btn pf-btn--sm' + (diffOnly ? ' pf-btn--primary' : '') +
+      '" data-act="cmp-diff" aria-pressed="' + (diffOnly ? 'true' : 'false') + '">' +
+      (diffOnly ? '👁️ Arată tot' : '🔍 Doar diferențele') +
+      (identical ? ' <span class="pf-badge">' + identical + '</span>' : '') +
+      '</button>' +
       '<button class="pf-btn pf-btn--sm pf-btn--danger" data-act="clear-compare">Golește</button>' +
       '</div>' +
       '<div class="pf-compare"><table>' +
@@ -197,8 +236,59 @@
       '<tbody>' + barsRow + statsRow + body + '</tbody>' +
       '</table></div>' +
       '<p class="pf-muted" style="font-size:var(--fs-2xs);margin-top:var(--sp-3)">' +
-      'Verde = cea mai bună valoare de pe rând. Rândurile fără câștigător (carbohidrați, ' +
-      'grăsimi) sunt cele unde „mai mult” sau „mai puțin” depinde de ce urmărești.</p>';
+      'Verde = cea mai bună valoare de pe rând, dar numai când e a unui singur produs: ' +
+      'la egalitate nu câștigă nimeni. Rândurile fără câștigător (carbohidrați, grăsimi) ' +
+      'sunt cele unde „mai mult” sau „mai puțin” depinde de ce urmărești. „—” înseamnă ' +
+      'că produsul nu declară valoarea, deci nu intră în concurs.' +
+      (diffOnly && identical
+        ? ' <b>' + identical + ' rânduri identice sunt ascunse.</b>'
+        : '') +
+      '</p>';
+
+    bind(container);
+  }
+
+  /**
+   * Which cell gets the crown, if any.
+   *
+   * Three rules, all of them things the old code got wrong:
+   *   - a row with no direction (`better: null`) never crowns anybody;
+   *   - a value the product does not declare (null) does not compete, so a
+   *     blank cell can never win a "less is better" row;
+   *   - a tie for the best value crowns nobody — highlighting one of two
+   *     equal numbers is a lie about which one is better.
+   */
+  function crownIndexes(values, better) {
+    const out = { best: -1, worst: -1 };
+    if (!better) return out;
+
+    const valid = values
+      .map((v, i) => ({ v: v, i: i }))
+      .filter(x => typeof x.v === 'number' && !Number.isNaN(x.v));
+    if (valid.length < 2) return out;
+
+    valid.sort((a, b) => (better === 'high' ? b.v - a.v : a.v - b.v));
+    const bestVal = valid[0].v;
+    const worstVal = valid[valid.length - 1].v;
+    if (bestVal === worstVal) return out; /* everyone equal — no winner */
+
+    const bestTied = valid.filter(x => x.v === bestVal);
+    const worstTied = valid.filter(x => x.v === worstVal);
+    if (bestTied.length === 1) out.best = bestTied[0].i;
+    if (worstTied.length === 1) out.worst = worstTied[0].i;
+    return out;
+  }
+
+  /* One delegated listener per container, installed once. */
+  function bind(container) {
+    if (container.__pfCompareBound) return;
+    container.__pfCompareBound = true;
+    container.addEventListener('click', function (ev) {
+      const btn = ev.target.closest('[data-act="cmp-diff"]');
+      if (!btn) return;
+      diffOnly = !diffOnly;
+      render(container);
+    });
   }
 
   PF.compare = {
@@ -211,6 +301,11 @@
     count: count,
     ids: function () { return ids.slice(); },
     render: render,
-    ROWS: ROWS
+    ROWS: ROWS,
+    crownIndexes: crownIndexes,
+    diffOnly: function (v) {
+      if (v !== undefined) diffOnly = !!v;
+      return diffOnly;
+    }
   };
 })();

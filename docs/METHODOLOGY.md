@@ -83,7 +83,8 @@ mai bun preț găsit.
 
 > **Prețurile sunt estimări, nu date.** Niciunul nu a fost verificat într-un
 > magazin, iar pentru retailul alimentar din România nu există un API public de
-> prețuri. Fiecare preț poartă o marjă (±20% la lanțuri, ±30% la piață și
+> prețuri. Fiecare preț poartă o marjă (±20% la lanțuri și online, ±25% la
+> farmacie, ±30% la piață, măcelărie, pescărie și
 > restaurant) și e afișat cu `≈`. Bara de preț și clasamentul de cost sunt deci
 > ordonări relative, corecte ca ierarhie, aproximative ca valoare absolută.
 
@@ -105,7 +106,7 @@ arăta ca o condamnare.
 
 ---
 
-## 3. Cele trei axe subiective
+## 3. Cele patru axe subiective
 
 **Gust**, **sațietate**, **comoditate** și **versatilitate** sunt evaluate manual,
 de la 10 la 100, în timpul cercetării fiecărei categorii. Instrucțiunea dată a
@@ -178,13 +179,13 @@ scor = 0,28 × proteină      (ajustată cu calitatea)
 | Rang | Scor | Produse | % din atlas |
 |:---:|---:|---:|---:|
 | **S** | ≥ 80 | 3 | 0,6% |
-| **A** | ≥ 68 | 75 | 14,9% |
-| **B** | ≥ 56 | 161 | 31,9% |
-| **C** | ≥ 44 | 148 | 29,3% |
-| **D** | ≥ 30 | 102 | 20,2% |
+| **A** | ≥ 68 | 73 | 14,5% |
+| **B** | ≥ 56 | 161 | 32,0% |
+| **C** | ≥ 44 | 148 | 29,4% |
+| **D** | ≥ 30 | 102 | 20,3% |
 | **E** | < 30 | 16 | 3,2% |
 
-**Rangul S e rar intenționat.** Trei produse din 505. Dacă jumătate din atlas ar
+**Rangul S e rar intenționat.** Trei produse din 503. Dacă jumătate din atlas ar
 fi rang S, litera n-ar comunica nimic.
 
 ### De ce aceste ponderi
@@ -229,15 +230,15 @@ de etichetă, polioli, sau o eroare de transcriere).
 
 Se mai verifică `zaharuri ≤ carbohidrați` și `grăsimi saturate ≤ grăsimi`.
 
-**Rezultat curent: 0 intrări cu steaguri de coerență din 505.**
+**Rezultat curent: 0 intrări cu steaguri de coerență din 503.**
 
 ### Nivelurile de încredere
 
 | Nivel | Produse | Ce înseamnă |
 |---|---:|---|
-| Ridicată | 167 | Citit de pe etichetă / site oficial |
-| Medie | 260 | Valori tipice pentru tipul de produs |
-| Scăzută | 78 | Estimare: raion cald, restaurant, tarabă din piață |
+| Ridicată | 168 | Citit de pe etichetă / site oficial |
+| Medie | 259 | Valori tipice pentru tipul de produs |
+| Scăzută | 76 | Estimare: raion cald, restaurant, tarabă din piață |
 
 Nivelul e afișat în subsolul fiecărui dosar, împreună cu sursele.
 
@@ -254,7 +255,7 @@ câștigă cea cu mai multe magazine (mai multe date de preț), iar rândurile d
 magazin ale celeilalte sunt adăugate la ea. Nicio cercetare nu se pierde, iar
 ID-urile vechi rămân valide, deci link-urile partajate nu se rup.
 
-**7 perechi îmbinate**, din 512 intrări brute → 505 produse afișate.
+**7 perechi îmbinate**, din 510 intrări brute → 503 produse afișate.
 
 ---
 

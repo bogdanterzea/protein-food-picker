@@ -29,6 +29,37 @@
 
   const SVG_NS = 'http://www.w3.org/2000/svg';
 
+  const MACRO_KEYS = ['protein', 'carbs', 'fat', 'fiber'];
+
+  /* =======================================================================
+   * 0. SHARED — percentages that have to read as a whole
+   *
+   * `energyShare` sums to exactly 100 by construction, but rounding the four
+   * slots independently makes 125 of the 512 products print 99% or 101%.
+   * Largest-remainder: round every slot, then push the whole residual onto
+   * the BIGGEST slot. The biggest slot is the only one guaranteed to absorb
+   * a +/-2 correction without going negative or visibly changing.
+   * ==================================================================== */
+  function roundShares(shares, keys) {
+    const ks = keys || MACRO_KEYS;
+    const out = {};
+    let rounded = 0;
+    let raw = 0;
+    let biggest = ks[0];
+    ks.forEach(function (k) {
+      const v = shares[k] || 0;
+      out[k] = Math.round(v);
+      rounded += out[k];
+      raw += v;
+      if (v > (shares[biggest] || 0)) biggest = k;
+    });
+    /* Nothing to normalise when there is no energy at all (all macros zero):
+     * forcing a residual onto a slot would invent a 100% out of nowhere. */
+    if (raw < 99 || raw > 101) return out;
+    out[biggest] += 100 - rounded;
+    return out;
+  }
+
   /* =======================================================================
    * 1. MACRO DONUT
    * Part-to-whole: where the calories come from.
@@ -47,25 +78,34 @@
      * of the circle so it survives any radius. */
     const gapPx = 3;
 
-    const slots = [
-      { k: 'protein', v: d.energyShare.protein },
-      { k: 'carbs', v: d.energyShare.carbs },
-      { k: 'fat', v: d.energyShare.fat },
-      { k: 'fiber', v: d.energyShare.fiber }
-    ].filter(s => s.v > 0.4);
+    /* One rounding for the whole chart: the arc titles, the aria-label and
+     * the legend next to it must never disagree, and must sum to 100. */
+    const shown = roundShares(d.energyShare);
+
+    const slots = MACRO_KEYS
+      .map(k => ({ k: k, v: d.energyShare[k], pct: shown[k] }))
+      .filter(s => s.v > 0.4);
 
     let offset = 0;
     const arcs = slots
       .map(function (s) {
         const len = (s.v / 100) * circumference;
-        const drawn = Math.max(1, len - gapPx);
+        /* A flat 3px gap eats a fixed length out of every arc, so a small
+         * slot loses most of itself: fibre at 0.71% used to draw as 0.24%,
+         * a 66% relative error. Never spend more than 40% of a slot on its
+         * own separator, and drop the gap entirely when there is only one
+         * arc — a lone ring has nothing to be separated from. */
+        const gap = slots.length < 2 ? 0 : Math.min(gapPx, len * 0.4);
+        const drawn = Math.max(0.5, len - gap);
+        /* Half the gap on each side, so the arc stays centred on the angular
+         * slot it actually owns instead of drifting backwards by gap/2. */
         const arc =
           '<circle class="pf-donut__seg pf-donut__seg--' + s.k + '" ' +
           'cx="' + cx + '" cy="' + cy + '" r="' + r.toFixed(2) + '" ' +
           'stroke-dasharray="' + drawn.toFixed(2) + ' ' + (circumference - drawn).toFixed(2) + '" ' +
-          'stroke-dashoffset="' + (-offset).toFixed(2) + '" ' +
+          'stroke-dashoffset="' + (-(offset + gap / 2)).toFixed(2) + '" ' +
           'transform="rotate(-90 ' + cx + ' ' + cy + ')">' +
-          '<title>' + fmt.esc(t('card.' + s.k) + ': ' + Math.round(s.v) + '% din calorii') + '</title>' +
+          '<title>' + fmt.esc(t('card.' + s.k) + ': ' + s.pct + '% din calorii') + '</title>' +
           '</circle>';
         offset += len;
         return arc;
@@ -79,7 +119,7 @@
       '<div class="pf-donut">' +
       '<svg class="pf-donut__svg" viewBox="0 0 ' + size + ' ' + size + '" role="img" ' +
       'aria-label="' + fmt.esc('Distribuția caloriilor: ' +
-        slots.map(s => t('card.' + s.k) + ' ' + Math.round(s.v) + '%').join(', ')) + '">' +
+        slots.map(s => t('card.' + s.k) + ' ' + s.pct + '%').join(', ')) + '">' +
       '<circle class="pf-donut__track" cx="' + cx + '" cy="' + cy + '" r="' + r.toFixed(2) + '"/>' +
       arcs +
       '<text class="pf-donut__center-v" x="' + cx + '" y="' + (cy + 2) + '">' + centerValue + '</text>' +
@@ -195,7 +235,11 @@
     const plotW = w - pad.l - pad.r;
     const plotH = h - pad.t - pad.b;
 
-    const maxKcal = o.maxKcal || 620;
+    /* The axis has to contain the data, or the clamp silently stacks every
+     * outlier onto the frame and invents a cluster that is not there. The
+     * densest product in the atlas is 680 kcal / 100 g, so 620 was pinning
+     * real points onto the right edge. */
+    const maxKcal = o.maxKcal || 700;
     const maxProtein = o.maxProtein || 92;
 
     const X = v => pad.l + (fmt.clamp(v, 0, maxKcal) / maxKcal) * plotW;
@@ -203,7 +247,8 @@
 
     /* --- grid + axes ------------------------------------------------- */
     let grid = '';
-    const xTicks = [0, 100, 200, 300, 400, 500, 600];
+    const xTicks = [];
+    for (let v = 0; v <= maxKcal; v += 100) xTicks.push(v);
     const yTicks = [0, 15, 30, 45, 60, 75, 90];
 
     xTicks.forEach(function (v) {
@@ -274,11 +319,38 @@
       })
       .join('');
 
+    /* --- the table alternative every chart owes ---------------------- */
+    /* The chart-view host renders its own toggle button next to the chart;
+     * CSS drops this one there so the same table is not offered twice. */
+    const topN = Math.min(20, foods.length);
+    const table =
+      '<details class="pf-chart__details"><summary>' +
+      'Tabel cu datele · primele ' + topN + ' din ' + foods.length +
+      ' după puritate</summary>' +
+      chartTable(
+        ['Produs', 'g proteină/100g', 'kcal/100g', '% din kcal'],
+        foods
+          .slice()
+          .sort((a, b) => b._d.purityPct - a._d.purityPct)
+          .slice(0, topN)
+          .map(f => [
+            f.nameRo || f.name,
+            fmt.num(f._d.protein100, 1),
+            Math.round(f._d.kcal100),
+            Math.round(f._d.purityPct) + '%'
+          ])
+      ) +
+      '</details>';
+
     return (
       '<div class="pf-scatter">' +
       '<div class="pf-chart__title">Proteină vs. calorii — la 100 g</div>' +
       '<div class="pf-chart__sub">Colțul din stânga-sus e locul unde vrei să cumperi: ' +
       'multă proteină, puține calorii. Culoarea arată ce procent din calorii vine din proteină.</div>' +
+      /* Only the plot scrolls. The title, the legend and the table stay put,
+       * and the floor is the chart's own design width so the 9px axis text
+       * renders at 9px instead of being scaled down to 5.7px. */
+      '<div class="pf-scatter__scroll" style="--pf-chart-w:' + w + 'px">' +
       '<svg class="pf-scatter__svg" viewBox="0 0 ' + w + ' ' + h + '" ' +
       'preserveAspectRatio="xMidYMid meet" role="img" ' +
       'aria-label="Grafic de dispersie: proteină la 100 g pe axa verticală, calorii la 100 g pe axa orizontală, ' +
@@ -294,9 +366,11 @@
       '" text-anchor="middle" transform="rotate(-90 12 ' + (pad.t + plotH / 2) + ')">' +
       'g proteină la 100 g</text>' +
       '</svg>' +
+      '</div>' +
       '<div class="pf-macrolegend" style="justify-content:flex-end;align-items:center;gap:6px">' +
       '<span>10%</span>' + legend + '<span>70%+ din calorii din proteină</span>' +
       '</div>' +
+      table +
       '</div>'
     );
   }
@@ -305,13 +379,21 @@
    * 4. RANKED BAR ROW — used by the leaderboards
    * ==================================================================== */
   function rankBar(value, maxValue, color, display) {
-    const pct = maxValue > 0 ? (value / maxValue) * 100 : 0;
+    const pct = fmt.clamp(maxValue > 0 ? (value / maxValue) * 100 : 0, 0, 100);
+    const shown = display === undefined || display === null ? '' : String(display);
+    /* Length alone is never allowed to be the whole message. When the caller
+     * prints the number in a neighbouring column it passes an empty string —
+     * the bar then carries the value for screen readers and native hover
+     * instead of being a mute decoration. */
+    const label = fmt.num(value, 1) + ' din ' + fmt.num(maxValue, 0) +
+      ' (' + Math.round(pct) + '%)';
     return (
-      '<div class="pf-rankbar">' +
+      '<div class="pf-rankbar" role="img" aria-label="' + fmt.esc(label) + '" ' +
+      'title="' + fmt.esc(label) + '">' +
       '<span class="pf-rankbar__track"><span class="pf-rankbar__fill" style="--v:' +
-      fmt.clamp(pct, 0, 100).toFixed(1) + ';--c:' + (color || 'var(--macro-protein)') +
+      pct.toFixed(1) + ';--c:' + (color || 'var(--macro-protein)') +
       '"></span></span>' +
-      '<span class="pf-rankbar__val">' + fmt.esc(String(display)) + '</span>' +
+      '<span class="pf-rankbar__val">' + fmt.esc(shown) + '</span>' +
       '</div>'
     );
   }
@@ -331,22 +413,54 @@
     const lo = Math.min.apply(null, values);
     const sorted = values.slice().sort(function (a, b) { return a - b; });
     const med = sorted[Math.floor(sorted.length / 2)];
+
+    const edges = buckets.map(function (b, i) {
+      return {
+        lo: Math.round((i / n) * hi),
+        up: Math.round(((i + 1) / n) * hi),
+        n: b
+      };
+    });
+
+    /* The modal bin carries the shape of the distribution in one number, so
+     * say it out loud rather than leaving it to be read off the bars. */
+    const topIdx = buckets.indexOf(peak);
+    const summary =
+      'Distribuția proteinei: ' + values.length + ' produse, de la ' +
+      fmt.num(lo, 0) + ' la ' + fmt.num(hi, 0) + ' g la 100 g, median ' +
+      fmt.num(med, 0) + ' g; cel mai populat interval ' +
+      edges[topIdx].lo + '–' + edges[topIdx].up + ' g cu ' + peak + ' produse';
+
     return (
-      '<div class="pf-histo" role="img" aria-label="' +
-      fmt.esc('Distribuția proteinei: ' + values.length + ' produse, de la ' +
-        fmt.num(lo, 0) + ' la ' + fmt.num(hi, 0) + ' g la 100 g, median ' +
-        fmt.num(med, 0) + ' g') + '">' +
-      buckets
-        .map(function (b, i) {
-          const lo = Math.round((i / n) * hi);
-          const up = Math.round(((i + 1) / n) * hi);
+      '<div class="pf-histo-wrap">' +
+      '<div class="pf-histo" role="img" aria-label="' + fmt.esc(summary) + '">' +
+      edges
+        .map(function (e) {
           return (
             '<div class="pf-histo__bar" style="height:' +
-            Math.max(3, (b / peak) * 100).toFixed(1) + '%" data-tip="' +
-            fmt.esc(lo + '–' + up + ' g: ' + b + ' produse') + '"></div>'
+            Math.max(3, (e.n / peak) * 100).toFixed(1) + '%" data-tip="' +
+            fmt.esc(e.lo + '–' + e.up + ' g: ' + e.n + ' produse') + '"></div>'
           );
         })
         .join('') +
+      '</div>' +
+      /* Rule 7: every chart ships a data-table alternative. Neither caller
+       * supplied one for the histogram, so it carries its own. */
+      '<details class="pf-chart__details"><summary>' +
+      'Tabel cu datele · ' + n + ' intervale</summary>' +
+      chartTable(
+        ['Interval (g/100 g)', 'Produse', 'Din total'],
+        edges
+          .filter(function (e) { return e.n > 0; })
+          .map(function (e) {
+            return [
+              e.lo + '–' + e.up,
+              e.n,
+              (values.length ? ((e.n / values.length) * 100).toFixed(1) : '0') + '%'
+            ];
+          })
+      ) +
+      '</details>' +
       '</div>'
     );
   }
@@ -367,6 +481,9 @@
   }
 
   PF.charts = {
+    /* Shared with ui.js: the legend and the ring must round identically,
+     * or the same product shows 101% in one place and 100% in the other. */
+    roundShares: roundShares,
     donut: donut,
     radar: radar,
     scatter: scatter,

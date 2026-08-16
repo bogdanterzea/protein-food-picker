@@ -1,0 +1,202 @@
+/* =========================================================================
+ * 14 — GHIDUL MAGAZINELOR
+ *
+ * O fișă per retailer, în vizualizarea Hartă. Fiecare fișă poartă culoarea
+ * lanțului pe muchia din stânga — singurul loc din aplicație unde culoarea
+ * de brand are voie să apară, fiindcă aici identitatea magazinului chiar e
+ * informația.
+ * ========================================================================= */
+
+.pf-stores {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--sp-3);
+  margin-top: var(--sp-3);
+}
+
+.pf-store {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  background: var(--bg-panel-2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--store-color, var(--border-strong));
+  border-radius: var(--r-md);
+}
+
+/* ---------------------------------------------------------------- head -- */
+
+.pf-store__head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.pf-store__mark {
+  font-size: 1.4rem;
+  line-height: 1;
+  flex: none;
+}
+
+.pf-store__name {
+  margin: 0;
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: var(--text-1);
+}
+
+.pf-store__kind {
+  display: block;
+  font-size: var(--fs-2xs);
+  color: var(--text-4);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.pf-store__note {
+  margin: 0;
+  font-size: var(--fs-xs);
+  line-height: 1.55;
+  color: var(--text-3);
+}
+
+/* ------------------------------------------------------ price index bar -- */
+
+/* Anchored at the city average, not at zero: every store sits between 80 and
+ * 130, so a zero-based bar would show eighteen near-identical stripes. The
+ * tick marks 100 and the fill grows away from it, left for cheap. */
+.pf-sprice {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.pf-sprice__lbl {
+  flex: none;
+  font-size: var(--fs-3xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-4);
+}
+
+.pf-sprice__track {
+  position: relative;
+  flex: 1 1 auto;
+  height: 6px;
+  border-radius: var(--r-full);
+  background: var(--bg-inset);
+}
+
+.pf-sprice__fill {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  border-radius: var(--r-full);
+}
+
+.pf-sprice__fill.is-cheap { background: var(--ok); }
+.pf-sprice__fill.is-dear  { background: var(--warn); }
+
+.pf-sprice__mid {
+  position: absolute;
+  top: -3px;
+  width: 2px;
+  height: 12px;
+  margin-left: -1px;
+  border-radius: 1px;
+  background: var(--border-loud);
+}
+
+.pf-sprice__val {
+  flex: none;
+  font-size: var(--fs-2xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-3);
+}
+
+/* --------------------------------------------------------------- facts -- */
+
+.pf-store__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px var(--sp-3);
+  font-size: var(--fs-2xs);
+  color: var(--text-4);
+}
+
+/* -------------------------------------------------------- cheapest here -- */
+
+.pf-store__best {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--bg-inset);
+  border-radius: var(--r-sm);
+}
+
+.pf-store__best .pf-link {
+  text-align: left;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+}
+
+.pf-store__bestval {
+  font-size: var(--fs-2xs);
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ------------------------------------------------------ good / bad list -- */
+
+.pf-store__lists {
+  display: grid;
+  gap: var(--sp-3);
+}
+
+.pf-store__lists ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.pf-store__lists li {
+  position: relative;
+  padding-left: 16px;
+  font-size: var(--fs-xs);
+  line-height: 1.45;
+  color: var(--text-3);
+}
+
+.pf-store__lists li::before {
+  position: absolute;
+  left: 0;
+  font-weight: 700;
+}
+
+.pf-sgood li::before { content: '+'; color: var(--ok); }
+.pf-sbad  li::before { content: '−'; color: var(--warn); }
+
+.pf-store__cats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: auto;
+  padding-top: var(--sp-2);
+  border-top: 1px solid var(--border);
+}
+
+/* ---------------------------------------------------------------- ≤620 -- */
+
+@media (max-width: 620px) {
+  .pf-stores { grid-template-columns: 1fr; }
+  .pf-store { padding: var(--sp-3); }
+
+  /* The action button drops under the name rather than squeezing it. */
+  .pf-store__head { flex-wrap: wrap; row-gap: var(--sp-2); }
+  .pf-store__head .pf-btn { flex: 1 0 100%; }
+}

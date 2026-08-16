@@ -1,7 +1,7 @@
 /* =========================================================================
  * PROTEIN ATLAS SIBIU — MEZELURI, CHARCUTERIE, CONSERVE DE CARNE & RAFT CALD
  * File: js/data/03-deli-processed.js
- * Items: 64
+ * Items: 63
  * Category slug: deli-processed
  * ID prefix: p-
  * Last researched: 2026-08
@@ -243,7 +243,7 @@
       stats: { taste: 48, satiety: 60, convenience: 100, versatility: 76 },
       timing: { breakfast: 5, preWorkout: 3, postWorkout: 3, lunch: 4, snack: 4, dinner: 3, beforeBed: 2 },
       timingNote: 'Cel mai ieftin mod de a pune 17 g proteină într-un sandviș de dimineață.',
-      tags: ['ready-to-eat', 'grab-and-go', 'high-protein', 'low-fat', 'high-sodium', 'processed', 'budget', 'cheap-protein', 'breakfast', 'portable'],
+      tags: ['ready-to-eat', 'grab-and-go', 'high-protein', 'high-sodium', 'processed', 'budget', 'cheap-protein', 'breakfast', 'portable'],
       diet: { vegan: false, vegetarian: false, glutenFree: true, lactoseFree: true, keto: true, halal: true, porkFree: true },
       pairings: ['Pâine toast integrală', 'Muștar', 'Salată verde', 'Brânză light'],
       tips: [
@@ -339,7 +339,7 @@
       stats: { taste: 60, satiety: 68, convenience: 96, versatility: 78 },
       timing: { breakfast: 5, preWorkout: 3, postWorkout: 3, lunch: 4, snack: 5, dinner: 3, beforeBed: 3 },
       timingNote: 'Cea mai „curată” șuncă de pe raft — varianta de zi cu zi dacă mănânci mezeluri des.',
-      tags: ['ready-to-eat', 'grab-and-go', 'high-protein', 'low-fat', 'premium', 'breakfast', 'portable', 'office-lunch'],
+      tags: ['ready-to-eat', 'grab-and-go', 'high-protein', 'premium', 'breakfast', 'portable', 'office-lunch'],
       diet: { vegan: false, vegetarian: false, glutenFree: true, lactoseFree: true, keto: true, halal: true, porkFree: true },
       pairings: ['Avocado', 'Pâine cu semințe', 'Roșii cherry', 'Iaurt grecesc cu mărar'],
       tips: [
@@ -536,7 +536,7 @@
       stats: { taste: 64, satiety: 82, convenience: 100, versatility: 86 },
       timing: { breakfast: 5, preWorkout: 4, postWorkout: 5, lunch: 5, snack: 5, dinner: 4, beforeBed: 3 },
       timingNote: 'Alternativă la pieptul de pui feliat, cu ceva mai mult fier și zinc.',
-      tags: ['ready-to-eat', 'grab-and-go', 'very-high-protein', 'low-fat', 'low-carb', 'processed', 'portable', 'post-workout', 'cutting', 'office-lunch'],
+      tags: ['ready-to-eat', 'grab-and-go', 'low-carb', 'processed', 'portable', 'post-workout', 'cutting', 'office-lunch'],
       diet: { vegan: false, vegetarian: false, glutenFree: true, lactoseFree: true, keto: true, halal: true, porkFree: true },
       pairings: ['Muștar cu miere', 'Salată de varză', 'Lipie', 'Hummus'],
       tips: [
@@ -684,7 +684,7 @@
       stats: { taste: 82, satiety: 80, convenience: 90, versatility: 78 },
       timing: { breakfast: 4, preWorkout: 3, postWorkout: 4, lunch: 5, snack: 5, dinner: 4, beforeBed: 3 },
       timingNote: 'Fier hemic + B12 + 22 g proteină — util dacă ai analize slabe la fier.',
-      tags: ['ready-to-eat', 'high-protein', 'low-fat', 'low-carb', 'iron-rich', 'b12', 'high-sodium', 'processed', 'premium', 'cutting'],
+      tags: ['ready-to-eat', 'high-protein', 'low-carb', 'iron-rich', 'b12', 'high-sodium', 'processed', 'premium', 'cutting'],
       diet: { vegan: false, vegetarian: false, glutenFree: true, lactoseFree: true, keto: true, halal: false, porkFree: true },
       pairings: ['Muștar cu hrean', 'Pâine de secară', 'Castraveți murați', 'Ceapă roșie', 'Cașcaval afumat'],
       tips: [
@@ -2491,7 +2491,8 @@
       warnings: [
         'Sub 10 g proteină/100 g.',
         '72% din calorii din grăsime; colesterol ~120 mg/100 g.',
-        'Conține amidon și proteine vegetale.'
+        'Conține amidon și proteine vegetale.',
+        'Fiind pe bază de ficat, aduce vitamina A preformată (retinol) — femeile însărcinate nu ar trebui să consume cantități mari.'
       ],
       storage: 'Loc uscat. După deschidere, frigider, 2 zile.',
       shelfLife: '2 ani sigilată',
@@ -2692,7 +2693,7 @@
       stats: { taste: 74, satiety: 88, convenience: 100, versatility: 40 },
       timing: { breakfast: 2, preWorkout: 4, postWorkout: 4, lunch: 3, snack: 5, dinner: 2, beforeBed: 3 },
       timingNote: 'Densitate proteică maximă: 40 g de biltong = 22 g proteină la 120 kcal.',
-      tags: ['ready-to-eat', 'grab-and-go', 'shelf-stable', 'very-high-protein', 'protein-dense', 'low-carb', 'low-fat', 'high-sodium', 'iron-rich', 'portable', 'premium', 'cutting', 'imported'],
+      tags: ['ready-to-eat', 'grab-and-go', 'shelf-stable', 'very-high-protein', 'protein-dense', 'low-carb', 'high-sodium', 'iron-rich', 'portable', 'premium', 'cutting', 'imported'],
       diet: { vegan: false, vegetarian: false, glutenFree: true, lactoseFree: true, keto: true, halal: false, porkFree: true },
       pairings: ['Apă', 'Brânză maturată', 'Măsline', 'Nuci'],
       tips: [
@@ -2761,19 +2762,22 @@
     },
 
     {
-      id: 'p-pui-rotisor-kaufland',
-      name: 'Rotisserie Chicken (Kaufland Grill)',
+      id: 'p-pui-rotisor',
+      name: 'Rotisserie Chicken (Supermarket Hot Counter)',
       nameRo: 'Pui la rotisor',
-      brand: 'Kaufland Grill',
+      brand: 'Kaufland Grill / Carrefour / Auchan / Penny',
       category: 'deli-processed',
       subcategory: 'Raft cald & rotiserie',
       emoji: '🍗',
       unit: 'g',
       stores: [
-        { name: 'Kaufland', availability: 'always', aisle: 'Standul Kaufland Grill, lângă intrare sau la panificație', priceRon: 27, packGrams: 900, packLabel: '1 pui întreg (~900 g gătit)', note: 'Program tipic 10:00–20:00; se termină seara' }
+        { name: 'Penny', availability: 'occasional', aisle: 'Vitrină caldă la intrare', priceRon: 26, packGrams: 850, packLabel: '1 pui întreg', note: 'Doar în magazinele mari; nu toate zilele' },
+        { name: 'Kaufland', availability: 'always', aisle: 'Standul Kaufland Grill, lângă intrare sau la panificație', priceRon: 27, packGrams: 900, packLabel: '1 pui întreg (~900 g gătit)', note: 'Program tipic 10:00–20:00; se termină seara' },
+        { name: 'Auchan', availability: 'always', aisle: 'Raft cald / rotiserie', priceRon: 30, packGrams: 900, packLabel: '1 pui întreg', note: '' },
+        { name: 'Carrefour', availability: 'always', aisle: 'Raft cald, lângă brutărie', priceRon: 32, packGrams: 900, packLabel: '1 pui întreg (~900 g gătit)', note: 'Ambalat în pungă termică' }
       ],
-      sibiuNote: 'Kaufland Șos. Alba Iulia și Shopping City au grătarul zilnic. Cel mai bun moment: 11:30–12:30, când iese prima tură. După 19:00 rămâne doar ce s-a uscat pe rotisor.',
-      per100g: { kcal: 219, protein: 25, carbs: 0.5, sugars: 0.2, fat: 13, satFat: 3.8, fiber: 0, salt: 1.4 },
+      sibiuNote: 'Kaufland Șos. Alba Iulia și Shopping City au grătarul zilnic; cel mai bun moment e 11:30–12:30, când iese prima tură. Carrefour din Shopping City scoate ture la 11:00, 14:00 și 17:00. După 19:00, oriunde ai merge, rămâne doar ce s-a uscat pe rotisor.',
+      per100g: { kcal: 219, protein: 25, carbs: 0.5, sugars: 0.2, fat: 13, satFat: 3.8, fiber: 0, salt: 1.5 },
       micros: { ironMg: 1, zincMg: 1.8, b12Ug: 0.5, potassiumMg: 280, cholesterolMg: 95 },
       serving: { grams: 250, label: 'un sfert de pui (250 g)' },
       effort: 0,
@@ -2782,9 +2786,9 @@
       cooking: { method: 'none', difficulty: 'none', equipment: ['cuțit'], steps: [], yieldNote: 'Un pui de ~900 g gătit dă ~500–550 g carne fără oase și piele' },
       taste: {
         profile: 'Sărat, condimentat cu boia și usturoi, cu pielea crocantă și carnea suculentă',
-        intensity: 4, sweetness: 0, saltiness: 3, umami: 4, richness: 4,
+        intensity: 4, sweetness: 1, saltiness: 4, umami: 4, richness: 4,
         texture: 'Piele crocantă peste carne fragedă; pieptul se poate usca',
-        notes: 'Cea mai bună afacere din tot fișierul: 27 lei pentru ~130 g proteină totală. Nimic altceva nu se apropie.'
+        notes: 'Cea mai bună afacere din tot fișierul: ~27 lei pentru ~130 g proteină totală. Nimic altceva nu se apropie.'
       },
       stats: { taste: 84, satiety: 82, convenience: 92, versatility: 90 },
       timing: { breakfast: 2, preWorkout: 3, postWorkout: 5, lunch: 5, snack: 3, dinner: 5, beforeBed: 3 },
@@ -2793,71 +2797,22 @@
       diet: { vegan: false, vegetarian: false, glutenFree: true, lactoseFree: true, keto: true, halal: false, porkFree: true },
       pairings: ['Cartofi la cuptor', 'Salată de varză', 'Mujdei de usturoi', 'Orez', 'Murături'],
       tips: [
-        'MATEMATICA: 27 lei pentru ~550 g carne = ~130 g proteină. Costă ~21 lei per 100 g proteină — printre cele mai ieftine surse de proteină gătită din Sibiu.',
+        'MATEMATICA: ~27 lei pentru ~550 g carne = ~130 g proteină. Costă ~21 lei per 100 g proteină — printre cele mai ieftine surse de proteină gătită din Sibiu.',
         'Dă pielea jos și proteina/100 g urcă la ~31 g iar grăsimea scade la ~4 g. Pielea are aproape toată grăsimea.',
         'Carcasa nu se aruncă: fierbe-o 1 oră cu ceapă și morcov și ai 1,5 l de supă de pui gratis.',
-        'Cumpără-l la 12:00, nu la 19:00. Puiul stat 6 ore pe rotisor e uscat și sărat.',
-        'Valorile sunt ESTIMATE — Kaufland Grill nu afișează etichetă nutrițională. Marinada și sarea variază de la magazin la magazin.'
+        'Cumpără-l la 12:00, nu la 19:00, și cere-l din tura proaspătă. Puiul stat 6 ore în vitrină pierde apă și devine sfoară.',
+        'Prețurile estimate diferă puțin între lanțuri (Penny ~26, Kaufland ~27, Auchan ~30, Carrefour ~32 lei), dar produsul e practic același; diferă marinada.'
       ],
       warnings: [
         'Fără etichetă nutrițională — cifrele sunt estimări bazate pe pui rotisat standard.',
         'Sarea din marinadă poate ajunge la 1,5–2 g/100 g; poate fi mai mare decât estimarea.',
-        'Se răcește repede — mănâncă-l în 2 ore sau bagă-l imediat la frigider (regula 2 ore la temperatura camerei).'
+        'Marinadele pot conține zahăr, gluten (sos de soia) și potențiatori de aromă; întreabă dacă ai alergii.',
+        'Se răcește repede — mănâncă-l în 2 ore sau bagă-l imediat la frigider (regula 2 ore la temperatura camerei); nu-l lăsa în mașină.'
       ],
       storage: 'Dezosează-l cald și pune carnea la frigider în 2 ore. Se ține 3 zile la 0–4 °C.',
       shelfLife: '3 zile la frigider, dezosat',
       dataConfidence: 'low',
       sources: ['kaufland.ro Kaufland Grill', 'Estimare nutrițională pui rotisat standard']
-    },
-
-    {
-      id: 'p-pui-rotisor-carrefour',
-      name: 'Rotisserie Chicken (Carrefour Hot Counter)',
-      nameRo: 'Pui rotisat de la raftul cald',
-      brand: 'Carrefour',
-      category: 'deli-processed',
-      subcategory: 'Raft cald & rotiserie',
-      emoji: '🔆',
-      unit: 'g',
-      stores: [
-        { name: 'Carrefour', availability: 'always', aisle: 'Raft cald, lângă brutărie', priceRon: 32, packGrams: 900, packLabel: '1 pui întreg (~900 g gătit)', note: 'Ambalat în pungă termică' },
-        { name: 'Auchan', availability: 'always', aisle: 'Raft cald / rotiserie', priceRon: 30, packGrams: 900, packLabel: '1 pui întreg', note: '' },
-        { name: 'Penny', availability: 'occasional', aisle: 'Vitrină caldă la intrare', priceRon: 26, packGrams: 850, packLabel: '1 pui întreg', note: 'Doar în magazinele mari' }
-      ],
-      sibiuNote: 'Carrefour din Shopping City are rotiseria lângă brutărie; puiul iese în ture, la 11:00, 14:00 și 17:00. Întreabă vânzătorul când e următoarea tură.',
-      per100g: { kcal: 219, protein: 25, carbs: 0.5, sugars: 0.2, fat: 13, satFat: 3.8, fiber: 0, salt: 1.5 },
-      micros: { ironMg: 1, zincMg: 1.8, b12Ug: 0.5, potassiumMg: 280, cholesterolMg: 95 },
-      serving: { grams: 250, label: 'un sfert de pui (250 g)' },
-      effort: 0,
-      timeMin: 2,
-      activeTimeMin: 2,
-      cooking: { method: 'none', difficulty: 'none', equipment: ['cuțit'], steps: [], yieldNote: '~900 g gătit = ~520 g carne curată' },
-      taste: {
-        profile: 'Condimentat mai puternic decât la Kaufland, uneori cu marinadă dulceagă',
-        intensity: 4, sweetness: 1, saltiness: 4, umami: 4, richness: 4,
-        texture: 'Piele crocantă, carne fragedă la pulpe, mai uscată la piept',
-        notes: 'Practic același produs ca la Kaufland, cu 5 lei mai scump. Diferența e marinada, care variază de la magazin la magazin.'
-      },
-      stats: { taste: 82, satiety: 82, convenience: 90, versatility: 90 },
-      timing: { breakfast: 2, preWorkout: 3, postWorkout: 5, lunch: 5, snack: 3, dinner: 5, beforeBed: 3 },
-      timingNote: 'Masă gata pentru 2 persoane, plus resturi.',
-      tags: ['ready-to-eat', 'high-protein', 'low-carb', 'budget', 'cheap-protein', 'meal-prep', 'batch-cook', 'post-workout'],
-      diet: { vegan: false, vegetarian: false, glutenFree: true, lactoseFree: true, keto: true, halal: false, porkFree: true },
-      pairings: ['Cartofi', 'Salată verde', 'Mujdei', 'Pâine', 'Legume la grătar'],
-      tips: [
-        'Compară prețurile în Sibiu: Penny ~26 lei, Kaufland ~27 lei, Auchan ~30 lei, Carrefour ~32 lei. Puiul e cam același.',
-        'Cere-l din tura proaspătă. Puiul care stă în vitrina caldă peste 3 ore pierde apă și devine sfoară.',
-        'Dezosat imediat și porționat în cutii, îți dă 3 mese de prânz cu ~35 g proteină fiecare.'
-      ],
-      warnings: [
-        'Fără etichetă nutrițională — valorile sunt estimări.',
-        'Marinadele pot conține zahăr, gluten (sos de soia) și potențiatori de aromă; întreabă la raft dacă ai alergii.',
-        'Riscul principal e temperatura: nu-l lăsa peste 2 ore în mașină.'
-      ],
-      storage: 'Frigider în 2 ore de la cumpărare, dezosat. 3 zile la 0–4 °C.',
-      shelfLife: '3 zile dezosat la frigider',
-      dataConfidence: 'low',
-      sources: ['estimare de preț 2026 — neconfirmată la raft', 'Estimare nutrițională pui rotisat']
     },
 
     {

@@ -24,11 +24,13 @@
 <link rel="stylesheet" href="css/09-charts.css">
 <link rel="stylesheet" href="css/10-animations.css">
 <link rel="stylesheet" href="css/11-responsive.css">
+<link rel="stylesheet" href="css/13-fridge.css">
+<link rel="stylesheet" href="css/14-stores.css">
 <link rel="stylesheet" href="css/12-print.css">
 </head>
 
 <body>
-<a class="pf-skip-link" href="#pf-main">Sari la conținut</a>
+<a class="pf-skip-link" href="#pf-main" data-i18n="a11y.skip">Sari la conținut</a>
 
 <div class="pf-app">
 
@@ -36,12 +38,12 @@
        TOP BAR
        ==================================================================== -->
   <header class="pf-topbar">
-    <button class="pf-iconbtn pf-railtoggle" data-act="toggle-rail" aria-label="Filtre">☰</button>
+    <button class="pf-iconbtn pf-railtoggle" data-act="toggle-rail" aria-label="Filtre" data-i18n-attr="aria-label:filter.title">☰</button>
 
-    <a class="pf-brand" href="#" aria-label="Atlasul Proteinelor Sibiu">
+    <a class="pf-brand" href="#" aria-label="Atlasul Proteinelor Sibiu" data-i18n-attr="aria-label:a11y.brand">
       <span class="pf-brand__mark">🥩</span>
       <span class="pf-brand__text">
-        <span class="pf-brand__title">Atlasul Proteinelor</span>
+        <span class="pf-brand__title" data-i18n="app.title">Atlasul Proteinelor</span>
         <span class="pf-brand__sub">Sibiu · 2026</span>
       </span>
     </a>
@@ -55,13 +57,14 @@
         autocomplete="off"
         spellcheck="false"
         placeholder="Caută: piept de pui, skyr, ton, linte…"
-        aria-label="Caută în atlas">
+        aria-label="Caută în atlas"
+        data-i18n-attr="placeholder:search.placeholder;aria-label:a11y.search">
       <span class="pf-search__hint" id="pf-search-hint"><kbd>/</kbd></span>
-      <button class="pf-search__clear" id="pf-search-clear" hidden aria-label="Șterge căutarea">✕</button>
+      <button class="pf-search__clear" id="pf-search-clear" hidden aria-label="Șterge căutarea" data-i18n-attr="aria-label:search.clear">✕</button>
     </div>
 
     <div class="pf-topbar__actions">
-      <div class="pf-seg" role="tablist" aria-label="Vizualizare">
+      <div class="pf-seg" role="tablist" aria-label="Vizualizare" data-i18n-attr="aria-label:a11y.viewSwitch">
         <button class="pf-seg__btn is-active" data-view="grid" role="tab" id="pf-tab-grid" aria-controls="pf-view-grid" aria-selected="true">🃏 <span>Carduri</span></button>
         <button class="pf-seg__btn" data-view="table" role="tab" id="pf-tab-table" aria-controls="pf-view-table" aria-selected="false">📊 <span>Tabel</span></button>
         <button class="pf-seg__btn" data-view="boards" role="tab" id="pf-tab-boards" aria-controls="pf-view-boards" aria-selected="false">🏆 <span>Clasamente</span></button>
@@ -70,9 +73,9 @@
         <button class="pf-seg__btn" data-view="recipes" role="tab" id="pf-tab-recipes" aria-controls="pf-view-recipes" aria-selected="false">🍳 <span>Rețete</span></button>
         <button class="pf-seg__btn" data-view="shop" role="tab" id="pf-tab-shop" aria-controls="pf-view-shop" aria-selected="false">🛒 <span>Listă</span></button>
       </div>
-      <button class="pf-iconbtn" id="pf-lang" title="Limbă / Language">RO</button>
-      <button class="pf-iconbtn" id="pf-theme" title="Temă">☀️</button>
-      <button class="pf-iconbtn" data-act="help" title="Scurtături (?)">?</button>
+      <button class="pf-iconbtn" id="pf-lang" title="Limbă / Language" data-i18n-attr="title:misc.language">RO</button>
+      <button class="pf-iconbtn" id="pf-theme" title="Temă" data-i18n-attr="title:misc.theme">☀️</button>
+      <button class="pf-iconbtn" data-act="help" title="Scurtături (?)" data-i18n-attr="aria-label:misc.help;title:a11y.shortcuts">?</button>
     </div>
   </header>
 
@@ -82,7 +85,7 @@
   <div class="pf-shell">
 
     <!-- ---------------- FILTER RAIL ---------------- -->
-    <aside class="pf-rail" id="pf-rail" aria-label="Filtre">
+    <aside class="pf-rail" id="pf-rail" aria-label="Filtre" data-i18n-attr="aria-label:filter.title">
       <div id="pf-rail-body"></div>
     </aside>
     <div class="pf-rail-scrim" id="pf-rail-scrim"></div>
@@ -113,51 +116,51 @@
   <footer class="pf-footer">
     <div class="pf-footer__inner">
       <div class="pf-footer__col">
-        <h4>Ce este asta</h4>
+        <h4 data-i18n="foot.what">Ce este asta</h4>
         <ul>
-          <li>O bază de date cu alimente bogate în proteine pe care le poți
+          <li data-i18n="foot.what1">O bază de date cu alimente bogate în proteine pe care le poți
               cumpăra efectiv în Sibiu.</li>
-          <li>Fiecare produs are macro-uri complete, preț pe gram de proteină,
+          <li data-i18n="foot.what2">Fiecare produs are macro-uri complete, preț pe gram de proteină,
               efort de gătit, gust și momentul potrivit din zi.</li>
-          <li>Funcționează complet offline. Nu trimite nimic nicăieri.</li>
+          <li data-i18n="foot.what3">Funcționează complet offline. Nu trimite nimic nicăieri.</li>
         </ul>
       </div>
       <div class="pf-footer__col">
-        <h4>Cum se citesc barele</h4>
+        <h4 data-i18n="foot.bars">Cum se citesc barele</h4>
         <ul>
-          <li><b>Proteină</b> — grame la 100 g. Bara e plină la 30 g.</li>
-          <li><b>Puritate</b> — ce procent din calorii vine din proteină.</li>
-          <li><b>Preț</b> — cât costă 100 g de proteină pură.</li>
-          <li><b>Gust, sațietate, comoditate</b> — evaluări subiective, asumate.</li>
+          <li data-i18n-html="foot.bars1"><b>Proteină</b> — grame la 100 g. Bara e plină la 30 g.</li>
+          <li data-i18n-html="foot.bars2"><b>Puritate</b> — ce procent din calorii vine din proteină.</li>
+          <li data-i18n-html="foot.bars3"><b>Preț</b> — cât costă 100 g de proteină pură.</li>
+          <li data-i18n-html="foot.bars4"><b>Gust, sațietate, comoditate</b> — evaluări subiective, asumate.</li>
         </ul>
       </div>
       <div class="pf-footer__col">
-        <h4>Documentație</h4>
+        <h4 data-i18n="foot.docs">Documentație</h4>
         <ul>
-          <li><a class="pf-link" href="docs/METHODOLOGY.md">Metodologie și scoruri</a></li>
-          <li><a class="pf-link" href="docs/DATA-SCHEMA.md">Schema datelor</a></li>
-          <li><a class="pf-link" href="docs/PROTEIN-GUIDE.md">Ghid de proteină</a></li>
-          <li><a class="pf-link" href="docs/STORES-SIBIU.md">Magazinele din Sibiu</a></li>
+          <li><a class="pf-link" data-i18n="foot.docsMethod" href="docs/METHODOLOGY.md">Metodologie și scoruri</a></li>
+          <li><a class="pf-link" data-i18n="foot.docsSchema" href="docs/DATA-SCHEMA.md">Schema datelor</a></li>
+          <li><a class="pf-link" data-i18n="foot.docsGuide" href="docs/PROTEIN-GUIDE.md">Ghid de proteină</a></li>
+          <li><a class="pf-link" data-i18n="foot.docsStores" href="docs/STORES-SIBIU.md">Magazinele din Sibiu</a></li>
           <li><a class="pf-link" href="README.md">README</a></li>
         </ul>
       </div>
       <div class="pf-footer__col">
-        <h4>Avertismente</h4>
+        <h4 data-i18n="foot.warn">Avertismente</h4>
         <ul>
-          <li><b>Prețurile sunt estimări neverificate.</b> Niciunul nu a fost
+          <li data-i18n-html="foot.warn1"><b>Prețurile sunt estimări neverificate.</b> Niciunul nu a fost
               citit dintr-un magazin și nu există un API public de prețuri
               pentru retailul alimentar din România. Sunt afișate cu „≈” și au
               o marjă de ±20–30%. Folosește-le ca să compari produse între ele,
               nu ca preț de raft.</li>
-          <li>Valorile nutriționale variază între loturi și producători.
+          <li data-i18n="foot.warn2">Valorile nutriționale variază între loturi și producători.
               Eticheta din mână bate întotdeauna baza de date.</li>
-          <li>Nu este sfat medical. Dacă ai probleme renale, hepatice sau o
+          <li data-i18n="foot.warn3">Nu este sfat medical. Dacă ai probleme renale, hepatice sau o
               afecțiune metabolică, întreabă un medic înainte să-ți crești
               aportul de proteină.</li>
         </ul>
       </div>
     </div>
-    <div class="pf-footer__legal">
+    <div class="pf-footer__legal" data-i18n="foot.legal">
       Atlasul Proteinelor Sibiu · date colectate în august 2026 · toate mărcile
       aparțin proprietarilor lor. Proiect personal, fără afiliere cu niciun
       retailer. Datele tale (favorite, masa curentă, comparația) rămân în
@@ -170,7 +173,7 @@
 <!-- ======================================================================
      MEAL TRAY (fixed, docked at the bottom)
      ====================================================================== -->
-<div class="pf-tray is-hidden" id="pf-tray" aria-label="Masa mea"></div>
+<div class="pf-tray is-hidden" id="pf-tray" aria-label="Masa mea" data-i18n-attr="aria-label:tray.title"></div>
 
 <!-- TOASTS -->
 <div class="pf-toasts" id="pf-toasts" aria-live="polite" aria-atomic="false"></div>
@@ -209,6 +212,7 @@
 <script src="js/components/filters.js"></script>
 <script src="js/components/tray.js"></script>
 <script src="js/components/recipes.js"></script>
+<script src="js/components/stores.js"></script>
 <script src="js/components/boards.js"></script>
 <script src="js/components/compare.js"></script>
 

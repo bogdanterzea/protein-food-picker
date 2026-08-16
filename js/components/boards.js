@@ -12,6 +12,14 @@
   const fmt = PF.fmt;
   const t = k => PF.i18n.t(k);
 
+  /* Every visible string on a board is a dictionary key derived from the
+   * board's own key: `board.<key>` is the title, `board.<key>.unit` the small
+   * unit next to it, `board.<key>.desc` the paragraph under the header. Only
+   * the product rows stay Romanian — those are data, not interface. */
+  const title = b => t('board.' + b.key);
+  const unit = b => t('board.' + b.key + '.unit');
+  const desc = b => t('board.' + b.key + '.desc');
+
   /* Boards that answer "what is the best protein source" must exclude
    * collagen and gelatin. Their labels declare 85–90 g of protein and up to
    * 100% of calories from protein, so on raw numbers they win every one of
@@ -20,125 +28,92 @@
    * documented; they are just not allowed to top a leaderboard. */
   const usableProtein = f => f._d.qualityReason !== 'collagen';
 
-  /* Each board: how to rank, how to print the value, and who qualifies. */
+  /* Each board: how to rank, how to print the value, and who qualifies.
+   * Titles, units and descriptions live in the dictionary under the board key. */
   const BOARDS = [
     {
       key: 'protein',
       icon: '🥇',
-      title: 'board.protein',
-      unit: 'g / 100 g',
       color: 'var(--macro-protein)',
       value: f => f._d.protein100,
       display: f => fmt.num(f._d.protein100, 1) + ' g',
-      filter: usableProtein,
-      desc: 'Cea mai mare concentrație de proteină pe 100 g, indiferent de preț sau de efort. '
-        + 'Colagenul și gelatina sunt excluse — au cifre mari, dar proteină inutilizabilă.'
+      filter: usableProtein
     },
     {
       key: 'purity',
       icon: '💎',
-      title: 'board.purity',
-      unit: '% din kcal',
       color: 'var(--stat-leanness)',
       value: f => f._d.purityPct,
       display: f => Math.round(f._d.purityPct) + '%',
-      filter: f => usableProtein(f) && f._d.protein100 >= 8,
-      desc: 'Ce procent din calorii vine din proteină. Filtrat la minim 8 g/100 g, ' +
-        'altfel salata verde ar câștiga cu 0,9 g de proteină. Colagenul e exclus: ' +
-        'ajunge la 100%, dar fără triptofan nu contează.'
+      filter: f => usableProtein(f) && f._d.protein100 >= 8
     },
     {
       key: 'value',
       icon: '💰',
-      title: 'board.value',
-      unit: 'lei / 100 g P',
       color: 'var(--stat-value)',
       value: f => f._d.ronPer100gProtein,
       asc: true,
-      display: f => (f._d.priceVerified ? '' : '≈') + fmt.num(f._d.ronPer100gProtein, 1) + ' lei',
-      filter: f => usableProtein(f) && f._d.ronPer100gProtein !== null && f._d.protein100 >= 5,
-      desc: 'Cât te costă 100 g de proteină pură. ATENȚIE: toate prețurile sunt ' +
-        'estimări (±20–30%), nu prețuri de raft. Ordinea e aproape sigur corectă — ' +
-        'diferența dintre linte și un baton proteic e de 20×, nu de 5%.'
+      display: f =>
+        (f._d.priceVerified ? '' : '≈') + fmt.num(f._d.ronPer100gProtein, 1) +
+        ' ' + t('misc.currency'),
+      filter: f => usableProtein(f) && f._d.ronPer100gProtein !== null && f._d.protein100 >= 5
     },
     {
       key: 'serving',
       icon: '🍽️',
-      title: 'board.serving',
-      unit: 'g / porție',
       color: 'var(--macro-protein)',
       value: f => f._d.perServing.protein,
       display: f => fmt.num(f._d.perServing.protein, 1) + ' g',
-      filter: usableProtein,
-      desc: 'Proteina dintr-o porție realistă — nu din 100 g teoretice.'
+      filter: usableProtein
     },
     {
       key: 'instant',
       icon: '⚡',
-      title: 'board.instant',
-      unit: 'g / 100 g',
       color: 'var(--stat-convenience)',
       value: f => f._d.protein100,
       display: f => fmt.num(f._d.protein100, 1) + ' g',
-      filter: f => usableProtein(f) && f.timeMin === 0 && f.effort === 0,
-      desc: 'Zero gătit, zero încălzit. Deschizi și mănânci.'
+      filter: f => usableProtein(f) && f.timeMin === 0 && f.effort === 0
     },
     {
       key: 'lowkcal',
       icon: '🪶',
-      title: 'board.lowkcal',
-      unit: 'g P / 100 kcal',
       color: 'var(--stat-leanness)',
       value: f => f._d.proteinPer100kcal,
       display: f => fmt.num(f._d.proteinPer100kcal, 1) + ' g',
-      filter: f => usableProtein(f) && f._d.protein100 >= 8,
-      desc: 'Cea mai multă proteină pentru fiecare 100 de calorii. Regele deficitului caloric.'
+      filter: f => usableProtein(f) && f._d.protein100 >= 8
     },
     {
       key: 'taste',
       icon: '😋',
-      title: 'board.taste',
-      unit: 'scor gust',
       color: 'var(--stat-taste)',
       value: f => f._d.bars.taste,
       display: f => Math.round(f._d.bars.taste) + '/100',
-      filter: f => usableProtein(f) && f._d.protein100 >= 12,
-      desc: 'Cele mai plăcute surse de proteină. Filtrate la minim 12 g/100 g, ' +
-        'ca să nu câștige ciocolata.'
+      filter: f => usableProtein(f) && f._d.protein100 >= 12
     },
     {
       key: 'satiety',
       icon: '🛑',
-      title: 'board.satiety',
-      unit: 'scor sațietate',
       color: 'var(--stat-satiety)',
       value: f => f._d.bars.satiety,
-      display: f => Math.round(f._d.bars.satiety) + '/100',
-      desc: 'Ce îți taie foamea cel mai mult, raportat la calorii.'
+      display: f => Math.round(f._d.bars.satiety) + '/100'
     },
     {
       key: 'lean',
       icon: '🥩',
-      title: 'board.lean',
-      unit: '% kcal fără grăsime',
       color: 'var(--stat-leanness)',
       value: f => f._d.bars.leanness,
       display: f => Math.round(f._d.bars.leanness) + '%',
-      filter: f => usableProtein(f) && f._d.protein100 >= 12,
-      desc: 'Cele mai slabe surse de proteină din atlas.'
+      filter: f => usableProtein(f) && f._d.protein100 >= 12
     },
     {
       key: 'local',
       icon: '🏛️',
-      title: 'board.local',
-      unit: 'g / 100 g',
       color: 'var(--tier-s)',
       value: f => f._d.protein100,
       display: f => fmt.num(f._d.protein100, 1) + ' g',
       filter: f =>
         (f.tags || []).indexOf('local-sibiu') !== -1 ||
-        (f.stores || []).some(s => s.name === 'Piața Cibin' || s.name === 'Măcelărie locală'),
-      desc: 'Ce poți lua din Piața Cibin, de la măcelării și de la producătorii locali.'
+        (f.stores || []).some(s => s.name === 'Piața Cibin' || s.name === 'Măcelărie locală')
     }
   ];
 
@@ -183,11 +158,11 @@
       '<section class="pf-board">' +
       '<header class="pf-board__head" style="--c:' + board.color + '">' +
       '<span class="pf-board__icon">' + board.icon + '</span>' +
-      '<span class="pf-board__title">' + t(board.title) + '</span>' +
-      '<span class="pf-board__unit">' + fmt.esc(board.unit) + '</span>' +
+      '<span class="pf-board__title">' + fmt.esc(title(board)) + '</span>' +
+      '<span class="pf-board__unit">' + fmt.esc(unit(board)) + '</span>' +
       '</header>' +
       '<p class="pf-muted" style="font-size:var(--fs-3xs);padding:var(--sp-2) var(--sp-4) 0;line-height:1.45">' +
-      fmt.esc(board.desc) + '</p>' +
+      fmt.esc(desc(board)) + '</p>' +
       '<div class="pf-board__list">' + rows + '</div>' +
       '</section>'
     );
@@ -209,7 +184,8 @@
     const histo =
       '<section class="pf-panel" style="margin-bottom:var(--sp-4)">' +
       '<div class="pf-panel__head"><span class="pf-panel__title">' +
-      'Distribuția proteinei · ' + foods.length + ' produse</span></div>' +
+      fmt.esc(t('board.histo') + ' · ' + foods.length + ' ' + t('misc.products')) +
+      '</span></div>' +
       '<div class="pf-panel__body">' +
       PF.charts.histogram(proteins, 26, Math.max.apply(null, proteins)) +
       '<div class="pf-range__scale" style="margin-top:6px"><span>0 g</span><span>' +

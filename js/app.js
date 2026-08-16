@@ -201,19 +201,21 @@
     el.innerHTML =
       '<div class="pf-hero__top">' +
       '<div class="pf-grow">' +
-      '<div class="pf-eyebrow">Sibiu · ' + summary.count + ' produse · ' +
-      Object.keys(summary.categories).length + ' categorii · ' +
-      summary.storeList.length + ' magazine</div>' +
+      '<div class="pf-eyebrow">' + PF.i18n.tf('hero.eyebrow', {
+        n: summary.count,
+        c: Object.keys(summary.categories).length,
+        s: summary.storeList.length
+      }) + '</div>' +
       '<h1 class="pf-hero__title">Atlasul <em>Proteinelor</em></h1>' +
       '<p class="pf-hero__sub">' + t('app.heroLead') + '</p>' +
       '<div class="pf-hero__stats">' +
-      kpi('protein', fmt.num(summary.maxProtein, 0) + ' g', 'max proteină/100g') +
-      kpi('ready', summary.readyToEat, 'gata de mâncat') +
+      kpi('protein', fmt.num(summary.maxProtein, 0) + ' g', t('kpi.protein')) +
+      kpi('ready', summary.readyToEat, t('kpi.ready')) +
       kpi('cheap',
         summary.cheapest ? fmt.num(summary.cheapest._d.ronPer100gProtein, 1) : '—',
-        'lei/100g proteină min') +
-      kpi('stores', summary.storeList.length, 'magazine') +
-      kpi('cats', summary.tiers.S + summary.tiers.A, 'produse rang S+A') +
+        t('kpi.value')) +
+      kpi('stores', summary.storeList.length, t('kpi.stores')) +
+      kpi('cats', summary.tiers.S + summary.tiers.A, t('kpi.tier')) +
       '</div>' +
       '</div>' +
 
@@ -233,7 +235,7 @@
       '<span>' + t('calc.perDay') + '</span>' +
       '<div class="pf-calc__split">' +
       '<div><b>' + target.min + '</b>min</div>' +
-      '<div><b>' + target.target + '</b>țintă</div>' +
+      '<div><b>' + target.target + '</b>' + t('calc.targetShort') + '</div>' +
       '<div><b>' + target.max + '</b>max</div>' +
       '<div><b>' + target.perMeal + '</b>' + t('calc.perMeal') + '</div>' +
       '</div>' +
@@ -343,7 +345,7 @@
       '<span class="pf-grow"></span>' +
       '<span class="pf-select pf-select--sm"><select id="pf-sort" aria-label="' +
       t('sort.label') + '">' + sortOptions + '</select></span>' +
-      '<button class="pf-iconbtn" data-act="flip-dir" title="Inversează ordinea">' +
+      '<button class="pf-iconbtn" data-act="flip-dir" title="' + t('sort.flip') + '">' +
       (PF.filters.state.dir === 'desc' ? '↓' : '↑') + '</button>';
   }
 
@@ -408,9 +410,11 @@
     const more =
       visible.length > renderLimit
         ? '<div class="pf-text-center" style="grid-column:1/-1;padding:var(--sp-6)">' +
-          '<button class="pf-btn pf-btn--lg" data-act="more">Încarcă încă ' +
-          Math.min(PAGE, visible.length - renderLimit) + ' produse ' +
-          '<span class="pf-muted">(' + (visible.length - renderLimit) + ' rămase)</span></button>' +
+          '<button class="pf-btn pf-btn--lg" data-act="more">' +
+          PF.i18n.tf('res.loadMore', { n: Math.min(PAGE, visible.length - renderLimit) }) + ' ' +
+          '<span class="pf-muted">' +
+          PF.i18n.tf('res.remaining', { n: visible.length - renderLimit }) +
+          '</span></button>' +
           '</div>'
         : '';
 
@@ -483,11 +487,16 @@
       '</div>' +
       '</div></section>' +
       '<section class="pf-panel pf-mt-4"><div class="pf-panel__head">' +
-      '<span class="pf-panel__title">Distribuția proteinei</span></div>' +
+      '<span class="pf-panel__title">' + t('board.histo') + '</span></div>' +
       '<div class="pf-panel__body">' +
       PF.charts.histogram(visible.map(f => f._d.protein100), 30,
         Math.max.apply(null, visible.map(f => f._d.protein100))) +
-      '</div></section>';
+      '</div></section>' +
+
+      /* The store guide sits at the bottom of this view because the view
+       * answers "where does everything sit" — and the last question that
+       * follows from a landscape is "so where do I go to buy it". */
+      '<div class="pf-mt-4">' + PF.stores.render() + '</div>';
   }
 
   /* =======================================================================
@@ -872,7 +881,7 @@
       '<span>' + t('calc.perDay') + '</span>' +
       '<div class="pf-calc__split">' +
       '<div><b>' + target.min + '</b>min</div>' +
-      '<div><b>' + target.target + '</b>țintă</div>' +
+      '<div><b>' + target.target + '</b>' + t('calc.targetShort') + '</div>' +
       '<div><b>' + target.max + '</b>max</div>' +
       '<div><b>' + target.perMeal + '</b>' + t('calc.perMeal') + '</div>' +
       '</div>';
@@ -1125,6 +1134,10 @@
   PF.app = {
     boot: boot,
     refresh: refresh,
+    /* Re-render just the current view. Cheaper than refresh(): skips filtering
+     * all 512 products and rebuilding the rail. For views that own their own
+     * local state (the recipes fridge, for one) that work is pure waste. */
+    repaint: renderView,
     toast: toast,
     addToTray: addToTray,
     toggleFav: toggleFav,

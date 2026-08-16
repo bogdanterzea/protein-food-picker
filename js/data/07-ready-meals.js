@@ -1,7 +1,7 @@
 /* =========================================================================
  * PROTEIN ATLAS SIBIU — READY MEALS, FROZEN & EATING OUT
  * File: js/data/07-ready-meals.js
- * Items: 60
+ * Items: 61
  * Category slug: ready-meals
  * ID prefix: r-
  * Last researched: 2026-08
@@ -282,7 +282,7 @@
         grams: 250,
         label: '1 bol întreg (250 g)'
       },
-      effort: 0,
+      effort: 1,
       timeMin: 2,
       activeTimeMin: 2,
       cooking: {
@@ -322,7 +322,7 @@
         beforeBed: 2
       },
       timingNote: 'Prânz bun în zilele de cutting, dar prea sărac în calorii pentru un post-workout serios.',
-      tags: ['ready-to-eat', 'grab-and-go', 'no-cook', 'office-lunch', 'cutting', 'low-kcal', 'mid-price'],
+      tags: ['ready-to-eat', 'grab-and-go', 'no-cook', 'office-lunch', 'cutting', 'mid-price'],
       diet: {
         vegan: false,
         vegetarian: false,
@@ -434,7 +434,7 @@
         beforeBed: 2
       },
       timingNote: 'Fibrele + proteina îl fac cel mai bun prânz de birou din categoria asta.',
-      tags: ['ready-to-eat', 'grab-and-go', 'no-cook', 'office-lunch', 'high-fiber', 'omega3', 'cutting', 'mid-price'],
+      tags: ['ready-to-eat', 'grab-and-go', 'no-cook', 'office-lunch', 'omega3', 'cutting', 'mid-price'],
       diet: {
         vegan: false,
         vegetarian: false,
@@ -1004,7 +1004,7 @@
         beforeBed: 3
       },
       timingNote: 'Cazeina din brânzeturile maturate se digeră lent — acceptabil seara, dezastruos ca pre-workout.',
-      tags: ['ready-to-eat', 'no-cook', 'high-protein', 'calcium-rich', 'high-kcal', 'premium', 'slow-digesting'],
+      tags: ['ready-to-eat', 'no-cook', 'high-protein', 'calcium-rich', 'high-kcal', 'premium', 'slow-digesting', 'high-sodium'],
       diet: {
         vegan: false,
         vegetarian: true,
@@ -1020,7 +1020,7 @@
         'La Piața Cibin, 100 g de telemea de oaie costă ~4 lei față de ~17 lei porția din platou. Diferența e doar în ambalaj.',
         'Pune platoul pe o farfurie și pune restul înapoi în frigider imediat — altfel dispar 200 g fără să realizezi.'
       ],
-      warnings: ['Conține lapte. Grăsimi saturate foarte mari și sodiu ridicat.'],
+      warnings: ['1,8 g sare la 100 g — porția de 100 g acoperă o treime din maximul zilnic de sare. Brânzeturile maturate sunt cele mai sărate din platou.', 'Conține lapte. Grăsimi saturate foarte mari și sodiu ridicat.'],
       storage: 'Frigider 2–6 °C, se consumă în 3 zile după deschidere.',
       shelfLife: '~10 zile sigilat',
       dataConfidence: 'medium',
@@ -1111,7 +1111,7 @@
         beforeBed: 2
       },
       timingNote: 'Gustare de după-amiază bună pentru fibre, nu pentru proteină.',
-      tags: ['ready-to-eat', 'grab-and-go', 'no-cook', 'high-fiber', 'portable', 'mid-price', 'processed'],
+      tags: ['ready-to-eat', 'grab-and-go', 'no-cook', 'portable', 'mid-price', 'processed'],
       diet: {
         vegan: true,
         vegetarian: true,
@@ -1239,8 +1239,8 @@
 
     {
       id: 'r-pui-rotisor-intreg',
-      name: 'Whole Rotisserie Chicken',
-      nameRo: 'Pui întreg la rotisor',
+      name: 'Rotisserie Chicken (Whole or Half)',
+      nameRo: 'Pui la rotisor, întreg sau jumătate',
       brand: 'Kaufland Grill / Carrefour bistro',
       category: 'ready-meals',
       subcategory: 'Bistro & rotiserie din supermarket',
@@ -1255,6 +1255,15 @@
           packGrams: 1100,
           packLabel: 'pui întreg gătit ~1,1 kg',
           note: 'Cel mai bun raport proteină/leu din toată categoria.'
+        },
+        {
+          name: 'Kaufland',
+          availability: 'always',
+          aisle: 'Kaufland Grill, vitrina caldă de la intrare',
+          priceRon: 22,
+          packGrams: 550,
+          packLabel: 'jumătate de pui ~550 g',
+          note: 'Formatul pentru o persoană; ~10% mai scump pe kilogram decât puiul întreg.'
         },
         {
           name: 'Carrefour',
@@ -1272,10 +1281,10 @@
           priceRon: 41.9,
           packGrams: 1100,
           packLabel: 'pui întreg gătit',
-          note: ''
+          note: 'Are și jumătăți, la ~23,9 lei.'
         }
       ],
-      sibiuNote: 'În Sibiu ai rotisor la Kaufland Șos. Alba Iulia, Kaufland Șelimbăr, Kaufland din Promenada și la Carrefour Shopping City. Cere unul din șarja proaspătă — întreabă la ce oră iese următoarea.',
+      sibiuNote: 'În Sibiu ai rotisor la Kaufland Șos. Alba Iulia, Kaufland Șelimbăr, Kaufland din Promenada și la Carrefour Shopping City. Cere unul din șarja proaspătă — întreabă la ce oră iese următoarea. La Șelimbăr jumătățile se termină primele, pentru că sunt formatul preferat al navetiștilor: du-te înainte de 17:30.',
       per100g: {
         kcal: 210,
         protein: 25,
@@ -1308,7 +1317,7 @@
           'Taie puiul în sferturi cu foarfeca, direct în caserolă.',
           'Dacă vrei mai puține calorii, scoate pielea înainte de a mânca.'
         ],
-        yieldNote: 'Pui gătit de 1,1 kg = ~750 g carne comestibilă, din care ~600 g fără piele.'
+        yieldNote: 'Pui gătit de 1,1 kg = ~750 g carne comestibilă (~600 g fără piele); jumătatea de 550 g = ~330 g carne comestibilă.'
       },
       taste: {
         profile: 'Sărat, condimentat cu boia și usturoi, piele crocantă și suculentă',
@@ -1336,7 +1345,7 @@
         beforeBed: 4
       },
       timingNote: 'Post-workout excelent dacă scoți pielea: 25 g proteină la 100 g de carne.',
-      tags: ['ready-to-eat', 'high-protein', 'cheap-protein', 'budget', 'meal-prep', 'batch-cook', 'complete-protein', 'romanian-classic'],
+      tags: ['ready-to-eat', 'cheap-protein', 'budget', 'meal-prep', 'batch-cook', 'complete-protein', 'romanian-classic', 'very-high-protein', 'protein-dense'],
       diet: {
         vegan: false,
         vegetarian: false,
@@ -1349,124 +1358,16 @@
       pairings: ['Pungă de salată mixtă', 'Orez la plic', 'Iaurt cu usturoi', 'Murături'],
       tips: [
         'Un pui de 39,90 lei îți dă ~185 g proteină totală. Asta înseamnă 0,22 lei per gram de proteină — de 5–10 ori mai ieftin decât orice altceva din categoria "mâncare gata".',
-        'Scoate pielea și scazi caloriile de la ~210 la ~165 kcal/100 g, cu proteina aproape neschimbată (27 g).',
+        'Jumătatea de 22 lei are ~75 g proteină, adică 0,29 lei/g. Convenabilă dacă locuiești singur, dar puiul întreg rămâne cu 25% mai ieftin pe gramul de proteină.',
+        'Scoate pielea și scazi caloriile de la ~210 la ~165 kcal/100 g, cu proteina aproape neschimbată (27 g). Pe o jumătate, asta înseamnă ~420 kcal în loc de 630, cu aceleași ~72 g proteină.',
         'Dezosează-l cald, în 5 minute, cât e încă moale. Carnea desprinsă se păstrează 3 zile la frigider și îți face 3 prânzuri.',
         'Nu lua puiul care stă de 3 ore sub lampă: pielea e cauciucată și carnea uscată. Întreabă când iese următoarea șarjă.'
       ],
-      warnings: ['Sodiu ridicat de la saramura de injectare (1,3 g sare/100 g). Riscul principal e cel de siguranță alimentară: puiul ținut sub 60 °C ore în șir.'],
+      warnings: ['Sodiu ridicat de la saramura de injectare (1,3 g sare/100 g): porția de 250 g aduce 3,2 g sare, peste jumătate din maximul zilnic.', 'Riscul principal e cel de siguranță alimentară: puiul ținut sub 60 °C ore în șir sub lampă. Nu îl lăsa în mașină vara — carnea caldă în caserolă închisă e un incubator.'],
       storage: 'Consumă în 2 ore de la cumpărare sau răcește rapid și ține la frigider maxim 3 zile.',
       shelfLife: '3 zile la frigider după dezosare',
       dataConfidence: 'medium',
       sources: ['Kaufland Grill meniu 2026', 'valori USDA pui la rotisor cu piele']
-    },
-
-    {
-      id: 'r-jumatate-pui-rotisor',
-      name: 'Half Rotisserie Chicken',
-      nameRo: 'Jumătate de pui la rotisor',
-      brand: 'Kaufland Grill',
-      category: 'ready-meals',
-      subcategory: 'Bistro & rotiserie din supermarket',
-      emoji: '🐔',
-      unit: 'g',
-      stores: [
-        {
-          name: 'Kaufland',
-          availability: 'always',
-          aisle: 'Kaufland Grill, vitrina caldă de la intrare',
-          priceRon: 22,
-          packGrams: 550,
-          packLabel: 'jumătate de pui ~550 g',
-          note: 'Formatul potrivit pentru o persoană singură.'
-        },
-        {
-          name: 'Auchan',
-          availability: 'usual',
-          aisle: 'Zona de preparate calde',
-          priceRon: 23.9,
-          packGrams: 550,
-          packLabel: 'jumătate de pui',
-          note: ''
-        }
-      ],
-      sibiuNote: 'La Kaufland Șelimbăr jumătățile se termină primele, pentru că sunt formatul preferat al navetiștilor. Du-te înainte de 17:30.',
-      per100g: {
-        kcal: 210,
-        protein: 25,
-        carbs: 0.5,
-        sugars: 0.3,
-        fat: 12,
-        satFat: 3.5,
-        fiber: 0,
-        salt: 1.3
-      },
-      micros: {
-        b12Ug: 0.4,
-        zincMg: 1.8,
-        potassiumMg: 280,
-        cholesterolMg: 95
-      },
-      serving: {
-        grams: 300,
-        label: 'jumătate de pui, carne comestibilă (~300 g)'
-      },
-      effort: 0,
-      timeMin: 2,
-      activeTimeMin: 2,
-      cooking: {
-        method: 'none',
-        difficulty: 'none',
-        equipment: ['furculiță'],
-        steps: [],
-        yieldNote: 'Jumătate de pui de 550 g = ~330 g carne comestibilă cu piele.'
-      },
-      taste: {
-        profile: 'Identic cu puiul întreg: sărat, condimentat, cu piele rumenită',
-        intensity: 4,
-        sweetness: 1,
-        saltiness: 4,
-        umami: 4,
-        richness: 4,
-        texture: 'Fragedă, cu piele crocantă dacă e proaspăt scos',
-        notes: 'Aceeași calitate ca puiul întreg, dar plătești cu ~10% mai mult pe kg.'
-      },
-      stats: {
-        taste: 85,
-        satiety: 88,
-        convenience: 92,
-        versatility: 85
-      },
-      timing: {
-        breakfast: 2,
-        preWorkout: 2,
-        postWorkout: 5,
-        lunch: 5,
-        snack: 3,
-        dinner: 5,
-        beforeBed: 4
-      },
-      timingNote: 'Cea mai rapidă masă cu 70+ g proteină pe care o poți cumpăra în Sibiu.',
-      tags: ['ready-to-eat', 'high-protein', 'cheap-protein', 'budget', 'complete-protein', 'post-workout', 'romanian-classic'],
-      diet: {
-        vegan: false,
-        vegetarian: false,
-        glutenFree: true,
-        lactoseFree: true,
-        keto: true,
-        halal: false,
-        porkFree: true
-      },
-      pairings: ['Salată verde la pungă', 'Cartofi la cuptor', 'Iaurt cu usturoi', 'Castraveți murați'],
-      tips: [
-        'Jumătate de pui = ~75 g proteină pentru 22 lei, adică 0,29 lei/g proteină. Doar puiul întreg bate cifra asta.',
-        'Împarte-o în două: jumătate acum, jumătate mâine în salată. Ai două mese cu 35 g proteină fiecare.',
-        'Dacă vrei cutting, ia doar pieptul și pulpa fără piele — cobori de la 630 kcal la ~420 kcal păstrând 72 g proteină.'
-      ],
-      warnings: ['Sodiu ridicat. Nu o lăsa în mașină vara — carnea caldă în caserolă închisă e un incubator.'],
-      storage: 'Frigider maxim 3 zile după răcire rapidă.',
-      shelfLife: 'Se mănâncă în ziua cumpărării, ideal',
-      dataConfidence: 'medium',
-      sources: ['Kaufland Grill meniu 2026', 'valori USDA pui la rotisor']
     },
 
     {
@@ -1664,7 +1565,7 @@
         beforeBed: 2
       },
       timingNote: 'Digestie lentă din cauza grăsimii — evită cu 2 ore înainte de antrenament.',
-      tags: ['ready-to-eat', 'high-protein', 'high-kcal', 'bulking', 'romanian-classic', 'mid-price', 'high-sodium'],
+      tags: ['ready-to-eat', 'high-kcal', 'bulking', 'romanian-classic', 'mid-price', 'high-sodium', 'very-high-protein'],
       diet: {
         vegan: false,
         vegetarian: false,
@@ -1680,7 +1581,7 @@
         'Cere bucata din mijlocul tăvii, nu de la margine: marginile stau cel mai mult și se usucă.',
         'Dacă vrei aceleași 52 g proteină cu 200 kcal mai puțin, ia pulpe de pui dezosate de la aceeași vitrină.'
       ],
-      warnings: ['Grăsimi saturate ridicate. Carne de porc — nu e halal.'],
+      warnings: ['Grăsimi saturate ridicate. Carne de porc — nu e halal.', '1,4 g sare la 100 g: porția de 200 g aduce 2,8 g sare, jumătate din maximul zilnic.'],
       storage: 'Se mănâncă imediat. La frigider maxim 2 zile.',
       shelfLife: 'Aceeași zi',
       dataConfidence: 'low',
@@ -1892,7 +1793,7 @@
         'Stoarce lămâie peste el: acidul taie senzația de ulei vechi de la vitrina caldă.',
         'Dacă îl iei acasă, reîncălzește-l 6 minute la airfryer 180 °C — revine complet. Microundele îl transformă în burete.'
       ],
-      warnings: ['Conține gluten, ou și lapte. Uleiul din vitrinele de supermarket e reutilizat de multe ori.'],
+      warnings: ['Conține gluten, ou și lapte. Uleiul din vitrinele de supermarket e reutilizat de multe ori.', '1,4 g sare la 100 g — cele două șnițele de la raftul cald înseamnă 2,5 g sare.'],
       storage: 'Frigider maxim 24 h.',
       shelfLife: 'Aceeași zi, ideal',
       dataConfidence: 'low',
@@ -1979,7 +1880,7 @@
         beforeBed: 1
       },
       timingNote: 'Mai mult confort decât nutriție — 22% din calorii din proteină.',
-      tags: ['high-protein', 'ready-to-eat', 'processed', 'romanian-classic', 'kid-friendly', 'high-kcal', 'budget'],
+      tags: ['high-protein', 'ready-to-eat', 'processed', 'romanian-classic', 'kid-friendly', 'high-kcal', 'budget', 'high-sodium'],
       diet: {
         vegan: false,
         vegetarian: false,
@@ -1995,7 +1896,7 @@
         'Chiftelele de bistro conțin de regulă 20–30% pâine și cartof — de aceea proteina cade la 15 g/100 g față de 19 g la carnea tocată simplă.',
         'Reci sunt surprinzător de bune într-o lipie cu iaurt și castraveți — masă de birou improvizată.'
       ],
-      warnings: ['Conțin gluten, ou și de obicei carne de porc.'],
+      warnings: ['1,5 g sare la 100 g înseamnă 3 g sare pe porția de 200 g — jumătate din maximul zilnic recomandat, dintr-un singur fel.', 'Conțin gluten, ou și de obicei carne de porc.'],
       storage: 'Frigider maxim 2 zile.',
       shelfLife: 'Aceeași zi, ideal',
       dataConfidence: 'low',
@@ -2196,7 +2097,7 @@
         beforeBed: 2
       },
       timingNote: 'Fibrele din varză + grăsimea din ciolan țin de foame 4–5 ore.',
-      tags: ['ready-to-eat', 'microwave', 'high-fiber', 'romanian-classic', 'winter', 'budget', 'high-sodium'],
+      tags: ['ready-to-eat', 'microwave', 'romanian-classic', 'winter', 'budget', 'high-sodium'],
       diet: {
         vegan: false,
         vegetarian: false,
@@ -2306,7 +2207,7 @@
         beforeBed: 3
       },
       timingNote: 'Post-workout foarte bun: 48 g proteină la 388 kcal.',
-      tags: ['ready-to-eat', 'high-protein', 'post-workout', 'meal-prep', 'complete-protein', 'mid-price'],
+      tags: ['ready-to-eat', 'high-protein', 'post-workout', 'meal-prep', 'complete-protein', 'mid-price', 'protein-dense'],
       diet: {
         vegan: false,
         vegetarian: false,
@@ -2428,7 +2329,7 @@
         beforeBed: 3
       },
       timingNote: 'Fibre + proteină + amidon lent: cea mai sățioasă conservă din raft.',
-      tags: ['ready-to-eat', 'shelf-stable', 'microwave', 'high-fiber', 'cheap-protein', 'budget', 'romanian-classic', 'local-sibiu', 'winter'],
+      tags: ['ready-to-eat', 'shelf-stable', 'microwave', 'cheap-protein', 'budget', 'romanian-classic', 'local-sibiu', 'winter'],
       diet: {
         vegan: false,
         vegetarian: false,
@@ -2540,7 +2441,7 @@
         beforeBed: 2
       },
       timingNote: 'Cină de iarnă rapidă; prea sărată ca să o mănânci des.',
-      tags: ['ready-to-eat', 'shelf-stable', 'microwave', 'high-fiber', 'budget', 'romanian-classic', 'local-sibiu', 'winter', 'high-sodium'],
+      tags: ['ready-to-eat', 'shelf-stable', 'microwave', 'budget', 'romanian-classic', 'local-sibiu', 'winter', 'high-sodium'],
       diet: {
         vegan: false,
         vegetarian: false,
@@ -2660,7 +2561,7 @@
         beforeBed: 3
       },
       timingNote: 'Cea mai ieftină masă caldă cu 28 g proteină pe care o poți cumpăra în Sibiu.',
-      tags: ['ready-to-eat', 'shelf-stable', 'microwave', 'high-fiber', 'cheap-protein', 'budget', 'local-sibiu', 'romanian-classic'],
+      tags: ['ready-to-eat', 'shelf-stable', 'microwave', 'cheap-protein', 'budget', 'local-sibiu', 'romanian-classic'],
       diet: {
         vegan: false,
         vegetarian: false,
@@ -3128,7 +3029,7 @@
         'Colagenul din burtă are un profil de aminoacizi incomplet (fără triptofan) — nu contează la fel ca proteina din carne.',
         'Dacă vrei ciorbă cu proteină reală, ia ciorbă de perișoare sau supă de pui cu carne multă și adaugă piept de pui feliat.'
       ],
-      warnings: ['4 g sare per conservă. Grăsime ridicată. Conține lapte (smântână).'],
+      warnings: ['Proteina din burtă este în mare parte colagen — fără triptofan, deci nu o socoti integral la ținta zilnică. Din cele 19,6 g pe conservă, contează pentru mușchi mult mai puțin.', '4 g sare per conservă. Grăsime ridicată. Conține lapte (smântână).'],
       storage: 'Loc uscat. După deschidere, frigider, maxim 48 h.',
       shelfLife: '~2 ani sigilat',
       dataConfidence: 'medium',
@@ -3338,7 +3239,7 @@
         beforeBed: 3
       },
       timingNote: 'Carbohidrați lenți + fibre: cel mai bun prânz vegetal shelf-stable.',
-      tags: ['ready-to-eat', 'shelf-stable', 'no-cook', 'high-fiber', 'cheap-protein', 'budget', 'iron-rich', 'office-lunch'],
+      tags: ['ready-to-eat', 'shelf-stable', 'no-cook', 'cheap-protein', 'budget', 'iron-rich', 'office-lunch'],
       diet: {
         vegan: true,
         vegetarian: true,
@@ -3458,7 +3359,7 @@
         beforeBed: 3
       },
       timingNote: 'Indice glicemic mic — energie stabilă câteva ore.',
-      tags: ['ready-to-eat', 'shelf-stable', 'no-cook', 'high-fiber', 'cheap-protein', 'iron-rich', 'budget', 'low-fat'],
+      tags: ['ready-to-eat', 'shelf-stable', 'no-cook', 'cheap-protein', 'iron-rich', 'budget', 'low-fat'],
       diet: {
         vegan: true,
         vegetarian: true,
@@ -3944,7 +3845,7 @@
         'La airfryer nu ai nevoie de ulei deloc — economisești 80–100 kcal față de prăjire.',
         'Alternativă cu profil dublu mai bun: aceleași 375 kcal în cordon bleu îți dau 34 g proteină.'
       ],
-      warnings: ['Conțin gluten. Procent de carne variabil (45–65%) — citește eticheta.'],
+      warnings: ['Conțin gluten. Procent de carne variabil (45–65%) — citește eticheta.', '1,3 g sare la 100 g — porția de 8 nuggets aduce ~2 g sare.'],
       storage: 'Congelator -18 °C.',
       shelfLife: '~18 luni la -18 °C',
       dataConfidence: 'medium',
@@ -4051,7 +3952,7 @@
         'Caută pe pungă "din piept de pui întreg" — variantele din carne formată au 3–4 g mai puțină proteină la 100 g.',
         'Airfryer 190 °C, 15 minute: cel mai bun rezultat, fără ulei.'
       ],
-      warnings: ['Conține gluten și ou. Nu-l mânca dacă interiorul nu e complet fierbinte.'],
+      warnings: ['Conține gluten și ou. Nu-l mânca dacă interiorul nu e complet fierbinte.', '1,2 g sare la 100 g: cele 2 șnițele (200 g) aduc 2,4 g sare, înainte de garnitură și sosuri.'],
       storage: 'Congelator -18 °C.',
       shelfLife: '~12 luni la -18 °C',
       dataConfidence: 'medium',
@@ -4612,7 +4513,7 @@
         beforeBed: 3
       },
       timingNote: 'Puține calorii, multă proteină relativ: excelent în perioade de cutting.',
-      tags: ['frozen', 'high-fiber', 'low-kcal', 'cutting', 'meal-prep', 'mid-price'],
+      tags: ['frozen', 'low-kcal', 'cutting', 'meal-prep', 'mid-price'],
       diet: {
         vegan: false,
         vegetarian: false,
@@ -4724,7 +4625,7 @@
         beforeBed: 2
       },
       timingNote: 'Cazeină cu digestie lentă, dar cu multă grăsime saturată la pachet.',
-      tags: ['frozen', 'high-protein', 'calcium-rich', 'high-kcal', 'processed', 'slow-digesting', 'mid-price'],
+      tags: ['frozen', 'high-protein', 'calcium-rich', 'high-kcal', 'processed', 'slow-digesting', 'mid-price', 'high-sodium'],
       diet: {
         vegan: false,
         vegetarian: true,
@@ -4740,7 +4641,7 @@
         'Airfryer, nu ulei: prăjit în baie de ulei ajunge la peste 380 kcal la 100 g.',
         'Ca variantă vegetariană cu jumătate de calorii: 200 g brânză de vaci degresată dă aceleași 27 g proteină la 180 kcal.'
       ],
-      warnings: ['Conține lapte, gluten și ou. Grăsimi saturate foarte mari.'],
+      warnings: ['1,6 g sare la 100 g: porția de 150 g aduce 2,4 g sare, pe lângă 13,5 g grăsimi saturate.', 'Conține lapte, gluten și ou. Grăsimi saturate foarte mari.'],
       storage: 'Congelator -18 °C. Nu recongela.',
       shelfLife: '~12 luni la -18 °C',
       dataConfidence: 'medium',
@@ -4831,7 +4732,7 @@
         beforeBed: 2
       },
       timingNote: 'Nu contează în bugetul tău de proteină. Este apă caldă cu sare.',
-      tags: ['shelf-stable', 'low-kcal', 'budget', 'processed', 'high-sodium', 'winter'],
+      tags: ['shelf-stable', 'budget', 'processed', 'high-sodium', 'winter'],
       diet: {
         vegan: false,
         vegetarian: true,
@@ -5412,7 +5313,7 @@
         beforeBed: 1
       },
       timingNote: 'Calorii goale — nu are ce căuta într-un plan de proteină.',
-      tags: ['shelf-stable', 'budget', 'processed', 'high-sodium', 'high-kcal', 'low-kcal'],
+      tags: ['shelf-stable', 'budget', 'processed', 'high-sodium', 'high-kcal'],
       diet: {
         vegan: false,
         vegetarian: false,
@@ -5803,7 +5704,7 @@
         beforeBed: 3
       },
       timingNote: 'Cea mai bună opțiune de cutting din tot food court-ul sibian.',
-      tags: ['ready-to-eat', 'low-kcal', 'cutting', 'office-lunch', 'processed', 'premium'],
+      tags: ['ready-to-eat', 'low-kcal', 'cutting', 'office-lunch', 'processed', 'premium', 'protein-dense'],
       diet: {
         vegan: false,
         vegetarian: false,
@@ -6106,7 +6007,7 @@
         'Sosurile dulci (BBQ, curry) adaugă 50–70 kcal fiecare, aproape numai din zahăr.',
         'Cu aceiași 30 de lei, 5 Crispy Strips de la KFC îți dau aceeași proteină la 130 kcal mai puțin.'
       ],
-      warnings: ['Conține gluten. Grăsime egală cu proteina în grame.'],
+      warnings: ['Conține gluten. Grăsime egală cu proteina în grame.', '1,2 g sare la 100 g: cutia de 9 bucăți are ~1,9 g sare, plus 0,5–1 g din sosul de muiat.'],
       storage: 'Se mănâncă imediat.',
       shelfLife: 'Aceeași masă',
       dataConfidence: 'medium',
@@ -6297,7 +6198,7 @@
         'Cere "dublu pui" (+15–18 g proteină pentru ~12 lei) și renunță la brânză și maioneză. Ajungi la 62 g proteină sub 750 kcal.',
         'Pâinea integrală (Hearty Italian / grâu integral) adaugă 4–5 g fibre față de cea albă, la același preț.'
       ],
-      warnings: ['Conține gluten. Sosurile cremoase pot adăuga 150–250 kcal fără proteină. Valorile depind complet de ce ceri.'],
+      warnings: ['Conține gluten. Sosurile cremoase pot adăuga 150–250 kcal fără proteină. Valorile depind complet de ce ceri.', '1,2 g sare la 100 g × 400 g = ~4,8 g sare pe sandvișul de 30 cm, adică aproape întreaga cantitate recomandată pe zi. Sosurile adaugă în plus.'],
       storage: 'Se mănâncă imediat.',
       shelfLife: 'Aceeași masă',
       dataConfidence: 'low',
@@ -6572,7 +6473,7 @@
         beforeBed: 3
       },
       timingNote: 'Cel mai bun raport proteină/calorie din food court dacă alegi dressing pe bază de iaurt.',
-      tags: ['ready-to-eat', 'high-fiber', 'cutting', 'office-lunch', 'post-workout', 'premium'],
+      tags: ['ready-to-eat', 'cutting', 'office-lunch', 'post-workout', 'premium'],
       diet: {
         vegan: false,
         vegetarian: false,

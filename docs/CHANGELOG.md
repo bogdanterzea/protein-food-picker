@@ -1,5 +1,102 @@
 # Changelog
 
+## v1.1 — august 2026
+
+O rundă de audit și consolidare, rulată de zece agenți în paralel pe fișiere
+cu proprietar exclusiv, plus integrarea făcută în sesiunea principală.
+
+### Funcționalități noi
+
+**„Ce am în frigider"** (`js/components/recipes.js`, `css/13-fridge.css`).
+Bifezi ingredientele pe care le ai în casă; fiecare masă îți arată câte
+ingrediente ai din câte îi trebuie și exact ce-ți lipsește. Se poate ordona
+după cât de aproape ești de a putea găti, iar în dosarul rețetei apare un buton
+care adaugă în listă **doar ce lipsește** — lista de cumpărături devine ce mai
+ai de cumpărat, nu o copie a rețetei. Cele 83 de ingrediente sunt grupate după
+ce contribuie efectiv, nu după raionul din atlas: broccoli și spanacul stau la
+legume, deși în atlas sunt „proteine vegetale”; laptele praf degresat stă la
+proteine, deși în magazin e pe raftul de patiserie.
+
+**Ghidul magazinelor** (`js/components/stores.js`, `css/14-stores.css`).
+`00-stores.js` descria de la început 18 retaileri din Sibiu cu puncte tari,
+puncte slabe, indice de preț, program, deschidere duminica și card de
+fidelitate — și **nimic din toate astea nu ajungea pe ecran**. Aplicația citea
+doar `name` și `color`; zece câmpuri cercetate erau greutate moartă în bundle.
+Acum sunt o fișă per magazin, cu bara de preț ancorată la media orașului, iar
+numărul de produse și cea mai ieftină proteină de la fiecare magazin se
+calculează din atlas la randare, deci nu pot să se desincronizeze.
+
+**`collagenShare`** (`js/utils/compute.js`). Penalizarea pentru colagen era
+totul-sau-nimic, aplicată după numele produsului. Jeleul proteic, care e ~1/3
+gelatină și 2/3 whey, lua factorul 0,25 pe toată intrarea și cădea la rang E.
+Acum câmpul dă o medie ponderată: jeleul urcă la D cu factorul 0,699. În sens
+invers, ciorba de burtă și șoriciul crud — colagen curat pe care regexul nu-l
+prindea — coboară la factorul corect. Exact 3 produse din 510 și-au schimbat
+scorul; restul atlasului e bit-identic.
+
+### Corecții de date — 187 de intrări modificate
+
+- **Etichete peste praguri: ~100 de eliminări.** `very-high-protein` pe băuturi
+  cu 8 g proteină, `high-protein` pe iaurturi cu 10 g, `low-fat` pe mușchi de
+  vită cu 6,5 g, `high-fiber` pe spanac cu 2,2 g, `low-kcal` pe supe de 448 kcal.
+  Aplicația derivă singură etichetele astea din numere, deci una lipsă e
+  inofensivă — dar una scrisă greșit intra în filtre și le polua.
+- **O inversare fizică:** tonul în ulei avea `omega3Mg` mai *mare* decât cel în
+  suc propriu. E invers — la sterilizare grăsimile migrează în uleiul care se
+  scurge la consum. 400 → 130.
+- **Avertismente de mercur** adăugate la somn, șalău, biban și la produsele cu
+  ton care nu aveau niciunul, cu limite săptămânale concrete.
+- **Porții imposibile:** gâsca și coastele de porc aveau porții „cu os” dar
+  macro-uri pentru carne, deci 1104 și 963 kcal pe porție.
+- **8 duplicate unificate**, printre care puiul la rotisor, care exista în trei
+  locuri cu aceleași macro-uri.
+- 29 de avertismente noi: polioli în batoane, sare pe porție (cel mai grav un
+  sandviș cu ~4,8 g), grăsimi saturate, vitamina A din pate de ficat.
+
+### Rețete: 21 → 43
+
+Toate cele șapte metode au acum 5–9 mese. Nicio masă sub 25 g proteină pe
+porție (două preexistente au fost corectate). Mediana: 41,4 g proteină la
+≈ 8,85 lei porția. Macro-urile rămân calculate din ingrediente, niciodată
+scrise de mână.
+
+### Interfață și corectitudine
+
+- **Legenda de macro dădea 99% sau 101% la 125 din 512 de produse** — cele
+  patru procente erau rotunjite independent. Acum rotunjire prin cel mai mare
+  rest, partajată între legendă și donut, ca inelul și textul de lângă el să nu
+  se poată contrazice.
+- **Dosarul de produs:** scatterul depășea coloana cu 163px pe desktop, tabelul
+  de magazine cerea derulare laterală pe toate produsele testate, subsolul mânca
+  139px pe telefon, iar săgețile furau tastele când focusul era pe o filă. Plus
+  comparație cu mediana categoriei și un indicator vizibil pentru datele cu
+  încredere scăzută.
+- **Traducerea în engleză:** 68 de scurgeri de română măsurate în browser,
+  reduse la 1 — și aceea e conținut de date, care rămâne în română intenționat.
+  Dicționarul a crescut de la 180 la 230 de chei, cu paritate RO/EN completă.
+- Textul „scorul e ajustat cu factorul 0,25” era scris de mână și contrazicea
+  bara de calitate afișată lângă el; acum citește valoarea reală.
+
+### Unelte
+
+- `tools/test-compute.js` — **154 de teste** pe scoruri și formatare, zero
+  dependențe. A prins șase bug-uri reale, printre care `enrich()` care crăpa pe
+  o intrare fără `per100g` (adică o singură intrare pe jumătate scrisă dobora
+  tot atlasul la boot) și `fmt.normalize` care putea decala `<mark>`-urile din
+  căutare.
+- `tools/check.js` — două secțiuni noi: fiecare tip de magazin trebuie să aibă
+  etichetă în ghid, iar emoji-urile din date trebuie să fie sigure pentru
+  injectare în DOM.
+
+### Cifre curente
+
+510 intrări brute, 7 perechi îmbinate, **503 produse afișate** · 8 categorii ·
+18 magazine · 43 de mese · 35 de ingrediente de cămară.
+Ranguri: S 3 · A 73 · B 161 · C 148 · D 102 · E 16.
+Încredere: 168 ridicată · 259 medie · 76 scăzută.
+
+---
+
 ## v1.0 — august 2026
 
 Prima versiune completă a Atlasului Proteinelor Sibiu.

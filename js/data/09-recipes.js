@@ -54,6 +54,11 @@
     mustar:         { name: 'Muștar',                   kcal: 66,  protein: 4.0,  carbs: 5.0, fat: 3.5,  fiber: 3.3, salt: 3.0, ronKg: 13 },
     'sos-soia':     { name: 'Sos de soia',              kcal: 53,  protein: 8.0,  carbs: 4.9, fat: 0.1,  fiber: 0.8, salt: 16.0, ronKg: 26 },
     miere:          { name: 'Miere',                    kcal: 304, protein: 0.3,  carbs: 82,  fat: 0,    fiber: 0.2, salt: 0, ronKg: 36 },
+    otet:           { name: 'Oțet (de mere sau de vin)', kcal: 21, protein: 0.1,  carbs: 0.9, fat: 0,    fiber: 0,   salt: 0.01, ronKg: 6 },
+    telina:         { name: 'Țelină rădăcină',          kcal: 42,  protein: 1.5,  carbs: 9.2, fat: 0.3,  fiber: 1.8, salt: 0.25, ronKg: 9 },
+    bors:           { name: 'Borș de tărâțe',           kcal: 10,  protein: 0.4,  carbs: 1.8, fat: 0.1,  fiber: 0.1, salt: 0.05, ronKg: 5 },
+    'porumb-conserva': { name: 'Porumb dulce boabe (conservă, scurs)', kcal: 81, protein: 2.9, carbs: 18, fat: 1.0, fiber: 2.1, salt: 0.55, ronKg: 13 },
+    'fructe-padure': { name: 'Fructe de pădure congelate', kcal: 45, protein: 0.8, carbs: 9.0, fat: 0.4, fiber: 3.5, salt: 0.01, ronKg: 24 },
     condimente:     { name: 'Sare, piper, boia, ierburi', kcal: 0, protein: 0,    carbs: 0,   fat: 0,    fiber: 0,   salt: 0, ronKg: 0 }
   };
 
@@ -652,12 +657,12 @@
       servings: 2, timeMin: 25, activeTimeMin: 15, effort: 2, difficulty: 'easy',
       equipment: ['tigaie cu capac'],
       ing: [
-        { id: 'd-oua-gaina-l', g: 220 },
+        { id: 'd-oua-gaina-l', g: 330 },
         { p: 'rosii-cutie', g: 400 },
         { p: 'ardei', g: 150 },
         { p: 'ceapa', g: 100 },
         { p: 'usturoi', g: 12 },
-        { id: 'd-telemea-vaca', g: 60 },
+        { id: 'd-telemea-vaca', g: 90 },
         { p: 'ulei-masline', g: 15 },
         { p: 'condimente', g: 5, free: true }
       ],
@@ -665,7 +670,7 @@
         'Călește ceapa și ardeiul 6–7 minute, până se înmoaie de tot.',
         'Usturoi, chimion, boia — 30 de secunde, pe foc mic.',
         'Roșiile, sare, piper. Fierbe 8 minute până sosul se îngroașă. Dacă e prea apos, ouăle vor pluti.',
-        'Fă adâncituri cu lingura și sparge câte un ou în fiecare.',
+        'Fă șase adâncituri cu lingura și sparge câte un ou în fiecare — trei de persoană, altfel nu e masă, e garnitură.',
         'Capac, foc mic, 5–7 minute. Albușul închegat, gălbenușul încă moale.',
         'Telemea sfărâmată deasupra și pătrunjel. Se mănâncă direct din tigaie, cu pâine.'
       ],
@@ -722,8 +727,8 @@
       servings: 3, timeMin: 35, activeTimeMin: 15, effort: 2, difficulty: 'easy',
       equipment: ['oală', 'oală mică'],
       ing: [
-        { id: 'v-linte-rosie-uscata', g: 220 },
-        { p: 'orez-alb', g: 150 },
+        { id: 'v-linte-rosie-uscata', g: 300 },
+        { p: 'orez-alb', g: 120 },
         { p: 'ceapa', g: 120 },
         { p: 'morcov', g: 120 },
         { p: 'usturoi', g: 15 },
@@ -820,6 +825,851 @@
         { label: 'Cu linte', text: 'Linte verde fiartă în loc de granule — textură mai bună, proteină ceva mai mică.' }
       ],
       why: 'Are gust de bolognese, costă cât o garnitură și aduce peste 30 g de proteină pe porție.'
+    },
+
+    /* ===================== GRĂTAR ===================== */
+    {
+      id: 'rc-cotlet-porc-gratar-mamaliga',
+      name: 'Cotlet de porc la grătar cu mămăligă și salată de varză',
+      emoji: '🔥', base: 'porc', method: 'grill', mealType: 'pranz',
+      servings: 3, timeMin: 40, activeTimeMin: 25, effort: 2, difficulty: 'easy',
+      equipment: ['grătar sau tigaie-grill', 'ceaun sau oală cu fund gros', 'tel', 'castron'],
+      ing: [
+        { id: 'm-cotlet-porc', g: 600 },
+        { p: 'malai', g: 150 },
+        { p: 'varza', g: 300 },
+        { p: 'ulei-masline', g: 15 },
+        { p: 'otet', g: 15 },
+        { p: 'usturoi', g: 10 },
+        { p: 'condimente', g: 6, free: true }
+      ],
+      steps: [
+        'Scoate cotletele din frigider cu 30 de minute înainte și șterge-le cu un șervet. Carnea rece și udă nu face crustă, oricât de tare ar fi grătarul.',
+        'Salata de varză se face prima: taie varza cât mai subțire, presar-o cu sare și freac-o cu mâna un minut, până lasă apă. Apoi oțet, ulei, piper. Stă și se înmoaie cât gătești restul.',
+        'Mămăliga: 600 ml apă cu sare la clocot, torni mălaiul în ploaie amestecând cu telul, apoi 10–12 minute pe foc mic, amestecând des. E gata când se desprinde de pe pereții vasului.',
+        'Încinge grătarul până o picătură de apă sare de pe el. Unge carnea cu ulei, nu grătarul — uleiul pe grătar fumegă și dă gust amar.',
+        'Cotletele 4 minute pe o parte, fără să le miști, apoi 3–4 minute pe cealaltă. Grăsimea de pe margine o ții 30 de secunde direct pe grătar, pusă pe muchie.',
+        'Gata la 63 °C în centru, cu miezul ușor roz. Fără termometru: apăsat cu degetul, cotletul e ferm dar încă cedează puțin.',
+        'Odihnă 5 minute pe un tocător cald, cu usturoiul tocat și un strop de ulei peste. Abia apoi tai.'
+      ],
+      tips: [
+        'Cotletul e a doua cea mai slabă bucată de porc după mușchiuleț: 21 g proteină la 100 g, față de 17,5 g la ceafă, și cu o treime din grăsime.',
+        'Grătarul trebuie să fie fierbinte ÎNAINTE de carne. Pe un grătar călduț, carnea lasă apă, se fierbe în ea și rămâne cenușie.',
+        'Varza frecată cu sare pierde apa care altfel ar dilua dressingul. Un minut de frecat schimbă complet textura salatei.'
+      ],
+      swaps: [
+        { label: 'Fără grătar', text: 'Tigaie-grill din fontă bine încinsă, aceiași timpi. Pornește hota înainte, nu după.' },
+        { label: 'Mai ieftin', text: 'Ceafă de porc: gust mai bun și preț mai mic, dar 250 kcal la 100 g față de 163 și cu 3,5 g mai puțină proteină.' },
+        { label: 'Fără mămăligă', text: 'Cartofi copți în coajă direct pe jarul de la margine, 35 de minute. Zero vase în plus.' }
+      ],
+      why: 'Grătarul de duminică făcut cu bucata slabă, nu cu ceafa. Aceeași masă, cu 40 % mai puține calorii și mai multă proteină.'
+    },
+
+    {
+      id: 'rc-frigarui-vita-gratar-bulgur',
+      name: 'Frigărui de vită la grătar cu bulgur și legume',
+      emoji: '🍢', base: 'vita', method: 'grill', mealType: 'cina',
+      servings: 3, timeMin: 50, activeTimeMin: 25, effort: 3, difficulty: 'medium',
+      equipment: ['grătar', 'frigărui de metal sau de lemn', 'oală mică', 'castron'],
+      ing: [
+        { id: 'm-gulas-vita', g: 600 },
+        { p: 'bulgur', g: 150 },
+        { p: 'ardei', g: 200 },
+        { p: 'ceapa', g: 100 },
+        { p: 'dovlecel', g: 150 },
+        { p: 'ulei-masline', g: 20 },
+        { p: 'lamaie', g: 20 },
+        { p: 'condimente', g: 6, free: true }
+      ],
+      steps: [
+        'Taie carnea cuburi de 3 cm, toate la fel de mari. Bucățile inegale sunt motivul pentru care o frigăruie iese și crudă, și arsă.',
+        'Marinează 30 de minute în ulei, zeamă de lămâie, usturoi, boia afumată și piper. Sarea o pui doar înainte de grătar.',
+        'Dacă folosești frigărui de lemn, ține-le 20 de minute în apă, altfel ard pe grătar.',
+        'Înșiră alternând carne și legume, dar lasă un milimetru între bucăți. Înghesuite, laturile lipite rămân crude.',
+        'Bulgurul: 1 parte bulgur la 2 părți apă clocotită cu sare, capac, foc oprit, 12 minute. Nu se amestecă, se desface cu furculița la final.',
+        'Grătar bine încins, frigăruile 3 minute pe fiecare din cele 4 laturi. Vita de gulaș e o bucată cu tendon — la 12 minute total e fragedă, la 20 devine tare.',
+        'Odihnă 5 minute sub o folie, apoi peste bulgur, cu zeama din tavă turnată deasupra.'
+      ],
+      tips: [
+        'Carnea de gulaș costă jumătate cât mușchiul și are aproape aceeași proteină (19,5 vs 21 g la 100 g). La cuburi mici și foc scurt, diferența de frăgezime aproape dispare.',
+        'Bulgurul are 12,3 g proteină la 100 g, aproape dublu față de orezul alb, și nu are nevoie de foc — doar de apă clocotită și răbdare.',
+        'Nu înțepa carnea cu furculița ca s-o întorci. Fiecare gaură scoate zeamă. Folosește un clește.'
+      ],
+      swaps: [
+        { label: 'Mai ieftin', text: 'Spată de porc în loc de vită: se pretează la fel la frigărui și costă mult mai puțin.' },
+        { label: 'Fără grătar', text: 'Tavă la cuptor, 220 °C cu grill-ul pornit, 15 minute, întorcând o dată. Pune frigăruile pe un grătar așezat peste tavă, ca aerul să circule.' },
+        { label: 'Cu iaurt', text: 'Un sos de iaurt grecesc cu usturoi și mărar alături: +8 g proteină pe porție și taie din uscăciunea vitei.' }
+      ],
+      why: 'Vită la grătar fără prețul mușchiului, pe o garnitură care aduce ea singură 18 g de proteină pe oală.'
+    },
+
+    {
+      id: 'rc-pastrav-gratar-cartofi',
+      name: 'Păstrăv la grătar cu cartofi și mujdei',
+      emoji: '🐟', base: 'peste', method: 'grill', mealType: 'cina',
+      servings: 2, timeMin: 40, activeTimeMin: 20, effort: 2, difficulty: 'easy',
+      equipment: ['grătar', 'oală', 'mojar sau furculiță'],
+      ing: [
+        { id: 'f-pastrav-file-proaspat-local', g: 400 },
+        { p: 'cartofi', g: 500 },
+        { p: 'usturoi', g: 20 },
+        { p: 'ulei-masline', g: 18 },
+        { p: 'lamaie', g: 25 },
+        { p: 'salata', g: 80 },
+        { p: 'condimente', g: 5, free: true }
+      ],
+      steps: [
+        'Fierbe cartofii întregi, în coajă, în apă sărată, 25 de minute. În coajă rămân cu gust de cartof, nu de apă.',
+        'Usucă fileurile cu un șervet și unge-le cu ulei, sare și piper. Peștele umed se lipește de grătar — asta e singura cauză reală a fileurilor rupte.',
+        'Grătar curat și încins, fileurile cu pielea în jos. Nu le atinge 4 minute.',
+        'Întoarce-le o singură dată, cu o spatulă lată, și mai dă-le 2 minute. Peștele e gata când carnea trece din translucid în opac și se desface în fulgi.',
+        'Mujdei: usturoiul pisat cu sare grunjoasă până devine pastă, apoi subțiat cu 2–3 linguri din apa în care au fiert cartofii și un strop de ulei.',
+        'Cartofii se sparg cu podul palmei, nu se taie — suprafața zdrențuită ține sosul.',
+        'Zeamă de lămâie peste pește la final, niciodată înainte: acidul „gătește” carnea și o face sfărâmicioasă pe grătar.'
+      ],
+      tips: [
+        'Păstrăvul e cel mai ieftin pește gras din zonă și are 20,8 g proteină la doar 128 kcal — mai slab decât somonul, cu aceeași familie de grăsimi.',
+        'Grătarul trebuie uns și curat înainte de pește. O jumătate de ceapă înfiptă în furculiță, trecută peste barele încinse, curăță și unge într-o singură mișcare.',
+        'Apa de la cartofi e sărată și amidonoasă — leagă mujdeiul mult mai bine decât apa simplă.'
+      ],
+      swaps: [
+        { label: 'Păstrăv întreg', text: 'Doi păstrăvi întregi, 6–7 minute pe parte. Gust mai bun, dar din 100 g de pește întreg mănânci cam 55 g de carne — pune cam dublu față de fileuri.' },
+        { label: 'Mai ieftin', text: 'File de macrou proaspăt sau de crap: aceeași tehnică, jumătate din preț.' },
+        { label: 'Fără grătar', text: 'Tigaie antiaderentă bine încinsă, cu pielea în jos, apăsat cu o spatulă primele 20 de secunde ca să nu se curbeze.' }
+      ],
+      why: 'Peștele local, gătit în cea mai simplă formă posibilă, cu o garnitură care costă cât nimic.'
+    },
+
+    {
+      id: 'rc-burger-curcan-gratar',
+      name: 'Burger de curcan la grătar cu chiflă proteică',
+      emoji: '🍔', base: 'curcan', method: 'grill', mealType: 'cina',
+      servings: 3, timeMin: 35, activeTimeMin: 20, effort: 2, difficulty: 'easy',
+      equipment: ['grătar', 'castron', 'hârtie de copt'],
+      ing: [
+        { id: 'm-carne-tocata-curcan', g: 450 },
+        { id: 'b-chifle-proteice', g: 210 },
+        { id: 'd-cascaval-dalia', g: 45 },
+        { id: 'd-oua-gaina-l', g: 55 },
+        { p: 'ceapa', g: 60 },
+        { p: 'rosii', g: 120 },
+        { p: 'salata', g: 60 },
+        { p: 'mustar', g: 15 },
+        { p: 'ulei-masline', g: 10 },
+        { p: 'condimente', g: 5, free: true }
+      ],
+      steps: [
+        'Amestecă tocătura de curcan cu oul, ceapa dată pe răzătoarea mică, muștar, sare și piper. Oul e obligatoriu: curcanul e prea slab ca să se lege singur.',
+        'Fă trei chiftele mai late decât chifla și apasă cu degetul o adâncitură în mijlocul fiecăreia. Fără adâncitură, burgerul se bombează pe grătar și devine minge.',
+        'Ține-le 15 minute la frigider pe o hârtie de copt. Reci, își țin forma; calde, se rup la întors.',
+        'Grătar încins, ungi chiftelele cu ulei. 5 minute pe o parte, întorci o dată, încă 4 minute.',
+        'Curcanul se gătește complet, la 74 °C — nu e vită, nu se mănâncă roz. Zeama care iese trebuie să fie limpede.',
+        'Pune cașcavalul peste burger în ultimul minut și acoperă cu un capac sau un bol, ca să se topească din aburi.',
+        'Prăjește chiflele tăiate, cu partea tăiată pe grătar, 30 de secunde. Un strat rumenit nu se îmbibă cu zeamă.'
+      ],
+      tips: [
+        'Chiflele proteice au 17 g proteină la 100 g față de ~8 g la o chiflă albă. Pe un burger, asta înseamnă 12 g de proteină în plus, fără să schimbi nimic altceva.',
+        'Nu apăsa burgerul cu spatula pe grătar. Sfârâitul pe care îl auzi e zeama care pleacă definitiv.',
+        'Tocătura din piept de curcan are 21,5 g proteină și 112 kcal la 100 g — jumătate din caloriile tocăturii de vită, la mai multă proteină.'
+      ],
+      swaps: [
+        { label: 'Fără chiflă', text: 'Burgerul între două frunze mari de salată, cu o porție de cartofi copți alături. Scazi ~180 kcal de porție.' },
+        { label: 'La tigaie', text: 'Tigaie-grill sau tigaie obișnuită, foc mediu, aceiași timpi. Capac în ultimele 2 minute.' },
+        { label: 'Mai suculent', text: 'O lingură de iaurt grecesc gros în compoziție, sau 100 g de ciuperci tocate mărunt și călite. Ambele adaugă umiditate fără grăsime.' }
+      ],
+      why: 'Un burger care are peste 50 g de proteină pe porție și mai puține calorii decât o farfurie de paste.'
+    },
+
+    {
+      id: 'rc-creveti-gratar-orez',
+      name: 'Frigărui de creveți la grătar cu orez și salată',
+      emoji: '🍤', base: 'peste', method: 'grill', mealType: 'cina',
+      servings: 2, timeMin: 30, activeTimeMin: 18, effort: 2, difficulty: 'easy',
+      equipment: ['grătar sau tigaie-grill', 'oală mică', 'frigărui'],
+      ing: [
+        { id: 'f-creveti-cruzi-congelati', g: 400 },
+        { p: 'orez-alb', g: 130 },
+        { p: 'usturoi', g: 12 },
+        { p: 'lamaie', g: 30 },
+        { p: 'ulei-masline', g: 15 },
+        { p: 'salata', g: 100 },
+        { p: 'rosii', g: 150 },
+        { p: 'condimente', g: 4, free: true }
+      ],
+      steps: [
+        'Dezgheață creveții în frigider peste noapte sau 15 minute într-un castron cu apă rece. Nu la microunde — se gătesc pe margini și rămân cruzi în mijloc.',
+        'Usucă-i foarte bine. Creveții dezghețați țin multă apă, iar apa aia îi fierbe pe grătar în loc să-i rumenească.',
+        'Amestecă-i cu ulei, usturoi tocat, boia, piper și coajă de lămâie. Maximum 15 minute de marinare — mai mult și lămâia îi face făinoși.',
+        'Orezul la fiert: 1 la 2 cu apă, capac, 15 minute foc mic, apoi 5 minute fără foc.',
+        'Înșiră creveții pe frigărui, câte 4–5, îndoiți în formă de C. Așa stau drept și se întorc toți odată.',
+        'Grătar foarte încins: 2 minute pe o parte, 1–2 pe cealaltă. Sunt gata exact când s-au făcut portocalii și s-au curbat în formă de C. Dacă ajung la O, sunt deja tari.',
+        'Zeamă de lămâie peste, direct pe grătar, și servești imediat pe orez, cu salata de roșii alături.'
+      ],
+      tips: [
+        'Creveții sunt printre puținele proteine care se strică din prea mult, nu din prea puțin. Trei minute totale, nu mai mult.',
+        'Forma spune totul: C = gata, O = gătit prea mult. E cel mai fiabil indiciu vizual din bucătărie.',
+        'Creveții cruzi congelați au 17 g proteină la doar 74 kcal — cea mai slabă proteină animală din tot atlasul, după fileul de cod.'
+      ],
+      swaps: [
+        { label: 'Mai ieftin', text: 'Mix de fructe de mare congelat, aruncat direct în tigaia încinsă în loc de frigărui. Proteină ceva mai mică, preț mult mai mic.' },
+        { label: 'Cu orez brun', text: 'Orez brun în loc de alb: 7,5 g proteină la 100 g și mult mai multe fibre, dar 35 de minute de fiert.' },
+        { label: 'Fără grătar', text: 'Tigaie fără ulei, foarte încinsă, creveții într-un singur strat, 90 de secunde pe parte.' }
+      ],
+      why: 'Cea mai rapidă proteină de pe grătar: trei minute, foarte puține calorii și o farfurie care arată a restaurant.'
+    },
+
+    /* ===================== AIR FRYER ===================== */
+    {
+      id: 'rc-somon-airfryer-cartofi-dulci',
+      name: 'Somon la air fryer cu cartofi dulci și broccoli',
+      emoji: '🌀', base: 'peste', method: 'airfryer', mealType: 'cina',
+      servings: 2, timeMin: 30, activeTimeMin: 10, effort: 1, difficulty: 'trivial',
+      equipment: ['air fryer', 'castron'],
+      ing: [
+        { id: 'f-somon-file-congelat', g: 320 },
+        { p: 'cartofi-dulci', g: 400 },
+        { id: 'v-broccoli', g: 200 },
+        { p: 'ulei-masline', g: 15 },
+        { p: 'lamaie', g: 25 },
+        { p: 'condimente', g: 5, free: true }
+      ],
+      steps: [
+        'Dezgheață somonul complet în frigider. Din congelator direct în air fryer iese gătit pe dinafară și rece la mijloc.',
+        'Taie cartofii dulci bastonașe de 1 cm și amestecă-i cu jumătate din ulei, sare, piper și boia afumată.',
+        'Air fryer la 200 °C, doar cartofii, 12 minute, cu o scuturare la mijloc. Cartoful dulce are mai mult zahăr decât cel alb și se rumenește mai repede — nu-l lăsa nesupravegheat la final.',
+        'Usucă somonul cu un șervet, unge-l cu restul de ulei, sare, piper și felii subțiri de lămâie deasupra.',
+        'Dă temperatura la 180 °C, împinge cartofii într-o parte și pune somonul cu pielea în jos, alături — nu peste.',
+        'Încă 8–9 minute. Broccoliul, uns cu un strop de ulei, intră în ultimele 6 minute.',
+        'Somonul e gata când se desface în fulgi la apăsare ușoară. Dacă vezi puncte albe de albumină la suprafață, l-ai depășit cu 2 minute.'
+      ],
+      tips: [
+        'Air fryerul e practic un cuptor mic cu ventilator puternic. Regula de conversie: minus 20 °C și minus o treime din timpul de cuptor.',
+        'Somonul congelat porționat costă cu 30–40 % mai puțin decât cel de la tejghea și, la air fryer, diferența nu se simte.',
+        'Coșul se umple maximum pe jumătate. Aglomerat, aerul nu circulă și tot ce iese e abur, nu crustă.'
+      ],
+      swaps: [
+        { label: 'Mult mai ieftin', text: 'File de polac sau de cod congelat: 17,5 g proteină la 76–82 kcal. Timp mai scurt cu 2 minute, fiind mai subțire.' },
+        { label: 'Cu cartofi obișnuiți', text: 'Cartofi albi, tăiați la fel, +3 minute. Mai puțin dulci și mai ieftini.' },
+        { label: 'La cuptor', text: '200 °C, cartofii 25 de minute, somonul ultimele 13.' }
+      ],
+      why: 'Zece minute de muncă pentru o masă cu omega-3, fibre din cartoful dulce și zero vase de spălat în afară de coș.'
+    },
+
+    {
+      id: 'rc-falafel-airfryer-humus',
+      name: 'Falafel la air fryer cu humus, lipie și salată',
+      emoji: '🧆', base: 'leguminoase', method: 'airfryer', mealType: 'pranz',
+      servings: 2, timeMin: 25, activeTimeMin: 12, effort: 1, difficulty: 'trivial',
+      equipment: ['air fryer', 'castron'],
+      ing: [
+        { id: 'v-falafel-congelat', g: 240 },
+        { id: 'b-humus', g: 80 },
+        { id: 'b-lipie-integrala', g: 120 },
+        { id: 'd-iaurt-grecesc-olympus-0', g: 200 },
+        { p: 'rosii', g: 150 },
+        { p: 'castraveti', g: 120 },
+        { p: 'salata', g: 60 },
+        { p: 'ceapa', g: 40 },
+        { p: 'lamaie', g: 20 },
+        { p: 'condimente', g: 4, free: true }
+      ],
+      steps: [
+        'Falafelul congelat intră direct în coș, fără dezghețare. Un strop de ulei pulverizat peste ajută la crustă, dar nu e obligatoriu.',
+        'Air fryer la 190 °C, 12–14 minute, cu o scuturare la jumătate. E gata când exteriorul e maro-închis și crocant la ciocănit cu lingura.',
+        'Cât se face, taie roșiile, castraveții și ceapa cubulețe mici și amestecă-le cu zeamă de lămâie, sare și pătrunjel tocat.',
+        'Sosul: iaurt grecesc cu usturoi, sare, piper și o linguriță de zeamă de lămâie. Bate-l bine — cu cât e mai neted, cu atât se întinde mai ușor.',
+        'Lipia se încălzește 1 minut în air fryer la final, cât e încă cald. Rece, se rupe la îndoit.',
+        'Asamblează: humus întins pe lipie, falafel sfărâmat cu degetul, salata, sosul de iaurt deasupra.'
+      ],
+      tips: [
+        'Falafelul are doar 11 g proteină la 100 g — singur nu e o masă. Iaurtul grecesc de aici aduce mai multă proteină decât falafelul însuși și e ce transformă farfuria într-un prânz real.',
+        'Falafelul prăjit în ulei absoarbe 8–10 g de grăsime la porție. La air fryer, aproape nimic — e diferența dintre 250 și 150 kcal.',
+        'Sfărâmă falafelul, nu-l lăsa bilă. Pe suprafață mai mare, sosul ajunge peste tot și fiecare îmbucătură are gust.'
+      ],
+      swaps: [
+        { label: 'Făcut în casă', text: 'Năut înmuiat 12 ore (nu fiert!), tocat în robot cu ceapă, usturoi, pătrunjel și chimion. Iese la jumătate de preț și cu ~20 g proteină la 100 g.' },
+        { label: 'Mai multă proteină', text: 'Adaugă 100 g de telemea sfărâmată sau înlocuiește lipia cu o tortilla proteică: +10–12 g pe porție.' },
+        { label: 'Fără air fryer', text: 'Cuptor la 220 °C, 20 de minute, întors o dată. Iese aproape la fel.' }
+      ],
+      why: 'Prânz vegetarian gata în 25 de minute, din congelator și frigider, care chiar trece de 30 g de proteină pe porție.'
+    },
+
+    {
+      id: 'rc-curcan-airfryer-radacinoase',
+      name: 'Piept de curcan la air fryer cu legume rădăcinoase',
+      emoji: '🌀', base: 'curcan', method: 'airfryer', mealType: 'pranz',
+      servings: 2, timeMin: 35, activeTimeMin: 12, effort: 1, difficulty: 'easy',
+      equipment: ['air fryer', 'castron', 'cuțit mare'],
+      ing: [
+        { id: 'm-piept-curcan', g: 380 },
+        { p: 'cartofi', g: 300 },
+        { p: 'morcov', g: 200 },
+        { p: 'telina', g: 150 },
+        { p: 'ulei-masline', g: 18 },
+        { p: 'mustar', g: 15 },
+        { p: 'usturoi', g: 10 },
+        { p: 'condimente', g: 6, free: true }
+      ],
+      steps: [
+        'Taie pieptul de curcan în două bucăți egale, de aceeași grosime. O bucată groasă și una subțire în același coș înseamnă una uscată garantat.',
+        'Unge carnea cu muștar, usturoi tocat, cimbru, sare și piper, și las-o 10 minute la temperatura camerei.',
+        'Taie cartofii, morcovul și țelina cuburi de 2 cm și amestecă-le cu uleiul și sare. Țelina se taie ultima și se dă imediat prin ulei — altfel se înnegrește.',
+        'Air fryer la 190 °C, doar legumele, 10 minute.',
+        'Scutură coșul, așază curcanul peste legume și mai dă 14–16 minute, întorcând carnea o dată.',
+        'Curcanul e gata la 74 °C în centru. Fără termometru: tai cea mai groasă bucată, carnea trebuie să fie albă peste tot, fără urmă de roz.',
+        'Odihnă 5 minute înainte de feliat. Feliile se taie contra fibrei, oblic, ca să iasă mai scurte și mai fragede.'
+      ],
+      tips: [
+        'Pieptul de curcan are 23,5 g proteină la 105 kcal — cea mai bună densitate proteică din raionul de carne proaspătă. E și cea mai puțin iertătoare la supragătit.',
+        'Muștarul face două lucruri: ține condimentele lipite și formează crustă. Gustul de muștar dispare complet la 190 °C.',
+        'Țelina rădăcină e sub 10 lei kilogramul, are gust puternic și înlocuiește jumătate din cartofi la o treime din carbohidrați.'
+      ],
+      swaps: [
+        { label: 'Mai ieftin', text: 'Pulpă de curcan dezosată: 19,5 g proteină la 100 g, dar mult mai greu de uscat și cu mai mult gust.' },
+        { label: 'Fără air fryer', text: 'Tavă la cuptor, 200 °C: legumele 20 de minute singure, curcanul ultimele 22.' },
+        { label: 'Cu sos', text: 'Două linguri de iaurt grecesc amestecate cu zeama rămasă în coș și un vârf de muștar — sos în 30 de secunde, fără smântână.' }
+      ],
+      why: 'Cea mai slabă carne de pe raft, o singură tavă și legume care costă sub 10 lei kilogramul.'
+    },
+
+    {
+      id: 'rc-chiftele-vita-airfryer-tzatziki',
+      name: 'Chiftele de vită la air fryer cu cartofi și tzatziki',
+      emoji: '🧆', base: 'vita', method: 'airfryer', mealType: 'cina',
+      servings: 3, timeMin: 40, activeTimeMin: 20, effort: 2, difficulty: 'easy',
+      equipment: ['air fryer', 'castron', 'răzătoare'],
+      ing: [
+        { id: 'm-carne-tocata-vita', g: 500 },
+        { id: 'd-oua-gaina-l', g: 55 },
+        { id: 'b-tzatziki', g: 150 },
+        { p: 'pesmet', g: 40 },
+        { p: 'cartofi', g: 500 },
+        { p: 'ceapa', g: 80 },
+        { p: 'usturoi', g: 10 },
+        { p: 'ulei-masline', g: 15 },
+        { p: 'condimente', g: 6, free: true }
+      ],
+      steps: [
+        'Amestecă tocătura cu oul, pesmetul, ceapa dată pe răzătoarea mică, usturoi, sare, piper, chimion și mult mărar. Amestecă până se leagă, nu mai mult — frământată prea mult, carnea devine cauciucoasă.',
+        'Lasă compoziția 15 minute la frigider. Pesmetul absoarbe umezeala și chiftelele nu se mai turtesc în coș.',
+        'Taie cartofii felii groase de 1 cm, amestecă-i cu uleiul și sare, și pune-i primii: 190 °C, 12 minute.',
+        'Formează chiftele cât o nucă mare, cu mâinile ude. Umede, aluatul nu se lipește de palme.',
+        'Împinge cartofii într-o parte, pune chiftelele într-un singur strat și mai dă 12–14 minute la 190 °C, scuturând o dată.',
+        'Sunt gata când sunt maro pe dinafară și zeama care iese la înțepare e limpede. Vita tocată se gătește complet, nu roz.',
+        'Tzatziki rece alături, direct din frigider. Contrastul cald–rece e jumătate din farmecul farfuriei.'
+      ],
+      tips: [
+        'La air fryer, chiftelele pierd o parte din grăsime în coș. Aceeași compoziție prăjită în tigaie absoarbe ulei în loc să-l lase — diferența e de ~100 kcal pe porție.',
+        'Vita tocată are 18,5 g proteină și 214 kcal la 100 g. E o proteină bună, dar densă caloric: 500 g pentru trei porții e limita rezonabilă.',
+        'Pune un strat subțire de hârtie de copt perforată sub chiftele dacă air fryerul tău are grătar cu ochiuri mari — altfel jumătate din crustă rămâne pe grătar.'
+      ],
+      swaps: [
+        { label: 'Mai slab', text: 'Jumătate vită, jumătate tocătură din piept de curcan: scazi ~90 kcal pe porție și crești proteina.' },
+        { label: 'Fără air fryer', text: 'Tavă la cuptor, 200 °C, 20 de minute, întors o dată. Cartofii intră cu 15 minute înainte.' },
+        { label: 'Tzatziki de casă', text: 'Iaurt grecesc 0 %, castravete ras și stors bine, usturoi, mărar, sare. Costă jumătate și are dublu proteină față de cel cumpărat.' }
+      ],
+      why: 'Chiftele care nu înoată în ulei, gata în 40 de minute, cu o proteină pe porție cât o porție de friptură.'
+    },
+
+    /* ===================== GĂTIT LENT ===================== */
+    {
+      id: 'rc-gulas-vita-cartofi-lent',
+      name: 'Gulaș de vită cu cartofi, gătit lent',
+      emoji: '🍲', base: 'vita', method: 'slow', mealType: 'pranz',
+      servings: 4, timeMin: 165, activeTimeMin: 25, effort: 3, difficulty: 'easy',
+      equipment: ['oală cu fund gros și capac', 'tigaie', 'lingură de lemn'],
+      ing: [
+        { id: 'm-gulas-vita', g: 800 },
+        { p: 'cartofi', g: 700 },
+        { p: 'ceapa', g: 250 },
+        { p: 'ardei', g: 200 },
+        { p: 'morcov', g: 150 },
+        { p: 'bulion', g: 60 },
+        { p: 'ulei-floarea', g: 20 },
+        { p: 'condimente', g: 10, free: true }
+      ],
+      steps: [
+        'Taie carnea cuburi de 4 cm — mai mari decât ai crede că trebuie. La 2 ore de fiert, se micșorează cu o treime.',
+        'Rumenește-o în trei tranșe, la foc mare, câte 3 minute per tranșă. Toată deodată înseamnă apă în oală și carne fiartă cenușiu. Crusta maro de pe fundul oalei e baza gustului.',
+        'Scoate carnea, pune ceapa tocată în aceeași oală și las-o 8 minute până devine sticloasă și desprinde tot ce s-a lipit pe fund.',
+        'Ia oala de pe foc și abia atunci pune boiaua dulce, o linguriță plină. Boiaua arsă amărăște ireversibil toată mâncarea — ăsta e singurul pas care nu se poate repara.',
+        'Carnea înapoi, apă fierbinte cât să o acopere la limită, capac întredeschis, foc cât mai mic. 90 de minute, fără să amesteci mai des de o dată la 20.',
+        'Adaugă cartofii tăiați mari, morcovul și ardeiul. Încă 30–35 de minute, până cartoful se lasă străpuns de furculiță fără să se sfărâme.',
+        'Bulionul și sarea abia la final. Sarea pusă la început se concentrează pe măsură ce scade apa și te trezești cu o oală prea sărată.',
+        'Lasă 15 minute pe aragazul stins înainte de servit. Sosul se leagă singur în timpul ăsta.'
+      ],
+      tips: [
+        'Carnea de gulaș e plină de colagen. Sub 90 de minute e tare, peste 90 devine gelatinoasă și moale — nu există scurtătură, doar timp.',
+        'Un clocot puternic strânge fibrele și usucă carnea chiar dacă stă în apă. Sosul trebuie doar să tremure, cu o bulă la câteva secunde.',
+        'A doua zi e mai bun: amidonul din cartofi îngroașă sosul peste noapte, iar carnea absoarbe gustul. Fă porție dublă din start.'
+      ],
+      swaps: [
+        { label: 'La slow cooker', text: 'Rumenirea tot în tigaie, apoi 7 ore pe treapta mică. Pune cartofii de la început, la temperatura aia nu se sfărâmă.' },
+        { label: 'La oala sub presiune', text: '35 de minute sub presiune pentru carne, apoi cartofii încă 8. Câștigi o oră.' },
+        { label: 'Cu fasole', text: 'Înlocuiește jumătate din cartofi cu 150 g fasole albă înmuiată peste noapte: mai multe fibre și proteină vegetală în plus.' }
+      ],
+      why: 'Bucata ieftină de vită devine mai bună decât mușchiul, cu 25 de minute de muncă împărțite pe patru porții.'
+    },
+
+    {
+      id: 'rc-iahnie-fasole-afumatura',
+      name: 'Iahnie de fasole cu afumătură',
+      emoji: '🫘', base: 'leguminoase', method: 'slow', mealType: 'pranz',
+      servings: 4, timeMin: 150, activeTimeMin: 20, effort: 2, difficulty: 'easy',
+      equipment: ['oală mare', 'strecurătoare', 'lingură de lemn'],
+      ing: [
+        { id: 'v-fasole-alba-uscata', g: 350 },
+        { id: 'p-ceafa-afumata-porc', g: 250 },
+        { p: 'ceapa', g: 250 },
+        { p: 'morcov', g: 150 },
+        { p: 'ardei', g: 100 },
+        { p: 'bulion', g: 60 },
+        { p: 'ulei-floarea', g: 20 },
+        { p: 'condimente', g: 10, free: true }
+      ],
+      steps: [
+        'Fasolea se pune la înmuiat de seara, în apă rece, cel puțin 10 ore. Fără înmuiere fierbe și 3 ore și tot rămâne tare la mijloc.',
+        'Aruncă apa de înmuiere, pune fasolea în apă rece proaspătă și fierbe-o 10 minute. Aruncă și apa asta. Repetă o dată. Cele două schimburi de apă sunt tot secretul împotriva balonării.',
+        'A treia apă e cea bună: fasolea, apă cât s-o acopere cu trei degete, foc mic, 60–75 de minute, fără sare.',
+        'Între timp călește ceapa tocată mărunt în ulei, 10 minute la foc mic, până e aurie și dulce. Ceapa grăbită lasă iahnia fadă.',
+        'Adaugă morcovul ras, ardeiul, și afumătura tăiată cubulețe. Încă 5 minute, cât să-și lase grăsimea.',
+        'Toarnă totul peste fasolea fiartă, cu o parte din apa ei. Foc mic, capac, încă 30 de minute.',
+        'Bulionul, o foaie de dafin și sarea intră în ultimele 10 minute. Sarea pusă devreme întărește coaja boabelor și fasolea nu se mai înmoaie niciodată.',
+        'Zdrobește cu lingura vreo 20 de boabe pe marginea oalei. Amidonul eliberat îngroașă zeama fără făină.'
+      ],
+      tips: [
+        '350 g de fasole uscată costă sub 8 lei și dau 73 g de proteină. E cea mai ieftină proteină din tot atlasul, iar afumătura e acolo pentru gust, nu pentru cantitate.',
+        'Fasolea + carnea afumată se completează: leguminoasa e săracă în metionină, carnea o aduce. Împreună au profilul complet de aminoacizi.',
+        'Se congelează perfect în porții. Dezghețată, e la fel de bună — spre deosebire de aproape orice mâncare cu cartofi.'
+      ],
+      swaps: [
+        { label: 'Complet vegetal', text: 'Fără afumătură, cu o linguriță de boia afumată și 100 g de ciuperci călite. Scade cu ~12 g proteina pe oală, dar rămâne peste 25 g pe porție.' },
+        { label: 'Rapid', text: 'Trei conserve de fasole albă, clătite bine: 40 de minute cap-coadă în loc de 2,5 ore, la un preț dublu.' },
+        { label: 'Cu ciolan', text: 'Rasol de porc afumat, fiert odată cu fasolea și dezosat la final. Varianta de duminică.' }
+      ],
+      why: 'Patru porții pentru cât costă o pizza, cu peste 30 g de proteină și 15 g de fibre pe farfurie.'
+    },
+
+    {
+      id: 'rc-porc-destramat-varza-lent',
+      name: 'Porc destrămat cu varză călită, gătit lent',
+      emoji: '🍲', base: 'porc', method: 'slow', mealType: 'pranz',
+      servings: 4, timeMin: 180, activeTimeMin: 25, effort: 3, difficulty: 'easy',
+      equipment: ['oală de fontă cu capac sau tavă adâncă cu folie', 'două furculițe'],
+      ing: [
+        { id: 'm-spata-porc', g: 800 },
+        { p: 'varza', g: 700 },
+        { p: 'ceapa', g: 200 },
+        { p: 'bulion', g: 50 },
+        { p: 'ulei-floarea', g: 20 },
+        { p: 'otet', g: 20 },
+        { p: 'condimente', g: 10, free: true }
+      ],
+      steps: [
+        'Freacă bucata întreagă de spată cu sare, piper, boia afumată, cimbru și usturoi granulat. Nu o tăia — se gătește întreagă și se destramă la final.',
+        'Rumenește-o în oală, pe toate fețele, câte 2–3 minute. E singurul moment în care se formează gustul de fript.',
+        'Pune ceapa tăiată felii sub carne, toarnă 150 ml de apă fierbinte și oțetul, capac etanș, cuptor la 150 °C — sau foc foarte mic pe aragaz.',
+        'Două ore și jumătate, fără să deschizi capacul mai mult de o dată. De fiecare dată când ridici capacul, pierzi 15 minute de temperatură.',
+        'Carnea e gata când două furculițe o desfac fără efort. Dacă opune rezistență, nu e „prea gătită” — e insuficient gătită. Mai dă-i 30 de minute.',
+        'Scoate carnea, destram-o cu furculițele și pune-o deoparte cu puțin din sosul din oală.',
+        'În aceeași oală, cu grăsimea rămasă, călește varza tăiată subțire, 20 de minute la foc mediu, amestecând rar. Bulionul, piper și mărar la final.',
+        'Amestecă porcul destrămat în varză, pe foc oprit, și lasă 10 minute cu capacul pus.'
+      ],
+      tips: [
+        'Spata are 19 g proteină și 188 kcal la 100 g — suficientă grăsime intramusculară cât să nu se usuce la 3 ore, dar mult mai slabă decât ceafa sau pieptul.',
+        'Oțetul nu se simte la final. Rolul lui e să taie grăsimea și să ajute țesutul conjunctiv să se descompună mai repede.',
+        'Varza nu se sărează la început. Sarea o face să lase apă și, în loc să se rumenească, se fierbe.'
+      ],
+      swaps: [
+        { label: 'La slow cooker', text: '8 ore pe treapta mică. Rumenirea în tigaie rămâne obligatorie — fără ea, carnea e fadă.' },
+        { label: 'Cu varză murată', text: 'Varză murată clătită și stoarsă în loc de cea dulce, fără sare deloc. Varianta de iarnă, mai acră și mai bogată în probiotice.' },
+        { label: 'În tortilla', text: 'Porcul destrămat în tortilla proteică, cu iaurt și ceapă roșie. Din aceeași oală ies două mese complet diferite.' }
+      ],
+      why: 'O bucată de 25 de lei devine mâncare pentru patru zile, iar tot efortul stă în primele 25 de minute.'
+    },
+
+    {
+      id: 'rc-pui-destramat-lent-tortilla',
+      name: 'Pui destrămat gătit lent, în tortilla proteică',
+      emoji: '🌯', base: 'pui', method: 'slow', mealType: 'cina',
+      servings: 4, timeMin: 120, activeTimeMin: 20, effort: 2, difficulty: 'easy',
+      equipment: ['oală cu capac', 'două furculițe', 'tigaie pentru tortilla'],
+      ing: [
+        { id: 'm-pulpe-pui-dezosate', g: 700 },
+        { id: 'b-tortilla-proteica-lidl', g: 240 },
+        { id: 'd-iaurt-grecesc-olympus-0', g: 150 },
+        { p: 'rosii-cutie', g: 200 },
+        { p: 'ceapa', g: 150 },
+        { p: 'ardei', g: 150 },
+        { p: 'usturoi', g: 12 },
+        { p: 'ulei-masline', g: 15 },
+        { p: 'lamaie', g: 20 },
+        { p: 'condimente', g: 8, free: true }
+      ],
+      steps: [
+        'Rumenește pulpele întregi în ulei, 3 minute pe fiecare parte. Pulpa dezosată rezistă la gătit lung mult mai bine decât pieptul, care se usucă și se destramă în ață.',
+        'Scoate carnea, călește ceapa și ardeiul 6 minute, apoi usturoiul, chimionul și boia afumată, 30 de secunde.',
+        'Carnea înapoi, roșiile, 100 ml apă, capac, foc foarte mic. 75–90 de minute.',
+        'Verifică la 75 de minute: carnea trebuie să se desfacă singură când o apeși cu lingura. Dacă nu, mai dă-i 20 de minute — nu se poate strica.',
+        'Destram-o cu două furculițe direct în oală și las-o 10 minute fără capac, ca sosul să scadă și să se lipească de carne.',
+        'Zeamă de lămâie peste, la final. Acidul ridică tot gustul după atâtea ore de fiert.',
+        'Încălzește tortillele câte 20 de secunde pe parte, în tigaie uscată. Umple-le cu carne, iaurt grecesc și ce legume crude ai.'
+      ],
+      tips: [
+        'Tortilla proteică are 16 g proteină la 100 g față de 9 g la cea integrală obișnuită. La patru porții, asta e diferența dintre o gustare și o cină.',
+        'Iaurtul grecesc 0 % ține loc de smântână: aceeași cremozitate, de patru ori mai multă proteină și un sfert din calorii.',
+        'Carnea destrămată ține 4 zile la frigider și e mai bună a doua zi. Congelează-o cu tot cu sos, nu uscată.'
+      ],
+      swaps: [
+        { label: 'Peste orez', text: 'Fără tortilla, peste orez sau bulgur, cu iaurt deasupra. Mai ieftin și mai sățios.' },
+        { label: 'Mai slab', text: 'Piept de pui în loc de pulpe, dar redu timpul la 45 de minute și verifică des — pieptul trece rapid de la fraged la sfoară.' },
+        { label: 'Mai iute', text: 'O linguriță de sriracha sau ardei iute tocat în sos, la final. Nu în timpul fierberii — iuțeala se estompează la foc lung.' }
+      ],
+      why: 'O oală care merge singură o oră și jumătate și scoate patru cine cu peste 45 g de proteină fiecare.'
+    },
+
+    /* ===================== FIERT / SUPĂ ===================== */
+    {
+      id: 'rc-ciorba-perisoare-vita',
+      name: 'Ciorbă de perișoare din vită, cu borș',
+      emoji: '🥣', base: 'vita', method: 'boil', mealType: 'pranz',
+      servings: 4, timeMin: 70, activeTimeMin: 25, effort: 3, difficulty: 'medium',
+      equipment: ['oală mare', 'castron', 'spumieră'],
+      ing: [
+        { id: 'm-carne-tocata-vita', g: 600 },
+        { id: 'd-oua-gaina-l', g: 55 },
+        { id: 'd-smantana-20', g: 100 },
+        { p: 'orez-alb', g: 60 },
+        { p: 'morcov', g: 200 },
+        { p: 'telina', g: 150 },
+        { p: 'ceapa', g: 150 },
+        { p: 'ardei', g: 100 },
+        { p: 'bors', g: 400 },
+        { p: 'condimente', g: 10, free: true }
+      ],
+      steps: [
+        'Amestecă tocătura cu orezul crud, oul, ceapa rasă, sare, piper și pătrunjel tocat. Orezul se pune crud — se fierbe în ciorbă și leagă perișoara din interior.',
+        'Pune compoziția 20 de minute la frigider. Rece, se rulează în bile care nu se destramă în apă clocotită.',
+        'Pune 2,5 litri de apă la fiert cu morcovul, țelina, ceapa și ardeiul tăiate cubulețe. 15 minute, până legumele sunt aproape moi.',
+        'Formează perișoare cât o nucă, cu mâinile ude, și lasă-le una câte una în apa care fierbe încet. Nu în clocot puternic — se sparg.',
+        'Nu amesteca 5 minute. Perișoarele au nevoie să se întărească la exterior înainte să le atingi.',
+        'Ia spuma pe măsură ce urcă, apoi fierbe 20 de minute la foc mic.',
+        'Fierbe borșul separat 2 minute, într-un ibric, și abia apoi toarnă-l în ciorbă. Borșul turnat crud dă gust de mucegai.',
+        'Foc oprit, leuștean tocat, sare la gust. Smântâna se pune în farfurie, nu în oală — altfel se taie la reîncălzire.'
+      ],
+      tips: [
+        'Perișoarele fierte în apă, nu prăjite, sunt motivul pentru care ciorba asta are 33 g de proteină la sub 520 kcal pe porție.',
+        'Leușteanul se pune întotdeauna pe foc oprit. Fiert, își pierde complet aroma și rămâne doar amăreala.',
+        'Dacă vrei ciorba mai limpede, spală orezul înainte. Amidonul de pe boabe e ce o tulbură.'
+      ],
+      swaps: [
+        { label: 'Mai ieftin', text: 'Carne tocată amestec (porc și vită): gust mai bogat, preț mai mic, aproape aceeași proteină.' },
+        { label: 'Fără borș', text: 'Zeamă de varză murată sau suc de lămâie la final. Zeama de varză e mai sărată — nu mai adăuga sare deloc.' },
+        { label: 'Mai multă proteină', text: 'Smântâna înlocuită cu iaurt grecesc 0 %: +6 g proteină pe oală și 150 kcal mai puțin.' }
+      ],
+      why: 'Ciorba de duminică, cu proteina unei fripturi și caloriile unei supe. Face patru porții dintr-o singură oală.'
+    },
+
+    {
+      id: 'rc-supa-mazare-carnati-pui',
+      name: 'Supă groasă de mazăre despicată cu cârnați de pui',
+      emoji: '🥣', base: 'leguminoase', method: 'boil', mealType: 'pranz',
+      servings: 4, timeMin: 75, activeTimeMin: 15, effort: 2, difficulty: 'easy',
+      equipment: ['oală mare', 'blender vertical (opțional)', 'tigaie mică'],
+      ing: [
+        { id: 'v-mazare-despicata-uscata', g: 350 },
+        { id: 'p-crenvursti-piept-pui-cristim', g: 300 },
+        { p: 'morcov', g: 200 },
+        { p: 'ceapa', g: 150 },
+        { p: 'telina', g: 100 },
+        { p: 'usturoi', g: 12 },
+        { p: 'ulei-masline', g: 15 },
+        { p: 'condimente', g: 8, free: true }
+      ],
+      steps: [
+        'Clătește mazărea despicată sub jet de apă. Nu are nevoie de înmuiere — e decorticată și se face în mai puțin de o oră.',
+        'Călește ceapa, morcovul și țelina tăiate mărunt în ulei, 8 minute, până ceapa e translucidă.',
+        'Adaugă mazărea și 1,8 litri de apă rece. Dă în clocot, ia spuma o dată, apoi foc mic și capac întredeschis.',
+        '45–55 de minute. E gata când boabele s-au desfăcut complet și supa a devenit groasă ca o smântână subțire. Amestecă din 10 în 10 minute — mazărea se lipește de fund mai ceva ca lintea.',
+        'Dacă vrei textura fină, dă 10 secunde cu blenderul vertical. Dacă îți place rustic, las-o așa.',
+        'Rumenește crenvurștii tăiați rondele într-o tigaie fără ulei, până au margini crocante. Aruncați direct în supă, rămân moi și fără gust.',
+        'Sare abia acum, cu crenvurștii deja înăuntru — ei aduc singuri destulă. Usturoi tocat crud și piper la final.'
+      ],
+      tips: [
+        'Mazărea despicată are 24,5 g proteină la 100 g și costă sub 10 lei kilogramul. Trei sute cincizeci de grame acoperă singure 85 g de proteină.',
+        'Supa se îngroașă mult la răcire. Dacă a doua zi e pastă, subțiaz-o cu apă fierbinte, nu cu apă rece — altfel se separă.',
+        'Rumenirea cârnaților separat nu e un moft: caramelizarea de pe margini e singura sursă de gust „fript” din toată oala.'
+      ],
+      swaps: [
+        { label: 'Complet vegetal', text: 'Fără cârnați, cu o linguriță de boia afumată și cuburi de pâine proteică prăjită. Rămâne peste 25 g de proteină pe porție.' },
+        { label: 'Cu afumătură', text: 'Ceafă afumată de porc, cubulețe, fiartă odată cu mazărea. Varianta clasică germană.' },
+        { label: 'Cu linte', text: 'Linte verde în loc de mazăre: 25 g proteină la 100 g, se fierbe în 30 de minute și își ține forma.' }
+      ],
+      why: 'O oală de 15 lei care ține patru mese, cu peste 30 g de proteină și un munte de fibre pe porție.'
+    },
+
+    {
+      id: 'rc-ciorba-peste-mamaliga',
+      name: 'Ciorbă de pește cu legume și mămăligă',
+      emoji: '🐟', base: 'peste', method: 'boil', mealType: 'pranz',
+      servings: 4, timeMin: 60, activeTimeMin: 25, effort: 3, difficulty: 'medium',
+      equipment: ['oală mare', 'ceaun sau oală cu fund gros', 'tel', 'spumieră'],
+      ing: [
+        { id: 'f-cod-file-congelat', g: 700 },
+        { p: 'malai', g: 120 },
+        { p: 'cartofi', g: 400 },
+        { p: 'morcov', g: 200 },
+        { p: 'ardei', g: 150 },
+        { p: 'ceapa', g: 150 },
+        { p: 'telina', g: 100 },
+        { p: 'bors', g: 400 },
+        { p: 'ulei-floarea', g: 15 },
+        { p: 'condimente', g: 10, free: true }
+      ],
+      steps: [
+        'Dezgheață fileurile în frigider și taie-le bucăți de 4 cm. Mai mici se destramă complet în ciorbă.',
+        'Fierbe legumele tăiate cubulețe în 2 litri de apă cu sare puțină: cartof, morcov, ceapă, ardei, țelină. 20 de minute, până cartoful e aproape moale.',
+        'Peștele intră ULTIMUL și fierbe doar 8 minute. Ăsta e tot secretul unei ciorbe de pește: legumele au nevoie de 20 de minute, peștele de 8. Fierte împreună de la început, peștele se face zdrențe.',
+        'Nu amesteca după ce ai pus peștele. Clatină oala de mâner dacă trebuie.',
+        'Fierbe borșul separat 2 minute și toarnă-l peste, cu focul dat mic.',
+        'Mămăliga: 500 ml apă cu sare la clocot, mălaiul în ploaie cu telul, 10–12 minute la foc mic, amestecând. E gata când se desprinde de pe pereți.',
+        'Foc oprit, leuștean și pătrunjel tocate, un praf de ardei iute. Se lasă 5 minute cu capacul pus înainte de servit.'
+      ],
+      tips: [
+        'Fileul de cod congelat are 17,5 g proteină la doar 76 kcal — mai slab decât pieptul de pui, la un preț comparabil cu pieptul de curcan.',
+        'Ciorba de pește nu se reîncălzește bine. Fă-o pentru ziua respectivă sau, dacă vrei rezerve, fierbe zeama separat și adaugă peștele porție cu porție.',
+        'Mămăliga nu e opțională aici: fără ea, ciorba are sub 300 kcal pe porție și te lasă flămând în două ore.'
+      ],
+      swaps: [
+        { label: 'Cu pește local', text: 'Crap sau caras, curățați și tăiați bucăți cu tot cu os. Gust mult mai bun, dar ai grijă la oase.' },
+        { label: 'Mai rapid', text: 'File de polac sau merluciu, tăiat direct din congelator în bucăți mari: intră înghețat, fierbe 11 minute.' },
+        { label: 'Fără borș', text: 'Zeamă de lămâie sau zeamă de varză la final. Pune-o treptat și gustă — e mai concentrată decât borșul.' }
+      ],
+      why: 'Cea mai slabă proteină din atlas, într-o ciorbă care cere 25 de minute de muncă și scoate patru porții.'
+    },
+
+    {
+      id: 'rc-macaroane-branza-ou',
+      name: 'Macaroane cu brânză de vaci și ou',
+      emoji: '🧀', base: 'lactate', method: 'boil', mealType: 'cina',
+      servings: 3, timeMin: 30, activeTimeMin: 20, effort: 2, difficulty: 'easy',
+      equipment: ['oală mare', 'strecurătoare', 'vas de copt (opțional)'],
+      ing: [
+        { id: 'v-paste-integrale', g: 210 },
+        { id: 'd-branza-vaci-covalact-05', g: 400 },
+        { id: 'd-oua-gaina-l', g: 110 },
+        { id: 'd-smantana-20', g: 100 },
+        { p: 'unt', g: 20 },
+        { p: 'condimente', g: 4, free: true }
+      ],
+      steps: [
+        'Pune apa la fiert, bine sărată. Pastele integrale au nevoie de apă mai multă decât cele albe — lasă mai mult amidon.',
+        'Cât fierbe apa, freacă brânza de vaci cu ouăle și smântâna, până devine o cremă fără cocoloașe. Cocoloașele nu se mai desfac după ce dai căldură.',
+        'Fierbe pastele cu un minut mai puțin decât scrie pe pungă. Scurge-le, dar oprește o cană din apa de fierbere.',
+        'Pune untul peste pastele fierbinți, în oală, și amestecă până se topește complet. Grăsimea îmbracă pastele și împiedică oul să se coaguleze în grunji.',
+        'Ia oala de pe foc, numără până la zece, apoi toarnă crema de brânză. Peste 70 °C, oul se face omletă — trebuie doar căldura reziduală.',
+        'Amestecă rapid, cu 2–3 linguri din apa de paste, până sosul devine cremos și lucios.',
+        'Opțional, la cuptor: totul într-un vas uns, 15 minute la 190 °C, până se rumenește deasupra.'
+      ],
+      tips: [
+        'Brânza de vaci slabă are 17 g proteină la 81 kcal. Patru sute de grame aduc 68 g de proteină pentru sub 15 lei — mai ieftin decât orice carne.',
+        'Oala trebuie luată de pe foc înainte de ou. Ăsta e singurul pas în care rețeta chiar se poate strica, și se strică în 5 secunde.',
+        'Se face și dulce, cu 20 g de miere sau zahăr în loc de sare, și rămâne exact la fel de bogată în proteină. Varianta clasică românească.'
+      ],
+      swaps: [
+        { label: 'Mai multă proteină', text: 'Paste din linte roșie în loc de integrale: masa urcă cu ~24 g de proteină pe oală, la aceleași calorii.' },
+        { label: 'Mai cremos', text: 'Iaurt grecesc 0 % în loc de smântână: mai puține calorii și mai multă proteină, dar amestecă-l doar pe foc oprit.' },
+        { label: 'Cu telemea', text: '100 g de telemea rasă amestecată la final, sare deloc. Devine sărat-acrișor, ca o versiune românească de mac and cheese.' }
+      ],
+      why: 'Mâncarea de copilărie care se dovedește a fi una dintre cele mai ieftine surse de proteină din bucătărie.'
+    },
+
+    /* ===================== FĂRĂ GĂTIT ===================== */
+    {
+      id: 'rc-bol-iaurt-granola-fructe',
+      name: 'Bol de iaurt grecesc cu granola proteică și fructe',
+      emoji: '🫐', base: 'lactate', method: 'nocook', mealType: 'mic-dejun',
+      servings: 1, timeMin: 5, activeTimeMin: 5, effort: 0, difficulty: 'none',
+      equipment: ['bol', 'lingură'],
+      ing: [
+        { id: 'd-iaurt-grecesc-olympus-0', g: 300 },
+        { id: 'b-granola-proteica', g: 50 },
+        { id: 'v-unt-arahide-100', g: 15 },
+        { p: 'fructe-padure', g: 100 }
+      ],
+      steps: [
+        'Scoate fructele congelate din congelator cu 10 minute înainte. Semi-dezghețate lasă un sirop violet care colorează tot iaurtul — exact ce vrei.',
+        'Pune iaurtul în bol și fă o adâncitură cu dosul lingurii.',
+        'Untul de arahide se încălzește 15 secunde la microunde ca să curgă, apoi se toarnă în fir. Rece, rămâne un bulgăre pe care îl mănânci dintr-o îmbucătură.',
+        'Granola deasupra, la sfârșit de tot. Pusă prima, se înmoaie în două minute și pierzi singura textură crocantă din bol.',
+        'Fructele peste, cu tot cu zeama lăsată.'
+      ],
+      tips: [
+        'Iaurtul grecesc 0 % are 10 g proteină la 100 g. Trei sute de grame înseamnă 30 g de proteină înainte să adaugi orice altceva.',
+        'Granola „normală” are 8 g proteină și 460 kcal la 100 g; cea proteică are 22 g la 420. La 50 g, diferența e de 7 g de proteină pentru aceleași calorii.',
+        'Untul de arahide 100 % arahide, fără zahăr și fără ulei de palmier, e singura variantă care merită. Citește lista de ingrediente: trebuie să aibă un rând.'
+      ],
+      swaps: [
+        { label: 'Mai ieftin', text: 'Iaurt clasic 3,5 % + 15 g lapte praf degresat amestecat în el: aceeași proteină, jumătate din preț.' },
+        { label: 'Fără granola', text: '40 g fulgi de ovăz mari și 10 g semințe de dovleac. Mai puțină proteină, dar și mult mai puțin zahăr.' },
+        { label: 'Seara', text: 'Amestecă ovăzul în iaurt și lasă peste noapte la frigider. Dimineața e budincă, fără niciun minut de muncă.' }
+      ],
+      why: 'Cinci minute, zero vase, peste 45 g de proteină. Cel mai simplu mic dejun care chiar mută acul.'
+    },
+
+    {
+      id: 'rc-wrap-pastrama-curcan',
+      name: 'Wrap cu pastramă de curcan, telemea și legume',
+      emoji: '🌯', base: 'curcan', method: 'nocook', mealType: 'pranz',
+      servings: 2, timeMin: 12, activeTimeMin: 12, effort: 1, difficulty: 'trivial',
+      equipment: ['tocător', 'cuțit', 'bol mic'],
+      ing: [
+        { id: 'p-pastrama-curcan-caroli', g: 200 },
+        { id: 'b-tortilla-proteica-lidl', g: 120 },
+        { id: 'd-telemea-vaca', g: 80 },
+        { id: 'd-iaurt-grecesc-olympus-0', g: 80 },
+        { p: 'salata', g: 60 },
+        { p: 'rosii', g: 120 },
+        { p: 'castraveti', g: 100 },
+        { p: 'ceapa', g: 30 },
+        { p: 'mustar', g: 10 },
+        { p: 'condimente', g: 3, free: true }
+      ],
+      steps: [
+        'Sosul: iaurt grecesc cu muștar, piper, mărar tocat și o pișcătură de sare. Amestecă până e complet neted.',
+        'Taie roșiile felii și scoate miezul apos cu lingura. Miezul e ce udă tortilla și o rupe la a doua îmbucătură.',
+        'Întinde sosul pe tortilla, dar lasă 3 cm liberi pe margini — altfel iese pe la capete când rulezi.',
+        'Așază salata prima, ca strat izolator între sos și legumele umede. Apoi pastrama, telemeaua sfărâmată, castraveții și ceapa.',
+        'Pune umplutura pe treimea de jos, nu în mijloc. Îndoaie laturile spre interior, apoi rulează strâns de jos în sus.',
+        'Taie oblic în două și înfășoară fiecare jumătate în hârtie de copt dacă o iei la pachet. Ține forma până seara.'
+      ],
+      tips: [
+        'Pastrama de curcan are 22 g proteină la 121 kcal — de trei ori mai bună decât salamul, la aceeași felie.',
+        'Telemeaua e deja sărată, pastrama la fel. Aici nu mai adaugi sare aproape deloc, altfel iese o masă cu peste 4 g de sare.',
+        'Rulat strâns și înfășurat în hârtie, wrapul rezistă 8 ore la temperatura camerei fără să se destrame. E singura masă din listă care nu are nevoie de frigider la birou.'
+      ],
+      swaps: [
+        { label: 'Mai ieftin', text: 'Piept de pui fiert și feliat de acasă în loc de pastramă: jumătate din preț, mai multă proteină, dar 15 minute de gătit.' },
+        { label: 'Fără tortilla', text: 'Aceleași ingrediente peste o salată mare, cu sosul de iaurt drept dressing. Scazi ~180 kcal de porție.' },
+        { label: 'Cu humus', text: 'Humus în loc de iaurt, dacă vrei varianta fără lactate. Mai multe calorii, mai puțină proteină.' }
+      ],
+      why: 'Prânzul de la birou care se face în 12 minute dimineața și are mai multă proteină decât orice de la raftul cald.'
+    },
+
+    {
+      id: 'rc-salata-fasole-telemea-ou',
+      name: 'Salată de fasole roșie cu telemea, ou și porumb',
+      emoji: '🥗', base: 'leguminoase', method: 'nocook', mealType: 'pranz',
+      servings: 2, timeMin: 15, activeTimeMin: 15, effort: 1, difficulty: 'trivial',
+      equipment: ['castron mare', 'strecurătoare', 'oală mică pentru ouă'],
+      ing: [
+        { id: 'v-fasole-rosie-conserva', g: 400 },
+        { id: 'd-oua-gaina-l', g: 110 },
+        { id: 'd-telemea-vaca', g: 80 },
+        { p: 'porumb-conserva', g: 150 },
+        { p: 'rosii', g: 200 },
+        { p: 'ardei', g: 100 },
+        { p: 'ceapa', g: 50 },
+        { p: 'ulei-masline', g: 12 },
+        { p: 'otet', g: 12 },
+        { p: 'condimente', g: 4, free: true }
+      ],
+      steps: [
+        'Clătește fasolea și porumbul sub jet de apă rece, un minut fiecare, până apa iese limpede. Lichidul din conservă are gust metalic și multă sare.',
+        'Lasă-le să se scurgă complet în strecurătoare, 5 minute. Salata cu boabe ude e salată apoasă.',
+        'Ouăle fierte tari, 9 minute, apoi imediat în apă cu gheață. (Fierbe-le de seara sau folosește-le pe cele de la începutul săptămânii.)',
+        'Ceapa tăiată subțire se ține 5 minute în oțet, apoi se scurge. Pierde iuțeala și rămâne doar dulceața — pasul ăsta face diferența între o salată bună și una pe care o eviți.',
+        'Amestecă fasolea, porumbul, roșiile, ardeiul și ceapa cu uleiul, restul de oțet, sare, piper și mult pătrunjel.',
+        'Telemeaua sfărâmată și ouăle tăiate în sferturi se pun deasupra, nu se amestecă. Amestecate, telemeaua se face pastă și ouăle se sfărâmă.',
+        'Lasă 10 minute înainte de servit. Fasolea absoarbe dressingul și salata devine mai bună.'
+      ],
+      tips: [
+        'Fasolea la conservă are doar 7 g proteină la 100 g — a fost fiartă și a absorbit apă. Cea uscată are 22,5 g. Aici plătești comoditatea, și e în regulă atât timp cât știi asta.',
+        'Telemeaua și fasolea din conservă aduc împreună multă sare. Nu mai săra până nu guști la final.',
+        'Ține 3 zile la frigider și e mai bună a doua zi. Adaugă ouăle abia când o mănânci — se strică textura la păstrare.'
+      ],
+      swaps: [
+        { label: 'Mai ieftin și mai proteic', text: '150 g fasole uscată, înmuiată peste noapte și fiartă 60 de minute: aceeași cantitate finală, cu ~20 g mai multă proteină și la o treime din preț.' },
+        { label: 'Cu ton', text: 'O conservă de ton scurs în plus: +26 g proteină pe castron, fără calorii semnificative.' },
+        { label: 'Fără lactate', text: 'Avocado sau 30 g de semințe de dovleac în loc de telemea. Mai puțină proteină, mai multe grăsimi bune.' }
+      ],
+      why: 'Cincisprezece minute, fără foc, din conserve care stau în dulap — și tot iese peste 30 g de proteină pe porție.'
+    },
+
+    {
+      id: 'rc-sandvis-branza-ou-paine-proteica',
+      name: 'Sandviș proteic cu brânză de vaci și ou',
+      emoji: '🥪', base: 'oua', method: 'nocook', mealType: 'mic-dejun',
+      servings: 1, timeMin: 8, activeTimeMin: 8, effort: 1, difficulty: 'trivial',
+      equipment: ['cuțit', 'furculiță', 'bol mic'],
+      ing: [
+        { id: 'b-paine-proteica-lidl', g: 90 },
+        { id: 'd-branza-vaci-covalact-05', g: 120 },
+        { id: 'd-oua-gaina-l', g: 110 },
+        { p: 'castraveti', g: 60 },
+        { p: 'rosii', g: 80 },
+        { p: 'salata', g: 20 },
+        { p: 'mustar', g: 8 },
+        { p: 'condimente', g: 2, free: true }
+      ],
+      steps: [
+        'Fierbe ouăle dinainte — 9 minute pentru gălbenuș tare — și ține-le necurățate la frigider. Se păstrează 5 zile și transformă micul dejun în asamblare pură.',
+        'Zdrobește brânza de vaci cu furculița împreună cu muștarul, sare, piper și mărar sau ceapă verde tocată. Nu o lăsa granulată; frecată, se întinde ca o cremă.',
+        'Prăjește feliile de pâine proteică în prăjitor sau în tigaie uscată. Pâinea proteică e mai densă și mai umedă decât cea albă — neprăjită, sandvișul e greu de mâncat.',
+        'Întinde crema de brânză pe ambele felii, generos. Ea e „lipiciul” care ține totul.',
+        'Ouăle tăiate rondele deasupra, apoi castravetele, roșia și salata. Sare doar peste roșie.',
+        'Taie sandvișul în diagonală. Nu e estetică — pe diagonală, prima îmbucătură prinde toate straturile.'
+      ],
+      tips: [
+        'Pâinea proteică are 20,4 g proteină la 100 g față de 8,8 g la pâinea albă toast. Două felii aduc 18 g — cât trei albușuri.',
+        'Micul dejun clasic românesc (pâine, unt, gem) are sub 8 g de proteină. Ăsta are peste 50, la aproximativ aceleași calorii.',
+        'Brânza de vaci ține de foame mult mai mult decât untul sau crema de brânză: are cazeină, care se digeră lent.'
+      ],
+      swaps: [
+        { label: 'Mai ieftin', text: 'Pâine integrală obișnuită și 30 g de lapte praf degresat amestecat în brânză: recuperezi aproape toată proteina pierdută.' },
+        { label: 'La pachet', text: 'Crema de brânză într-un borcănel, pâinea prăjită separat, asamblat la birou. Altfel se înmoaie până la ora 10.' },
+        { label: 'Fără ouă', text: '60 g de piept de pui la grătar feliat sau pastramă de curcan. Rămâne peste 45 g de proteină.' }
+      ],
+      why: 'Opt minute și un mic dejun care are mai multă proteină decât prânzul mediu al majorității oamenilor.'
+    },
+
+    /* ===================== TOFU & SOIA ===================== */
+    {
+      id: 'rc-tempeh-cuptor-cartofi-dulci',
+      name: 'Tempeh la cuptor cu cartofi dulci și broccoli',
+      emoji: '🌿', base: 'tofu', method: 'oven', mealType: 'cina',
+      servings: 2, timeMin: 45, activeTimeMin: 15, effort: 2, difficulty: 'easy',
+      equipment: ['tavă de cuptor', 'hârtie de copt', 'castron'],
+      ing: [
+        { id: 'v-tempeh', g: 300 },
+        { p: 'cartofi-dulci', g: 350 },
+        { id: 'v-broccoli', g: 250 },
+        { p: 'sos-soia', g: 25 },
+        { p: 'ulei-masline', g: 18 },
+        { p: 'usturoi', g: 10 },
+        { p: 'miere', g: 10 },
+        { p: 'lamaie', g: 20 },
+        { p: 'condimente', g: 4, free: true }
+      ],
+      steps: [
+        'Taie tempehul felii de 1 cm și ține-le 10 minute în abur sau 2 minute în apă clocotită. Aburirea scoate amăreala pe care mulți o pun greșit pe seama sortimentului.',
+        'Marinada: sos de soia, miere, usturoi tocat, zeamă de lămâie, ulei și piper. Lasă tempehul în ea 15 minute — spre deosebire de tofu, absoarbe repede.',
+        'Cuptor la 200 °C. Cartofii dulci tăiați cuburi de 2 cm, amestecați cu ulei și sare, intră primii, 20 de minute.',
+        'Adaugă feliile de tempeh într-un singur strat, cu marinada rămasă turnată peste, și mai dă 12 minute.',
+        'Broccoliul, uns cu un strop de ulei, intră în ultimele 8 minute. Peste 10 minute la 200 °C devine moale și își pierde culoarea.',
+        'Tempehul e gata când marginile s-au închis la culoare și marinada s-a lipit de el ca o glazură. Nu trebuie să fie moale — are textură fermă prin natura lui.'
+      ],
+      tips: [
+        'Tempehul are 19 g proteină la 100 g, față de 12,5–13 g la tofu, pentru că e boabă întreagă fermentată, nu coagulat de lapte de soia.',
+        'Aburirea de 10 minute e pasul pe care aproape toată lumea îl sare și e motivul pentru care „nu-mi place tempehul”.',
+        'Ca soia, are profilul complet de aminoacizi — nu are nevoie de combinat cu cereale ca lintea sau fasolea.'
+      ],
+      swaps: [
+        { label: 'Cu tofu', text: 'Tofu afumat, stors bine 10 minute între șervete. Mai ieftin și mai ușor de găsit, cu ~6 g mai puțină proteină la 100 g.' },
+        { label: 'La air fryer', text: '180 °C: cartofii 12 minute, tempehul încă 10. Iese mai crocant decât la cuptor.' },
+        { label: 'Fără miere', text: 'O linguriță de bulion și un vârf de boia afumată. Varianta vegană și fără zahăr adăugat.' }
+      ],
+      why: 'Cea mai concentrată proteină vegetală pe care o poți pune într-o tavă, cu 15 minute de muncă și fără carne.'
     },
 
     // ---INSERT-NEW-ITEMS-ABOVE---

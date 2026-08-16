@@ -45,7 +45,8 @@
   .pf-modal__foot,
   .pf-modal__close,
   .pf-chart__toggle,
-  .pf-search {
+  .pf-search,
+  .pf-fridge {
     display: none !important;
   }
 
@@ -135,4 +136,17 @@
   @page {
     margin: 14mm;
   }
+
+  /* The fridge picker itself is interactive and is hidden above, but what it
+   * produced — what you still need to buy for each meal — is exactly the sort
+   * of thing you print and take to the shop. Keep it, in ink-safe colours. */
+  .pf-rcard__cov {
+    display: block !important;
+    background: none !important;
+    border-left: 2pt solid #000;
+    padding-left: 6pt;
+  }
+
+  .pf-rcard__covbar { display: none; }
+  .pf-rcard__covtxt { color: #000 !important; }
 }

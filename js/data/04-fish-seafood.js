@@ -283,7 +283,10 @@
       },
       micros: {
         b12Ug: 2.6,
-        omega3Mg: 400,
+        // Oil-packed tuna: the fish's own EPA/DHA migrates into the packing oil,
+        // which is then drained away. Drained oil-packed tuna therefore has LESS
+        // omega-3 than water-packed tuna (~130 vs ~150-200 mg/100 g), not more.
+        omega3Mg: 130,
         potassiumMg: 250,
         cholesterolMg: 45,
         vitDUg: 2
@@ -342,6 +345,7 @@
       tips: [
         'Eticheta declară 403 kcal și 17,5 g proteină la 100 g — dar aia e pentru conținutul TOTAL, cu tot uleiul. Scurs, ajungi la ~192 kcal și ~25 g proteină.',
         'Nu arunca uleiul: e ulei de măsline cu aromă de ton, perfect pentru dressing de salată sau pentru a călii ceapă.',
+        'Contraintuitiv: tonul în ulei, scurs, are MAI PUȚIN omega-3 decât cel în suc propriu (~130 vs. ~150–200 mg/100 g). La sterilizare, grăsimile peștelui trec în uleiul din cutie — iar uleiul ajunge în chiuvetă. Încă un motiv să nu-l arunci.',
         'Dacă scurgi tot uleiul, produsul are aproape aceleași macro-uri ca tonul în suc propriu, dar ai plătit dublu.'
       ],
       warnings: [
@@ -452,7 +456,8 @@
       pairings: ['Salată de fasole', 'Ou fiert', 'Avocado', 'Muștar', 'Pâine prăjită'],
       tips: [
         'Compară cu Nixe la raftul de alături: aceleași macro-uri, jumătate de preț. Aici plătești brandul.',
-        'Sucul propriu conține proteine solubile — dacă îl folosești într-o pastă sau într-un sos, nu-l arunca.'
+        'Sucul propriu conține proteine solubile — dacă îl folosești într-o pastă sau într-un sos, nu-l arunca.',
+        'Matematica reală: 16,99 lei pentru 104 g scurs × 24 g proteină = ~25 g proteină, adică ~0,68 lei pe gram. Nixe la Lidl e la ~0,28 lei. Plătești de 2,4 ori mai mult pentru aceeași cutie de 160 g.'
       ],
       warnings: [
         'Mercur: maximum 3–4 cutii de ton pe săptămână, indiferent de marcă.'
@@ -608,7 +613,8 @@
       },
       micros: {
         b12Ug: 2.4,
-        omega3Mg: 180,
+        // Oil-packed and drained: omega-3 leaves with the oil.
+        omega3Mg: 120,
         potassiumMg: 240,
         cholesterolMg: 42
       },
@@ -831,7 +837,9 @@
       },
       micros: {
         b12Ug: 2.5,
-        omega3Mg: 380,
+        // Same mechanism as Rio Mare in olive oil: draining the oil removes most
+        // of the omega-3 that leached out of the fish during sterilisation.
+        omega3Mg: 130,
         potassiumMg: 250,
         cholesterolMg: 44
       },
@@ -1116,7 +1124,8 @@
         'Dacă vrei versiunea ieftină: cutie de ton + jumătate de conservă de fasole + porumb, la 12 lei și 35 g proteină.'
       ],
       warnings: [
-        'Proteina e sub 10 g/100 g — nu îl trece la „sursă de proteină" în jurnal fără să verifici.'
+        'Proteina e sub 10 g/100 g — nu îl trece la „sursă de proteină" în jurnal fără să verifici.',
+        'Mercur: rămâne ton, chiar dacă e diluat cu legume. O cutie conține ~50 g de pește, deci contează ca jumătate de porție la limita de 3–4 porții de ton pe săptămână.'
       ],
       storage: 'Cămară. Se consumă integral la deschidere.',
       shelfLife: '2–3 ani sigilat',
@@ -1227,6 +1236,7 @@
       ],
       warnings: [
         'Conține gluten.',
+        'Mercur: paharul conține ~45 g de ton, adică o jumătate de porție. Intră în același buget săptămânal de 3–4 porții de ton.',
         'Densitate proteică mică raportat la preț — evită dacă urmărești macro-uri.'
       ],
       storage: 'Cămară.',
@@ -3912,6 +3922,7 @@
         'Aproape fără oase în file — de asta e peștele preferat în restaurante și pentru copii.'
       ],
       warnings: [
+        'Mercur: șalăul e pește răpitor de apă dulce și acumulează metilmercur, mai ales exemplarele mari, bătrâne. Ține-te la maximum 1–2 porții pe săptămână; în sarcină și alăptare, maximum una, iar la copiii mici alternează-l cu pește alb marin (cod, merluciu, polac).',
         'Preț mare (~90 lei/kg file), disponibilitate incertă în Sibiu.'
       ],
       storage: 'Frigider 0–2 °C, maximum 24 de ore. Congelat, 4 luni.',
@@ -4031,6 +4042,7 @@
         'Cere la piață să ți-i curețe. Costă 3–5 lei/kg și îți salvează 30 de minute.'
       ],
       warnings: [
+        'Mercur: bibanul e răpitor și acumulează metilmercur pe măsură ce crește. Bibanii mici de baltă sunt în regulă săptămânal; la exemplarele mari, limitează-te la 1–2 porții pe săptămână, iar în sarcină la una.',
         'Înotătoare dorsale foarte țepoase — atenție la mâini când îl cureți.',
         'Randament comestibil foarte mic (~40%).'
       ],
@@ -4158,6 +4170,7 @@
         'Textura fermă îl face singurul pește de apă dulce care rezistă bine la grătar fără să se destrame.'
       ],
       warnings: [
+        'Mercur: somnul e răpitor și longeviv, deci printre peștii de apă dulce cu cel mai mare potențial de acumulare de metilmercur — mai ales somnul sălbatic mare, din Dunăre sau din bălți. Somnul african de crescătorie e sacrificat tânăr și e mult mai sigur. Regulă practică: maximum 1–2 porții pe săptămână din cel sălbatic, maximum una în sarcină și alăptare.',
         'Mai gras decât șalăul sau bibanul.',
         'Verifică proveniența dacă ești sensibil la gustul de mâl.'
       ],
@@ -5715,7 +5728,8 @@
         cholesterolMg: 190,
         ironMg: 0.6,
         zincMg: 1.4,
-        calciumMg: 60
+        calciumMg: 60,
+        omega3Mg: 300
       },
       serving: {
         grams: 125,
@@ -6149,7 +6163,7 @@
       pairings: ['Usturoi', 'Pătrunjel', 'Lămâie', 'Chili', 'Paste cu roșii', 'Orez'],
       tips: [
         'Regula 90 de secunde / 45 de minute: fie îl arunci în tigaie foarte încinsă un minut și jumătate, fie îl fierbi lent în sos de roșii trei sferturi de oră. Nimic între.',
-        'Colesterol 230 mg/100 g — cel mai mare din categorie. Pentru majoritatea oamenilor nu contează, dar merită știut.',
+        'Colesterol 230 mg/100 g — cel mai mare dintre produsele din categorie pe care le mănânci în porții întregi. Icrele au mai mult (350–400 mg), dar din ele iei 30 g, nu 180 g. Pentru majoritatea oamenilor colesterolul alimentar nu contează, dar merită știut.',
         'Uscarea e crucială: calamarul ud fierbe în propria apă și iese elastic.'
       ],
       warnings: [

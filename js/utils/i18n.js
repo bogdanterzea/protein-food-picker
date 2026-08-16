@@ -2,6 +2,14 @@
  * PROTEIN ATLAS SIBIU — I18N
  * Romanian is the primary language (the shelves are Romanian).
  * English is a full second locale for every UI string.
+ *
+ * Two ways to reach the dictionary:
+ *   - PF.i18n.t('key') / PF.i18n.tf('key', params) from JavaScript;
+ *   - data-i18n / data-i18n-html / data-i18n-attr attributes on static
+ *     markup, resolved by PF.i18n.applyDom(). The full contract is
+ *     documented above applyDom() further down this file.
+ * Product data (names, descriptions, sources) is deliberately Romanian only.
+ *
  * Attaches to window.PF.i18n
  * ========================================================================= */
 (function () {
@@ -13,15 +21,30 @@
     ro: {
       /* --- shell ---------------------------------------------------- */
       'app.title': 'Atlasul Proteinelor',
-      'app.subtitle': 'Sibiu',
-      'app.tagline': 'Fiecare gram de proteină pe care îl poți cumpăra în Sibiu.',
       'app.heroLead':
         'O bază de date cu alimente bogate în proteine găsibile în Lidl, Kaufland, ' +
         'Carrefour, Profi, Penny, Auchan, Selgros, Metro și în Piața Cibin. ' +
         'Fiecare produs are macro-urile complete, efortul de gătit, gustul, prețul ' +
         'pe gram de proteină și momentul din zi în care merită mâncat.',
+
+      /* --- hero eyebrow + KPI strip ---------------------------------- */
+      /* {n} produse, {c} categorii, {s} magazine — see PF.i18n.tf() */
+      'hero.eyebrow': 'Sibiu · {n} produse · {c} categorii · {s} magazine',
+      'kpi.protein': 'max proteină/100g',
+      'kpi.ready': 'gata de mâncat',
+      'kpi.value': 'lei/100g proteină min',
+      'kpi.stores': 'magazine',
+      'kpi.tier': 'produse rang S+A',
+
       'search.placeholder': 'Caută: piept de pui, skyr, ton, linte…',
       'search.clear': 'Șterge căutarea',
+
+      /* --- accessible names for the static chrome in index.html ------ */
+      'a11y.skip': 'Sari la conținut',
+      'a11y.brand': 'Atlasul Proteinelor Sibiu',
+      'a11y.search': 'Caută în atlas',
+      'a11y.viewSwitch': 'Vizualizare',
+      'a11y.shortcuts': 'Scurtături (?)',
 
       /* --- nav / views ---------------------------------------------- */
       'view.grid': 'Carduri',
@@ -69,6 +92,7 @@
       'sort.taste': 'Cel mai bun gust',
       'sort.satiety': 'Cea mai mare sațietate',
       'sort.name': 'Alfabetic',
+      'sort.flip': 'Inversează ordinea',
 
       /* --- card ------------------------------------------------------- */
       'card.per100': 'la 100 g',
@@ -137,7 +161,6 @@
       'tab.timing': 'Când mănânci',
 
       /* --- modal sections -------------------------------------------------- */
-      'sec.macros': 'Macronutrienți',
       'sec.stats': 'Statistici',
       'sec.energy': 'Distribuția caloriilor',
       'sec.steps': 'Cum îl faci',
@@ -149,7 +172,6 @@
       'sec.stores': 'Prețuri și disponibilitate',
       'sec.similar': 'Produse similare',
       'sec.upgrade': 'Alternativă mai bună',
-      'sec.sources': 'Surse',
       'sec.tasteProfile': 'Profil de gust',
       'sec.micros': 'Micronutrienți',
 
@@ -175,7 +197,7 @@
       'calc.goal.senior': 'Peste 65 de ani',
       'calc.perDay': 'g de proteină pe zi',
       'calc.perMeal': 'pe masă (4 mese)',
-      'calc.range': 'interval rezonabil',
+      'calc.targetShort': 'țintă',
 
       /* --- oracle -------------------------------------------------------------- */
       'oracle.title': 'Ce mănânc acum?',
@@ -184,23 +206,69 @@
       'oracle.now': 'Acum e momentul pentru',
 
       /* --- boards ---------------------------------------------------------------- */
+      /* Each board has three strings: title, unit (printed next to the title)
+       * and desc (the paragraph under the header). */
       'board.protein': 'Cea mai multă proteină',
+      'board.protein.unit': 'g / 100 g',
+      'board.protein.desc':
+        'Cea mai mare concentrație de proteină pe 100 g, indiferent de preț sau de efort. ' +
+        'Colagenul și gelatina sunt excluse — au cifre mari, dar proteină inutilizabilă.',
+
       'board.purity': 'Cea mai pură proteină',
+      'board.purity.unit': '% din kcal',
+      'board.purity.desc':
+        'Ce procent din calorii vine din proteină. Filtrat la minim 8 g/100 g, ' +
+        'altfel salata verde ar câștiga cu 0,9 g de proteină. Colagenul e exclus: ' +
+        'ajunge la 100%, dar fără triptofan nu contează.',
+
       'board.value': 'Cea mai ieftină proteină',
+      'board.value.unit': 'lei / 100 g P',
+      'board.value.desc':
+        'Cât te costă 100 g de proteină pură. ATENȚIE: toate prețurile sunt ' +
+        'estimări (±20–30%), nu prețuri de raft. Ordinea e aproape sigur corectă — ' +
+        'diferența dintre linte și un baton proteic e de 20×, nu de 5%.',
+
       'board.serving': 'Cea mai multă proteină pe porție',
+      'board.serving.unit': 'g / porție',
+      'board.serving.desc': 'Proteina dintr-o porție realistă — nu din 100 g teoretice.',
+
       'board.instant': 'Zero efort, multă proteină',
+      'board.instant.unit': 'g / 100 g',
+      'board.instant.desc': 'Zero gătit, zero încălzit. Deschizi și mănânci.',
+
       'board.taste': 'Cel mai bun gust',
+      'board.taste.unit': 'scor gust',
+      'board.taste.desc':
+        'Cele mai plăcute surse de proteină. Filtrate la minim 12 g/100 g, ' +
+        'ca să nu câștige ciocolata.',
+
       'board.lean': 'Cele mai slabe (fără grăsime)',
+      'board.lean.unit': '% kcal fără grăsime',
+      'board.lean.desc': 'Cele mai slabe surse de proteină din atlas.',
+
       'board.lowkcal': 'Multă proteină, puține calorii',
+      'board.lowkcal.unit': 'g P / 100 kcal',
+      'board.lowkcal.desc':
+        'Cea mai multă proteină pentru fiecare 100 de calorii. Regele deficitului caloric.',
+
       'board.satiety': 'Cea mai mare sațietate',
+      'board.satiety.unit': 'scor sațietate',
+      'board.satiety.desc': 'Ce îți taie foamea cel mai mult, raportat la calorii.',
+
       'board.local': 'Produse locale de Sibiu',
+      'board.local.unit': 'g / 100 g',
+      'board.local.desc':
+        'Ce poți lua din Piața Cibin, de la măcelării și de la producătorii locali.',
+
+      'board.histo': 'Distribuția proteinei',
 
       /* --- results -------------------------------------------------------------- */
       'res.showing': 'produse',
-      'res.of': 'din',
       'res.none': 'Niciun produs nu trece de filtre',
       'res.noneHelp': 'Relaxează un filtru — de obicei „proteină minimă” sau „cost maxim” e vinovatul.',
       'res.resetFilters': 'Resetează filtrele',
+      'res.loadMore': 'Încarcă încă {n} produse',
+      'res.remaining': '({n} rămase)',
 
       /* --- misc ----------------------------------------------------------------- */
       'misc.confidence': 'Încredere în date',
@@ -219,28 +287,83 @@
       'misc.copied': 'Copiat în clipboard',
       'misc.added': 'Adăugat la masă',
       'misc.removed': 'Șters',
-      'misc.per': 'pe',
-      'misc.each': 'buc',
       'misc.total': 'Total',
-      'misc.pack': 'ambalaj',
       'misc.availability': 'Disponibilitate',
       'misc.price': 'Preț',
       'misc.perKg': '/kg',
       'misc.per100gProtein': '/100 g proteină',
-      'misc.aisle': 'Unde îl găsești'
+      'misc.aisle': 'Unde îl găsești',
+      'misc.products': 'produse',
+      'misc.categories': 'categorii',
+      'misc.stores': 'magazine',
+      /* Currency symbol. format.js still hard-codes "lei"; see the note there. */
+      'misc.currency': 'lei',
+
+      /* --- footer (static markup in index.html) ---------------------------------- */
+      'foot.what': 'Ce este asta',
+      'foot.what1':
+        'O bază de date cu alimente bogate în proteine pe care le poți cumpăra ' +
+        'efectiv în Sibiu.',
+      'foot.what2':
+        'Fiecare produs are macro-uri complete, preț pe gram de proteină, efort ' +
+        'de gătit, gust și momentul potrivit din zi.',
+      'foot.what3': 'Funcționează complet offline. Nu trimite nimic nicăieri.',
+
+      'foot.bars': 'Cum se citesc barele',
+      'foot.bars1': '<b>Proteină</b> — grame la 100 g. Bara e plină la 30 g.',
+      'foot.bars2': '<b>Puritate</b> — ce procent din calorii vine din proteină.',
+      'foot.bars3': '<b>Preț</b> — cât costă 100 g de proteină pură.',
+      'foot.bars4': '<b>Gust, sațietate, comoditate</b> — evaluări subiective, asumate.',
+
+      'foot.docs': 'Documentație',
+      'foot.docsMethod': 'Metodologie și scoruri',
+      'foot.docsSchema': 'Schema datelor',
+      'foot.docsGuide': 'Ghid de proteină',
+      'foot.docsStores': 'Magazinele din Sibiu',
+
+      'foot.warn': 'Avertismente',
+      'foot.warn1':
+        '<b>Prețurile sunt estimări neverificate.</b> Niciunul nu a fost citit ' +
+        'dintr-un magazin și nu există un API public de prețuri pentru retailul ' +
+        'alimentar din România. Sunt afișate cu „≈” și au o marjă de ±20–30%. ' +
+        'Folosește-le ca să compari produse între ele, nu ca preț de raft.',
+      'foot.warn2':
+        'Valorile nutriționale variază între loturi și producători. Eticheta din ' +
+        'mână bate întotdeauna baza de date.',
+      'foot.warn3':
+        'Nu este sfat medical. Dacă ai probleme renale, hepatice sau o afecțiune ' +
+        'metabolică, întreabă un medic înainte să-ți crești aportul de proteină.',
+
+      'foot.legal':
+        'Atlasul Proteinelor Sibiu · date colectate în august 2026 · toate mărcile ' +
+        'aparțin proprietarilor lor. Proiect personal, fără afiliere cu niciun ' +
+        'retailer. Datele tale (favorite, masa curentă, comparația) rămân în ' +
+        'browserul tău.'
     },
 
     en: {
       'app.title': 'Protein Atlas',
-      'app.subtitle': 'Sibiu',
-      'app.tagline': 'Every gram of protein you can buy in Sibiu.',
       'app.heroLead':
         'A database of high-protein foods you can actually find in Lidl, Kaufland, ' +
         'Carrefour, Profi, Penny, Auchan, Selgros, Metro and the Cibin market. ' +
         'Every product carries full macros, cooking effort, taste, cost per gram of ' +
         'protein and the time of day it makes sense to eat it.',
+
+      'hero.eyebrow': 'Sibiu · {n} products · {c} categories · {s} stores',
+      'kpi.protein': 'max protein/100g',
+      'kpi.ready': 'ready to eat',
+      'kpi.value': 'cheapest 100g of protein',
+      'kpi.stores': 'stores',
+      'kpi.tier': 'S+A tier products',
+
       'search.placeholder': 'Search: chicken breast, skyr, tuna, lentils…',
       'search.clear': 'Clear search',
+
+      'a11y.skip': 'Skip to content',
+      'a11y.brand': 'Protein Atlas Sibiu',
+      'a11y.search': 'Search the atlas',
+      'a11y.viewSwitch': 'View',
+      'a11y.shortcuts': 'Shortcuts (?)',
 
       'view.grid': 'Cards',
       'view.table': 'Table',
@@ -285,6 +408,7 @@
       'sort.taste': 'Best tasting',
       'sort.satiety': 'Most filling',
       'sort.name': 'Alphabetical',
+      'sort.flip': 'Reverse the order',
 
       'card.per100': 'per 100 g',
       'card.per100ml': 'per 100 ml',
@@ -347,7 +471,6 @@
       'tab.buy': 'Where to buy',
       'tab.timing': 'When to eat',
 
-      'sec.macros': 'Macronutrients',
       'sec.stats': 'Stats',
       'sec.energy': 'Calorie split',
       'sec.steps': 'How to make it',
@@ -359,7 +482,6 @@
       'sec.stores': 'Prices & availability',
       'sec.similar': 'Similar products',
       'sec.upgrade': 'A better alternative',
-      'sec.sources': 'Sources',
       'sec.tasteProfile': 'Taste profile',
       'sec.micros': 'Micronutrients',
 
@@ -383,7 +505,7 @@
       'calc.goal.senior': 'Over 65',
       'calc.perDay': 'g of protein per day',
       'calc.perMeal': 'per meal (4 meals)',
-      'calc.range': 'reasonable range',
+      'calc.targetShort': 'target',
 
       'oracle.title': 'What do I eat right now?',
       'oracle.sub': 'Pick for me, based on the time of day and the active filters.',
@@ -391,21 +513,66 @@
       'oracle.now': 'Right now is the moment for',
 
       'board.protein': 'Most protein',
+      'board.protein.unit': 'g / 100 g',
+      'board.protein.desc':
+        'The densest protein per 100 g, whatever it costs and however long it takes ' +
+        'to make. Collagen and gelatin are excluded — big numbers on the label, ' +
+        'protein your muscles cannot use.',
+
       'board.purity': 'Purest protein',
+      'board.purity.unit': '% of kcal',
+      'board.purity.desc':
+        'How much of the calories come from protein. Filtered at 8 g/100 g minimum, ' +
+        'or lettuce would win the board with 0.9 g of protein. Collagen is excluded: ' +
+        'it hits 100%, but with no tryptophan the number is meaningless.',
+
       'board.value': 'Cheapest protein',
+      'board.value.unit': 'RON / 100 g P',
+      'board.value.desc':
+        'What 100 g of pure protein costs you. HEADS UP: every price here is an ' +
+        'estimate (±20–30%), not a shelf price. The ordering is almost certainly ' +
+        'right — lentils and a protein bar are 20× apart, not 5%.',
+
       'board.serving': 'Most protein per serving',
+      'board.serving.unit': 'g / serving',
+      'board.serving.desc': 'Protein in a portion you would actually eat — not in a theoretical 100 g.',
+
       'board.instant': 'Zero effort, lots of protein',
+      'board.instant.unit': 'g / 100 g',
+      'board.instant.desc': 'No cooking, no reheating. Open it and eat.',
+
       'board.taste': 'Best tasting',
+      'board.taste.unit': 'taste score',
+      'board.taste.desc':
+        'The protein sources that are genuinely nice to eat. Filtered at 12 g/100 g ' +
+        'minimum, so chocolate does not walk away with it.',
+
       'board.lean': 'Leanest',
+      'board.lean.unit': '% non-fat kcal',
+      'board.lean.desc': 'The leanest protein sources in the atlas.',
+
       'board.lowkcal': 'High protein, low calorie',
+      'board.lowkcal.unit': 'g P / 100 kcal',
+      'board.lowkcal.desc':
+        'The most protein for every 100 calories. King of the calorie deficit.',
+
       'board.satiety': 'Most filling',
+      'board.satiety.unit': 'satiety score',
+      'board.satiety.desc': 'What kills hunger hardest for the calories it costs you.',
+
       'board.local': 'Sibiu local products',
+      'board.local.unit': 'g / 100 g',
+      'board.local.desc':
+        'What you can pick up at the Cibin market, from local butchers and local producers.',
+
+      'board.histo': 'Protein distribution',
 
       'res.showing': 'products',
-      'res.of': 'of',
       'res.none': 'No product passes the filters',
       'res.noneHelp': 'Relax a filter — usually "min protein" or "max cost" is the culprit.',
       'res.resetFilters': 'Reset filters',
+      'res.loadMore': 'Load {n} more products',
+      'res.remaining': '({n} left)',
 
       'misc.confidence': 'Data confidence',
       'misc.confidence.high': 'high — read off the label',
@@ -423,15 +590,55 @@
       'misc.copied': 'Copied to clipboard',
       'misc.added': 'Added to the meal',
       'misc.removed': 'Removed',
-      'misc.per': 'per',
-      'misc.each': 'ea',
       'misc.total': 'Total',
-      'misc.pack': 'pack',
       'misc.availability': 'Availability',
       'misc.price': 'Price',
       'misc.perKg': '/kg',
       'misc.per100gProtein': '/100 g protein',
-      'misc.aisle': 'Where to find it'
+      'misc.aisle': 'Where to find it',
+      'misc.products': 'products',
+      'misc.categories': 'categories',
+      'misc.stores': 'stores',
+      'misc.currency': 'RON',
+
+      'foot.what': 'What this is',
+      'foot.what1':
+        'A database of high-protein foods you can actually walk into a shop in ' +
+        'Sibiu and buy.',
+      'foot.what2':
+        'Every product carries full macros, cost per gram of protein, cooking ' +
+        'effort, taste and the time of day it fits.',
+      'foot.what3': 'Runs entirely offline. Nothing is sent anywhere.',
+
+      'foot.bars': 'How to read the bars',
+      'foot.bars1': '<b>Protein</b> — grams per 100 g. The bar fills at 30 g.',
+      'foot.bars2': '<b>Purity</b> — how much of the calories come from protein.',
+      'foot.bars3': '<b>Value</b> — what 100 g of pure protein costs.',
+      'foot.bars4': '<b>Taste, satiety, convenience</b> — subjective calls, openly so.',
+
+      'foot.docs': 'Documentation',
+      'foot.docsMethod': 'Methodology & scores',
+      'foot.docsSchema': 'Data schema',
+      'foot.docsGuide': 'Protein guide',
+      'foot.docsStores': 'The shops in Sibiu',
+
+      'foot.warn': 'Caveats',
+      'foot.warn1':
+        '<b>Prices are unverified estimates.</b> Not one was read off a shelf, and ' +
+        'Romanian food retail has no public price API. They are shown with “≈” and ' +
+        'carry a ±20–30% margin. Use them to compare products against each other, ' +
+        'not as shelf prices.',
+      'foot.warn2':
+        'Nutrition values vary between batches and manufacturers. The label in your ' +
+        'hand always beats the database.',
+      'foot.warn3':
+        'This is not medical advice. If you have kidney or liver trouble or a ' +
+        'metabolic condition, talk to a doctor before pushing your protein intake up.',
+
+      'foot.legal':
+        'Protein Atlas Sibiu · data collected in August 2026 · all trademarks belong ' +
+        'to their owners. A personal project, unaffiliated with any retailer. Your ' +
+        'data (favourites, current meal, comparison) stays in your browser.'
     }
   };
 
@@ -444,11 +651,121 @@
     return fallback !== undefined ? fallback : key;
   }
 
+  /** True when the key exists in the active locale or in the Romanian base. */
+  function has(key) {
+    const table = DICT[LANG] || DICT.ro;
+    return (
+      Object.prototype.hasOwnProperty.call(table, key) ||
+      Object.prototype.hasOwnProperty.call(DICT.ro, key)
+    );
+  }
+
+  /**
+   * Translate a string that carries {placeholders}:
+   *     tf('hero.eyebrow', { n: 505, c: 8, s: 18 })
+   *     -> "Sibiu · 505 produse · 8 categorii · 18 magazine"
+   * A placeholder with no matching parameter is left as-is, so a wiring
+   * mistake shows up as "{n}" in the UI instead of a silent "undefined".
+   */
+  function tf(key, params) {
+    const s = t(key);
+    if (!params) return s;
+    return s.replace(/\{(\w+)\}/g, function (whole, name) {
+      return Object.prototype.hasOwnProperty.call(params, name) ? String(params[name]) : whole;
+    });
+  }
+
+  /* =========================================================================
+   * DECLARATIVE DOM TRANSLATION — the data-i18n contract
+   *
+   * Static markup (index.html) cannot call t(). Instead it declares which
+   * dictionary key each node carries, and applyDom() writes the active
+   * language into it. Three attributes, all optional, all combinable on the
+   * same element:
+   *
+   *   data-i18n="key"
+   *       Replaces the element's textContent.
+   *       <a class="pf-skip-link" href="#pf-main" data-i18n="a11y.skip">Sari la conținut</a>
+   *
+   *   data-i18n-html="key"
+   *       Replaces the element's innerHTML. Use it only when the translation
+   *       itself contains markup (the footer <li> items wrap a word in <b>).
+   *       The value comes from the dictionary in this file and from nowhere
+   *       else — never point it at user or product data.
+   *       <li data-i18n-html="foot.bars1"><b>Proteină</b> — grame la 100 g.</li>
+   *
+   *   data-i18n-attr="attr:key;attr2:key2"
+   *       Sets one or more attributes. Pairs are separated by ";", the
+   *       attribute name and the key by the first ":". Whitespace around the
+   *       parts is ignored.
+   *       <button data-i18n-attr="aria-label:misc.help;title:a11y.shortcuts">?</button>
+   *       <input id="pf-search" data-i18n-attr="placeholder:search.placeholder;aria-label:a11y.search">
+   *
+   * Rules:
+   *   - Write the Romanian text into the markup as usual. It is the fallback
+   *     that shows before the first applyDom() pass and in any browser where
+   *     scripting is off, and it keeps the file readable.
+   *   - An unknown key leaves the node untouched, so a typo degrades to the
+   *     Romanian already in the markup rather than printing "foo.bar".
+   *   - applyDom() runs automatically at the end of setLang(), which app.js
+   *     already calls on boot and on every RO/EN toggle. Marking up index.html
+   *     is therefore the only thing needed — no extra wiring.
+   *   - Call it yourself only after injecting new *static* markup:
+   *     PF.i18n.applyDom(myNewlyInsertedElement). Components that build their
+   *     HTML in JS should keep calling t() directly instead.
+   *   - root defaults to document, and the root element itself is translated
+   *     if it carries the attributes.
+   *
+   * Returns the number of nodes/attributes it wrote, which is handy in tests.
+   * ====================================================================== */
+  function applyDom(root) {
+    const scope = root || (typeof document !== 'undefined' ? document : null);
+    if (!scope || typeof scope.querySelectorAll !== 'function') return 0;
+    let written = 0;
+
+    function each(selector, fn) {
+      if (typeof scope.matches === 'function' && scope.matches(selector)) fn(scope);
+      const found = scope.querySelectorAll(selector);
+      for (let i = 0; i < found.length; i++) fn(found[i]);
+    }
+
+    each('[data-i18n]', function (el) {
+      const key = el.getAttribute('data-i18n');
+      if (!key || !has(key)) return;
+      el.textContent = t(key);
+      written++;
+    });
+
+    each('[data-i18n-html]', function (el) {
+      const key = el.getAttribute('data-i18n-html');
+      if (!key || !has(key)) return;
+      el.innerHTML = t(key);
+      written++;
+    });
+
+    each('[data-i18n-attr]', function (el) {
+      (el.getAttribute('data-i18n-attr') || '').split(';').forEach(function (pair) {
+        const cut = pair.indexOf(':');
+        if (cut < 1) return;
+        const attr = pair.slice(0, cut).trim();
+        const key = pair.slice(cut + 1).trim();
+        if (!attr || !key || !has(key)) return;
+        el.setAttribute(attr, t(key));
+        written++;
+      });
+    });
+
+    return written;
+  }
+
   function setLang(l) {
     LANG = DICT[l] ? l : 'ro';
     if (PF.fmt) PF.fmt.setLocale(LANG);
     try {
       document.documentElement.setAttribute('lang', LANG);
+      /* Re-translate the static markup. Keeps index.html in sync with the
+       * toggle without app.js having to know which nodes exist. */
+      applyDom(document);
     } catch (e) {
       /* ignore */
     }
@@ -580,6 +897,9 @@
 
   PF.i18n = {
     t: t,
+    tf: tf,
+    has: has,
+    applyDom: applyDom,
     setLang: setLang,
     lang: lang,
     catName: catName,

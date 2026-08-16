@@ -151,11 +151,16 @@
   /** Legend for the macro bar — always rendered next to it. */
   function macroLegend(food) {
     const d = food._d;
+    /* Rounding the four shares independently printed 99% or 101% on 125 of
+     * the 512 products. `energyShare` sums to exactly 100, so the fix belongs
+     * to the display: largest-remainder rounding, shared with the donut so
+     * the ring, its tooltips and this legend can never disagree. */
+    const pct = PF.charts.roundShares(d.energyShare);
     const rows = [
-      { k: 'protein', g: d.protein100, pct: d.energyShare.protein, c: 'var(--macro-protein)' },
-      { k: 'carbs', g: d.carbs100, pct: d.energyShare.carbs, c: 'var(--macro-carbs)' },
-      { k: 'fat', g: d.fat100, pct: d.energyShare.fat, c: 'var(--macro-fat)' },
-      { k: 'fiber', g: d.fiber100, pct: d.energyShare.fiber, c: 'var(--macro-fiber)' }
+      { k: 'protein', g: d.protein100, pct: pct.protein, c: 'var(--macro-protein)' },
+      { k: 'carbs', g: d.carbs100, pct: pct.carbs, c: 'var(--macro-carbs)' },
+      { k: 'fat', g: d.fat100, pct: pct.fat, c: 'var(--macro-fat)' },
+      { k: 'fiber', g: d.fiber100, pct: pct.fiber, c: 'var(--macro-fiber)' }
     ];
     return (
       '<div class="pf-donut__legend">' +
@@ -166,7 +171,7 @@
             '<span class="pf-legend-row__swatch" style="--c:' + r.c + '"></span>' +
             '<span class="pf-legend-row__name">' + t('card.' + r.k) + '</span>' +
             '<span class="pf-legend-row__g">' + fmt.g(r.g) + '</span>' +
-            '<span class="pf-legend-row__pct">' + Math.round(r.pct) + '%</span>' +
+            '<span class="pf-legend-row__pct">' + r.pct + '%</span>' +
             '</div>'
         )
         .join('') +
@@ -372,6 +377,13 @@
   function qualityNote(food) {
     const d = food._d;
     if (d.qualityReason === 'collagen') {
+      /* The factor used to be a flat 0.25 and was written into this string.
+       * Since `collagenShare` landed, a partly gelatinous product gets a
+       * weighted factor (0.699 for the protein jelly), and the hardcoded
+       * 0,25 contradicted the quality bar rendered right next to it. Read
+       * the real number instead — it reads correctly at 0,25 and at 0,699. */
+      const share = Math.round((d.collagenShare || 1) * 100);
+      const factor = fmt.num(d.quality, 2).replace('.', ',');
       return {
         level: 'bad',
         short: 'Proteină incompletă',
@@ -379,8 +391,14 @@
           'Colagenul și gelatina nu conțin triptofan și au o valoare biologică ' +
           'aproape nulă pentru sinteza musculară. Gramele de pe etichetă sunt ' +
           'reale ca azot, dar NU le pune la socoteală în ținta zilnică de ' +
-          'proteină. Scorul din atlas e ajustat cu un factor de 0,25 tocmai ' +
-          'din acest motiv.'
+          'proteină. ' +
+          (share < 100
+            ? 'Aici doar ' + share + '% din proteină e gelatină, așa că scorul ' +
+              'din atlas ajustează'
+            : 'Scorul din atlas ajustează') +
+          ' proteina cu un factor de ' + factor +
+          ' (' + Math.round(d.quality * 100) + '% din gramele declarate) ' +
+          'tocmai din acest motiv.'
       };
     }
     if (d.quality < 1) {

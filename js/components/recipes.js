@@ -31,6 +31,197 @@
   };
 
   /* =======================================================================
+   * "CE AM ÎN FRIGIDER"
+   *
+   * Atlasul răspunde la "ce să cumpăr". Asta răspunde la întrebarea de la
+   * 19:00: "am chestiile astea în casă — ce pot găti ACUM?"
+   *
+   * Bifezi ingredientele pe care le ai, iar fiecare masă îți arată câte
+   * ingrediente ai din câte are nevoie și exact ce-ți lipsește. Se poate
+   * ordona după cât de aproape ești de a putea găti.
+   *
+   * Cheia unui ingredient: 'a:<id-produs>' pentru atlas, 'p:<cheie>' pentru
+   * cămară. Se ține în localStorage, ca restul stării personale.
+   * ==================================================================== */
+  let fridge = new Set();
+  let fridgeMode = false;   /* true = ordonează după ce poți găti acum */
+  let fridgeOpen = false;
+  const fridgeExpanded = new Set();   /* groups showing their full ingredient list */
+
+  /* Ingredients per group before the "+N altele" cut. Chosen so the open panel
+   * stays near one phone screen per group — with 83 ingredients across 43
+   * meals, showing everything turns the panel into a 2400px wall of chips. */
+  const GROUP_CAP = 12;
+
+  function ingKey(i) {
+    return i.id ? 'a:' + i.id : 'p:' + i.p;
+  }
+
+  function ingLabel(i) {
+    if (i.id) {
+      const f = PF.data.byId[i.id];
+      return f ? (f.nameRo || f.name) : i.id;
+    }
+    const p = (window.PF_PANTRY || {})[i.p];
+    return p ? p.name : i.p;
+  }
+
+  /** Ingredients you would obviously never track — salt, pepper, herbs. */
+  function isStaple(i) {
+    return !!i.free;
+  }
+
+  function loadFridge() {
+    fridge = PF.store.getSet('fridge');
+    fridgeMode = PF.store.get('fridgeMode', false) === true;
+  }
+
+  function saveFridge() {
+    PF.store.saveSet('fridge', fridge);
+    PF.store.set('fridgeMode', fridgeMode);
+  }
+
+  /** How much of a recipe you already have at home. */
+  function coverage(r) {
+    const need = (r.ing || []).filter(i => !isStaple(i));
+    const missing = need.filter(i => !fridge.has(ingKey(i)));
+    return {
+      total: need.length,
+      have: need.length - missing.length,
+      missing: missing,
+      ratio: need.length ? (need.length - missing.length) / need.length : 0,
+      complete: missing.length === 0 && need.length > 0
+    };
+  }
+
+  /** Every distinct ingredient used across all meals, most-used first. */
+  function ingredientIndex() {
+    const map = new Map();
+    ALL.forEach(r => (r.ing || []).forEach(i => {
+      if (isStaple(i)) return;
+      const k = ingKey(i);
+      if (!map.has(k)) {
+        map.set(k, { key: k, label: ingLabel(i), uses: 0, group: groupOf(i) });
+      }
+      map.get(k).uses++;
+    }));
+    return [...map.values()].sort((a, b) => b.uses - a.uses || a.label.localeCompare(b.label, 'ro'));
+  }
+
+  const GROUP_ORDER = ['Proteină', 'Garnitură & cereale', 'Legume & fructe', 'Cămară'];
+
+  function groupOf(i) {
+    if (i.p) {
+      const veg = ['cartofi', 'cartofi-dulci', 'ceapa', 'usturoi', 'rosii', 'rosii-cutie',
+        'ardei', 'morcov', 'dovlecel', 'vinete', 'varza', 'castraveti', 'salata', 'lamaie'];
+      const carb = ['orez-alb', 'bulgur', 'cuscus', 'malai', 'faina', 'pesmet'];
+      if (veg.indexOf(i.p) !== -1) return 'Legume & fructe';
+      if (carb.indexOf(i.p) !== -1) return 'Garnitură & cereale';
+      return 'Cămară';
+    }
+
+    const f = PF.data.byId[i.id];
+    if (!f) return 'Cămară';
+
+    /* Group by what the ingredient actually contributes, not by which atlas
+     * file it lives in. Broccoli and spinach are filed under plant-protein
+     * because that is where vegetables sit in the atlas — but with 2–3 g of
+     * protein per 100 g nobody shops for them as a protein. */
+    const p = (f.per100g && f.per100g.protein) || 0;
+    const name = fmt.normalize(f.nameRo || f.name || '');
+
+    if (/paste|orez|ovaz|bulgur|cuscus|quinoa|hrisca|amarant|malai|faina|pesmet|lipie|tortilla|chifl|paine|covrig/.test(name)) {
+      return 'Garnitură & cereale';
+    }
+    /* Protein beats shelf position. Skimmed milk powder is 36 g of protein but
+     * lives in the baking aisle, so its atlas category would file it under
+     * grains — which is where nobody would look for it. */
+    if (p >= 15) return 'Proteină';
+    if (p < 5) return f.category === 'plant-protein' ? 'Legume & fructe' : 'Cămară';
+    if (f.category === 'bakery-drinks-sweets') return 'Garnitură & cereale';
+    if (['fresh-meat', 'fish-seafood', 'deli-processed', 'dairy-eggs', 'plant-protein',
+      'ready-meals', 'supplements-snacks'].indexOf(f.category) !== -1) return 'Proteină';
+    return 'Cămară';
+  }
+
+  function renderFridge() {
+    const index = ingredientIndex();
+    const groups = {};
+    index.forEach(it => { (groups[it.group] = groups[it.group] || []).push(it); });
+
+    const cookable = ALL.filter(r => coverage(r).complete).length;
+    const almost = ALL.filter(r => { const c = coverage(r); return !c.complete && c.missing.length <= 2; }).length;
+
+    /* When nothing is cookable yet — the normal state after ticking a handful
+     * of things — "0 mese gata" is a dead end. Name the closest meal instead,
+     * so the collapsed line always tells you what to do next. */
+    let closest = null;
+    if (fridge.size && !cookable && !almost) {
+      ALL.forEach(function (r) {
+        const c = coverage(r);
+        if (c.have && (!closest || c.missing.length < closest.c.missing.length)) closest = { r: r, c: c };
+      });
+    }
+
+    const body = GROUP_ORDER.filter(g => groups[g]).map(function (g) {
+      const all = groups[g];
+      const open = fridgeExpanded.has(g);
+
+      /* Anything already ticked stays visible even if it falls past the cut —
+       * otherwise unticking something you just ticked means hunting for it. */
+      const shown = open ? all : all.filter(function (it, idx) {
+        return idx < GROUP_CAP || fridge.has(it.key);
+      });
+      const hidden = all.length - shown.length;
+
+      return '<div class="pf-fridge__group">' +
+        '<div class="pf-eyebrow">' + fmt.esc(g) +
+        '<span class="pf-fridge__count">' + all.length + '</span></div>' +
+        '<div class="pf-chips">' +
+        shown.map(function (it) {
+          return '<button class="pf-chip' + (fridge.has(it.key) ? ' is-on' : '') +
+            '" data-fridge="' + fmt.esc(it.key) + '" aria-pressed="' +
+            (fridge.has(it.key) ? 'true' : 'false') + '">' +
+            fmt.esc(it.label) + '<span class="pf-chip__n">' + it.uses + '</span></button>';
+        }).join('') +
+        (hidden > 0 || open
+          ? '<button class="pf-chip pf-chip--ghost" data-fridge-more="' + fmt.esc(g) + '">' +
+            (open ? '− arată mai puține' : '+ încă ' + hidden) + '</button>'
+          : '') +
+        '</div></div>';
+    }).join('');
+
+    return '<section class="pf-fridge' + (fridgeOpen ? ' is-open' : '') + '">' +
+      '<button class="pf-fridge__head" data-fridge-toggle aria-expanded="' +
+      (fridgeOpen ? 'true' : 'false') + '" aria-controls="pf-fridge-body">' +
+      '<span class="pf-fridge__icon">🧊</span>' +
+      '<span class="pf-fridge__title">Ce am în frigider' +
+      (fridge.size ? '<span class="pf-badge pf-badge--accent">' + fridge.size + ' bifate</span>' : '') +
+      '</span>' +
+      '<span class="pf-fridge__summary">' +
+      (!fridge.size
+        ? 'Bifează ce ai în casă și îți arăt ce poți găti acum'
+        : closest
+          ? 'Cel mai aproape: <b>' + fmt.esc(closest.r.name) + '</b> — îți lipsesc ' +
+            closest.c.missing.length
+          : '<b>' + cookable + '</b> gata de gătit · <b>' + almost + '</b> la 1–2 ingrediente') +
+      '</span>' +
+      '<span class="pf-fridge__chev">' + (fridgeOpen ? '▾' : '▸') + '</span>' +
+      '</button>' +
+      (fridgeOpen
+        ? '<div class="pf-fridge__body" id="pf-fridge-body">' + body +
+          '<div class="pf-row" style="gap:var(--sp-2);margin-top:var(--sp-3);flex-wrap:wrap">' +
+          '<label class="pf-toggle"><input type="checkbox" data-fridge-mode' +
+          (fridgeMode ? ' checked' : '') + '><span class="pf-toggle__track"></span>' +
+          '<span class="pf-toggle__label">Ordonează după ce pot găti acum</span></label>' +
+          '<span class="pf-grow"></span>' +
+          (fridge.size ? '<button class="pf-btn pf-btn--sm pf-btn--danger" data-fridge-clear>Golește frigiderul</button>' : '') +
+          '</div></div>'
+        : '') +
+      '</section>';
+  }
+
+  /* =======================================================================
    * RESOLVE + COMPUTE
    * ==================================================================== */
   function resolve(ing) {
@@ -115,6 +306,7 @@
       return copy;
     });
     PF.data.recipes = ALL;
+    loadFridge();
     return ALL.length;
   }
 
@@ -138,10 +330,28 @@
     const c = r._r;
     const per = c.perServing;
 
+    /* Only speak about the fridge once the user has actually filled it in —
+     * "0 din 6 ingrediente" on every card would be noise, not information. */
+    let cov = '';
+    if (fridge.size) {
+      const v = coverage(r);
+      cov = '<div class="pf-rcard__cov' + (v.complete ? ' is-full' : v.missing.length <= 2 ? ' is-close' : '') + '">' +
+        '<span class="pf-rcard__covbar"><i style="width:' + Math.round(v.ratio * 100) + '%"></i></span>' +
+        '<span class="pf-rcard__covtxt">' +
+        (v.complete
+          ? '✓ Ai tot ce trebuie'
+          : 'Ai ' + v.have + '/' + v.total + ' · lipsesc: ' +
+            fmt.esc(v.missing.slice(0, 3).map(function (i) {
+              return fmt.truncate(ingLabel(i), 26);
+            }).join(', ')) +
+            (v.missing.length > 3 ? ' +' + (v.missing.length - 3) : '')) +
+        '</span></div>';
+    }
+
     return (
       '<article class="pf-rcard" data-recipe="' + fmt.esc(r.id) + '" tabindex="0">' +
       '<header class="pf-rcard__head">' +
-      '<span class="pf-rcard__icon">' + r.emoji + '</span>' +
+      '<span class="pf-rcard__icon">' + fmt.esc(r.emoji || '🍽️') + '</span>' +
       '<span class="pf-rcard__id">' +
       '<h3 class="pf-rcard__name">' + fmt.esc(r.name) + '</h3>' +
       '<span class="pf-rcard__meta">' +
@@ -151,6 +361,7 @@
       '</span></span>' +
       '</header>' +
 
+      cov +
       '<div class="pf-rcard__hero">' +
       '<span class="pf-rcard__protein"><b>' + Math.round(per.protein) + '</b><span>g proteină<br>pe porție</span></span>' +
       '<span class="pf-rcard__bars">' +
@@ -201,7 +412,13 @@
     const list = ALL.filter(function (r) {
       return (activeMethod === 'all' || r.method === activeMethod) &&
              (activeBase === 'all' || r.base === activeBase);
-    }).sort(function (a, b) { return b._r.perServing.protein - a._r.perServing.protein; });
+    }).sort(function (a, b) {
+      if (fridgeMode && fridge.size) {
+        const d = coverage(b).ratio - coverage(a).ratio;
+        if (Math.abs(d) > 0.001) return d;
+      }
+      return b._r.perServing.protein - a._r.perServing.protein;
+    });
 
     const methodChips =
       '<button class="pf-chip' + (activeMethod === 'all' ? ' is-on' : '') + '" data-rmethod="all">Toate metodele<span class="pf-chip__n">' + ALL.length + '</span></button>' +
@@ -237,6 +454,7 @@
       '<div class="pf-eyebrow" style="margin:var(--sp-4) 0 var(--sp-2)">Ingredientul principal</div>' +
       '<div class="pf-chips">' + baseChips + '</div>' +
       '</div></section>' +
+      renderFridge() +
       (list.length
         ? '<div class="pf-grid">' + list.map(card).join('') + '</div>'
         : '<div class="pf-empty"><span class="pf-empty__icon">🍳</span>' +
@@ -281,7 +499,7 @@
     return (
       '<div class="pf-modal__head" data-cat="fresh-meat">' +
       '<button class="pf-modal__close" data-recipe-close aria-label="Închide">✕</button>' +
-      '<span class="pf-modal__icon">' + r.emoji + '</span>' +
+      '<span class="pf-modal__icon">' + fmt.esc(r.emoji || '🍽️') + '</span>' +
       '<div class="pf-modal__titles">' +
       '<h2 class="pf-modal__title" id="pf-recipe-title">' + fmt.esc(r.name) + '</h2>' +
       '<div class="pf-modal__subtitle">' + m.emoji + ' ' + fmt.esc(m.ro) + ' · ' +
@@ -371,6 +589,13 @@
       '<span class="pf-muted" style="font-size:var(--fs-2xs)">Macro-urile sunt calculate din produsele din atlas. Prețurile sunt estimări, nu prețuri de raft.</span>' +
       '<span class="pf-spacer"></span>' +
       '<button class="pf-btn pf-btn--sm" data-recipe-shop="' + fmt.esc(r.id) + '">+ Adaugă ingredientele la masă</button>' +
+      /* Only offered once the fridge knows something — otherwise "what's
+       * missing" is the entire recipe and the button is a worse duplicate
+       * of the one beside it. */
+      (fridge.size && !coverage(r).complete
+        ? '<button class="pf-btn pf-btn--sm pf-btn--primary" data-recipe-shop-missing="' + fmt.esc(r.id) +
+          '">🛒 Doar ce îmi lipsește (' + coverage(r).missing.length + ')</button>'
+        : '') +
       '<button class="pf-btn pf-btn--sm" data-recipe-close>Închide</button>' +
       '</div>'
     );
@@ -387,6 +612,8 @@
       if (ev.target.closest('[data-recipe-close]')) { dlg.close(); return; }
       const shop = ev.target.closest('[data-recipe-shop]');
       if (shop) { addToTray(shop.getAttribute('data-recipe-shop')); return; }
+      const miss = ev.target.closest('[data-recipe-shop-missing]');
+      if (miss) { addMissingToTray(miss.getAttribute('data-recipe-shop-missing')); return; }
       const goto = ev.target.closest('[data-goto-food]');
       if (goto) {
         const f = PF.data.byId[goto.getAttribute('data-goto-food')];
@@ -421,14 +648,100 @@
     PF.app.toast(added + ' ingrediente adăugate la masă', 'ok');
   }
 
+  /**
+   * Add only the ingredients you do NOT already have to the meal tray.
+   *
+   * This is the payoff of the fridge: the tray becomes an actual shopping
+   * list — what you still need to buy for this meal — instead of a copy of
+   * the whole recipe, half of which is already in your kitchen.
+   */
+  function addMissingToTray(id) {
+    const r = ALL.filter(x => x.id === id)[0];
+    if (!r) return;
+    const need = new Set(coverage(r).missing.map(ingKey));
+    let added = 0, skipped = 0;
+    r._r.items.forEach(function (it) {
+      if (it.kind !== 'atlas') { return; }
+      if (!need.has('a:' + it.food.id)) { skipped++; return; }
+      const servingG = it.food._d.servingGrams || 100;
+      PF.tray.add(it.food.id, Math.round((it.grams / servingG) * 10) / 10);
+      added++;
+    });
+    PF.app.toast(added
+      ? added + ' de cumpărat adăugate' + (skipped ? ' · ' + skipped + ' le ai deja' : '')
+      : 'Ai deja tot ce se poate adăuga din atlas', added ? 'ok' : 'info');
+  }
+
+  /* =======================================================================
+   * EVENTS
+   *
+   * Delegated on document because the recipes view re-renders itself wholesale;
+   * anything bound to a node inside it would die on the next repaint.
+   * ==================================================================== */
+  /**
+   * Repaint the view without losing the user's place.
+   *
+   * Ticking ten ingredients in a row means ten full repaints. Without this the
+   * page would jump to the top and the keyboard focus would be destroyed on
+   * every single tick.
+   */
+  function repaintFridge(refocus) {
+    const y = window.scrollY;
+    PF.app.repaint();
+    window.scrollTo(0, y);
+    if (refocus) {
+      const el = document.querySelector('[data-fridge="' + window.CSS.escape(refocus) + '"]');
+      if (el) el.focus();
+    }
+  }
+
+  document.addEventListener('click', function (e) {
+    const t = e.target.closest ? e.target : e.target.parentNode;
+    if (!t || !t.closest) return;
+
+    const head = t.closest('[data-fridge-toggle]');
+    if (head) { fridgeOpen = !fridgeOpen; repaintFridge(); return; }
+
+    const more = t.closest('[data-fridge-more]');
+    if (more) {
+      const g = more.getAttribute('data-fridge-more');
+      fridgeExpanded.has(g) ? fridgeExpanded.delete(g) : fridgeExpanded.add(g);
+      repaintFridge();
+      return;
+    }
+
+    const chip = t.closest('[data-fridge]');
+    if (chip) {
+      const k = chip.getAttribute('data-fridge');
+      fridge.has(k) ? fridge.delete(k) : fridge.add(k);
+      saveFridge();
+      repaintFridge(k);
+      return;
+    }
+
+    if (t.closest('[data-fridge-clear]')) {
+      fridge.clear(); saveFridge(); repaintFridge();
+    }
+  });
+
+  document.addEventListener('change', function (e) {
+    if (e.target && e.target.matches && e.target.matches('[data-fridge-mode]')) {
+      fridgeMode = e.target.checked;
+      saveFridge();
+      repaintFridge();
+    }
+  });
+
   PF.recipes = {
     boot: boot,
+    coverage: coverage,
     enrich: enrich,
     render: render,
     open: open,
     card: card,
     forFood: forFood,
     addToTray: addToTray,
+    addMissingToTray: addMissingToTray,
     all: function () { return ALL; },
     setMethod: function (m) { activeMethod = m; },
     setBase: function (b) { activeBase = b; },
