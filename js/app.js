@@ -365,6 +365,7 @@
     else if (currentView === 'boards') PF.boards.render($('#pf-view-boards'), visible);
     else if (currentView === 'compare') PF.compare.render($('#pf-view-compare'));
     else if (currentView === 'chart') renderChart();
+    else if (currentView === 'recipes') PF.recipes.render($('#pf-view-recipes'));
     else if (currentView === 'shop') PF.tray.renderShoppingView($('#pf-view-shop'));
   }
 
@@ -622,6 +623,16 @@
 
     /* ---- global click delegation ---- */
     document.addEventListener('click', function (ev) {
+      /* recipe filters and cards */
+      const rm = ev.target.closest('[data-rmethod]');
+      if (rm) { PF.recipes.setMethod(rm.getAttribute('data-rmethod')); PF.recipes.render($('#pf-view-recipes')); return; }
+      const rb = ev.target.closest('[data-rbase]');
+      if (rb) { PF.recipes.setBase(rb.getAttribute('data-rbase')); PF.recipes.render($('#pf-view-recipes')); return; }
+      const ro = ev.target.closest('[data-recipe-open]');
+      if (ro) { PF.recipes.open(ro.getAttribute('data-recipe-open')); return; }
+      const rcard = ev.target.closest('[data-recipe]');
+      if (rcard && !ev.target.closest('button')) { PF.recipes.open(rcard.getAttribute('data-recipe')); return; }
+
       /* filter chips */
       const chip = ev.target.closest('[data-facet]');
       if (chip) {
@@ -934,7 +945,7 @@
   const SHORTCUTS = [
     { keys: ['/'], label: 'Caută' },
     { keys: ['Esc'], label: 'Închide fereastra / golește căutarea' },
-    { keys: ['1', '…', '6'], label: 'Schimbă vizualizarea' },
+    { keys: ['1', '…', '7'], label: 'Schimbă vizualizarea' },
     { keys: ['R'], label: 'Ce mănânc acum? (alege aleatoriu)' },
     { keys: ['T'], label: 'Temă deschisă / întunecată' },
     { keys: ['L'], label: 'Limbă RO / EN' },
@@ -1015,8 +1026,8 @@
       return;
     }
 
-    const views = ['grid', 'table', 'boards', 'compare', 'chart', 'shop'];
-    if (ev.key >= '1' && ev.key <= '6') {
+    const views = ['grid', 'table', 'boards', 'compare', 'chart', 'recipes', 'shop'];
+    if (ev.key >= '1' && ev.key <= '7') {
       setView(views[Number(ev.key) - 1]);
       return;
     }
@@ -1074,6 +1085,8 @@
     }
 
     PF.compare.load();
+    const nRecipes = PF.recipes.boot();
+    console.info('[Protein Atlas] ' + nRecipes + ' mese complete, macro-uri calculate din atlas');
     PF.filters.setOnChange(function () { refresh(); });
 
     /* hydrate from the URL so a shared link reproduces the exact view */

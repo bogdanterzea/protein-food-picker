@@ -6,7 +6,9 @@
 .pf-app {
   position: relative;
   z-index: 1;
-  min-height: 100%;
+  /* viewport units, not a percentage — <body> no longer has a fixed height
+   * for a percentage to resolve against (see the note in 02-base.css). */
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }

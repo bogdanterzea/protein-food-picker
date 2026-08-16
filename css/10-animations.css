@@ -18,11 +18,12 @@
   to   { transform: scaleX(1); }
 }
 
-/* A specular highlight sweeping along a filled bar. */
+/* A specular highlight sweeping across a stat bar. One clean pass, edge to
+ * edge — the old version held at 100% for the last 45% of its duration,
+ * which is what made it look like it froze part-way. */
 @keyframes pf-bar-sheen {
-  0%   { transform: translateX(-100%); }
-  55%  { transform: translateX(100%); }
-  100% { transform: translateX(100%); }
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(100%); }
 }
 
 /* S-rank badge border shine. */
@@ -150,7 +151,7 @@
     transform: scaleX(1);
   }
 
-  .pf-stat__fill::after,
+  .pf-stat__track::before,
   .pf-tier[data-tier='S']::before {
     display: none;
   }

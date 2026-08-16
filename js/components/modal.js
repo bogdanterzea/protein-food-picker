@@ -299,9 +299,27 @@
             '</div>')
         : '';
 
+    /* Meals that actually use this product — the bridge from ingredient to dinner. */
+    const meals = (PF.recipes && PF.recipes.forFood) ? PF.recipes.forFood(food.id) : [];
+    const mealsBlock = meals.length
+      ? block('Ce gătești din el · ' + meals.length + (meals.length === 1 ? ' masă' : ' mese'),
+          '<div class="pf-recipe-links">' +
+          meals.map(function (r) {
+            const m = (window.PF_METHODS || {})[r.method] || { ro: r.method, emoji: '🍽️' };
+            return '<button class="pf-recipe-link" data-recipe-open="' + fmt.esc(r.id) + '">' +
+              '<span style="font-size:18px">' + r.emoji + '</span>' +
+              '<span class="pf-recipe-link__name">' + fmt.esc(r.name) +
+              '<small>' + m.emoji + ' ' + fmt.esc(m.ro) + ' · ' +
+              fmt.minutes(r.timeMin, 'ro') + ' · ' + r.servings + ' porții</small></span>' +
+              '<span class="pf-recipe-link__p">' + Math.round(r._r.perServing.protein) + ' g</span>' +
+              '</button>';
+          }).join('') + '</div>')
+      : '';
+
     return (
       '<div class="pf-dossier">' +
       '<div>' +
+      mealsBlock +
       block('Timp și efort', timeCard + (c.yieldNote ? '<p class="pf-muted" style="font-size:var(--fs-2xs);margin-top:var(--sp-2)">📏 ' + fmt.esc(c.yieldNote) + '</p>' : '')) +
       block(t('sec.steps'), stepsHtml) +
       equip +
@@ -643,6 +661,13 @@
       servingMode = servingBtn.getAttribute('data-serving');
       const pane = dlg.querySelector('[data-pane="nutrition"]');
       if (pane) pane.innerHTML = paneNutrition(currentFood);
+      return;
+    }
+
+    const ro = ev.target.closest('[data-recipe-open]');
+    if (ro) {
+      dlg.close();
+      PF.recipes.open(ro.getAttribute('data-recipe-open'));
       return;
     }
 

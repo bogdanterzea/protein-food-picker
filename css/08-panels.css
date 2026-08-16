@@ -848,3 +848,188 @@
   gap: 4px;
   flex-shrink: 0;
 }
+
+/* =========================================================================
+ * 10. RECIPE CARDS — mese complete
+ * ========================================================================= */
+.pf-rcard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  border-radius: var(--r-lg);
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--accent) 6%, var(--bg-panel)) 0%,
+    var(--bg-panel) 45%
+  );
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md), var(--shadow-inset);
+  cursor: pointer;
+  transition: transform var(--dur-base) var(--ease-out),
+              border-color var(--dur-base) var(--ease-out),
+              box-shadow var(--dur-base) var(--ease-out);
+}
+
+.pf-rcard:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  box-shadow: var(--shadow-lg), var(--shadow-inset);
+}
+
+.pf-rcard__head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--sp-3);
+  align-items: start;
+}
+
+.pf-rcard__icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--r-md);
+  font-size: 22px;
+  background: color-mix(in srgb, var(--accent) 12%, var(--bg-inset));
+  border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent);
+}
+
+.pf-rcard__id {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.pf-rcard__name {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  line-height: 1.22;
+  color: var(--text-1);
+  overflow-wrap: anywhere;
+}
+
+.pf-rcard__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.pf-rcard__hero {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3);
+  border-radius: var(--r-md);
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+}
+
+.pf-rcard__protein {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.pf-rcard__protein b {
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-black);
+  line-height: 0.95;
+  color: var(--macro-protein);
+  font-variant-numeric: tabular-nums;
+}
+
+.pf-rcard__protein span {
+  font-size: var(--fs-3xs);
+  font-weight: var(--fw-bold);
+  color: var(--text-4);
+  line-height: 1.2;
+}
+
+.pf-rcard__bars {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.pf-rcard__line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  font-size: var(--fs-3xs);
+  color: var(--text-4);
+}
+
+.pf-rcard__line b {
+  font-family: var(--font-mono);
+  color: var(--stat-value);
+}
+
+.pf-rcard__foot {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+  margin-top: auto;
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--border);
+}
+
+.pf-rcard__foot .pf-btn {
+  margin-left: auto;
+}
+
+/* The recipe list inside a food's dossier. */
+.pf-recipe-links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.pf-recipe-link {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-inset);
+  text-align: left;
+  width: 100%;
+  transition: border-color var(--dur-fast) var(--ease-out),
+              background var(--dur-fast) var(--ease-out);
+}
+
+.pf-recipe-link:hover {
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  background: var(--bg-hover);
+}
+
+.pf-recipe-link__name {
+  min-width: 0;
+  font-size: var(--fs-sm);
+  color: var(--text-1);
+  line-height: 1.3;
+}
+
+.pf-recipe-link__name small {
+  display: block;
+  font-size: var(--fs-3xs);
+  color: var(--text-4);
+}
+
+.pf-recipe-link__p {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--macro-protein);
+  white-space: nowrap;
+}

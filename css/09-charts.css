@@ -88,8 +88,10 @@
               opacity var(--dur-fast) var(--ease-out);
 }
 
+/* Growing the stroke pushed the ring's outer edge out by 2px and made the
+ * whole donut jump under the cursor. Brighten it in place instead. */
 .pf-donut__seg:hover {
-  stroke-width: 26;
+  filter: brightness(1.18) saturate(1.1);
 }
 
 .pf-donut__seg--protein { stroke: var(--macro-protein); }

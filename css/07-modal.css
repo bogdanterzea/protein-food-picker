@@ -106,20 +106,6 @@
   gap: var(--sp-3);
 }
 
-/* The tier tooltip is centred on a badge that sits ~47px from the modal
- * edge, and .pf-modal has overflow:hidden — so centre-anchoring clipped it.
- * Anchor it to the right edge instead. */
-.pf-modal__headright [data-tip]::after {
-  left: auto;
-  right: 0;
-  transform: translateY(4px);
-}
-
-.pf-modal__headright [data-tip]:hover::after,
-.pf-modal__headright [data-tip]:focus-visible::after {
-  transform: translateY(0);
-}
-
 .pf-modal__close {
   position: absolute;
   top: var(--sp-3);

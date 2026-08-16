@@ -38,7 +38,7 @@ proteinFood/
 
 Serios, atât. Dublu-click pe `index.html`.
 
-### Cele șase vizualizări
+### Cele șapte vizualizări
 
 | Tastă | Vizualizare | La ce e bună |
 |:---:|---|---|
@@ -47,7 +47,8 @@ Serios, atât. Dublu-click pe `index.html`.
 | `3` | **Clasamente** | 10 topuri: cea mai multă / cea mai pură / cea mai ieftină proteină etc. |
 | `4` | **Comparație** | Până la 5 produse cap la cap, cu cea mai bună valoare evidențiată |
 | `5` | **Hartă** | Grafic proteină vs. calorii — colțul stânga-sus e unde vrei să cumperi |
-| `6` | **Listă** | Lista de cumpărături, grupată pe magazinul unde produsul e cel mai ieftin |
+| `6` | **Rețete** | Mese complete: proteină + garnitură + legume, pe metodă de gătit |
+| `7` | **Listă** | Lista de cumpărături, grupată pe magazinul unde produsul e cel mai ieftin |
 
 ### Scurtături
 
@@ -110,6 +111,30 @@ Media pe atlas e de **19,8 g proteină / 100 g**. Prețul median al proteinei e 
 
 ---
 
+## Mese complete (Rețete)
+
+Atlasul îți spune *ce* să cumperi. Fila **Rețete** îți spune *ce faci din el* —
+o masă întreagă, nu un ingredient.
+
+- **21 de mese**, filtrabile după **metodă** (la cuptor, la tigaie, la grătar,
+  air fryer, fiert/supă, gătit lent, fără gătit) și după **ingredientul
+  principal** (pui, curcan, porc, vită, pește, ouă, lactate, leguminoase, tofu).
+- Fiecare rețetă are proteina, garnitura și legumele în aceeași listă, cu pași
+  scriși pentru cineva care nu gătește des, plus sfaturi și **variante**
+  („cu paste în loc de cartofi”, „mai ieftin”, „fără cuptor”).
+- **Macro-urile nu sunt scrise de mână.** Fiecare ingredient trimite fie către
+  un produs din atlas, fie către cămara din `js/data/09-recipes.js`, iar
+  totalurile — proteină, calorii, cost pe porție — se calculează la încărcare.
+  Dacă se corectează eticheta unui produs, se corectează și toate mesele care
+  îl folosesc.
+- Costul e real: fiecare ingredient are prețul lui, deci vezi câți lei costă
+  porția, nu doar câte grame de proteină are.
+- În dosarul fiecărui produs, fila **Preparare** listează mesele care îl
+  folosesc — puntea de la „am piept de pui în frigider” la „ce gătesc diseară”.
+
+Intervalul actual: de la **23 g proteină / porție la 2,54 lei** (linte cu orez)
+până la **63 g / porție** (șnițel de curcan cu piure).
+
 ## Structura proiectului
 
 ```
@@ -132,7 +157,8 @@ proteinFood/
 ├── js/
 │   ├── data/                   35 138 de linii de date cercetate
 │   │   ├── 00-stores.js        registrul magazinelor din Sibiu
-│   │   └── 01..08-*.js         câte un fișier per categorie
+│   │   ├── 01..08-*.js         câte un fișier per categorie
+│   │   └── 09-recipes.js       21 de mese complete + cămara
 │   ├── utils/
 │   │   ├── format.js           numere, lei, minute, diacritice, highlight
 │   │   ├── i18n.js             dicționar RO/EN complet
@@ -145,6 +171,8 @@ proteinFood/
 │   │   ├── modal.js            dosarul, în 6 file
 │   │   ├── filters.js          motorul de filtrare + coloana de filtre
 │   │   ├── tray.js             masa + lista de cumpărături
+│   │   ├── recipes.js          mesele complete, calculate din atlas
+│   │   ├── tooltip.js          tooltip flotant, nu pseudo-element
 │   │   ├── boards.js           cele 10 clasamente
 │   │   └── compare.js          comparația cap la cap
 │   └── app.js                  boot, evenimente, vizualizări, scurtături

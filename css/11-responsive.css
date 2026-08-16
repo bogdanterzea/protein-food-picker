@@ -486,7 +486,7 @@
     transform: none;
   }
 
-  [data-tip]::after {
+  .pf-tip {
     display: none;
   }
 }

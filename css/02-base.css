@@ -3,9 +3,18 @@
  * Document-level styling, typography primitives and shared atoms.
  * ========================================================================= */
 
-html,
+/* Do NOT set `height: 100%` here.
+ *
+ * Combined with `overflow-x: hidden` below it pinned <html> and <body> to
+ * exactly the viewport height while the content was 3309px tall, which turned
+ * <body> into a scroll container the document could no longer drive:
+ * `scrollTop` refused to move, so the skip link, in-page anchors and
+ * `scrollIntoView()` all silently did nothing. Wheel scrolling still worked,
+ * which is why it looked fine.
+ *
+ * `min-height` gives the same full-height background without capping it. */
 body {
-  height: 100%;
+  min-height: 100dvh;
 }
 
 body {
@@ -267,24 +276,15 @@ body::before {
 /* -------------------------------------------------------------------------
  * TOOLTIP — pure CSS, data-tip attribute
  * ---------------------------------------------------------------------- */
-[data-tip] {
-  position: relative;
-}
-
-[data-tip]::after {
-  content: attr(data-tip);
-  position: absolute;
-  bottom: calc(100% + 8px);
-  left: 50%;
-  transform: translateX(-50%) translateY(4px);
-  z-index: 60;
-  padding: 6px 10px;
-  /* `min-width: max-content` would ALWAYS beat max-width, so the bubble
-   * never wrapped and grew to roughly twice its cap — which then widened
-   * the page in views that have many tooltips. `width: max-content` shrinks
-   * to fit but still yields to max-width. */
-  width: max-content;
-  max-width: min(260px, calc(100vw - 32px));
+/* The bubble itself is a single fixed-position element in <body>, driven by
+ * js/components/tooltip.js. It deliberately does NOT live inside the layout:
+ * as a pseudo-element it was clipped by every `overflow: hidden` ancestor and
+ * still contributed scrollable overflow while invisible. */
+.pf-tip {
+  position: fixed;
+  z-index: 300;
+  padding: 7px 11px;
+  max-width: 280px;
   white-space: normal;
   text-align: center;
   font-size: var(--fs-2xs);
@@ -295,27 +295,41 @@ body::before {
   border: 1px solid var(--border-strong);
   border-radius: var(--r-sm);
   box-shadow: var(--shadow-lg);
-  opacity: 0;
   pointer-events: none;
+  opacity: 0;
+  transform: translateY(3px);
   transition: opacity var(--dur-fast) var(--ease-out),
               transform var(--dur-fast) var(--ease-out);
 }
 
-[data-tip]:hover::after,
-[data-tip]:focus-visible::after {
+.pf-tip.is-on {
   opacity: 1;
-  transform: translateX(-50%) translateY(0);
+  transform: translateY(0);
 }
 
-[data-tip-side='right']::after {
-  bottom: auto;
-  top: 50%;
-  left: calc(100% + 8px);
-  transform: translateY(-50%) translateX(-4px);
+/* Arrow, tracking the anchor even when the bubble was clamped to an edge. */
+.pf-tip::after {
+  content: '';
+  position: absolute;
+  left: var(--arrow-x, 50%);
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-strong);
+  transform: rotate(45deg);
 }
 
-[data-tip-side='right']:hover::after {
-  transform: translateY(-50%) translateX(0);
+.pf-tip[data-side='above']::after {
+  bottom: -5px;
+  border-top: none;
+  border-left: none;
+}
+
+.pf-tip[data-side='below']::after {
+  top: -5px;
+  border-bottom: none;
+  border-right: none;
 }
 
 /* -------------------------------------------------------------------------

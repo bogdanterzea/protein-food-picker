@@ -29,6 +29,7 @@
       'view.boards': 'Clasamente',
       'view.compare': 'Comparație',
       'view.chart': 'Hartă',
+      'view.recipes': 'Rețete',
       'view.shop': 'Listă',
 
       /* --- filters --------------------------------------------------- */
@@ -246,6 +247,7 @@
       'view.boards': 'Leaderboards',
       'view.compare': 'Compare',
       'view.chart': 'Map',
+      'view.recipes': 'Recipes',
       'view.shop': 'List',
 
       'filter.title': 'Filters',

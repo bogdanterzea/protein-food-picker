@@ -88,7 +88,7 @@
     print-color-adjust: exact;
   }
 
-  .pf-stat__fill::after {
+  .pf-stat__track::before {
     display: none;
   }
 

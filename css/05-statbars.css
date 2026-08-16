@@ -72,22 +72,38 @@
   );
 }
 
-/* A moving specular highlight along the filled portion. */
-.pf-stat__fill::after {
+/* A specular highlight that sweeps the bar.
+ *
+ * It lives on the TRACK, not on the fill. Anchored to the fill it was only
+ * as wide as the fill itself, so on a bar at 20% the light travelled a few
+ * pixels and then sat still for the rest of the cycle — it read as the
+ * animation "stopping at a random point". On the track the sweep distance
+ * is the same for every bar, and `overflow: hidden` clips it cleanly.
+ *
+ * It also no longer loops forever: 6 bars x 60 cards was 360 permanent
+ * animations of visual noise. Now it is a one-shot flourish on hover. */
+.pf-stat__track::before {
   content: '';
   position: absolute;
   inset: 0;
+  z-index: 3;
+  pointer-events: none;
   background: linear-gradient(
     100deg,
-    transparent 20%,
-    rgba(255, 255, 255, 0.28) 48%,
-    transparent 76%
+    transparent 35%,
+    rgba(255, 255, 255, 0.20) 50%,
+    transparent 65%
   );
   transform: translateX(-100%);
-  animation: pf-bar-sheen 3.4s var(--ease-both) 0.6s infinite;
 }
 
-:root[data-fx='off'] .pf-stat__fill::after {
+.pf-card:hover .pf-stat__track::before,
+.pf-block:hover .pf-stat__track::before,
+.pf-compare td:hover .pf-stat__track::before {
+  animation: pf-bar-sheen 1.15s var(--ease-both);
+}
+
+:root[data-fx='off'] .pf-stat__track::before {
   display: none;
 }
 
@@ -574,6 +590,13 @@
   position: relative;
   display: grid;
   place-items: center;
+  /* The value and the label are two auto-sized grid rows. Without this,
+   * `align-content` resolves to `stretch` and the rows expand to fill the
+   * whole circle (53px + 39px of 92px), which parks the number well above
+   * the centre and the label well below it, with a 26px hole in between.
+   * `center` packs the pair and centres it as one block. */
+  align-content: center;
+  row-gap: 2px;
   width: 58px;
   height: 58px;
   flex-shrink: 0;
@@ -588,7 +611,7 @@
 
 .pf-orb__track {
   fill: none;
-  stroke: var(--stat-track);
+  stroke: var(--stat-track-edge);
   stroke-width: 5;
 }
 
@@ -597,7 +620,9 @@
   stroke: var(--c, var(--accent));
   stroke-width: 5;
   stroke-linecap: round;
-  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--c, var(--accent)) 60%, transparent));
+  /* A 5px 60% halo bled well past the stroke and made the ring look blurry
+   * and off-centre. Keep a hint of glow, not a smear. */
+  filter: drop-shadow(0 0 2px color-mix(in srgb, var(--c, var(--accent)) 35%, transparent));
   transition: stroke-dashoffset var(--dur-bar) var(--ease-out);
 }
 
