@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ro" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Metodologie și scoruri · Atlasul Proteinelor Sibiu</title>
+<link rel="stylesheet" href="../css/00-reset.css">
+<link rel="stylesheet" href="../css/01-tokens.css">
+<link rel="stylesheet" href="../css/15-docs.css">
+</head>
+<body class="pf-doc-body">
+
+<header class="pf-doc-top">
+  <a class="pf-doc-back" href="../index.html">‹ Atlasul Proteinelor</a>
+  <a class="pf-doc-back" href="index.html">Toată documentația</a>
+  <button class="pf-doc-theme" id="pf-doc-theme" title="Temă">☀️</button>
+</header>
+
+<div class="pf-doc-shell">
+  <nav class="pf-doc-toc" aria-label="Cuprins"><div class="pf-doc-toc__title">Pe această pagină</div><ul><li class="lv2"><a href="#1-problema-bogat-in-proteine-nu-e-un-singur-numar">1. Problema: „bogat în proteine” nu e un singur număr</a></li><li class="lv2"><a href="#2-cele-trei-axe-calculate-din-date">2. Cele trei axe calculate din date</a></li><li class="lv3"><a href="#2-1-proteina-cantitatea-bruta">2.1 Proteină — cantitatea brută</a></li><li class="lv3"><a href="#2-2-puritate-cat-din-calorii-vine-din-proteina">2.2 Puritate — cât din calorii vine din proteină</a></li><li class="lv3"><a href="#2-3-pret-cat-costa-proteina-nu-produsul">2.3 Preț — cât costă proteina, nu produsul</a></li><li class="lv2"><a href="#3-cele-patru-axe-subiective">3. Cele patru axe subiective</a></li><li class="lv2"><a href="#4-corectia-de-calitate-a-proteinei">4. Corecția de calitate a proteinei</a></li><li class="lv2"><a href="#5-scorul-general-si-rangul">5. Scorul general și rangul</a></li><li class="lv3"><a href="#de-ce-aceste-ponderi">De ce aceste ponderi</a></li><li class="lv2"><a href="#6-axe-suplimentare-afisate-dar-nu-in-scorul-general">6. Axe suplimentare (afișate, dar nu în scorul general)</a></li><li class="lv2"><a href="#7-verificarea-coerentei-datelor">7. Verificarea coerenței datelor</a></li><li class="lv3"><a href="#nivelurile-de-incredere">Nivelurile de încredere</a></li><li class="lv2"><a href="#8-imbinarea-duplicatelor">8. Îmbinarea duplicatelor</a></li><li class="lv2"><a href="#9-ce-nu-face-metodologia">9. Ce nu face metodologia</a></li><li class="lv2"><a href="#10-reproducerea-calculelor">10. Reproducerea calculelor</a></li></ul></nav>
+  <main class="pf-doc-main">
+<h1 id="metodologie-cum-sunt-calculate-scorurile">Metodologie — cum sunt calculate scorurile</h1>
+<p>Acest document explică fiecare număr pe care aplicația îl folosește ca să ordoneze, să coloreze sau să eticheteze un produs. Ideea de bază: <strong>dacă un scor îți schimbă decizia, trebuie să poți vedea cum a fost calculat și să fii de acord sau nu cu el.</strong></p>
+<p>Tot ce e descris aici trăiește într-un singur fișier: <code>js/utils/compute.js</code>. Nicio altă parte a aplicației nu are voie să-și inventeze propriul scor.</p>
+<hr>
+<h2 id="1-problema-bogat-in-proteine-nu-e-un-singur-numar">1. Problema: „bogat în proteine” nu e un singur număr</h2>
+<p>Patru produse reale din atlas, toate „bogate în proteine”:</p>
+<div class="pf-doc-tablewrap"><table class="pf-doc-table"><thead><tr><th style="text-align:left">Produs</th><th style="text-align:right">Proteină/100 g</th><th style="text-align:right">% din kcal</th><th style="text-align:right">lei/100 g proteină</th><th style="text-align:right">Timp</th></tr></thead><tbody><tr><td style="text-align:left">Izolat proteic din zer WPI 90</td><td style="text-align:right">88 g</td><td style="text-align:right">95%</td><td style="text-align:right">~20 lei</td><td style="text-align:right">2 min</td></tr><tr><td style="text-align:left">Piept de pui la grătar feliat (Cris-Tim)</td><td style="text-align:right">33 g</td><td style="text-align:right">81%</td><td style="text-align:right">~30 lei</td><td style="text-align:right">1 min</td></tr><tr><td style="text-align:left">Linte verde uscată</td><td style="text-align:right">25 g</td><td style="text-align:right">30%</td><td style="text-align:right">~5,4 lei</td><td style="text-align:right">35 min</td></tr><tr><td style="text-align:left">Jumătate de pui la rotisor</td><td style="text-align:right">25 g</td><td style="text-align:right">48%</td><td style="text-align:right">~12 lei</td><td style="text-align:right">0 min</td></tr></tbody></table></div>
+<p>Care e „cel mai bun”? Depinde complet de ce te doare: banii, timpul, caloriile sau efortul. Un singur clasament ar minți pe cineva.</p>
+<p>De aceea atlasul calculează <strong>șase axe independente</strong>, le arată pe toate ca bare, și abia apoi le comprimă într-o singură literă de rang — cu ponderile scrise pe față, ca să poți fi în dezacord informat.</p>
+<hr>
+<h2 id="2-cele-trei-axe-calculate-din-date">2. Cele trei axe calculate din date</h2>
+<h3 id="2-1-proteina-cantitatea-bruta">2.1 Proteină — cantitatea brută</h3>
+<pre class="pf-doc-code"><code>bara = min(100, proteină_la_100g / 30 × 100)</code></pre>
+<p><strong>De ce 30 g?</strong> E pragul la care se așază alimentele întregi bune: piept de pui gătit (~31 g), cașcaval (~26 g), ton scurs (~26 g), telemea de oaie. Pudrele (70–90 g) trec de prag și se opresc la 100 — nu vrem ca bara să fie proiectată pentru zer, altfel toate alimentele reale ar arăta anemic.</p>
+<p>Bara nu spune nimic despre calorii. Pentru asta există puritatea.</p>
+<h3 id="2-2-puritate-cat-din-calorii-vine-din-proteina">2.2 Puritate — cât din calorii vine din proteină</h3>
+<pre class="pf-doc-code"><code>puritate% = (proteină × 4) / kcal_declarate × 100
+bara = min(100, puritate% / 80 × 100)</code></pre>
+<p>Asta e metrica pe care majoritatea oamenilor n-o calculează și care schimbă cele mai multe decizii. Exemple din atlas:</p>
+<div class="pf-doc-tablewrap"><table class="pf-doc-table"><thead><tr><th style="text-align:left">Produs</th><th style="text-align:right">Proteină/100 g</th><th style="text-align:right">Puritate</th></tr></thead><tbody><tr><td style="text-align:left">Albuș de ou lichid</td><td style="text-align:right">11 g</td><td style="text-align:right">92%</td></tr><tr><td style="text-align:left">Iaurt grecesc 0%</td><td style="text-align:right">10 g</td><td style="text-align:right">70%</td></tr><tr><td style="text-align:left">Ouă întregi</td><td style="text-align:right">12,6 g</td><td style="text-align:right">35%</td></tr><tr><td style="text-align:left">Iaurt grecesc 10% grăsime</td><td style="text-align:right">5 g</td><td style="text-align:right">16%</td></tr></tbody></table></div>
+<p>Ouăle și iaurtul grecesc 0% au aproape aceeași proteină pe 100 g. Nu au deloc aceeași densitate calorică. Într-un deficit, diferența contează enorm.</p>
+<p><strong>80% e plafonul practic.</strong> Albușul, izolatul de zer și codul ajung acolo. Nimic real nu trece.</p>
+<p>Împărțim la caloriile <strong>declarate</strong>, nu la cele reconstruite din macro-uri, pentru că asta e cifra pe care o citește un om pe etichetă.</p>
+<h3 id="2-3-pret-cat-costa-proteina-nu-produsul">2.3 Preț — cât costă proteina, nu produsul</h3>
+<pre class="pf-doc-code"><code>proteină_în_pachet = proteină_la_100g × (grame_pachet / 100)
+lei_per_100g_proteină = preț_pachet / proteină_în_pachet × 100</code></pre>
+<p>Aplicația calculează asta pentru <strong>fiecare magazin</strong> din intrare și păstrează cel mai bun preț găsit.</p>
+<blockquote class="pf-doc-quote"><p><strong>Prețurile sunt estimări, nu date.</strong> Niciunul nu a fost verificat într-un magazin, iar pentru retailul alimentar din România nu există un API public de prețuri. Fiecare preț poartă o marjă (±20% la lanțuri și online, ±25% la farmacie, ±30% la piață, măcelărie, pescărie și restaurant) și e afișat cu <code>≈</code>. Bara de preț și clasamentul de cost sunt deci ordonări relative, corecte ca ierarhie, aproximative ca valoare absolută.</p></blockquote>
+<p>Bara e logaritmică, pentru că distribuția e brutal asimetrică:</p>
+<pre class="pf-doc-code"><code>bara = 100 × (1 − (ln(cost) − ln(2,5)) / (ln(80) − ln(2,5)))</code></pre>
+<ul class="pf-doc-list"><li><strong>2,5 lei / 100 g proteină</strong> = bara plină (leguminoase uscate, lapte praf, ouă la promoție)</li><li><strong>80 lei / 100 g proteină</strong> = bara goală (mâncare la restaurant, suplimente din farmacie)</li></ul>
+<p>Scala logaritmică e obligatorie: intervalul real din atlas merge de la <strong>3,69 lei</strong> la peste <strong>1800 lei</strong>. Pe o scală liniară, 95% din produse s-ar înghesui în primul procent al barei.</p>
+<p>Produsele fără preț cunoscut primesc 50 (neutru), nu 0 — altfel lipsa datelor ar arăta ca o condamnare.</p>
+<hr>
+<h2 id="3-cele-patru-axe-subiective">3. Cele patru axe subiective</h2>
+<p><strong>Gust</strong>, <strong>sațietate</strong>, <strong>comoditate</strong> și <strong>versatilitate</strong> sunt evaluate manual, de la 10 la 100, în timpul cercetării fiecărei categorii. Instrucțiunea dată a fost explicită: <em>fii un critic dur și folosește tot intervalul.</em></p>
+<div class="pf-doc-tablewrap"><table class="pf-doc-table"><thead><tr><th style="text-align:left">Produs</th><th style="text-align:right">Gust</th><th style="text-align:left">De ce</th></tr></thead><tbody><tr><td style="text-align:left">Antricot de vită</td><td style="text-align:right">95</td><td style="text-align:left">Nu e nevoie de argument</td></tr><tr><td style="text-align:left">Baton proteic Barebells</td><td style="text-align:right">84</td><td style="text-align:left">Chiar e bun</td></tr><tr><td style="text-align:left">Piept de pui fiert</td><td style="text-align:right">45</td><td style="text-align:left">Îl mănânci pentru proteină, nu pentru plăcere</td></tr><tr><td style="text-align:left">Granule de soia hidratate</td><td style="text-align:right">45</td><td style="text-align:left">Textura e o problemă reală</td></tr><tr><td style="text-align:left">Ficat de porc</td><td style="text-align:right">22</td><td style="text-align:left">Nutrițional excelent, gustul nu</td></tr></tbody></table></div>
+<p>Sațietatea e evaluată <strong>raportat la calorii</strong>, nu absolut. De asta pudrele proteice au scoruri mici (18–40): 100 de calorii de shake nu-ți taie foamea cât 100 de calorii de ouă. Asta e o observație reală, nu o părere despre suplimente.</p>
+<hr>
+<h2 id="4-corectia-de-calitate-a-proteinei">4. Corecția de calitate a proteinei</h2>
+<p>Aceasta e cea mai importantă corecție din tot sistemul, și fără ea atlasul ar recomanda prostii.</p>
+<p><strong>Problema.</strong> Eticheta calculează proteina măsurând azotul total. Colagenul și gelatina sunt pline de azot și complet lipsite de <strong>triptofan</strong>, un aminoacid esențial. DIAAS-ul lor pentru sinteză proteică e practic 0. Dar o pudră de colagen declară 90 g de proteină la 100 g și 100% din calorii din proteină — adică scoruri perfecte pe primele două axe.</p>
+<p>Fără corecție, colagenul ieșea <strong>pe locul 1 la „cea mai multă proteină”, pe locul 1 la „cea mai pură proteină” și în top 10 general.</strong></p>
+<p><strong>Soluția.</strong> Un factor de calitate care înmulțește cele două axe de proteină:</p>
+<div class="pf-doc-tablewrap"><table class="pf-doc-table"><thead><tr><th style="text-align:left">Categorie</th><th style="text-align:right">Factor</th><th style="text-align:left">Motiv</th></tr></thead><tbody><tr><td style="text-align:left">Colagen / gelatină / piftie / răcituri</td><td style="text-align:right"><strong>0,25</strong></td><td style="text-align:left">Fără triptofan; nu contează în ținta zilnică</td></tr><tr><td style="text-align:left">Lactate &amp; ouă</td><td style="text-align:right">1,08</td><td style="text-align:left">Proteina de referință, DIAAS peste 1</td></tr><tr><td style="text-align:left">Carne proaspătă, pește</td><td style="text-align:right">1,05</td><td style="text-align:left">Profil complet de aminoacizi</td></tr><tr><td style="text-align:left">Mezeluri, suplimente</td><td style="text-align:right">1,00</td><td style="text-align:left">Variază mult</td></tr><tr><td style="text-align:left">Mâncare gata</td><td style="text-align:right">0,95</td><td style="text-align:left">Amestecuri</td></tr><tr><td style="text-align:left">Panificație, băuturi, dulciuri</td><td style="text-align:right">0,92</td><td style="text-align:left">Domină cerealele</td></tr><tr><td style="text-align:left">Proteine vegetale</td><td style="text-align:right">0,88</td><td style="text-align:left">Aminoacid limitant</td></tr><tr><td style="text-align:left">…dar vegetale complete</td><td style="text-align:right"><strong>1,00</strong></td><td style="text-align:left">Soia, quinoa, cânepă, amarant, hrișcă</td></tr></tbody></table></div>
+<p><strong>Gramele afișate nu se schimbă niciodată.</strong> 90 g rămâne 90 g pe card. Doar scorul e ajustat, iar cardul explică de ce, cu un avertisment roșu.</p>
+<p>În plus, produsele de tip colagen sunt <strong>excluse din clasamentele de proteină</strong> — rămân găsibile prin căutare și filtre, dar nu au voie să câștige un top.</p>
+<p><strong>Rezultatul:</strong> colagenul a coborât de la rang A (75) la rang D (36). Ouăle au urcat de la C la B, ceea ce e corect — sunt una dintre cele mai bune surse de proteină existente, doar că nu una concentrată.</p>
+<hr>
+<h2 id="5-scorul-general-si-rangul">5. Scorul general și rangul</h2>
+<pre class="pf-doc-code"><code>scor = 0,28 × proteină      (ajustată cu calitatea)
+     + 0,24 × puritate      (ajustată cu calitatea)
+     + 0,15 × preț
+     + 0,13 × comoditate
+     + 0,10 × sațietate
+     + 0,10 × gust</code></pre>
+<div class="pf-doc-tablewrap"><table class="pf-doc-table"><thead><tr><th style="text-align:center">Rang</th><th style="text-align:right">Scor</th><th style="text-align:right">Produse</th><th style="text-align:right">% din atlas</th></tr></thead><tbody><tr><td style="text-align:center"><strong>S</strong></td><td style="text-align:right">≥ 80</td><td style="text-align:right">3</td><td style="text-align:right">0,6%</td></tr><tr><td style="text-align:center"><strong>A</strong></td><td style="text-align:right">≥ 68</td><td style="text-align:right">73</td><td style="text-align:right">14,5%</td></tr><tr><td style="text-align:center"><strong>B</strong></td><td style="text-align:right">≥ 56</td><td style="text-align:right">161</td><td style="text-align:right">32,0%</td></tr><tr><td style="text-align:center"><strong>C</strong></td><td style="text-align:right">≥ 44</td><td style="text-align:right">148</td><td style="text-align:right">29,4%</td></tr><tr><td style="text-align:center"><strong>D</strong></td><td style="text-align:right">≥ 30</td><td style="text-align:right">102</td><td style="text-align:right">20,3%</td></tr><tr><td style="text-align:center"><strong>E</strong></td><td style="text-align:right">&lt; 30</td><td style="text-align:right">16</td><td style="text-align:right">3,2%</td></tr></tbody></table></div>
+<p><strong>Rangul S e rar intenționat.</strong> Trei produse din 503. Dacă jumătate din atlas ar fi rang S, litera n-ar comunica nimic.</p>
+<h3 id="de-ce-aceste-ponderi">De ce aceste ponderi</h3>
+<p>Ponderile presupun că folosești atlasul ca să <strong>mănânci mai multă proteină, cu efort și bani rezonabili</strong>. Peste jumătate din scor (0,52) stă pe cât de multă și cât de curată e proteina — pentru că asta e întrebarea. Prețul urmează, pentru că proteina scumpă e proteina pe care n-o cumperi de două ori. Gustul are doar 0,10 nu pentru că n-ar conta, ci pentru că e cea mai personală axă din toate — dacă nu ești de acord, ai toate cele șase bare în față ca să judeci singur.</p>
+<p>Dacă alte ponderi ți se par mai bune, sunt un singur obiect în <code>js/utils/compute.js → CAL.weights</code>. Schimbă-le și tot atlasul se reordonează.</p>
+<hr>
+<h2 id="6-axe-suplimentare-afisate-dar-nu-in-scorul-general">6. Axe suplimentare (afișate, dar nu în scorul general)</h2>
+<div class="pf-doc-tablewrap"><table class="pf-doc-table"><thead><tr><th style="text-align:left">Axă</th><th style="text-align:left">Formulă</th><th style="text-align:left">Unde apare</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Viteză</strong></td><td style="text-align:left"><code>100 × (1 − timp/75)</code>, minim 3</td><td style="text-align:left">Bara extinsă din dosar</td></tr><tr><td style="text-align:left"><strong>Slăbiciune</strong></td><td style="text-align:left"><code>100 × (1 − grăsimi×9/kcal)</code></td><td style="text-align:left">Dosar + clasamentul „cele mai slabe”</td></tr><tr><td style="text-align:left"><strong>g proteină / 100 kcal</strong></td><td style="text-align:left"><code>proteină/kcal × 100</code></td><td style="text-align:left">Clasamentul „multă proteină, puține calorii”</td></tr><tr><td style="text-align:left"><strong>g proteină / leu</strong></td><td style="text-align:left">inversul costului</td><td style="text-align:left">Fila „unde cumperi”</td></tr></tbody></table></div>
+<hr>
+<h2 id="7-verificarea-coerentei-datelor">7. Verificarea coerenței datelor</h2>
+<p>Fiecare intrare e verificată automat la încărcare:</p>
+<p><strong>Verificarea Atwater.</strong> Caloriile ar trebui să poată fi reconstruite din macro-uri:</p>
+<pre class="pf-doc-code"><code>kcal_prezise = proteină×4 + carbohidrați×4 + grăsimi×9 + fibre×2</code></pre>
+<p>Dacă diferența față de valoarea declarată depășește <strong>±18%</strong>, intrarea primește un steag <code>energy-mismatch</code>, iar dosarul afișează explicația (poate fi rotunjire de etichetă, polioli, sau o eroare de transcriere).</p>
+<p>Se mai verifică <code>zaharuri ≤ carbohidrați</code> și <code>grăsimi saturate ≤ grăsimi</code>.</p>
+<p><strong>Rezultat curent: 0 intrări cu steaguri de coerență din 503.</strong></p>
+<h3 id="nivelurile-de-incredere">Nivelurile de încredere</h3>
+<div class="pf-doc-tablewrap"><table class="pf-doc-table"><thead><tr><th style="text-align:left">Nivel</th><th style="text-align:right">Produse</th><th style="text-align:left">Ce înseamnă</th></tr></thead><tbody><tr><td style="text-align:left">Ridicată</td><td style="text-align:right">168</td><td style="text-align:left">Citit de pe etichetă / site oficial</td></tr><tr><td style="text-align:left">Medie</td><td style="text-align:right">259</td><td style="text-align:left">Valori tipice pentru tipul de produs</td></tr><tr><td style="text-align:left">Scăzută</td><td style="text-align:right">76</td><td style="text-align:left">Estimare: raion cald, restaurant, tarabă din piață</td></tr></tbody></table></div>
+<p>Nivelul e afișat în subsolul fiecărui dosar, împreună cu sursele.</p>
+<hr>
+<h2 id="8-imbinarea-duplicatelor">8. Îmbinarea duplicatelor</h2>
+<p>Datele au fost cercetate de opt pași independenți, câte unul per categorie, iar teritoriile lor se suprapun la margini: laptele praf degresat e și lactat, și truc de panificație; tahini e și pastă de semințe, și condiment.</p>
+<p>Aplicația detectează automat intrările cu același nume normalizat și le îmbină: câștigă cea cu mai multe magazine (mai multe date de preț), iar rândurile de magazin ale celeilalte sunt adăugate la ea. Nicio cercetare nu se pierde, iar ID-urile vechi rămân valide, deci link-urile partajate nu se rup.</p>
+<p><strong>7 perechi îmbinate</strong>, din 510 intrări brute → 503 produse afișate.</p>
+<hr>
+<h2 id="9-ce-nu-face-metodologia">9. Ce nu face metodologia</h2>
+<ul class="pf-doc-list"><li><strong>Nu modelează biodisponibilitatea individuală.</strong> Digestia, microbiomul și toleranțele diferă de la om la om.</li><li><strong>Nu ține cont de gătit.</strong> O intrare „carne crudă” are valorile cărnii crude; <code>cooking.yieldNote</code> spune cât se pierde la gătit, dar scorul nu recalculează. Pentru leguminoase există intrări separate uscate și fierte, tocmai pentru că diferența e uriașă (linte: 25 g uscată → 9 g fiartă).</li><li><strong>Nu evaluează sănătatea generală.</strong> Un salam uscat poate avea rang bun la proteină și rămâne un mezel procesat, cu sare multă și nitriți. De aceea avertismentele sunt afișate separat, nu topite în scor.</li><li><strong>Nu urmărește prețurile în timp real.</strong> Prețurile sunt fotografii din august 2026.</li></ul>
+<hr>
+<h2 id="10-reproducerea-calculelor">10. Reproducerea calculelor</h2>
+<p>Totul e verificabil fără browser:</p>
+<pre class="pf-doc-code" data-lang="bash"><code>node -e &quot;
+global.window={location:{hash:''}};
+global.document={documentElement:{setAttribute(){},style:{setProperty(){}}}};
+['js/data/00-stores.js','js/data/01-dairy-eggs.js','js/utils/format.js',
+ 'js/utils/i18n.js','js/utils/compute.js'].forEach(f=&gt;require('./'+f));
+const PF=window.PF, f=window.PF_FOODS[0];
+f._d=PF.compute.enrich(f);
+console.log(f.nameRo, f._d.tier, Math.round(f._d.score), f._d.bars);
+&quot;</code></pre>
+  </main>
+</div>
+
+<footer class="pf-doc-foot">
+  Generat din <code>docs/METHODOLOGY.md</code> cu <code>tools/build-docs.js</code>.
+  Nu edita fișierul HTML — modifică Markdown-ul și regenerează.
+</footer>
+
+<script>
+/* Theme toggle, mirroring the app's own so the docs do not fight it. */
+(function () {
+  var KEY = 'pf.atlas.v1.theme';
+  var root = document.documentElement;
+  var saved;
+  try { saved = JSON.parse(localStorage.getItem(KEY)); } catch (e) { saved = null; }
+  if (saved === 'light' || saved === 'dark') root.setAttribute('data-theme', saved);
+  var btn = document.getElementById('pf-doc-theme');
+  function paint() { btn.textContent = root.getAttribute('data-theme') === 'light' ? '🌙' : '☀️'; }
+  paint();
+  btn.addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem(KEY, JSON.stringify(next)); } catch (e) {}
+    paint();
+  });
+})();
+</script>
+</body>
+</html>

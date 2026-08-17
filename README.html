@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ro" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>README · Atlasul Proteinelor Sibiu</title>
+<link rel="stylesheet" href="css/00-reset.css">
+<link rel="stylesheet" href="css/01-tokens.css">
+<link rel="stylesheet" href="css/15-docs.css">
+</head>
+<body class="pf-doc-body">
+
+<header class="pf-doc-top">
+  <a class="pf-doc-back" href="index.html">‹ Atlasul Proteinelor</a>
+  <a class="pf-doc-back" href="docs/index.html">Toată documentația</a>
+  <button class="pf-doc-theme" id="pf-doc-theme" title="Temă">☀️</button>
+</header>
+
+<div class="pf-doc-shell">
+  <nav class="pf-doc-toc" aria-label="Cuprins"><div class="pf-doc-toc__title">Pe această pagină</div><ul><li class="lv2"><a href="#ce-este">Ce este</a></li><li class="lv2"><a href="#cum-se-foloseste">Cum se folosește</a></li><li class="lv3"><a href="#cele-sapte-vizualizari">Cele șapte vizualizări</a></li><li class="lv3"><a href="#scurtaturi">Scurtături</a></li><li class="lv3"><a href="#ce-retine-browserul">Ce reține browserul</a></li><li class="lv2"><a href="#ce-e-in-atlas">Ce e în atlas</a></li><li class="lv3"><a href="#unde-se-cumpara">Unde se cumpără</a></li><li class="lv2"><a href="#mese-complete-retete">Mese complete (Rețete)</a></li><li class="lv2"><a href="#structura-proiectului">Structura proiectului</a></li><li class="lv2"><a href="#cum-se-citesc-barele">Cum se citesc barele</a></li><li class="lv3"><a href="#calculate">Calculate</a></li><li class="lv3"><a href="#subiective">Subiective</a></li><li class="lv3"><a href="#rangul-s-a-b-c-d-e">Rangul (S / A / B / C / D / E)</a></li><li class="lv2"><a href="#corectia-care-schimba-clasamentele-calitatea-proteinei">Corecția care schimbă clasamentele: calitatea proteinei</a></li><li class="lv2"><a href="#onestitatea-datelor">Onestitatea datelor</a></li><li class="lv3"><a href="#ce-nu-este-acest-proiect">Ce NU este acest proiect</a></li><li class="lv2"><a href="#cum-adaugi-un-produs">Cum adaugi un produs</a></li><li class="lv2"><a href="#compatibilitate">Compatibilitate</a></li></ul></nav>
+  <main class="pf-doc-main">
+<h1 id="atlasul-proteinelor-sibiu">Atlasul Proteinelor Sibiu</h1>
+<p><strong>505 alimente bogate în proteine pe care le poți cumpăra efectiv în Sibiu</strong>, cu macro-uri complete, preț pe gram de proteină, efort de gătit, gust evaluat onest și momentul din zi în care merită mâncate — afișate cu bare de statistici ca într-un joc video.</p>
+<p>Deschide <code>index.html</code> în orice browser. Nu are nevoie de server, de instalare, de internet și de niciun build step.</p>
+<hr>
+<h2 id="ce-este">Ce este</h2>
+<p>O bază de date construită pe o singură întrebare practică: <em>„ce mănânc acum, ca să iau proteină, din ce se găsește în Sibiu?”</em></p>
+<p>Fiecare produs din atlas are:</p>
+<div class="pf-doc-tablewrap"><table class="pf-doc-table"><thead><tr><th style="text-align:left">Ce</th><th style="text-align:left">De ce contează</th></tr></thead><tbody><tr><td style="text-align:left">Macro-uri complete la 100 g <strong>și</strong> pe porție reală</td><td style="text-align:left">„25 g proteină la 100 g” nu ajută dacă porția e de 30 g</td></tr><tr><td style="text-align:left">Preț <strong>estimat</strong> pe 100 g de proteină pură (<code>≈</code>, ±20–30%)</td><td style="text-align:left">Singura comparație corectă între un baton proteic și un piept de pui — dar vezi nota de mai jos</td></tr><tr><td style="text-align:left">Efort (0–5) și timp total vs. timp activ</td><td style="text-align:left">45 de minute la cuptor nu e același lucru cu 45 de minute de tăiat</td></tr><tr><td style="text-align:left">Gust, sațietate, comoditate, versatilitate (0–100)</td><td style="text-align:left">Evaluări subiective, dar asumate și consistente</td></tr><tr><td style="text-align:left">Magazine din Sibiu + raionul + prețul pachetului</td><td style="text-align:left">Ca să știi unde te duci, nu doar ce cauți</td></tr><tr><td style="text-align:left">Momentul din zi (7 sloturi, 0–5)</td><td style="text-align:left">Cazeina seara, zerul după antrenament</td></tr><tr><td style="text-align:left">Pași de gătit, sfaturi, avertismente, păstrare</td><td style="text-align:left">Ca să nu cauți rețeta în altă parte</td></tr></tbody></table></div>
+<hr>
+<h2 id="cum-se-foloseste">Cum se folosește</h2>
+<pre class="pf-doc-code"><code>proteinFood/
+└── index.html      ← deschide asta</code></pre>
+<p>Serios, atât. Dublu-click pe <code>index.html</code>.</p>
+<h3 id="cele-sapte-vizualizari">Cele șapte vizualizări</h3>
+<div class="pf-doc-tablewrap"><table class="pf-doc-table"><thead><tr><th style="text-align:center">Tastă</th><th style="text-align:left">Vizualizare</th><th style="text-align:left">La ce e bună</th></tr></thead><tbody><tr><td style="text-align:center"><code>1</code></td><td style="text-align:left"><strong>Carduri</strong></td><td style="text-align:left">Răsfoire vizuală, barele de statistici una lângă alta</td></tr><tr><td style="text-align:center"><code>2</code></td><td style="text-align:left"><strong>Tabel</strong></td><td style="text-align:left">Comparație densă, sortare pe orice coloană</td></tr><tr><td style="text-align:center"><code>3</code></td><td style="text-align:left"><strong>Clasamente</strong></td><td style="text-align:left">10 topuri: cea mai multă / cea mai pură / cea mai ieftină proteină etc.</td></tr><tr><td style="text-align:center"><code>4</code></td><td style="text-align:left"><strong>Comparație</strong></td><td style="text-align:left">Până la 5 produse cap la cap, cu cea mai bună valoare evidențiată</td></tr><tr><td style="text-align:center"><code>5</code></td><td style="text-align:left"><strong>Hartă</strong></td><td style="text-align:left">Grafic proteină vs. calorii — colțul stânga-sus e unde vrei să cumperi</td></tr><tr><td style="text-align:center"><code>6</code></td><td style="text-align:left"><strong>Rețete</strong></td><td style="text-align:left">Mese complete: proteină + garnitură + legume, pe metodă de gătit</td></tr><tr><td style="text-align:center"><code>7</code></td><td style="text-align:left"><strong>Listă</strong></td><td style="text-align:left">Lista de cumpărături, grupată pe magazinul unde produsul e cel mai ieftin</td></tr></tbody></table></div>
+<h3 id="scurtaturi">Scurtături</h3>
+<div class="pf-doc-tablewrap"><table class="pf-doc-table"><thead><tr><th style="text-align:center">Tastă</th><th style="text-align:left">Acțiune</th></tr></thead><tbody><tr><td style="text-align:center"><code>/</code></td><td style="text-align:left">Caută</td></tr><tr><td style="text-align:center"><code>R</code></td><td style="text-align:left">„Ce mănânc acum?” — alege în funcție de oră</td></tr><tr><td style="text-align:center"><code>M</code></td><td style="text-align:left">Deschide/închide masa</td></tr><tr><td style="text-align:center"><code>T</code></td><td style="text-align:left">Temă deschisă / întunecată</td></tr><tr><td style="text-align:center"><code>L</code></td><td style="text-align:left">Limbă RO / EN</td></tr><tr><td style="text-align:center"><code>X</code></td><td style="text-align:left">Resetează filtrele</td></tr><tr><td style="text-align:center"><code>?</code></td><td style="text-align:left">Lista completă de scurtături</td></tr><tr><td style="text-align:center"><code>←</code> <code>→</code></td><td style="text-align:left">Produsul anterior / următor, când e deschisă fereastra de detalii</td></tr></tbody></table></div>
+<h3 id="ce-retine-browserul">Ce reține browserul</h3>
+<p>Favoritele, masa curentă, comparația, tema, limba și profilul (greutate + obiectiv) se salvează local, în <code>localStorage</code>. Nu pleacă nimic nicăieri — aplicația nu face niciun request de rețea. Starea filtrelor se scrie în URL, deci poți trimite un link cu exact ce vezi pe ecran.</p>
+<hr>
+<h2 id="ce-e-in-atlas">Ce e în atlas</h2>
+<p><strong>505 produse · 8 categorii · 89 subcategorii · 18 locuri de cumpărat</strong></p>
+<div class="pf-doc-tablewrap"><table class="pf-doc-table"><thead><tr><th style="text-align:left">Categorie</th><th style="text-align:right">Produse</th></tr></thead><tbody><tr><td style="text-align:left">🌱 Proteine vegetale</td><td style="text-align:right">71</td></tr><tr><td style="text-align:left">🥛 Lactate &amp; ouă</td><td style="text-align:right">67</td></tr><tr><td style="text-align:left">🥩 Carne proaspătă</td><td style="text-align:right">64</td></tr><tr><td style="text-align:left">🥓 Mezeluri &amp; conserve</td><td style="text-align:right">64</td></tr><tr><td style="text-align:left">🐟 Pește &amp; fructe de mare</td><td style="text-align:right">60</td></tr><tr><td style="text-align:left">🍱 Mâncare gata</td><td style="text-align:right">61</td></tr><tr><td style="text-align:left">💪 Suplimente &amp; snackuri</td><td style="text-align:right">59</td></tr><tr><td style="text-align:left">🍞 Panificație, băuturi &amp; dulciuri</td><td style="text-align:right">59</td></tr></tbody></table></div>
+<p><strong>262 de produse (52%) au efort zero</strong> — le deschizi și le mănânci. <strong>47 sunt gata de mâncat în 0 minute</strong>, fără nici măcar încălzit.</p>
+<blockquote class="pf-doc-quote"><h2 id="despre-preturi-citeste-asta-intai">⚠️ Despre prețuri — citește asta întâi</h2>
+<p><strong>Niciun preț din acest proiect nu este verificat.</strong> Sunt estimări pentru 2026, calibrate pe intervale realiste — nu au fost citite de pe un raft și nu vin dintr-un API.</p>
+<p>Nu există un API public de prețuri pentru retailul alimentar din România. Singurul deschis (Open Prices / Open Food Facts) conținea, în august 2026, <strong>84 de prețuri în RON pentru toată țara</strong>, aproape toate dulciuri și băuturi — practic nicio suprapunere cu un atlas de proteine. <code>tools/verify-prices.js</code> interoghează acel API și raportează potrivirile; astăzi nu găsește niciuna suficient de sigură.</p>
+<p>De aceea aplicația afișează peste tot <code>≈</code> și o marjă de <strong>±20%</strong> (lanțuri de retail și online) sau <strong>±30%</strong> (piață, măcelărie, pescărie, restaurant, farmacie). Un preț apare fără <code>≈</code> doar dacă are <code>verified: true</code> — momentan niciunul nu are.</p>
+<p><strong>Ce poți face cu ele:</strong> să compari produse între ele. Ordinea clasamentelor e aproape sigur corectă, pentru că diferențele sunt de ordinul zecilor de ori, nu de procente. <strong>Ce NU poți face:</strong> să-ți faci bugetul, sau să te aștepți la prețul ăsta la casă.</p></blockquote>
+<p>Media pe atlas e de <strong>19,8 g proteină / 100 g</strong>. Prețul median al proteinei e de <strong>29,5 lei / 100 g de proteină pură</strong>; cel mai ieftin produs coboară la <strong>3,69 lei</strong>, iar cel mai scump urcă la peste 1800 (da, există — vezi <code>docs/BUDGET.md</code>).</p>
+<h3 id="unde-se-cumpara">Unde se cumpără</h3>
+<div class="pf-doc-tablewrap"><table class="pf-doc-table"><thead><tr><th style="text-align:left">Magazin</th><th style="text-align:right">Produse</th><th style="text-align:left">Magazin</th><th style="text-align:right">Produse</th></tr></thead><tbody><tr><td style="text-align:left">Kaufland</td><td style="text-align:right">374</td><td style="text-align:left">Auchan</td><td style="text-align:right">48</td></tr><tr><td style="text-align:left">Carrefour</td><td style="text-align:right">187</td><td style="text-align:left">Mega Image</td><td style="text-align:right">35</td></tr><tr><td style="text-align:left">Lidl</td><td style="text-align:right">180</td><td style="text-align:left">Decathlon</td><td style="text-align:right">17</td></tr><tr><td style="text-align:left">Selgros</td><td style="text-align:right">104</td><td style="text-align:left">Restaurant Sibiu</td><td style="text-align:right">17</td></tr><tr><td style="text-align:left">Online RO</td><td style="text-align:right">95</td><td style="text-align:left">Farmacie</td><td style="text-align:right">15</td></tr><tr><td style="text-align:left">Piața Cibin</td><td style="text-align:right">83</td><td style="text-align:left">Măcelărie locală</td><td style="text-align:right">13</td></tr><tr><td style="text-align:left">Profi</td><td style="text-align:right">67</td><td style="text-align:left">Pescărie</td><td style="text-align:right">11</td></tr><tr><td style="text-align:left">Penny</td><td style="text-align:right">55</td><td style="text-align:left">La Doi Pași</td><td style="text-align:right">4</td></tr><tr><td style="text-align:left">Metro</td><td style="text-align:right">52</td><td style="text-align:left">Carrefour Market</td><td style="text-align:right">2</td></tr></tbody></table></div>
+<hr>
+<h2 id="mese-complete-retete">Mese complete (Rețete)</h2>
+<p>Atlasul îți spune <em>ce</em> să cumperi. Fila <strong>Rețete</strong> îți spune <em>ce faci din el</em> — o masă întreagă, nu un ingredient.</p>
+<ul class="pf-doc-list"><li><strong>21 de mese</strong>, filtrabile după <strong>metodă</strong> (la cuptor, la tigaie, la grătar, air fryer, fiert/supă, gătit lent, fără gătit) și după <strong>ingredientul principal</strong> (pui, curcan, porc, vită, pește, ouă, lactate, leguminoase, tofu).</li><li>Fiecare rețetă are proteina, garnitura și legumele în aceeași listă, cu pași scriși pentru cineva care nu gătește des, plus sfaturi și <strong>variante</strong> („cu paste în loc de cartofi”, „mai ieftin”, „fără cuptor”).</li><li><strong>Macro-urile nu sunt scrise de mână.</strong> Fiecare ingredient trimite fie către un produs din atlas, fie către cămara din <code>js/data/09-recipes.js</code>, iar totalurile — proteină, calorii, cost pe porție — se calculează la încărcare. Dacă se corectează eticheta unui produs, se corectează și toate mesele care îl folosesc.</li><li>Costul e real: fiecare ingredient are prețul lui, deci vezi câți lei costă porția, nu doar câte grame de proteină are.</li><li>În dosarul fiecărui produs, fila <strong>Preparare</strong> listează mesele care îl folosesc — puntea de la „am piept de pui în frigider” la „ce gătesc diseară”.</li></ul>
+<p>Intervalul actual: de la <strong>23 g proteină / porție la 2,54 lei</strong> (linte cu orez) până la <strong>63 g / porție</strong> (șnițel de curcan cu piure).</p>
+<h2 id="structura-proiectului">Structura proiectului</h2>
+<pre class="pf-doc-code"><code>proteinFood/
+├── index.html                  Aplicația. Un singur fișier de deschis.
+├── css/                        13 fișiere, în ordinea cascadei
+│   ├── 00-reset.css            reset minimal
+│   ├── 01-tokens.css           TOATE culorile și dimensiunile trăiesc aici
+│   ├── 02-base.css             tipografie, panouri, badge-uri, tooltip-uri
+│   ├── 03-layout.css           bara de sus, coloana de filtre, scena
+│   ├── 04-controls.css         butoane, chips, slidere, comutatoare
+│   ├── 05-statbars.css         barele de joc, insignele de rang, macro-barele
+│   ├── 06-cards.css            cardul de produs
+│   ├── 07-modal.css            dosarul complet al unui produs
+│   ├── 08-panels.css           hero, calculator, masă, clasamente, listă
+│   ├── 09-charts.css           donut, radar, scatter, histogramă
+│   ├── 10-animations.css       toate keyframe-urile
+│   ├── 11-responsive.css       5 praguri + suport touch
+│   └── 12-print.css            lista de cumpărături pe hârtie
+├── js/
+│   ├── data/                   35 138 de linii de date cercetate
+│   │   ├── 00-stores.js        registrul magazinelor din Sibiu
+│   │   ├── 01..08-*.js         câte un fișier per categorie
+│   │   └── 09-recipes.js       21 de mese complete + cămara
+│   ├── utils/
+│   │   ├── format.js           numere, lei, minute, diacritice, highlight
+│   │   ├── i18n.js             dicționar RO/EN complet
+│   │   ├── compute.js          TOATE metricile derivate și scorurile
+│   │   └── storage.js          localStorage + starea din URL
+│   ├── components/
+│   │   ├── ui.js               bare, insigne, pips, pastile de magazin
+│   │   ├── charts.js           SVG scris de mână, fără biblioteci
+│   │   ├── card.js             cardul + rândul de tabel
+│   │   ├── modal.js            dosarul, în 6 file
+│   │   ├── filters.js          motorul de filtrare + coloana de filtre
+│   │   ├── tray.js             masa + lista de cumpărături
+│   │   ├── recipes.js          mesele complete, calculate din atlas
+│   │   ├── tooltip.js          tooltip flotant, nu pseudo-element
+│   │   ├── boards.js           cele 10 clasamente
+│   │   └── compare.js          comparația cap la cap
+│   └── app.js                  boot, evenimente, vizualizări, scurtături
+└── docs/
+    ├── DATA-SCHEMA.md          contractul de date (citește-l înainte să adaugi ceva)
+    ├── METHODOLOGY.md          cum se calculează scorurile și de ce
+    ├── PROTEIN-GUIDE.md        de câtă proteină ai nevoie și de unde
+    ├── STORES-SIBIU.md         ghid magazin cu magazin
+    ├── MEAL-TIMING.md          distribuția proteinei pe parcursul zilei
+    ├── BUDGET.md               proteină ieftină, ordonată de la cea mai bună
+    ├── CHARTS.md               deciziile de design ale graficelor
+    ├── CHANGELOG.md            istoricul proiectului
+    └── categories/             8 ghiduri de cumpărare, unul per categorie</code></pre>
+<hr>
+<h2 id="cum-se-citesc-barele">Cum se citesc barele</h2>
+<p>Fiecare card arată șase bare. Trei sunt <strong>calculate din date</strong>, trei sunt <strong>evaluări subiective asumate</strong>.</p>
+<h3 id="calculate">Calculate</h3>
+<div class="pf-doc-tablewrap"><table class="pf-doc-table"><thead><tr><th style="text-align:left">Bară</th><th style="text-align:left">Ce măsoară</th><th style="text-align:left">Bara e plină la</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Proteină</strong></td><td style="text-align:left">grame la 100 g</td><td style="text-align:left">30 g (≈ piept de pui gătit, cașcaval, ton)</td></tr><tr><td style="text-align:left"><strong>Puritate</strong></td><td style="text-align:left">ce procent din calorii vine din proteină</td><td style="text-align:left">80% (albuș, izolat de zer — maximul real)</td></tr><tr><td style="text-align:left"><strong>Preț</strong></td><td style="text-align:left">cât costă 100 g de proteină pură</td><td style="text-align:left">scală logaritmică, 2,5 lei = plin, 80 lei = gol</td></tr></tbody></table></div>
+<h3 id="subiective">Subiective</h3>
+<p><strong>Gust</strong>, <strong>sațietate</strong>, <strong>comoditate</strong>, <strong>versatilitate</strong> — evaluate de la 10 la 100, cu intenția de a folosi tot intervalul. Pieptul de pui fiert are gust 45. Ficatul de porc are 22. Dacă totul ar fi 90, barele n-ar spune nimic.</p>
+<h3 id="rangul-s-a-b-c-d-e">Rangul (S / A / B / C / D / E)</h3>
+<p>Un singur scor compus, cu ponderile scrise pe față în <code>docs/METHODOLOGY.md</code>. <strong>Doar 3 produse din 505 ajung la rang S.</strong> Asta e intenționat: dacă rangul S ar fi ieftin, n-ar însemna nimic.</p>
+<hr>
+<h2 id="corectia-care-schimba-clasamentele-calitatea-proteinei">Corecția care schimbă clasamentele: calitatea proteinei</h2>
+<p>Eticheta numără proteina măsurând azotul. Nu e același lucru cu proteina pe care corpul o poate folosi. Două corecții contează suficient ca să schimbe un top:</p>
+<ol class="pf-doc-list"><li><strong>Colagenul și gelatina nu conțin triptofan.</strong> Valoarea lor biologică pentru sinteza musculară e practic zero, dar o pudră de colagen declară 90 g de proteină la 100 g. Fără corecție, colagenul ar fi câștigat <em>fiecare</em> clasament din atlas. Scorul lui e înmulțit cu <strong>0,25</strong> și e exclus din clasamentele de proteină — rămâne găsibil, cu explicația la vedere pe card.</li><li><strong>Sursele vegetale simple sunt limitate într-un aminoacid</strong> (lizina la cereale, metionina la leguminoase). Penalizare blândă (×0,88), anulată pentru sursele complete — soia, quinoa, cânepa, amarantul, hrișca.</li></ol>
+<p>Gramele afișate nu sunt niciodată modificate. Doar scorul e ajustat, iar motivul e scris pe card.</p>
+<hr>
+<h2 id="onestitatea-datelor">Onestitatea datelor</h2>
+<p>Fiecare produs are un nivel de încredere declarat:</p>
+<div class="pf-doc-tablewrap"><table class="pf-doc-table"><thead><tr><th style="text-align:left">Nivel</th><th style="text-align:right">Produse</th><th style="text-align:left">Ce înseamnă</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Ridicată</strong></td><td style="text-align:right">167</td><td style="text-align:left">Valori citite de pe o etichetă reală sau de pe site-ul oficial</td></tr><tr><td style="text-align:left"><strong>Medie</strong></td><td style="text-align:right">260</td><td style="text-align:left">Valori tipice pentru tipul de produs; marca variază</td></tr><tr><td style="text-align:left"><strong>Scăzută</strong></td><td style="text-align:right">78</td><td style="text-align:left">Estimare — raion cald, restaurant, produs fără etichetă</td></tr></tbody></table></div>
+<p>Toate cele 505 intrări trec o verificare automată de coerență energetică (<code>kcal ≈ proteină×4 + carbo×4 + grăsimi×9 + fibre×2</code>, toleranță ±15%), plus <code>zaharuri ≤ carbohidrați</code> și <code>grăsimi saturate ≤ grăsimi</code>.</p>
+<h3 id="ce-nu-este-acest-proiect">Ce NU este acest proiect</h3>
+<ul class="pf-doc-list"><li><strong>Nu e sfat medical.</strong> Dacă ai probleme renale, hepatice sau o afecțiune metabolică, întreabă un medic înainte să-ți crești aportul de proteină.</li><li><strong>Nu e o listă de prețuri.</strong> Prețurile sunt estimări pentru 2026, colectate în august 2026. Se schimbă săptămânal. Folosește-le ca să compari produse între ele, nu ca să-ți faci bugetul la leu.</li><li><strong>Nu e afiliat cu niciun retailer.</strong> Toate mărcile aparțin proprietarilor lor.</li><li><strong>Eticheta din mână bate baza de date.</strong> Rețetele se schimbă, producătorii reformulează, loturile variază.</li></ul>
+<hr>
+<h2 id="cum-adaugi-un-produs">Cum adaugi un produs</h2>
+<ol class="pf-doc-list"><li>Citește <code>docs/DATA-SCHEMA.md</code>. E contractul, și e verificat automat.</li><li>Adaugă intrarea în fișierul categoriei potrivite din <code>js/data/</code>, deasupra liniei <code>// ---INSERT-NEW-ITEMS-ABOVE---</code>.</li><li>Rulează <code>node --check js/data/&lt;fișier&gt;.js</code>.</li><li>Reîncarcă <code>index.html</code>. Consola îți spune dacă intrarea a fost respinsă sau dacă are steaguri de calitate a datelor.</li></ol>
+<p>Aplicația nu se sparge dacă o intrare e incompletă: câmpurile lipsă primesc valori implicite, intrările fără <code>id</code>, <code>nume</code> sau <code>proteină</code> sunt respinse și raportate în consolă, iar duplicatele dintre categorii sunt îmbinate automat (prețurile din ambele surse se păstrează).</p>
+<hr>
+<h2 id="compatibilitate">Compatibilitate</h2>
+<p>Chrome, Edge, Firefox și Safari recente. Folosește <code>color-mix()</code>, <code>:has()</code>, <code>dialog</code> și <code>content-visibility</code> — toate cu degradare grațioasă: pe un browser mai vechi pierzi câteva accente vizuale, nu funcționalitate.</p>
+<p>Respectă <code>prefers-reduced-motion</code> (oprește toate animațiile), <code>prefers-contrast: more</code> și <code>forced-colors</code> (barele primesc texturi diferite, ca să rămână distinse fără culoare).</p>
+  </main>
+</div>
+
+<footer class="pf-doc-foot">
+  Generat din <code>README.md</code> cu <code>tools/build-docs.js</code>.
+  Nu edita fișierul HTML — modifică Markdown-ul și regenerează.
+</footer>
+
+<script>
+/* Theme toggle, mirroring the app's own so the docs do not fight it. */
+(function () {
+  var KEY = 'pf.atlas.v1.theme';
+  var root = document.documentElement;
+  var saved;
+  try { saved = JSON.parse(localStorage.getItem(KEY)); } catch (e) { saved = null; }
+  if (saved === 'light' || saved === 'dark') root.setAttribute('data-theme', saved);
+  var btn = document.getElementById('pf-doc-theme');
+  function paint() { btn.textContent = root.getAttribute('data-theme') === 'light' ? '🌙' : '☀️'; }
+  paint();
+  btn.addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem(KEY, JSON.stringify(next)); } catch (e) {}
+    paint();
+  });
+})();
+</script>
+</body>
+</html>

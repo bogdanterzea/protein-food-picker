@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ro" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Documentație · Atlasul Proteinelor Sibiu</title>
+<link rel="stylesheet" href="../css/00-reset.css">
+<link rel="stylesheet" href="../css/01-tokens.css">
+<link rel="stylesheet" href="../css/15-docs.css">
+</head>
+<body class="pf-doc-body">
+
+<header class="pf-doc-top">
+  <a class="pf-doc-back" href="../index.html">‹ Atlasul Proteinelor</a>
+  
+  <button class="pf-doc-theme" id="pf-doc-theme" title="Temă">☀️</button>
+</header>
+
+<div class="pf-doc-shell pf-doc-shell--solo">
+  
+  <main class="pf-doc-main">
+<h1>Documentația atlasului</h1><p>Tot ce stă în spatele cifrelor: cum sunt calculate scorurile, ce înseamnă fiecare câmp din date, de unde vin prețurile și de ce nu sunt confirmate.</p><h2 id="documente">Documente</h2><ul class="pf-doc-cards"><li><a class="pf-doc-card" href="BUDGET.html"><span class="pf-doc-card__name">Proteina ieftină</span><span class="pf-doc-card__meta">1.753 cuvinte</span></a></li><li><a class="pf-doc-card" href="CHANGELOG.html"><span class="pf-doc-card__name">Changelog</span><span class="pf-doc-card__meta">1.957 cuvinte</span></a></li><li><a class="pf-doc-card" href="CHARTS.html"><span class="pf-doc-card__name">Graficele</span><span class="pf-doc-card__meta">1.378 cuvinte</span></a></li><li><a class="pf-doc-card" href="DATA-SCHEMA.html"><span class="pf-doc-card__name">Schema datelor</span><span class="pf-doc-card__meta">2.024 cuvinte</span></a></li><li><a class="pf-doc-card" href="MEAL-TIMING.html"><span class="pf-doc-card__name">Când mănânci</span><span class="pf-doc-card__meta">1.190 cuvinte</span></a></li><li><a class="pf-doc-card" href="METHODOLOGY.html"><span class="pf-doc-card__name">Metodologie și scoruri</span><span class="pf-doc-card__meta">1.906 cuvinte</span></a></li><li><a class="pf-doc-card" href="PROTEIN-GUIDE.html"><span class="pf-doc-card__name">Ghid de proteină</span><span class="pf-doc-card__meta">1.972 cuvinte</span></a></li><li><a class="pf-doc-card" href="STORES-SIBIU.html"><span class="pf-doc-card__name">Magazinele din Sibiu</span><span class="pf-doc-card__meta">1.594 cuvinte</span></a></li></ul><h2 id="categorii">Ghiduri pe categorie</h2><ul class="pf-doc-cards"><li><a class="pf-doc-card" href="categories/bakery-drinks-sweets.html"><span class="pf-doc-card__name">Panificație, mic dejun, băuturi, dulciuri &amp; boostere — ghid Sibiu</span><span class="pf-doc-card__meta">4.866 cuvinte</span></a></li><li><a class="pf-doc-card" href="categories/dairy-eggs.html"><span class="pf-doc-card__name">Lactate &amp; Ouă — Protein Atlas Sibiu</span><span class="pf-doc-card__meta">4.297 cuvinte</span></a></li><li><a class="pf-doc-card" href="categories/deli-processed.html"><span class="pf-doc-card__name">Mezeluri, charcuterie, conserve de carne &amp; raft cald</span><span class="pf-doc-card__meta">5.020 cuvinte</span></a></li><li><a class="pf-doc-card" href="categories/fish-seafood.html"><span class="pf-doc-card__name">Pește &amp; fructe de mare — Protein Atlas Sibiu</span><span class="pf-doc-card__meta">5.035 cuvinte</span></a></li><li><a class="pf-doc-card" href="categories/fresh-meat.html"><span class="pf-doc-card__name">Carne proaspătă crudă — ghidul Sibiu</span><span class="pf-doc-card__meta">4.969 cuvinte</span></a></li><li><a class="pf-doc-card" href="categories/plant-protein.html"><span class="pf-doc-card__name">Proteine vegetale — leguminoase, soia, cereale, nuci, semințe</span><span class="pf-doc-card__meta">4.491 cuvinte</span></a></li><li><a class="pf-doc-card" href="categories/ready-meals.html"><span class="pf-doc-card__name">Ready Meals, Congelate &amp; Mâncat în Oraș — Sibiu</span><span class="pf-doc-card__meta">4.512 cuvinte</span></a></li><li><a class="pf-doc-card" href="categories/supplements-snacks.html"><span class="pf-doc-card__name">Suplimente, produse fortifiate &amp; snackuri proteice inginerite</span><span class="pf-doc-card__meta">4.589 cuvinte</span></a></li></ul>
+  </main>
+</div>
+
+<footer class="pf-doc-foot">
+  Generat din <code>generat</code> cu <code>tools/build-docs.js</code>.
+  Nu edita fișierul HTML — modifică Markdown-ul și regenerează.
+</footer>
+
+<script>
+/* Theme toggle, mirroring the app's own so the docs do not fight it. */
+(function () {
+  var KEY = 'pf.atlas.v1.theme';
+  var root = document.documentElement;
+  var saved;
+  try { saved = JSON.parse(localStorage.getItem(KEY)); } catch (e) { saved = null; }
+  if (saved === 'light' || saved === 'dark') root.setAttribute('data-theme', saved);
+  var btn = document.getElementById('pf-doc-theme');
+  function paint() { btn.textContent = root.getAttribute('data-theme') === 'light' ? '🌙' : '☀️'; }
+  paint();
+  btn.addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem(KEY, JSON.stringify(next)); } catch (e) {}
+    paint();
+  });
+})();
+</script>
+</body>
+</html>

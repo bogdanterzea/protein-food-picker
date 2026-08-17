@@ -1,0 +1,367 @@
+/* =========================================================================
+ * 15 — PAGINILE DE DOCUMENTAȚIE
+ *
+ * Folosite doar de fișierele generate de `tools/build-docs.js`, nu de
+ * aplicație. Împrumută tokenele din `01-tokens.css`, deci documentația și
+ * atlasul au aceleași culori, aceeași tipografie și același comutator de
+ * temă — nu arată ca două proiecte diferite.
+ *
+ * Regula de lizibilitate: o coloană de text, măsură ~72 de caractere,
+ * înălțime de rând 1,7. Documentele astea se citesc, nu se scanează.
+ * ========================================================================= */
+
+.pf-doc-body {
+  margin: 0;
+  background: var(--bg-app);
+  color: var(--text-2);
+  font-family: var(--font-sans);
+  font-size: var(--fs-md);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ----------------------------------------------------------------- top -- */
+
+.pf-doc-top {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-3) var(--sp-5);
+  background: color-mix(in srgb, var(--bg-app) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+
+.pf-doc-back {
+  color: var(--accent);
+  text-decoration: none;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+
+.pf-doc-back:hover { text-decoration: underline; }
+
+.pf-doc-theme {
+  margin-left: auto;
+  padding: 4px 8px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  color: inherit;
+  font-size: var(--fs-sm);
+  cursor: pointer;
+}
+
+.pf-doc-theme:hover { background: var(--bg-hover); }
+
+/* --------------------------------------------------------------- shell -- */
+
+.pf-doc-shell {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: var(--sp-8);
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: var(--sp-7) var(--sp-5) var(--sp-10);
+  align-items: start;
+}
+
+/* A page with no headings to index (the docs index itself) has no sidebar,
+ * so the grid must not reserve its column — otherwise the whole page renders
+ * inside a 240px strip. */
+.pf-doc-shell--solo {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.pf-doc-main {
+  min-width: 0;
+  max-width: 72ch;
+}
+
+.pf-doc-shell--solo .pf-doc-main { max-width: 900px; }
+
+/* ----------------------------------------------------------------- toc -- */
+
+.pf-doc-toc {
+  position: sticky;
+  top: calc(var(--topbar-h) + var(--sp-3));
+  max-height: calc(100vh - var(--topbar-h) - var(--sp-6));
+  overflow-y: auto;
+  font-size: var(--fs-xs);
+}
+
+.pf-doc-toc__title {
+  margin-bottom: var(--sp-2);
+  color: var(--text-4);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: var(--fs-3xs);
+  font-weight: 700;
+}
+
+.pf-doc-toc ul { margin: 0; padding: 0; list-style: none; }
+
+.pf-doc-toc li { margin: 0; }
+
+.pf-doc-toc a {
+  display: block;
+  padding: 3px 0 3px var(--sp-3);
+  border-left: 2px solid var(--border);
+  color: var(--text-4);
+  text-decoration: none;
+  line-height: 1.4;
+}
+
+.pf-doc-toc a:hover {
+  color: var(--text-1);
+  border-left-color: var(--accent);
+}
+
+.pf-doc-toc .lv3 a { padding-left: var(--sp-5); font-size: var(--fs-3xs); }
+
+/* ------------------------------------------------------------- headings -- */
+
+.pf-doc-main h1,
+.pf-doc-main h2,
+.pf-doc-main h3,
+.pf-doc-main h4 {
+  color: var(--text-1);
+  line-height: 1.25;
+  font-weight: 700;
+  scroll-margin-top: calc(var(--topbar-h) + var(--sp-4));
+}
+
+.pf-doc-main h1 {
+  margin: 0 0 var(--sp-5);
+  font-size: clamp(1.7rem, 4vw, 2.3rem);
+  letter-spacing: -0.02em;
+}
+
+.pf-doc-main h2 {
+  margin: var(--sp-9) 0 var(--sp-3);
+  padding-bottom: var(--sp-2);
+  border-bottom: 1px solid var(--border);
+  font-size: 1.35rem;
+}
+
+.pf-doc-main h3 { margin: var(--sp-6) 0 var(--sp-2); font-size: 1.08rem; }
+.pf-doc-main h4 { margin: var(--sp-5) 0 var(--sp-2); font-size: 0.98rem; color: var(--text-2); }
+
+.pf-doc-main > h2:first-child,
+.pf-doc-main > h3:first-child { margin-top: 0; }
+
+/* ---------------------------------------------------------------- text -- */
+
+.pf-doc-main p { margin: 0 0 var(--sp-4); }
+
+.pf-doc-main strong { color: var(--text-1); font-weight: 650; }
+
+.pf-doc-main a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+
+.pf-doc-main hr {
+  margin: var(--sp-8) 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+}
+
+.pf-doc-list {
+  margin: 0 0 var(--sp-4);
+  padding-left: var(--sp-5);
+}
+
+.pf-doc-list li { margin-bottom: var(--sp-2); }
+
+/* ---------------------------------------------------------------- code -- */
+
+.pf-doc-main code {
+  padding: 1px 5px;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xs);
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  color: var(--accent);
+}
+
+.pf-doc-code {
+  margin: 0 0 var(--sp-4);
+  padding: var(--sp-4);
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  overflow-x: auto;
+  line-height: 1.55;
+}
+
+.pf-doc-code code {
+  padding: 0;
+  background: none;
+  border: 0;
+  color: var(--text-2);
+  font-size: var(--fs-xs);
+}
+
+/* --------------------------------------------------------------- quote -- */
+
+.pf-doc-quote {
+  margin: 0 0 var(--sp-4);
+  padding: var(--sp-4) var(--sp-5);
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--warn);
+  border-radius: var(--r-md);
+}
+
+.pf-doc-quote > :last-child { margin-bottom: 0; }
+.pf-doc-quote h2 { margin-top: 0; border: 0; padding: 0; font-size: 1.05rem; }
+
+/* --------------------------------------------------------------- table -- */
+
+/* The docs are full of wide ranking tables. They scroll inside their own box
+ * so the page itself never scrolls sideways. */
+.pf-doc-tablewrap {
+  margin: 0 0 var(--sp-5);
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg-panel);
+}
+
+.pf-doc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+
+.pf-doc-table th {
+  position: sticky;
+  top: 0;
+  padding: var(--sp-3);
+  background: var(--bg-panel-2);
+  border-bottom: 1px solid var(--border-strong);
+  color: var(--text-4);
+  font-size: var(--fs-3xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.pf-doc-table td {
+  padding: var(--sp-3);
+  border-bottom: 1px solid var(--border);
+  color: var(--text-3);
+  vertical-align: top;
+}
+
+.pf-doc-table tbody tr:last-child td { border-bottom: 0; }
+.pf-doc-table tbody tr:hover { background: var(--bg-hover); }
+.pf-doc-table td:first-child { color: var(--text-2); }
+
+/* Numeric columns are right-aligned by the Markdown itself; give them
+ * tabular figures so the digits line up in a column. */
+.pf-doc-table td[style*='right'],
+.pf-doc-table th[style*='right'] { font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ index page -- */
+
+.pf-doc-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: var(--sp-3);
+  margin: 0 0 var(--sp-6);
+  padding: 0;
+  list-style: none;
+}
+
+.pf-doc-card {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--sp-4);
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  text-decoration: none !important;
+  transition: border-color var(--dur-fast) ease, transform var(--dur-fast) ease;
+}
+
+.pf-doc-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.pf-doc-card__name {
+  color: var(--text-1);
+  font-weight: 650;
+  font-size: var(--fs-sm);
+}
+
+.pf-doc-card__meta {
+  color: var(--text-4);
+  font-size: var(--fs-2xs);
+}
+
+/* ---------------------------------------------------------------- foot -- */
+
+.pf-doc-foot {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: var(--sp-5);
+  border-top: 1px solid var(--border);
+  color: var(--text-4);
+  font-size: var(--fs-2xs);
+}
+
+.pf-doc-foot code {
+  padding: 1px 4px;
+  background: var(--bg-inset);
+  border-radius: var(--r-xs);
+  font-family: var(--font-mono);
+}
+
+/* --------------------------------------------------------------- ≤900 --- */
+
+@media (max-width: 900px) {
+  /* The table of contents becomes a collapsed strip above the text rather
+   * than a column stealing a third of a phone screen. */
+  .pf-doc-shell {
+    grid-template-columns: 1fr;
+    gap: var(--sp-5);
+    padding: var(--sp-5) var(--sp-4) var(--sp-8);
+  }
+
+  .pf-doc-toc {
+    position: static;
+    max-height: none;
+    padding: var(--sp-3);
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+  }
+
+  .pf-doc-toc ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px var(--sp-2);
+  }
+
+  .pf-doc-toc a { border-left: 0; padding: 2px 0; }
+  .pf-doc-toc .lv3 { display: none; }
+  .pf-doc-main { max-width: none; }
+}
+
+/* --------------------------------------------------------------- print -- */
+
+@media print {
+  .pf-doc-top,
+  .pf-doc-toc,
+  .pf-doc-theme { display: none; }
+
+  .pf-doc-body { background: #fff; color: #000; }
+  .pf-doc-shell { display: block; padding: 0; }
+  .pf-doc-main { max-width: none; }
+}

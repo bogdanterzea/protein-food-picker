@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ro" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Graficele · Atlasul Proteinelor Sibiu</title>
+<link rel="stylesheet" href="../css/00-reset.css">
+<link rel="stylesheet" href="../css/01-tokens.css">
+<link rel="stylesheet" href="../css/15-docs.css">
+</head>
+<body class="pf-doc-body">
+
+<header class="pf-doc-top">
+  <a class="pf-doc-back" href="../index.html">‹ Atlasul Proteinelor</a>
+  <a class="pf-doc-back" href="index.html">Toată documentația</a>
+  <button class="pf-doc-theme" id="pf-doc-theme" title="Temă">☀️</button>
+</header>
+
+<div class="pf-doc-shell">
+  <nav class="pf-doc-toc" aria-label="Cuprins"><div class="pf-doc-toc__title">Pe această pagină</div><ul><li class="lv2"><a href="#1-regulile-care-se-aplica-peste-tot">1. Regulile care se aplică peste tot</a></li><li class="lv2"><a href="#2-paleta-a-fost-validata-nu-aleasa-din-ochi">2. Paleta a fost validată, nu aleasă din ochi</a></li><li class="lv3"><a href="#de-ce-categoriile-nu-sunt-o-paleta-de-date">De ce categoriile NU sunt o paletă de date</a></li><li class="lv2"><a href="#3-donutul-de-macronutrienti">3. Donutul de macronutrienți</a></li><li class="lv2"><a href="#4-radarul-de-statistici">4. Radarul de statistici</a></li><li class="lv2"><a href="#5-graficul-de-dispersie-proteina-vs-calorii">5. Graficul de dispersie proteină vs. calorii</a></li><li class="lv2"><a href="#6-histograma-distributiei">6. Histograma distribuției</a></li><li class="lv2"><a href="#7-barele-de-statistici-de-ce-arata-ca-intr-un-joc">7. Barele de statistici — de ce arată ca într-un joc</a></li><li class="lv3"><a href="#insignele-de-rang">Insignele de rang</a></li><li class="lv2"><a href="#8-accesibilitate">8. Accesibilitate</a></li><li class="lv2"><a href="#9-ce-a-fost-respins">9. Ce a fost respins</a></li></ul></nav>
+  <main class="pf-doc-main">
+<h1 id="graficele-decizii-de-design">Graficele — decizii de design</h1>
+<p>Toate graficele din atlas sunt <strong>SVG scris de mână</strong>, fără nicio bibliotecă și fără niciun request de rețea. Acest document explică deciziile care nu se văd din cod și de ce unele lucruri evidente au fost respinse.</p>
+<p>Cod: <code>js/components/charts.js</code> și <code>css/09-charts.css</code>.</p>
+<hr>
+<h2 id="1-regulile-care-se-aplica-peste-tot">1. Regulile care se aplică peste tot</h2>
+<ol class="pf-doc-list"><li><strong>O singură axă per grafic.</strong> Nu există nicăieri un grafic cu două scale verticale. Două măsuri de mărimi diferite înseamnă două grafice.</li><li><strong>Culoarea categorică urmează entitatea, niciodată rangul.</strong> Proteina e verde-teal în fiecare grafic, în fiecare tabel, în fiecare bară. Un filtru care schimbă numărul de serii nu recolorează supraviețuitorii.</li><li><strong>Culoarea nu e niciodată singurul purtător de identitate.</strong> Fiecare grafic are legendă cu valorile scrise, etichete directe, sau ambele.</li><li><strong>Spațiu de 2 px între segmente alăturate</strong>, în culoarea suprafeței, ca macro-urile vecine să rămână separabile fără să depindă de contrastul de nuanță.</li><li><strong>Marcaje subțiri, grilă și axe discrete.</strong> Datele sunt cele care trebuie să iasă în evidență.</li><li><strong>Textul poartă culorile textului</strong>, niciodată culoarea seriei.</li><li><strong>Fiecare grafic are o alternativă în tabel.</strong></li></ol>
+<hr>
+<h2 id="2-paleta-a-fost-validata-nu-aleasa-din-ochi">2. Paleta a fost validată, nu aleasă din ochi</h2>
+<p>Cele patru culori de macronutrienți sunt singurele care codifică identitate în grafice. Au fost trecute printr-un validator care verifică șase lucruri: banda de luminozitate OKLCH, pragul de cromă, separarea perechilor alăturate pentru daltonism (protanopie, deuteranopie, tritanopie), pragul pentru vederea normală și contrastul față de suprafață.</p>
+<div class="pf-doc-tablewrap"><table class="pf-doc-table"><thead><tr><th style="text-align:left">Slot</th><th style="text-align:left">Temă întunecată</th><th style="text-align:left">Temă deschisă</th></tr></thead><tbody><tr><td style="text-align:left">Proteină</td><td style="text-align:left"><code>#0ea885</code></td><td style="text-align:left"><code>#0a7d63</code></td></tr><tr><td style="text-align:left">Carbohidrați</td><td style="text-align:left"><code>#e56a12</code></td><td style="text-align:left"><code>#b5510c</code></td></tr><tr><td style="text-align:left">Grăsimi</td><td style="text-align:left"><code>#e0429c</code></td><td style="text-align:left"><code>#b32b77</code></td></tr><tr><td style="text-align:left">Fibre</td><td style="text-align:left"><code>#5b86e8</code></td><td style="text-align:left"><code>#3f63b8</code></td></tr></tbody></table></div>
+<p><strong>Ambele seturi trec toate cele șase verificări.</strong> Cea mai slabă pereche alăturată e carbohidrați↔proteină, la ΔE 13,1 (deuteranopie) — mult peste pragul de 8.</p>
+<p>Prima variantă încercată (verdele <code>#4ade80</code> cu ambra <code>#fbbf24</code>) a picat: verde și ambră sunt perechea clasică de confuzie pentru daltonismul roșu-verde, la ΔE 2,9. Soluția a fost mutarea proteinei spre verde-teal, care are suficient albastru cât să se separe de portocaliu.</p>
+<p>Setul pentru tema deschisă <strong>nu e o inversare automată</strong> a celui întunecat — sunt trepte separate din aceleași rampe, validate independent față de o suprafață aproape albă.</p>
+<h3 id="de-ce-categoriile-nu-sunt-o-paleta-de-date">De ce categoriile NU sunt o paletă de date</h3>
+<p>Atlasul are opt categorii, și fiecare are o culoare. <strong>Acele opt culori nu sunt o paletă categorică de date</strong> și nu sunt folosite ca atare în niciun grafic.</p>
+<p>Motivul e măsurat: opt nuanțe nu pot trece pragul de separare pentru daltonism. Oricum ar fi așezate, validatorul pică perechea roșu↔ambră la ΔE 2,9. Recomandarea standard pentru acest caz e să reduci numărul de serii sau să faci grafice separate — nu să livrezi culori pe care o parte din utilizatori nu le pot distinge.</p>
+<p>Așa că în atlas culoarea de categorie <strong>colorează doar dunga din stânga a unui card și pătratul cu emoji</strong>, întotdeauna lângă numele categoriei scris cu litere. Niciun grafic nu codifică categoria prin nuanță.</p>
+<hr>
+<h2 id="3-donutul-de-macronutrienti">3. Donutul de macronutrienți</h2>
+<p><strong>Întrebarea:</strong> de unde vin caloriile acestui produs?</p>
+<ul class="pf-doc-list"><li>Patru sloturi fixe, întotdeauna în aceeași ordine: proteină → carbohidrați → grăsimi → fibre. Sloturile sub 0,4% sunt omise, nu comprimate.</li><li>Spațiu de 3 px între arce, aplicat prin <code>stroke-dasharray</code>.</li><li>În centru stă numărul care contează: <strong>procentul din calorii din proteină</strong>.</li><li>Legenda de lângă scrie, pentru fiecare macro, <strong>și gramele, și procentul</strong>. Graficul e complet lizibil fără nicio percepție a culorii.</li><li>Fiecare arc are un <code>&lt;title&gt;</code>, deci și cititoarele de ecran, și hover-ul nativ funcționează.</li></ul>
+<p><strong>De ce donut și nu bare?</strong> Pentru că întrebarea e o parte-din-întreg cu patru componente care însumează 100%. E exact cazul în care inelul e potrivit, și e însoțit oricum de bara de macronutrienți și de tabelul complet.</p>
+<hr>
+<h2 id="4-radarul-de-statistici">4. Radarul de statistici</h2>
+<p><strong>Întrebarea:</strong> care e forma acestui produs, pe cele șase axe?</p>
+<ul class="pf-doc-list"><li><strong>O singură serie</strong>, deci nu are legendă — titlul o numește.</li><li>Fiecare dintre cele șase axe e <strong>etichetată direct cu numele și valoarea ei</strong>. Nu trebuie să numeri inele.</li><li>Inele la 25 / 50 / 75 / 100.</li><li><code>aria-label</code> conține toate cele șase valori în text.</li></ul>
+<p><strong>Avertismentul onest despre radare:</strong> forma depinde de ordinea axelor, iar aria nu are semnificație reală. Radarul e aici pentru recunoașterea rapidă a unui tipar („înalt peste tot în stânga, prăbușit la preț”), nu pentru citirea valorilor exacte — pentru asta există barele, care sunt sursa de adevăr.</p>
+<hr>
+<h2 id="5-graficul-de-dispersie-proteina-vs-calorii">5. Graficul de dispersie proteină vs. calorii</h2>
+<p><strong>Cel mai util grafic din atlas.</strong> Colțul din stânga-sus e „multă proteină, puține calorii” — adică exact unde vrei să cumperi.</p>
+<ul class="pf-doc-list"><li>Axa X: kcal la 100 g. Axa Y: g proteină la 100 g. O singură scală pe fiecare.</li><li>Două linii de ghidaj diagonale, etichetate: <strong>40% din calorii = proteină</strong> și <strong>20%</strong>. Un produs deasupra liniei de 40% e dens în proteină, indiferent de cifra absolută. Astea transformă un nor de puncte într-o hartă cu regiuni.</li><li><strong>Punctele NU sunt colorate pe categorie.</strong> Folosesc o <strong>rampă secvențială cu o singură nuanță</strong> (teal), în care luminozitatea codifică puritatea proteinei — adică exact întrebarea graficului. Categoria vine din tooltip și din chips-urile de filtrare.</li><li>Inel de 2 px în culoarea suprafeței în jurul fiecărui punct, ca punctele suprapuse să rămână numărabile.</li><li>Fiecare punct are <code>&lt;title&gt;</code> cu numele, proteina, caloriile și puritatea.</li><li>Un buton comută pe un tabel cu primele 40 de produse după puritate.</li></ul>
+<p>Graficul apare și în dosarul fiecărui produs, restrâns la categoria lui, ca să vezi unde stă produsul față de concurenții lui direcți.</p>
+<hr>
+<h2 id="6-histograma-distributiei">6. Histograma distribuției</h2>
+<p>O bandă de 26–30 de coloane care arată cum se distribuie conținutul de proteină în selecția curentă. Coloanele au 2 px între ele. Fiecare are un tooltip cu intervalul și numărul de produse.</p>
+<p>Utilitatea reală: după ce aplici filtre, îți spune imediat dacă ai mai rămas cu un set variat sau cu un grup îngust.</p>
+<hr>
+<h2 id="7-barele-de-statistici-de-ce-arata-ca-intr-un-joc">7. Barele de statistici — de ce arată ca într-un joc</h2>
+<p>Barele nu sunt o alegere estetică gratuită. Un <code>&lt;progress&gt;</code> obișnuit comunică „procent completat”. Barele astea comunică „valoarea acestei caracteristici pe o scală comparabilă” — o distincție care se citește mai bine cu segmente decât cu o umplere continuă.</p>
+<ul class="pf-doc-list"><li>Zece segmente, delimitate cu o crestătură în culoarea fundalului</li><li>Umplere cu gradient, plus o reflexie care baleiază lent</li><li>Eticheta și valoarea numerică sunt întotdeauna afișate lângă bară</li><li>Tooltip pe fiecare bară, care explică ce măsoară și unde e plină</li></ul>
+<p>Cu <code>prefers-reduced-motion</code> toate animațiile dispar și barele apar direct în starea finală. Cu <code>data-fx=&quot;off&quot;</code> dispar doar efectele decorative.</p>
+<h3 id="insignele-de-rang">Insignele de rang</h3>
+<p>S / A / B / C / D / E, cu culori care se încălzesc pe măsură ce rangul urcă. Rangul S are o margine animată — trebuie să pară un premiu, și e: trei produse din 505.</p>
+<p>Litera nu e niciodată singurul indiciu: tooltip-ul scrie scorul numeric și componentele din care e calculat.</p>
+<hr>
+<h2 id="8-accesibilitate">8. Accesibilitate</h2>
+<div class="pf-doc-tablewrap"><table class="pf-doc-table"><thead><tr><th style="text-align:left">Situație</th><th style="text-align:left">Ce se întâmplă</th></tr></thead><tbody><tr><td style="text-align:left"><code>prefers-reduced-motion</code></td><td style="text-align:left">Toate animațiile devin instantanee</td></tr><tr><td style="text-align:left"><code>prefers-contrast: more</code></td><td style="text-align:left">Marginile și textul secundar se întăresc</td></tr><tr><td style="text-align:left"><code>forced-colors</code></td><td style="text-align:left">Segmentele de macro primesc <strong>texturi diferite</strong> (45°, 135°, orizontal, vertical), ca să rămână distinse fără culoare</td></tr><tr><td style="text-align:left">Cititor de ecran</td><td style="text-align:left">Fiecare grafic are <code>role=&quot;img&quot;</code> și un <code>aria-label</code> cu toate valorile în text</td></tr><tr><td style="text-align:left">Tipărire</td><td style="text-align:left">Barele forțează <code>print-color-adjust: exact</code>, ca să nu iasă albe pe hârtie</td></tr></tbody></table></div>
+<hr>
+<h2 id="9-ce-a-fost-respins">9. Ce a fost respins</h2>
+<p><strong>Grafice cu două axe verticale.</strong> Sunt cea mai frecventă eroare din vizualizarea de date: relația aparentă dintre cele două serii depinde complet de scalele alese arbitrar. Nicăieri în atlas.</p>
+<p><strong>Colorarea punctelor pe categorie în dispersie.</strong> Explicat la §2 — opt nuanțe nu pot fi separate corect.</p>
+<p><strong>Curcubeu pentru date secvențiale.</strong> Rampa de puritate e o singură nuanță, deschis → închis. Un curcubeu ar sugera categorii acolo unde există o mărime continuă.</p>
+<p><strong>Etichete pe fiecare punct.</strong> 505 etichete înseamnă zero etichete lizibile. Identificarea se face prin hover și prin tabelul alternativ.</p>
+<p><strong>O bibliotecă de grafice.</strong> Ar fi însemnat un fișier extern, deci fie un CDN (rețea, contrar principiului de a funcționa offline), fie ~200 KB de cod pentru patru grafice pe care le scrii în 300 de linii.</p>
+  </main>
+</div>
+
+<footer class="pf-doc-foot">
+  Generat din <code>docs/CHARTS.md</code> cu <code>tools/build-docs.js</code>.
+  Nu edita fișierul HTML — modifică Markdown-ul și regenerează.
+</footer>
+
+<script>
+/* Theme toggle, mirroring the app's own so the docs do not fight it. */
+(function () {
+  var KEY = 'pf.atlas.v1.theme';
+  var root = document.documentElement;
+  var saved;
+  try { saved = JSON.parse(localStorage.getItem(KEY)); } catch (e) { saved = null; }
+  if (saved === 'light' || saved === 'dark') root.setAttribute('data-theme', saved);
+  var btn = document.getElementById('pf-doc-theme');
+  function paint() { btn.textContent = root.getAttribute('data-theme') === 'light' ? '🌙' : '☀️'; }
+  paint();
+  btn.addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem(KEY, JSON.stringify(next)); } catch (e) {}
+    paint();
+  });
+})();
+</script>
+</body>
+</html>

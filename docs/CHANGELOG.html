@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ro" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Changelog · Atlasul Proteinelor Sibiu</title>
+<link rel="stylesheet" href="../css/00-reset.css">
+<link rel="stylesheet" href="../css/01-tokens.css">
+<link rel="stylesheet" href="../css/15-docs.css">
+</head>
+<body class="pf-doc-body">
+
+<header class="pf-doc-top">
+  <a class="pf-doc-back" href="../index.html">‹ Atlasul Proteinelor</a>
+  <a class="pf-doc-back" href="index.html">Toată documentația</a>
+  <button class="pf-doc-theme" id="pf-doc-theme" title="Temă">☀️</button>
+</header>
+
+<div class="pf-doc-shell">
+  <nav class="pf-doc-toc" aria-label="Cuprins"><div class="pf-doc-toc__title">Pe această pagină</div><ul><li class="lv2"><a href="#v1-1-august-2026">v1.1 — august 2026</a></li><li class="lv3"><a href="#functionalitati-noi">Funcționalități noi</a></li><li class="lv3"><a href="#corectii-de-date-187-de-intrari-modificate">Corecții de date — 187 de intrări modificate</a></li><li class="lv3"><a href="#retete-21-43">Rețete: 21 → 43</a></li><li class="lv3"><a href="#interfata-si-corectitudine">Interfață și corectitudine</a></li><li class="lv3"><a href="#unelte">Unelte</a></li><li class="lv3"><a href="#cifre-curente">Cifre curente</a></li><li class="lv2"><a href="#v1-0-august-2026">v1.0 — august 2026</a></li><li class="lv3"><a href="#date">Date</a></li><li class="lv3"><a href="#aplicatie">Aplicație</a></li><li class="lv3"><a href="#decizii-de-proiectare-care-au-schimbat-rezultatele">Decizii de proiectare care au schimbat rezultatele</a></li><li class="lv3"><a href="#corectii-de-continut-gasite-in-cercetare">Corecții de conținut găsite în cercetare</a></li><li class="lv3"><a href="#bug-uri-prinse-inainte-de-livrare">Bug-uri prinse înainte de livrare</a></li><li class="lv3"><a href="#verificare">Verificare</a></li><li class="lv2"><a href="#idei-pentru-versiuni-viitoare">Idei pentru versiuni viitoare</a></li></ul></nav>
+  <main class="pf-doc-main">
+<h1 id="changelog">Changelog</h1>
+<h2 id="v1-1-august-2026">v1.1 — august 2026</h2>
+<p>O rundă de audit și consolidare, rulată de zece agenți în paralel pe fișiere cu proprietar exclusiv, plus integrarea făcută în sesiunea principală.</p>
+<h3 id="functionalitati-noi">Funcționalități noi</h3>
+<p><strong>„Ce am în frigider&quot;</strong> (<code>js/components/recipes.js</code>, <code>css/13-fridge.css</code>). Bifezi ingredientele pe care le ai în casă; fiecare masă îți arată câte ingrediente ai din câte îi trebuie și exact ce-ți lipsește. Se poate ordona după cât de aproape ești de a putea găti, iar în dosarul rețetei apare un buton care adaugă în listă <strong>doar ce lipsește</strong> — lista de cumpărături devine ce mai ai de cumpărat, nu o copie a rețetei. Cele 83 de ingrediente sunt grupate după ce contribuie efectiv, nu după raionul din atlas: broccoli și spanacul stau la legume, deși în atlas sunt „proteine vegetale”; laptele praf degresat stă la proteine, deși în magazin e pe raftul de patiserie.</p>
+<p><strong>Ghidul magazinelor</strong> (<code>js/components/stores.js</code>, <code>css/14-stores.css</code>). <code>00-stores.js</code> descria de la început 18 retaileri din Sibiu cu puncte tari, puncte slabe, indice de preț, program, deschidere duminica și card de fidelitate — și <strong>nimic din toate astea nu ajungea pe ecran</strong>. Aplicația citea doar <code>name</code> și <code>color</code>; zece câmpuri cercetate erau greutate moartă în bundle. Acum sunt o fișă per magazin, cu bara de preț ancorată la media orașului, iar numărul de produse și cea mai ieftină proteină de la fiecare magazin se calculează din atlas la randare, deci nu pot să se desincronizeze.</p>
+<p><strong><code>collagenShare</code></strong> (<code>js/utils/compute.js</code>). Penalizarea pentru colagen era totul-sau-nimic, aplicată după numele produsului. Jeleul proteic, care e ~1/3 gelatină și 2/3 whey, lua factorul 0,25 pe toată intrarea și cădea la rang E. Acum câmpul dă o medie ponderată: jeleul urcă la D cu factorul 0,699. În sens invers, ciorba de burtă și șoriciul crud — colagen curat pe care regexul nu-l prindea — coboară la factorul corect. Exact 3 produse din 510 și-au schimbat scorul; restul atlasului e bit-identic.</p>
+<p><strong>Documentația se poate citi.</strong> Subsolul trimitea la fișiere <code>.md</code> brute, pe care browserul le afișa ca text nedecorat, cu tabelele reduse la șiruri de bare verticale. <code>tools/build-docs.js</code> generează acum din fiecare document o pagină HTML cu aceleași tokene de culoare și tipografie ca aplicația, cu cuprins lateral, tabele stilizate și același comutator de temă. Markdown-ul rămâne sursa; HTML-ul e generat și poarta refuză să treacă dacă o pagină a rămas în urma sursei ei sau dacă vreo legătură mai trimite la Markdown brut.</p>
+<h3 id="corectii-de-date-187-de-intrari-modificate">Corecții de date — 187 de intrări modificate</h3>
+<ul class="pf-doc-list"><li><strong>Etichete peste praguri: ~100 de eliminări.</strong> <code>very-high-protein</code> pe băuturi cu 8 g proteină, <code>high-protein</code> pe iaurturi cu 10 g, <code>low-fat</code> pe mușchi de vită cu 6,5 g, <code>high-fiber</code> pe spanac cu 2,2 g, <code>low-kcal</code> pe supe de 448 kcal. Aplicația derivă singură etichetele astea din numere, deci una lipsă e inofensivă — dar una scrisă greșit intra în filtre și le polua.</li><li><strong>O inversare fizică:</strong> tonul în ulei avea <code>omega3Mg</code> mai <em>mare</em> decât cel în suc propriu. E invers — la sterilizare grăsimile migrează în uleiul care se scurge la consum. 400 → 130.</li><li><strong>Avertismente de mercur</strong> adăugate la somn, șalău, biban și la produsele cu ton care nu aveau niciunul, cu limite săptămânale concrete.</li><li><strong>Porții imposibile:</strong> gâsca și coastele de porc aveau porții „cu os” dar macro-uri pentru carne, deci 1104 și 963 kcal pe porție.</li><li><strong>8 duplicate unificate</strong>, printre care puiul la rotisor, care exista în trei locuri cu aceleași macro-uri.</li><li>29 de avertismente noi: polioli în batoane, sare pe porție (cel mai grav un sandviș cu ~4,8 g), grăsimi saturate, vitamina A din pate de ficat.</li></ul>
+<h3 id="retete-21-43">Rețete: 21 → 43</h3>
+<p>Toate cele șapte metode au acum 5–9 mese. Nicio masă sub 25 g proteină pe porție (două preexistente au fost corectate). Mediana: 41,4 g proteină la ≈ 8,85 lei porția. Macro-urile rămân calculate din ingrediente, niciodată scrise de mână.</p>
+<h3 id="interfata-si-corectitudine">Interfață și corectitudine</h3>
+<ul class="pf-doc-list"><li><strong>Legenda de macro dădea 99% sau 101% la 125 din 512 de produse</strong> — cele patru procente erau rotunjite independent. Acum rotunjire prin cel mai mare rest, partajată între legendă și donut, ca inelul și textul de lângă el să nu se poată contrazice.</li><li><strong>Dosarul de produs:</strong> scatterul depășea coloana cu 163px pe desktop, tabelul de magazine cerea derulare laterală pe toate produsele testate, subsolul mânca 139px pe telefon, iar săgețile furau tastele când focusul era pe o filă. Plus comparație cu mediana categoriei și un indicator vizibil pentru datele cu încredere scăzută.</li><li><strong>Traducerea în engleză:</strong> 68 de scurgeri de română măsurate în browser, reduse la 1 — și aceea e conținut de date, care rămâne în română intenționat. Dicționarul a crescut de la 180 la 230 de chei, cu paritate RO/EN completă.</li><li>Textul „scorul e ajustat cu factorul 0,25” era scris de mână și contrazicea bara de calitate afișată lângă el; acum citește valoarea reală.</li></ul>
+<h3 id="unelte">Unelte</h3>
+<ul class="pf-doc-list"><li><code>tools/test-compute.js</code> — <strong>154 de teste</strong> pe scoruri și formatare, zero dependențe. A prins șase bug-uri reale, printre care <code>enrich()</code> care crăpa pe o intrare fără <code>per100g</code> (adică o singură intrare pe jumătate scrisă dobora tot atlasul la boot) și <code>fmt.normalize</code> care putea decala <code>&lt;mark&gt;</code>-urile din căutare.</li><li><code>tools/check.js</code> — două secțiuni noi: fiecare tip de magazin trebuie să aibă etichetă în ghid, iar emoji-urile din date trebuie să fie sigure pentru injectare în DOM.</li></ul>
+<h3 id="cifre-curente">Cifre curente</h3>
+<p>510 intrări brute, 7 perechi îmbinate, <strong>503 produse afișate</strong> · 8 categorii · 18 magazine · 43 de mese · 35 de ingrediente de cămară. Ranguri: S 3 · A 73 · B 161 · C 148 · D 102 · E 16. Încredere: 168 ridicată · 259 medie · 76 scăzută.</p>
+<hr>
+<h2 id="v1-0-august-2026">v1.0 — august 2026</h2>
+<p>Prima versiune completă a Atlasului Proteinelor Sibiu.</p>
+<h3 id="date">Date</h3>
+<ul class="pf-doc-list"><li><strong>505 produse</strong> în 8 categorii și 89 de subcategorii, cercetate în opt pași independenți, câte unul per categorie.</li><li><strong>18 locuri de cumpărat</strong> documentate, de la Kaufland la Piața Cibin.</li><li>Fiecare intrare are macro-uri complete, micronutrienți acolo unde contează, 1–5 magazine cu preț și raion, pași de gătit, profil de gust pe cinci axe, potrivire pe șapte momente ale zilei, sfaturi, avertismente și surse.</li><li><strong>167 de intrări cu încredere ridicată</strong> (valori citite de pe etichete reale), 260 medii, 78 estimări declarate ca atare.</li><li>Toate cele 505 intrări trec verificarea de coerență energetică Atwater (±15%), <code>zaharuri ≤ carbohidrați</code> și <code>grăsimi saturate ≤ grăsimi</code>. <strong>Zero steaguri de coerență.</strong></li></ul>
+<h3 id="aplicatie">Aplicație</h3>
+<ul class="pf-doc-list"><li>Șase vizualizări: carduri, tabel, clasamente, comparație, hartă, listă de cumpărături.</li><li>Motor de filtrare cu 9 fațete și 8 intervale numerice, cu numărători live pe fiecare chip.</li><li>Bare de statistici în stil joc video, insigne de rang S–E, donut de macronutrienți, radar pe șase axe, grafic de dispersie proteină/calorii, histogramă.</li><li>Dosar complet pentru fiecare produs, în șase file.</li><li>Calculator de necesar de proteină, constructor de mese cu totaluri live față de țintă, listă de cumpărături grupată pe magazinul cel mai ieftin, tipăribilă.</li><li>Interfață completă în română și engleză.</li><li>Teme întunecată și deschisă, ambele cu paletă validată.</li><li>Stare persistentă local, stare de filtre partajabilă prin URL.</li><li>Funcționează din <code>file://</code>, fără server, fără build step, fără rețea.</li></ul>
+<h3 id="decizii-de-proiectare-care-au-schimbat-rezultatele">Decizii de proiectare care au schimbat rezultatele</h3>
+<p><strong>Corecția de calitate a proteinei.</strong> Fără ea, pudra de colagen ieșea pe locul 1 la „cea mai multă proteină”, pe locul 1 la „cea mai pură proteină” și în top 10 general — pentru că declară 90 g de proteină la 100 g și 100% din calorii din proteină. Colagenul și gelatina nu conțin triptofan și au valoare biologică aproape nulă pentru sinteza musculară. Scorul lor e înmulțit cu 0,25 și sunt excluse din clasamentele de proteină. Colagenul a coborât de la rang A (75) la rang D (36); ouăle au urcat de la C la B, ceea ce e corect.</p>
+<p><strong>Paleta a fost validată, nu aleasă.</strong> Prima variantă (verde + ambră pentru proteină și carbohidrați) a picat verificarea de daltonism la ΔE 2,9 — verdele și ambra sunt perechea clasică de confuzie roșu-verde. Proteina a fost mutată spre verde-teal, iar setul final trece toate cele șase verificări în ambele teme.</p>
+<p><strong>Culorile de categorie nu sunt o paletă de date.</strong> Opt nuanțe nu pot trece pragul de separare pentru daltonism, indiferent cum sunt așezate. Prin urmare niciun grafic nu codifică categoria prin culoare; graficul de dispersie folosește o rampă secvențială pe puritatea proteinei.</p>
+<p><strong>Scala de timp e discretă, nu liniară.</strong> Un slider liniar de 0–240 de minute ascundea 13 produse (fasole și năut cu înmuiere peste noapte, un jambon crud de 48 de ore, brisket, curcan întreg) și înghesuia toate alegerile reale în primul centimetru. Sliderul merge acum pe trepte, iar treapta de sus înseamnă „fără limită”, deci niciun produs nu e ascuns de un filtru pe care utilizatorul nu l-a atins.</p>
+<p><strong>Îmbinarea automată a duplicatelor.</strong> Cele opt cercetări paralele s-au suprapus la margini — laptele praf degresat e și lactat, și truc de patiserie; tahini e și pastă de semințe, și condiment. Aplicația detectează intrările cu același nume, păstrează varianta cu mai multe date de preț și îi adaugă rândurile de magazin ale celeilalte. 512 intrări brute → 505 produse, fără să se piardă cercetare.</p>
+<h3 id="corectii-de-continut-gasite-in-cercetare">Corecții de conținut găsite în cercetare</h3>
+<ul class="pf-doc-list"><li><strong>Salamul de Sibiu nu se face în Sibiu.</strong> IGP-ul trimite la fabrica lui Filippo Dozzi din Sinaia; numele vine de la ruta de expediere. Semnalat în datele produsului.</li><li><strong>Scandia Sibiu chiar e din Sibiu</strong>, și conservele ei sunt cea mai bună mâncare gătită la borcan din retailul românesc: fasole cu ciolan 400 g = 38 g proteină.</li><li><strong>„Aviland” nu a putut fi confirmat</strong> ca producător real de carne de pasăre din România și a fost eliminat; s-au folosit mărci verificate.</li><li><strong>Greutatea scursă la conserve</strong> — o cutie de ton de 160 g are ~104 g de ton. Tonul în ulei declară adesea valorile <em>cu tot cu ulei</em> (403 kcal/100 g față de ~192 scurs). Toate conservele din atlas folosesc valorile scurse.</li><li><strong>Produsele cu „Protein” pe ambalaj</strong> ocupă pozițiile 32–44 din 56 în clasamentul de preț pe lactate. Un iaurt „Protein” cu 8 g/100 g e sub un skyr obișnuit cu 11 g/100 g.</li><li><strong>Laptele praf degresat</strong> — 36 g proteină/100 g, ~11–13 lei per 100 g de proteină, complet, stă pe raftul de patiserie unde nu-l caută nimeni.</li><li><strong>Datele de nutriție KFC și McDonald's România</strong> au fost extrase din documentele oficiale, nu estimate.</li></ul>
+<h3 id="bug-uri-prinse-inainte-de-livrare">Bug-uri prinse înainte de livrare</h3>
+<ul class="pf-doc-list"><li><code>.pf-rail-scrim</code> era copil direct al grilei principale și, pe desktop, ocupa a doua coloană — împingea toată scena pe rândul următor, la lățimea coloanei de filtre. Pagina se încărca corect și era complet invizibilă. Prins printr-o măsurare de geometrie în Chrome headless, nu prin citirea codului.</li><li>Filtrele implicite ascundeau 13 produse (vezi scala de timp mai sus).</li><li>Un agent de cercetare a raportat singur că a codificat inițial <code>priceRon</code> ca preț pe kilogram în loc de preț pe pachet, pe 189 de rânduri de magazin — ceea ce ar fi denaturat bara de preț de până la 10 ori — și a corectat toate rândurile.</li></ul>
+<h3 id="verificare">Verificare</h3>
+<ul class="pf-doc-list"><li>Toate cele 505 produse trec fiecare cale de randare: card, rând de tabel, cele șase file ale dosarului, donut, radar, dispersie, cele zece clasamente, coloana de filtre, toate cele zece sortări și comparația. <strong>Zero erori.</strong></li><li>Toate fișierele JS trec <code>node --check</code>.</li><li>Randare verificată vizual în Chrome headless, în vizualizările carduri, clasamente și hartă.</li></ul>
+<hr>
+<h2 id="idei-pentru-versiuni-viitoare">Idei pentru versiuni viitoare</h2>
+<ul class="pf-doc-list"><li>Urmărirea prețurilor în timp, ca să se vadă inflația pe gram de proteină</li><li>Import/export al meselor salvate ca fișier</li><li>Mai multe intrări „gătite” pentru leguminoase și cereale, ca perechea uscat/fiert să fie completă peste tot</li><li>Sezonalitate pentru produsele din piață</li><li>Un mod „ce am în frigider” care compune mese din ce bifezi</li></ul>
+  </main>
+</div>
+
+<footer class="pf-doc-foot">
+  Generat din <code>docs/CHANGELOG.md</code> cu <code>tools/build-docs.js</code>.
+  Nu edita fișierul HTML — modifică Markdown-ul și regenerează.
+</footer>
+
+<script>
+/* Theme toggle, mirroring the app's own so the docs do not fight it. */
+(function () {
+  var KEY = 'pf.atlas.v1.theme';
+  var root = document.documentElement;
+  var saved;
+  try { saved = JSON.parse(localStorage.getItem(KEY)); } catch (e) { saved = null; }
+  if (saved === 'light' || saved === 'dark') root.setAttribute('data-theme', saved);
+  var btn = document.getElementById('pf-doc-theme');
+  function paint() { btn.textContent = root.getAttribute('data-theme') === 'light' ? '🌙' : '☀️'; }
+  paint();
+  btn.addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem(KEY, JSON.stringify(next)); } catch (e) {}
+    paint();
+  });
+})();
+</script>
+</body>
+</html>

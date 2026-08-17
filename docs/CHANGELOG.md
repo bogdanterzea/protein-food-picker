@@ -34,6 +34,14 @@ invers, ciorba de burtă și șoriciul crud — colagen curat pe care regexul nu
 prindea — coboară la factorul corect. Exact 3 produse din 510 și-au schimbat
 scorul; restul atlasului e bit-identic.
 
+**Documentația se poate citi.** Subsolul trimitea la fișiere `.md` brute, pe
+care browserul le afișa ca text nedecorat, cu tabelele reduse la șiruri de bare
+verticale. `tools/build-docs.js` generează acum din fiecare document o pagină
+HTML cu aceleași tokene de culoare și tipografie ca aplicația, cu cuprins
+lateral, tabele stilizate și același comutator de temă. Markdown-ul rămâne
+sursa; HTML-ul e generat și poarta refuză să treacă dacă o pagină a rămas în
+urma sursei ei sau dacă vreo legătură mai trimite la Markdown brut.
+
 ### Corecții de date — 187 de intrări modificate
 
 - **Etichete peste praguri: ~100 de eliminări.** `very-high-protein` pe băuturi

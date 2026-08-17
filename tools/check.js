@@ -237,6 +237,35 @@ compFiles.forEach(f => {
 rawPrice.length ? fail('preț afișat fără ≈', rawPrice.join(', '))
                 : ok('toate prețurile trec prin formatorul de estimare');
 
+/* --------------------------------------------------- 8b. DOCUMENTAȚIE --- */
+section('8b. Documentația generată');
+/* Fiecare .md trebuie să aibă perechea .html generată, iar aceasta nu are
+ * voie să fie mai veche decât sursa — altfel cititorul vede o versiune
+ * învechită fără niciun semn că e învechită. */
+const mdFiles = walk(path.join(ROOT, 'docs'), '.md')
+  .concat(fs.existsSync(path.join(ROOT, 'README.md')) ? [path.join(ROOT, 'README.md')] : []);
+const missingHtml = [];
+const staleHtml = [];
+mdFiles.forEach(md => {
+  const html = md.replace(/\.md$/, '.html');
+  if (!fs.existsSync(html)) { missingHtml.push(path.relative(ROOT, md)); return; }
+  if (fs.statSync(md).mtimeMs > fs.statSync(html).mtimeMs + 1000) {
+    staleHtml.push(path.relative(ROOT, md));
+  }
+});
+missingHtml.length
+  ? fail('documente fără pagină HTML', missingHtml.slice(0, 4).join(', ') + ' — rulează node tools/build-docs.js')
+  : ok(mdFiles.length + ' documente au pagină HTML');
+staleHtml.length
+  ? fail('pagini HTML învechite', staleHtml.slice(0, 4).join(', ') + ' — rulează node tools/build-docs.js')
+  : ok('paginile generate sunt la zi');
+
+/* Nicio legătură din aplicație nu are voie să trimită la Markdown brut. */
+const idx = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+const rawMdLinks = idx.match(/href="[^"]*\.md"/g) || [];
+rawMdLinks.length ? fail('legături către Markdown brut în index.html', rawMdLinks.join(', '))
+                  : ok('nicio legătură către Markdown brut');
+
 /* ------------------------------------------------- 9a. GHID MAGAZINE ---- */
 section('9a. Ghidul magazinelor');
 /* Every `kind` in the store registry needs a Romanian label in the guide,

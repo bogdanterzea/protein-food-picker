@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="ro" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Schema datelor · Atlasul Proteinelor Sibiu</title>
+<link rel="stylesheet" href="../css/00-reset.css">
+<link rel="stylesheet" href="../css/01-tokens.css">
+<link rel="stylesheet" href="../css/15-docs.css">
+</head>
+<body class="pf-doc-body">
+
+<header class="pf-doc-top">
+  <a class="pf-doc-back" href="../index.html">‹ Atlasul Proteinelor</a>
+  <a class="pf-doc-back" href="index.html">Toată documentația</a>
+  <button class="pf-doc-theme" id="pf-doc-theme" title="Temă">☀️</button>
+</header>
+
+<div class="pf-doc-shell">
+  <nav class="pf-doc-toc" aria-label="Cuprins"><div class="pf-doc-toc__title">Pe această pagină</div><ul><li class="lv2"><a href="#1-file-format">1. File format</a></li><li class="lv3"><a href="#hard-rules">Hard rules</a></li><li class="lv2"><a href="#2-the-entry-schema">2. The entry schema</a></li><li class="lv3"><a href="#collagenshare-when-a-product-is-only-partly-gelatin">`collagenShare` — when a product is only *partly* gelatin</a></li><li class="lv2"><a href="#3-controlled-vocabularies">3. Controlled vocabularies</a></li><li class="lv3"><a href="#stores-name-use-these-exact-strings">`stores[].name` — use these exact strings</a></li><li class="lv3"><a href="#tags-use-only-these-slugs">`tags[]` — use only these slugs</a></li><li class="lv3"><a href="#category-slugs-one-per-file-do-not-invent-others">`category` slugs (one per file, do not invent others)</a></li><li class="lv2"><a href="#4-quality-bar-read-this-twice">4. Quality bar — read this twice</a></li><li class="lv2"><a href="#5-companion-documentation">5. Companion documentation</a></li></ul></nav>
+  <main class="pf-doc-main">
+<h1 id="protein-atlas-sibiu-data-schema-v1">PROTEIN ATLAS SIBIU — DATA SCHEMA (v1)</h1>
+<p><strong>This file is the contract.</strong> Every data file in <code>js/data/</code> must follow it exactly. The web app reads these fields by name. A missing or misspelled field = a broken card.</p>
+<hr>
+<h2 id="1-file-format">1. File format</h2>
+<p>Every data file is <strong>plain browser JavaScript</strong> (NOT an ES module — the site must work from <code>file://</code> with no build step and no server). Wrap everything in an IIFE that appends to a global array:</p>
+<pre class="pf-doc-code" data-lang="js"><code>/* =========================================================================
+ * PROTEIN ATLAS SIBIU — &lt;CATEGORY TITLE&gt;
+ * File: js/data/NN-slug.js
+ * Items: &lt;count&gt;
+ * Category slug: &lt;category-slug&gt;
+ * ID prefix: &lt;x-&gt;
+ * Last researched: 2026-08
+ * ========================================================================= */
+(function () {
+  'use strict';
+
+  const ITEMS = [
+
+    { /* ...entry 1... */ },
+    { /* ...entry 2... */ },
+
+    // ---INSERT-NEW-ITEMS-ABOVE---
+  ];
+
+  window.PF_FOODS = (window.PF_FOODS || []).concat(ITEMS);
+})();</code></pre>
+<p>Keep the literal line <code>    // ---INSERT-NEW-ITEMS-ABOVE---</code> in the file. It is the anchor you use to append further batches with the Edit tool, so you never have to rewrite the whole file.</p>
+<h3 id="hard-rules">Hard rules</h3>
+<ul class="pf-doc-list"><li>Must be <strong>valid JavaScript</strong>. If it does not parse, the whole site breaks.</li><li>Numbers are <strong>plain numbers</strong>, never strings. <code>protein: 21.5</code> not <code>protein: &quot;21.5&quot;</code>.</li><li>No <code>NaN</code>, no <code>null</code> for numbers — use <code>0</code> when genuinely zero, and omit an optional object only if the schema says it is optional.</li><li>UTF-8, Romanian diacritics welcome (ă â î ș ț), exactly one emoji in <code>emoji</code>.</li><li>Do not use backticks inside strings. Use single quotes for strings; escape internal apostrophes (<code>'Kaufland\'s'</code>) or just use double quotes for that string.</li><li>Every <code>id</code> must be globally unique. Use your assigned prefix.</li></ul>
+<hr>
+<h2 id="2-the-entry-schema">2. The entry schema</h2>
+<pre class="pf-doc-code" data-lang="js"><code>{
+  // ---- IDENTITY -------------------------------------------------------
+  id: 'd-skyr-natural-milbona',   // kebab-case, unique, starts with your prefix
+  name: 'Skyr, Plain',            // English common name
+  nameRo: 'Skyr natural',         // the name as printed on the Romanian shelf label
+  brand: 'Milbona (Lidl)',        // brand + retailer in parens; 'generic' if unbranded
+  category: 'dairy-eggs',         // YOUR fixed category slug — identical in every entry
+  subcategory: 'Iaurturi &amp; brânzeturi proaspete',  // Romanian, free text, reused across similar items
+  emoji: '🥛',                    // exactly ONE emoji, used as the card icon
+  unit: 'g',                      // 'g' for solids, 'ml' for liquids. per100g is per 100 of this unit.
+
+  // ---- WHERE TO BUY IT IN SIBIU --------------------------------------
+  stores: [
+    {
+      name: 'Lidl',               // see controlled store list below
+      availability: 'always',     // 'always' | 'usual' | 'seasonal' | 'occasional' | 'online'
+      aisle: 'Raft lactate, lângă iaurturile grecești',  // Romanian, where to physically look
+      priceRon: 5.99,             // pack price in RON, 2026 estimate. 0 if truly unknown.
+      packGrams: 450,             // NUMBER of grams (or ml) in that pack. Required if priceRon &gt; 0.
+      packLabel: 'caserolă 450 g',// human label for the pack
+      note: ''                    // optional short note, '' if none
+    }
+    // 1–5 store entries. List the CHEAPEST / most reliable first.
+  ],
+  sibiuNote: 'Toate cele 4 magazine Lidl din Sibiu îl au...',  // Sibiu-specific practical tip
+
+  // ---- NUTRITION (per 100 g or 100 ml of the product AS SOLD) ---------
+  per100g: {
+    kcal: 63,        // kilocalories
+    protein: 11,     // g
+    carbs: 4,        // g (total carbohydrate, EU style = excluding fiber)
+    sugars: 4,       // g, must be &lt;= carbs
+    fat: 0.2,        // g
+    satFat: 0.1,     // g, must be &lt;= fat
+    fiber: 0,        // g
+    salt: 0.1        // g of salt (NOT sodium). salt = sodium * 2.5
+  },
+
+  // Optional but valuable — include when meaningful, else omit the whole object:
+  micros: {
+    calciumMg: 150,     // omit any line you do not know
+    ironMg: 0.1,
+    zincMg: 0.6,
+    b12Ug: 0.4,
+    vitDUg: 0,
+    omega3Mg: 0,
+    potassiumMg: 150,
+    cholesterolMg: 5
+  },
+
+  // Optional — ONLY for products that mix collagen protein with real protein.
+  // Fraction (0–1) of the declared protein that comes from collagen/gelatin.
+  // Omit it entirely for everything else; see the note under the schema.
+  collagenShare: 0.33,
+
+  // ---- PORTION --------------------------------------------------------
+  serving: {
+    grams: 200,                    // a realistic single portion, in the same unit as above
+    label: '1 caserolă mică (200 g)'  // Romanian
+  },
+
+  // ---- EFFORT &amp; TIME --------------------------------------------------
+  effort: 0,          // integer 0–5. 0 = deschizi și mănânci. 1 = încălzit/amestecat.
+                      // 2 = o tigaie, &lt;10 min. 3 = gătit real, 15–30 min.
+                      // 4 = mai multe etape / 30–60 min. 5 = proiect, &gt;60 min sau marinare.
+  timeMin: 0,         // TOTAL minutes from fridge to mouth (including passive cooking/oven)
+  activeTimeMin: 0,   // minutes your hands are actually busy
+  cooking: {
+    method: 'none',   // 'none' | 'reheat' | 'boil' | 'pan' | 'grill' | 'oven' | 'airfryer'
+                      // | 'slow' | 'pressure' | 'blend' | 'assemble' | 'soak' | 'fry' | 'steam'
+    difficulty: 'none',  // 'none' | 'trivial' | 'easy' | 'medium' | 'hard'
+    equipment: ['—'],    // Romanian, e.g. ['tigaie', 'lingură']
+    steps: [             // Romanian imperative steps. 0 steps if ready-to-eat, else 2–8 steps.
+      'Scoate din frigider.',
+      'Mănâncă.'
+    ],
+    yieldNote: ''        // e.g. '1 kg crud = ~700 g gătit'. '' if not relevant.
+  },
+
+  // ---- TASTE ----------------------------------------------------------
+  taste: {
+    profile: 'Acrișor, dens, cremos, aproape fără dulceață',  // Romanian, one sentence
+    intensity: 3,    // 0–5 how loud the flavour is
+    sweetness: 1,    // 0–5
+    saltiness: 1,    // 0–5
+    umami: 1,        // 0–5
+    richness: 2,     // 0–5 fattiness / mouth-coating
+    texture: 'Foarte dens, cremos, ușor granulat',            // Romanian
+    notes: 'Fără topping e sec; cu miere și nuci devine desert.'  // Romanian, honest opinion
+  },
+
+  // ---- GAME STAT BARS (0–100, YOU author these four) -------------------
+  // The app COMPUTES the protein bar, the value bar and the leanness bar itself.
+  // You only author the four subjective ones. Be a harsh, honest critic —
+  // if everything is 90 the bars are useless. Use the whole 10–100 range.
+  stats: {
+    taste: 62,         // how much a normal person enjoys eating it plain
+    satiety: 88,       // how long it kills hunger per calorie
+    convenience: 100,  // 100 = zero effort, always in stock, portable
+    versatility: 74    // how many different meals it can slot into
+  },
+
+  // ---- WHEN TO EAT IT (0–5 suitability for each slot) -----------------
+  timing: {
+    breakfast: 5,
+    preWorkout: 3,
+    postWorkout: 5,
+    lunch: 4,
+    snack: 5,
+    dinner: 4,
+    beforeBed: 5
+  },
+  timingNote: 'Cazeina din skyr se digeră lent — foarte bun înainte de culcare.', // Romanian, 1 line
+
+  // ---- CLASSIFICATION -------------------------------------------------
+  tags: ['ready-to-eat', 'high-protein', 'low-fat', 'budget', 'meal-prep'],  // controlled list below
+  diet: {
+    vegan: false,
+    vegetarian: true,
+    glutenFree: true,
+    lactoseFree: false,
+    keto: false,
+    halal: true,
+    porkFree: true
+  },
+
+  // ---- PRACTICAL ------------------------------------------------------
+  pairings: ['Fulgi de ovăz', 'Miere', 'Nuci', 'Fructe de pădure congelate'],  // 2–6 Romanian items
+  tips: [            // 2–5 genuinely useful, non-obvious Romanian tips
+    'Amestecă cu o lingură de cacao și îndulcitor: devine desert cu 22 g proteină.',
+    'Verifică data — Lidl reduce cu 30% în ultima zi.'
+  ],
+  warnings: [],      // Romanian. Allergens, mercury, sodium, purine, cost traps. [] if none.
+  storage: 'Frigider 2–6 °C, se consumă în 3 zile după deschidere.',  // Romanian
+  shelfLife: '~3 săptămâni sigilat',                                   // Romanian
+
+  // ---- META -----------------------------------------------------------
+  dataConfidence: 'high',   // 'high' = read off a real label / official site
+                            // 'medium' = brand varies, values are typical for the type
+                            // 'low' = estimate (restaurant food, deli counter, etc.)
+  sources: ['Eticheta Milbona Skyr', 'lidl.ro']   // 1–3 short strings
+}</code></pre>
+<h3 id="collagenshare-when-a-product-is-only-partly-gelatin"><code>collagenShare</code> — when a product is only <em>partly</em> gelatin</h3>
+<p>Collagen and gelatin contain no tryptophan, so the app writes their protein down to a factor of <strong>0,25</strong> (see <code>docs/METHODOLOGY.md</code> §4). It normally recognises them from the name — <em>colagen, gelatină, piftie, răcituri, aspic</em>, plus the cuts that are structurally collagen without saying so: <em>burtă / tripe, tendon, șorici</em>.</p>
+<p>That works for a product that <strong>is</strong> collagen. It fails for a product that merely <strong>contains</strong> some, and it fails hard, because the whole entry drops to 0,25:</p>
+<pre class="pf-doc-code" data-lang="js"><code>// b-jeleu-proteic — 15 g gelatină + 30 g whey per ~450 g of jelly
+per100g: { kcal: 40, protein: 8.5, /* … */ },
+collagenShare: 0.33,   // ~2,8 g of the 8,5 g protein is gelatin; the rest is whey</code></pre>
+<p>Without the field, the word &quot;gelatină&quot; in the name pushed this dessert to rank <strong>E</strong>. With it, the quality factor becomes a weighted average — <code>0,33 × 0,25 + 0,67 × 0,92 = 0,70</code> — and it lands at rank <strong>D</strong>, which is what a 40 kcal / 8,5 g-protein dessert actually deserves.</p>
+<p>Rules:</p>
+<ul class="pf-doc-list"><li><strong>Omit the field</strong> unless the product genuinely mixes the two protein pools. The name-matching stays the fallback, so leaving it out changes nothing.</li><li><code>collagenShare: 1</code> is identical to being caught by the name — use it only when the name would not catch a pure-collagen product.</li><li>Estimate it from the recipe or the ingredient list, in grams of <em>protein</em>, not grams of ingredient (gelatin is ~86 % protein, whey isolate ~90 %), and write the arithmetic in a comment next to the field.</li><li>The dossier still shows the red &quot;proteină incompletă&quot; warning and the product is still excluded from the protein leaderboards. Only the score is nuanced.</li></ul>
+<hr>
+<h2 id="3-controlled-vocabularies">3. Controlled vocabularies</h2>
+<h3 id="stores-name-use-these-exact-strings"><code>stores[].name</code> — use these exact strings</h3>
+<p><code>Lidl</code>, <code>Kaufland</code>, <code>Carrefour</code>, <code>Carrefour Market</code>, <code>Profi</code>, <code>Penny</code>, <code>Mega Image</code>, <code>Auchan</code>, <code>Selgros</code>, <code>Metro</code>, <code>La Doi Pași</code>, <code>Decathlon</code>, <code>Farmacie</code>, <code>Piața Cibin</code>, <code>Măcelărie locală</code>, <code>Pescărie</code>, <code>Online RO</code>, <code>Restaurant Sibiu</code></p>
+<p>If a product is only realistically obtainable online (Ostrovit, Myprotein, etc.) use <code>Online RO</code> and put the shop name in <code>note</code>.</p>
+<h3 id="tags-use-only-these-slugs"><code>tags[]</code> — use only these slugs</h3>
+<p><strong>Convenience:</strong> <code>ready-to-eat</code>, <code>grab-and-go</code>, <code>microwave</code>, <code>no-cook</code>, <code>meal-prep</code>, <code>portable</code>, <code>shelf-stable</code>, <code>frozen</code>, <code>batch-cook</code></p>
+<p><strong>Nutrition:</strong> <code>high-protein</code> (≥15 g/100 g), <code>very-high-protein</code> (≥25 g/100 g), <code>protein-dense</code> (≥40 % of kcal from protein), <code>low-fat</code>, <code>low-carb</code>, <code>high-fiber</code>, <code>low-kcal</code>, <code>high-kcal</code>, <code>omega3</code>, <code>iron-rich</code>, <code>calcium-rich</code>, <code>b12</code>, <code>complete-protein</code>, <code>slow-digesting</code>, <code>fast-digesting</code>, <code>high-sodium</code>, <code>processed</code>, <code>whole-food</code></p>
+<p><strong>Money:</strong> <code>budget</code>, <code>cheap-protein</code>, <code>mid-price</code>, <code>premium</code>, <code>bulk-buy</code></p>
+<p><strong>Use case:</strong> <code>breakfast</code>, <code>post-workout</code>, <code>pre-workout</code>, <code>night-snack</code>, <code>office-lunch</code>, <code>bulking</code>, <code>cutting</code>, <code>kid-friendly</code>, <code>hangover</code>, <code>summer</code>, <code>winter</code></p>
+<p><strong>Culture:</strong> <code>romanian-classic</code>, <code>local-sibiu</code>, <code>imported</code></p>
+<h3 id="category-slugs-one-per-file-do-not-invent-others"><code>category</code> slugs (one per file, do not invent others)</h3>
+<p><code>dairy-eggs</code>, <code>fresh-meat</code>, <code>deli-processed</code>, <code>fish-seafood</code>, <code>plant-protein</code>, <code>supplements-snacks</code>, <code>ready-meals</code>, <code>bakery-drinks-sweets</code></p>
+<hr>
+<h2 id="4-quality-bar-read-this-twice">4. Quality bar — read this twice</h2>
+<ol class="pf-doc-list"><li><strong>Real products, real shelves.</strong> Every branded item must plausibly exist in a Lidl, Kaufland, Carrefour, Profi, Penny, Mega Image, Auchan, Selgros or Metro in Romania in 2025–2026. When unsure whether a brand/product is sold in Romania, <strong>web-search it</strong> before including it. If you cannot confirm, either drop it or set <code>dataConfidence: 'medium'</code> and use the generic type name instead of a fake SKU.</li><li><strong>Never invent a nutrition label.</strong> If you are not confident of the exact numbers, use well-established generic values for that food type (USDA/CIQUAL-style) and set <code>dataConfidence</code> to <code>'medium'</code>. Internal consistency is checked by the app: <code>kcal ≈ protein*4 + carbs*4 + fat*9 + fiber*2</code> (±15 %). Entries that fail this badly will be flagged, so sanity-check your arithmetic.</li><li><strong><code>sugars ≤ carbs</code></strong> and <strong><code>satFat ≤ fat</code></strong>. Always.</li><li><strong>Prices</strong> are 2026 Sibiu estimates in RON. Reasonable ranges: chicken breast ~30–40 RON/kg, eggs ~1.2–1.8 RON each, Greek yogurt ~4–9 RON/pot, canned tuna ~7–14 RON/tin, whey ~150–320 RON/kg. Don't produce absurd numbers.</li><li><strong>Diversity beats duplication.</strong> Ten near-identical Greek yogurts is a waste. One per meaningfully different product (different brand tier, fat level, or format) is fine.</li><li><strong>Be honest in <code>stats</code> and <code>taste</code>.</strong> Liver is a protein monster with a taste score of 25. Plain chicken breast is boring: taste 45. Say so.</li><li><strong>Romanian for user-facing prose</strong> (<code>aisle</code>, <code>steps</code>, <code>tips</code>, <code>taste.*</code>, <code>storage</code>, <code>warnings</code>, <code>pairings</code>, <code>subcategory</code>, <code>sibiuNote</code>, <code>timingNote</code>). English for <code>name</code>, tags, enums and slugs.</li></ol>
+<hr>
+<h2 id="5-companion-documentation">5. Companion documentation</h2>
+<p>Each data file has a sibling markdown file in <code>docs/categories/&lt;category-slug&gt;.md</code>, 250–450 lines, containing:</p>
+<ul class="pf-doc-list"><li>A short intro on why this category matters for protein.</li><li><strong>Buying guide for Sibiu</strong> — which store wins for what, when to go, what to avoid.</li><li><strong>Top 10 picks</strong> table (name | protein/100 g | kcal | RON/kg | protein per RON | verdict).</li><li><strong>Traps &amp; marketing lies</strong> in this category.</li><li>4–8 <strong>recipes / preparation protocols</strong> with timings, in Romanian.</li><li><strong>Storage &amp; food-safety</strong> notes.</li><li>A <strong>price-per-gram-of-protein</strong> ranking table.</li><li>Sources / how the data was gathered, and known uncertainty.</li></ul>
+<p>Write it in Romanian with English technical terms where natural.</p>
+  </main>
+</div>
+
+<footer class="pf-doc-foot">
+  Generat din <code>docs/DATA-SCHEMA.md</code> cu <code>tools/build-docs.js</code>.
+  Nu edita fișierul HTML — modifică Markdown-ul și regenerează.
+</footer>
+
+<script>
+/* Theme toggle, mirroring the app's own so the docs do not fight it. */
+(function () {
+  var KEY = 'pf.atlas.v1.theme';
+  var root = document.documentElement;
+  var saved;
+  try { saved = JSON.parse(localStorage.getItem(KEY)); } catch (e) { saved = null; }
+  if (saved === 'light' || saved === 'dark') root.setAttribute('data-theme', saved);
+  var btn = document.getElementById('pf-doc-theme');
+  function paint() { btn.textContent = root.getAttribute('data-theme') === 'light' ? '🌙' : '☀️'; }
+  paint();
+  btn.addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem(KEY, JSON.stringify(next)); } catch (e) {}
+    paint();
+  });
+})();
+</script>
+</body>
+</html>
