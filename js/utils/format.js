@@ -11,8 +11,31 @@
   /** Current locale, switched by the i18n module. */
   let LOCALE = 'ro-RO';
 
+  /** What every formatter prints when it has nothing true to say. */
+  const DASH = '—';
+
   function setLocale(l) {
     LOCALE = l === 'en' ? 'en-GB' : 'ro-RO';
+  }
+
+  /** Decimal separator of the active locale: Romanian writes 5,4 not 5.4. */
+  function decimalSep() {
+    return LOCALE === 'ro-RO' ? ',' : '.';
+  }
+
+  /**
+   * The finite number behind a value, or null when there is none.
+   *
+   * Every public formatter funnels through this instead of repeating the
+   * null / undefined / NaN / Infinity dance. A missing field, a division by
+   * zero upstream, or a stray string must all reach the screen as "—" — never
+   * as the literal "NaN", never as "Infinity", and never as a thrown
+   * TypeError from calling .toFixed() on something that is not a number.
+   */
+  function finiteOf(v) {
+    if (v === null || v === undefined) return null;
+    const x = typeof v === 'number' ? v : Number(v);
+    return Number.isFinite(x) ? x : null;
   }
 
   /* -----------------------------------------------------------------------
@@ -22,33 +45,32 @@
   /**
    * Round to n decimals and drop trailing zeros.
    * 21.0 -> "21", 21.53 -> "21.5" (n=1), 0.04 -> "<0.1" (n=1) / "0.04" (n=2)
-   *
-   * Anything that is not a finite number renders as an em dash. A division by
-   * zero upstream must surface as "—", never as the literal "Infinity" or
-   * "NaN" printed into a product card.
    */
   function num(v, decimals) {
-    if (v === null || v === undefined) return '—';
-    const x = typeof v === 'number' ? v : Number(v);
-    if (!Number.isFinite(x)) return '—';
+    const x = finiteOf(v);
+    if (x === null) return DASH;
     const d = decimals === undefined ? 1 : decimals;
-    const rounded = Math.round(x * Math.pow(10, d)) / Math.pow(10, d);
-    // Small non-zero values must not collapse to "0".
-    if (rounded === 0 && x > 0 && x < 0.05) return '<0.1';
+    const step = Math.pow(10, d);
+    const rounded = Math.round(x * step) / step;
+    /* A positive value that rounds to zero is, by definition, below half of
+     * the smallest step this many decimals can show. Printing "0" would claim
+     * it is nothing, so print the step instead — "<0.1" at one decimal,
+     * "<0.01" at two, "<1" at none. The bound follows the decimals rather
+     * than being hard-coded, which is what made num(0.004, 2) answer "<0.1". */
+    if (rounded === 0 && x > 0) return '<' + (1 / step).toFixed(d);
     // String(-0) is "0", so a rounded-away negative never prints as "-0".
     return String(rounded);
   }
 
-  /** Decimal separator of the active locale: Romanian writes 5,4 not 5.4. */
+  /** num() in the active locale's separator: "5,4" in RO, "5.4" in EN. */
   function dec(v, decimals) {
-    return num(v, decimals).replace('.', LOCALE === 'ro-RO' ? ',' : '.');
+    return num(v, decimals).replace('.', decimalSep());
   }
 
   /** Integer with thousands separators. */
   function int(v) {
-    if (v === null || v === undefined) return '—';
-    const x = typeof v === 'number' ? v : Number(v);
-    if (!Number.isFinite(x)) return '—';
+    const x = finiteOf(v);
+    if (x === null) return DASH;
     return Math.round(x).toLocaleString(LOCALE);
   }
 
@@ -62,23 +84,35 @@
     return num(v, decimals === undefined ? 0 : decimals) + '%';
   }
 
-  /** kcal: "1 240 kcal" */
+  /** kcal, grouped by the locale: "1.240 kcal" in RO, "1,240 kcal" in EN. */
   function kcal(v) {
     return int(v) + ' kcal';
   }
 
-  /** Romanian lei: "12,49 lei" / "12.49 RON" */
+  /**
+   * Romanian lei: "12,49 lei" / "12.49 lei"
+   *
+   * Zero reads as "no price known", not as free — nothing in this database
+   * costs 0 lei, so a zero can only mean a missing or broken figure.
+   */
   function ron(v, decimals) {
-    if (v === null || v === undefined || Number.isNaN(v) || v === 0) return '—';
+    const x = finiteOf(v);
+    if (x === null || x === 0) return DASH;
     const d = decimals === undefined ? 2 : decimals;
-    return v.toFixed(d).replace('.', LOCALE === 'ro-RO' ? ',' : '.') + ' lei';
+    return x.toFixed(d).replace('.', decimalSep()) + ' lei';
   }
+
+  /* Above 100 lei the bani are noise on a chip; below 10 lei they are the
+   * difference between two products, so they stay. */
+  const RON_WHOLE_ABOVE = 100;
+  const RON_BANI_BELOW = 10;
 
   /** Compact price for tight spaces: "12,5 lei" */
   function ronShort(v) {
-    if (!v) return '—';
-    if (v >= 100) return Math.round(v) + ' lei';
-    return ron(v, v < 10 ? 2 : 1);
+    const x = finiteOf(v);
+    if (x === null || x === 0) return DASH;
+    if (x >= RON_WHOLE_ABOVE) return Math.round(x) + ' lei';
+    return ron(x, x < RON_BANI_BELOW ? 2 : 1);
   }
 
   /**
@@ -89,24 +123,28 @@
    * only way an exact-looking price can ever appear on screen.
    */
   function ronApprox(v, opts) {
-    if (v === null || v === undefined || Number.isNaN(v) || v === 0) return '—';
+    const x = finiteOf(v);
+    if (x === null || x === 0) return DASH;
     const o = opts || {};
-    const body = o.short ? ronShort(v) : ron(v, o.decimals);
+    const body = o.short ? ronShort(x) : ron(x, o.decimals);
     return o.verified ? body : '≈ ' + body;
   }
 
   /** "≈ 30 lei (24–36)" — the number plus the honest spread around it. */
   function ronRange(v, lo, hi, opts) {
-    if (v === null || v === undefined || Number.isNaN(v)) return '—';
+    const x = finiteOf(v);
+    /* Same "zero is a missing price" rule as ron() and ronApprox(); before,
+     * ronRange(0, 0, 0) was the one path that printed "≈ 0 lei (0–0)". */
+    if (x === null || x === 0) return DASH;
     const o = opts || {};
-    if (o.verified) return ron(v, o.decimals);
-    if (lo === null || lo === undefined || hi === null || hi === undefined) {
-      return ronApprox(v, o);
-    }
+    if (o.verified) return ron(x, o.decimals);
+    const l = finiteOf(lo);
+    const h = finiteOf(hi);
+    if (l === null || h === null) return ronApprox(x, o);
     /* dec(), not num(): the range sits next to ron() output on the same card,
      * and mixing "5,40 lei" with "(4.3–6.5)" looks like two different apps. */
-    const d = v < 10 ? 1 : 0;
-    return '≈ ' + dec(v, d) + ' lei (' + dec(lo, d) + '–' + dec(hi, d) + ')';
+    const d = x < RON_BANI_BELOW ? 1 : 0;
+    return '≈ ' + dec(x, d) + ' lei (' + dec(l, d) + '–' + dec(h, d) + ')';
   }
 
   /* -----------------------------------------------------------------------
@@ -124,9 +162,8 @@
    * em dash — the old code printed "NaN h" straight onto the card.
    */
   function minutes(v) {
-    if (v === null || v === undefined) return '—';
-    const n = typeof v === 'number' ? v : Number(v);
-    if (!Number.isFinite(n)) return '—';
+    const n = finiteOf(v);
+    if (n === null) return DASH;
     if (n <= 0) return 'instant';
     if (n < 60) return n + ' min';
     const h = Math.floor(n / 60);
@@ -134,11 +171,24 @@
     return m ? h + ' h ' + m + ' min' : h + ' h';
   }
 
-  /** A short bucket used for colour-coding the time chip. */
+  /* Bucket edges, in minutes: "quick" is what you can do while the kettle
+   * boils, "medium" is a weeknight, anything longer is a project. */
+  const TIME_QUICK_MAX = 10;
+  const TIME_MEDIUM_MAX = 30;
+
+  /**
+   * A short bucket used for colour-coding the time chip.
+   *
+   * A missing time is 'unknown', not a bucket: it used to answer 'instant'
+   * for null and 'slow' for undefined, so the same absent field painted the
+   * chip green or red depending on which flavour of nothing it held.
+   */
   function timeBucket(v) {
-    if (v <= 0) return 'instant';
-    if (v <= 10) return 'quick';
-    if (v <= 30) return 'medium';
+    const n = finiteOf(v);
+    if (n === null) return 'unknown';
+    if (n <= 0) return 'instant';
+    if (n <= TIME_QUICK_MAX) return 'quick';
+    if (n <= TIME_MEDIUM_MAX) return 'medium';
     return 'slow';
   }
 
@@ -161,11 +211,15 @@
    * Wrap every occurrence of `query` in the text with <mark>.
    * Diacritic-insensitive, case-insensitive. Input is escaped first.
    */
+  /* One letter matches almost every row, so highlighting it turns the list
+   * into a wall of <mark>. Two is where the marks start meaning something. */
+  const MIN_HIGHLIGHT_LEN = 2;
+
   function highlight(text, query) {
     const raw = text === null || text === undefined ? '' : String(text);
     if (!query) return esc(raw);
     const nq = normalize(query).trim();
-    if (nq.length < 2) return esc(raw);
+    if (nq.length < MIN_HIGHLIGHT_LEN) return esc(raw);
 
     /* Search the RAW text and escape each slice afterwards. Searching the
      * escaped text instead would let a match land inside an entity — a query
@@ -223,22 +277,33 @@
       .join(' ');
   }
 
+  /* Back up to a word boundary only while at least this much of the budget
+   * survives. "Brânză de burduf" cut at 20 would otherwise fall back to the
+   * first space and leave the stub "Brânză…". */
+  const TRUNCATE_WORD_FLOOR = 0.6;
+
   /** Truncate with an ellipsis at a word boundary. */
   function truncate(s, max) {
-    if (!s || s.length <= max) return s || '';
-    const cut = s.slice(0, max);
+    if (s === null || s === undefined) return '';
+    const str = String(s);
+    if (str.length <= max) return str;
+    const cut = str.slice(0, max);
     const lastSpace = cut.lastIndexOf(' ');
-    return (lastSpace > max * 0.6 ? cut.slice(0, lastSpace) : cut) + '…';
+    return (lastSpace > max * TRUNCATE_WORD_FLOOR ? cut.slice(0, lastSpace) : cut) + '…';
   }
 
-  /** Pluralise Romanian-style: 1 produs / 2 produse / 21 de produse */
+  /**
+   * Pluralise Romanian-style: 1 produs / 2 produse / 21 de produse.
+   * Romanian inserts "de" once the last two digits leave the 1–19 window,
+   * which is why 101 stays "101 produse" while 120 becomes "120 de produse".
+   */
   function plural(n, one, few, many) {
     const abs = Math.abs(n);
     if (abs === 1) return n + ' ' + one;
     const mod100 = abs % 100;
-    if (abs === 0 || (mod100 >= 1 && mod100 <= 19) || abs < 20) {
-      return n + ' ' + few;
-    }
+    /* `abs === 0` used to be spelled out here too; it is already covered by
+     * `abs < 20`, and so was every value the middle clause caught below 20. */
+    if (abs < 20 || (mod100 >= 1 && mod100 <= 19)) return n + ' ' + few;
     return n + ' de ' + (many || few);
   }
 
@@ -257,15 +322,16 @@
     return outLo + t * (outHi - outLo);
   }
 
-  function slug(s) {
-    return normalize(s)
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-|-$/g, '');
-  }
+  /* slug() lived here — normalize() + dashes, the inverse of titleize(). It
+   * had no caller in the app, none in the tools and none in the tests: ids in
+   * js/data/*.js are written by hand, so nothing ever needs to derive one.
+   * Deleted rather than kept "just in case"; normalize() is still exported and
+   * a slug is two .replace() calls away if a caller ever appears. */
 
   PF.fmt = {
     setLocale: setLocale,
     num: num,
+    dec: dec,
     int: int,
     g: g,
     pct: pct,
@@ -283,7 +349,6 @@
     truncate: truncate,
     plural: plural,
     clamp: clamp,
-    scale: scale,
-    slug: slug
+    scale: scale
   };
 })();

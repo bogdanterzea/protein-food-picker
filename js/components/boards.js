@@ -54,7 +54,7 @@
       value: f => f._d.ronPer100gProtein,
       asc: true,
       display: f =>
-        (f._d.priceVerified ? '' : '≈') + fmt.num(f._d.ronPer100gProtein, 1) +
+        PF.ui.approxNum(f._d.ronPer100gProtein, f._d.priceVerified, 1) +
         ' ' + t('misc.currency'),
       filter: f => usableProtein(f) && f._d.ronPer100gProtein !== null && f._d.protein100 >= 5
     },
@@ -141,7 +141,7 @@
         return (
           '<button class="pf-board__row" data-id="' + fmt.esc(f.id) + '">' +
           '<span class="pf-board__rank">' + (i + 1) + '</span>' +
-          '<span class="pf-board__emoji">' + (f.emoji || '🍽️') + '</span>' +
+          '<span class="pf-board__emoji">' + PF.ui.foodEmoji(f) + '</span>' +
           '<span class="pf-board__name">' + fmt.esc(f.nameRo || f.name) +
           (f.brand && f.brand !== 'generic'
             ? ' <span class="pf-muted" style="font-size:var(--fs-3xs)">' + fmt.esc(f.brand) + '</span>'
@@ -170,10 +170,11 @@
 
   function render(container, foods) {
     if (!foods.length) {
-      container.innerHTML =
-        '<div class="pf-empty"><span class="pf-empty__icon">🏆</span>' +
-        '<span class="pf-empty__title">' + t('res.none') + '</span>' +
-        '<span class="pf-empty__text">' + t('res.noneHelp') + '</span></div>';
+      container.innerHTML = PF.ui.emptyState({
+        icon: '🏆',
+        title: t('res.none'),
+        text: t('res.noneHelp')
+      });
       return;
     }
 

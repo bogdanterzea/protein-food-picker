@@ -56,17 +56,10 @@
     low: 'estimare'
   };
 
-  function block(title, bodyHtml, badge) {
-    if (!bodyHtml) return '';
-    return (
-      '<section class="pf-block">' +
-      '<div class="pf-block__head">' + fmt.esc(title) +
-      (badge ? '<span class="pf-badge">' + fmt.esc(badge) + '</span>' : '') +
-      '</div>' +
-      '<div class="pf-block__body">' + bodyHtml + '</div>' +
-      '</section>'
-    );
-  }
+  /* The titled section wrapper now lives in ui.js — recipes.js was writing
+   * the same markup out longhand seven times. Aliased rather than renamed at
+   * every one of the twenty-odd call sites below. */
+  const block = ui.block;
 
   function bullets(list, variant) {
     if (!list || !list.length) return '';
@@ -197,7 +190,7 @@
         ? block(
             t('sec.upgrade'),
             '<button class="pf-similar__item" data-goto="' + fmt.esc(upgrade.id) + '">' +
-            '<span class="pf-similar__emoji">' + (upgrade.emoji || '🍽️') + '</span>' +
+            '<span class="pf-similar__emoji">' + ui.foodEmoji(upgrade) + '</span>' +
             '<span class="pf-similar__txt">' +
             '<span class="pf-similar__name">' + fmt.esc(upgrade.nameRo || upgrade.name) + '</span>' +
             '<span class="pf-similar__p">' + fmt.num(upgrade._d.protein100, 1) + ' g / 100 g · ' +
@@ -217,7 +210,7 @@
             .map(
               f =>
                 '<button class="pf-similar__item" data-goto="' + fmt.esc(f.id) + '">' +
-                '<span class="pf-similar__emoji">' + (f.emoji || '🍽️') + '</span>' +
+                '<span class="pf-similar__emoji">' + ui.foodEmoji(f) + '</span>' +
                 '<span class="pf-similar__txt">' +
                 '<span class="pf-similar__name">' + fmt.esc(f.nameRo || f.name) + '</span>' +
                 '<span class="pf-similar__p">' + fmt.num(f._d.protein100, 1) + ' g/100 g</span>' +
@@ -259,7 +252,13 @@
       ? (food.serving && food.serving.label) || d.servingGrams + ' ' + food.unit
       : '100 ' + food.unit;
 
-    const e = d.energyShare;
+    /* The "% din kcal" column is four shares of one whole stacked vertically,
+     * which is the exact shape of the bug that made the card legend print
+     * 99% and 101%. Rounded independently, this column does the same thing —
+     * only worse, because here the reader can add the numbers up with a
+     * finger. Same largest-remainder pass the donut and the legend use, so
+     * all three agree on every product. */
+    const e = PF.charts.roundShares(d.energyShare);
 
     const table =
       '<table class="pf-nutri">' +
@@ -274,23 +273,14 @@
       '</table>';
 
     /* --- derived headline numbers --- */
-    const derived =
-      '<div class="pf-macros pf-macros--6" style="margin-top:var(--sp-3)">' +
-      '<div class="pf-macro pf-macro--protein"><span class="pf-macro__v">' +
-      Math.round(d.purityPct) + '%</span><span class="pf-macro__k">din kcal</span></div>' +
-      '<div class="pf-macro pf-macro--protein"><span class="pf-macro__v">' +
-      fmt.num(d.proteinPer100kcal, 1) + '</span><span class="pf-macro__k">g/100kcal</span></div>' +
-      '<div class="pf-macro pf-macro--kcal"><span class="pf-macro__v">' +
-      Math.round(d.kcal100) + '</span><span class="pf-macro__k">kcal/100' + food.unit + '</span></div>' +
-      '<div class="pf-macro pf-macro--fat"><span class="pf-macro__v">' +
-      Math.round(d.bars.leanness) + '</span><span class="pf-macro__k">slăbiciune</span></div>' +
-      '<div class="pf-macro pf-macro--carbs"><span class="pf-macro__v">' +
-      (d.ronPer100gProtein ? fmt.num(d.ronPer100gProtein, 1) : '—') +
-      '</span><span class="pf-macro__k">lei/100g P</span></div>' +
-      '<div class="pf-macro pf-macro--fiber"><span class="pf-macro__v">' +
-      (d.proteinPerRon ? fmt.num(d.proteinPerRon, 1) : '—') +
-      '</span><span class="pf-macro__k">g P / leu</span></div>' +
-      '</div>';
+    const derived = ui.statGrid([
+      { v: Math.round(d.purityPct) + '%', k: 'din kcal', cls: 'protein' },
+      { v: fmt.num(d.proteinPer100kcal, 1), k: 'g/100kcal', cls: 'protein' },
+      { v: Math.round(d.kcal100), k: 'kcal/100' + food.unit, cls: 'kcal' },
+      { v: Math.round(d.bars.leanness), k: 'slăbiciune', cls: 'fat' },
+      { v: d.ronPer100gProtein ? fmt.num(d.ronPer100gProtein, 1) : '—', k: 'lei/100g P', cls: 'carbs' },
+      { v: d.proteinPerRon ? fmt.num(d.proteinPerRon, 1) : '—', k: 'g P / leu', cls: 'fiber' }
+    ], { six: true, style: 'margin-top:var(--sp-3)' });
 
     /* --- micronutrients --- */
     let micros = '';
@@ -403,30 +393,21 @@
     const c = food.cooking || {};
     const steps = c.steps || [];
 
-    const timeCard =
-      '<div class="pf-macros">' +
-      '<div class="pf-macro pf-macro--kcal"><span class="pf-macro__v">' +
-      fmt.minutes(food.timeMin, PF.i18n.lang()) + '</span><span class="pf-macro__k">total</span></div>' +
-      '<div class="pf-macro pf-macro--carbs"><span class="pf-macro__v">' +
-      fmt.minutes(food.activeTimeMin, PF.i18n.lang()) + '</span><span class="pf-macro__k">activ</span></div>' +
-      '<div class="pf-macro pf-macro--fat"><span class="pf-macro__v">' + food.effort +
-      '/5</span><span class="pf-macro__k">efort</span></div>' +
-      '<div class="pf-macro pf-macro--protein"><span class="pf-macro__v">' +
-      fmt.esc(METHOD_LABEL[c.method] || c.method || '—') +
-      '</span><span class="pf-macro__k">metodă</span></div>' +
-      '</div>';
+    const timeCard = ui.statGrid([
+      { v: fmt.minutes(food.timeMin, PF.i18n.lang()), k: 'total', cls: 'kcal' },
+      { v: fmt.minutes(food.activeTimeMin, PF.i18n.lang()), k: 'activ', cls: 'carbs' },
+      { v: food.effort + '/5', k: 'efort', cls: 'fat' },
+      { v: METHOD_LABEL[c.method] || c.method || '—', k: 'metodă', cls: 'protein' }
+    ]);
 
     const stepsHtml = steps.length
       ? '<ol class="pf-steps">' + steps.map(s => '<li><span>' + fmt.esc(s) + '</span></li>').join('') + '</ol>'
       : '<p class="pf-muted">Nu necesită nicio preparare. Deschizi și mănânci.</p>';
 
-    const equip =
-      c.equipment && c.equipment.length && c.equipment[0] !== '—'
-        ? block(t('sec.equipment'),
-            '<div class="pf-card__tags">' +
-            c.equipment.map(e => '<span class="pf-tag">' + fmt.esc(e) + '</span>').join('') +
-            '</div>')
-        : '';
+    /* "—" is how the data says "no equipment", not the name of a tool. */
+    const equip = c.equipment && c.equipment[0] !== '—'
+      ? block(t('sec.equipment'), ui.tagList(c.equipment))
+      : '';
 
     /* Meals that actually use this product — the bridge from ingredient to dinner. */
     const meals = (PF.recipes && PF.recipes.forFood) ? PF.recipes.forFood(food.id) : [];
@@ -436,9 +417,9 @@
           meals.map(function (r) {
             const m = (window.PF_METHODS || {})[r.method] || { ro: r.method, emoji: '🍽️' };
             return '<button class="pf-recipe-link" data-recipe-open="' + fmt.esc(r.id) + '">' +
-              '<span style="font-size:18px">' + r.emoji + '</span>' +
+              '<span style="font-size:18px">' + ui.foodEmoji(r) + '</span>' +
               '<span class="pf-recipe-link__name">' + fmt.esc(r.name) +
-              '<small>' + m.emoji + ' ' + fmt.esc(m.ro) + ' · ' +
+              '<small>' + fmt.esc(m.emoji) + ' ' + fmt.esc(m.ro) + ' · ' +
               fmt.minutes(r.timeMin, 'ro') + ' · ' + r.servings + ' porții</small></span>' +
               '<span class="pf-recipe-link__p">' + Math.round(r._r.perServing.protein) + ' g</span>' +
               '</button>';
@@ -454,12 +435,7 @@
       equip +
       '</div>' +
       '<div>' +
-      (food.pairings && food.pairings.length
-        ? block(t('sec.pairings'),
-            '<div class="pf-card__tags">' +
-            food.pairings.map(p => '<span class="pf-tag">' + fmt.esc(p) + '</span>').join('') +
-            '</div>')
-        : '') +
+      block(t('sec.pairings'), ui.tagList(food.pairings)) +
       block(t('sec.storage'),
         '<p>' + fmt.esc(food.storage || '—') + '</p>' +
         (food.shelfLife ? '<p class="pf-muted" style="font-size:var(--fs-2xs)">⏳ ' + fmt.esc(food.shelfLife) + '</p>' : '')) +
@@ -560,8 +536,8 @@
             ? fmt.ronApprox(s.priceRon, { verified: s.verified === true }) : '—') +
           (s.packLabel ? '<span class="pf-stores-table__note">' + fmt.esc(s.packLabel) + '</span>' : '') +
           '</td>' +
-          '<td class="num pf-col--kg">' + (p ? (p.verified ? '' : '≈') + fmt.num(p.pricePerKg, 0) + ' lei/kg' : '—') + '</td>' +
-          '<td class="num">' + (p ? (p.verified ? '' : '≈') + fmt.num(p.ronPer100gProtein, 1) : '—') +
+          '<td class="num pf-col--kg">' + (p ? ui.approxNum(p.pricePerKg, p.verified, 0) + ' lei/kg' : '—') + '</td>' +
+          '<td class="num">' + (p ? ui.approxNum(p.ronPer100gProtein, p.verified, 1) : '—') +
           (over >= 3 ? '<span class="pf-stores-table__note">+' + over + '%</span>' : '') +
           '</td>' +
           '</tr>'
@@ -614,20 +590,12 @@
       '</div>' +
       '<div>' +
       block('Cost real',
-        '<div class="pf-macros">' +
-        '<div class="pf-macro pf-macro--protein"><span class="pf-macro__v">' +
-        (d.ronPer100gProtein ? (d.priceVerified ? '' : '≈') + fmt.num(d.ronPer100gProtein, 1) : '—') +
-        '</span><span class="pf-macro__k">lei/100g P</span></div>' +
-        '<div class="pf-macro pf-macro--carbs"><span class="pf-macro__v">' +
-        (d.proteinPerRon ? fmt.num(d.proteinPerRon, 1) : '—') +
-        '</span><span class="pf-macro__k">g P / leu</span></div>' +
-        '<div class="pf-macro pf-macro--kcal"><span class="pf-macro__v">' +
-        (d.costPerServing ? (d.priceVerified ? '' : '≈') + fmt.num(d.costPerServing, 2) : '—') +
-        '</span><span class="pf-macro__k">lei/porție</span></div>' +
-        '<div class="pf-macro pf-macro--fat"><span class="pf-macro__v">' +
-        (d.pricePerKg ? (d.priceVerified ? '' : '≈') + Math.round(d.pricePerKg) : '—') +
-        '</span><span class="pf-macro__k">lei/kg</span></div>' +
-        '</div>' +
+        ui.statGrid([
+          { v: ui.approxNum(d.ronPer100gProtein, d.priceVerified, 1), k: 'lei/100g P', cls: 'protein' },
+          { v: d.proteinPerRon ? fmt.num(d.proteinPerRon, 1) : '—', k: 'g P / leu', cls: 'carbs' },
+          { v: ui.approxNum(d.costPerServing, d.priceVerified, 2), k: 'lei/porție', cls: 'kcal' },
+          { v: ui.approxNum(d.pricePerKg, d.priceVerified, 0), k: 'lei/kg', cls: 'fat' }
+        ]) +
         '<p class="pf-muted" style="font-size:var(--fs-2xs);margin-top:var(--sp-2)">' +
         'Interval realist: ' + fmt.ronRange(d.ronPer100gProtein, d.ronPer100gProteinLo,
           d.ronPer100gProteinHi, { verified: d.priceVerified }) + ' la 100 g de proteină.</p>' +
@@ -653,7 +621,7 @@
         const v = timing[s.key] || 0;
         return (
           '<div class="pf-row" style="gap:var(--sp-3);padding:var(--sp-2) 0;border-bottom:1px solid var(--border)">' +
-          '<span style="font-size:18px">' + s.emoji + '</span>' +
+          '<span style="font-size:18px">' + fmt.esc(s.emoji) + '</span>' +
           '<span class="pf-grow">' + fmt.esc(PF.i18n.slotName(s.key)) +
           (s.key === nowSlot ? ' <span class="pf-badge pf-badge--accent">acum</span>' : '') +
           '</span>' +
@@ -716,7 +684,7 @@
     return (
       '<div class="pf-modal__head" data-cat="' + fmt.esc(food.category) + '">' +
       '<button class="pf-modal__close" data-act="close" aria-label="' + t('misc.close') + '">✕</button>' +
-      '<span class="pf-modal__icon">' + (food.emoji || '🍽️') + '</span>' +
+      '<span class="pf-modal__icon">' + ui.foodEmoji(food) + '</span>' +
       '<div class="pf-modal__titles">' +
       '<h2 class="pf-modal__title" id="pf-modal-title">' + fmt.esc(food.nameRo || food.name) + '</h2>' +
       '<div class="pf-modal__subtitle">' +

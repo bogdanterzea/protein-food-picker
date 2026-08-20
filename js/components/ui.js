@@ -123,23 +123,30 @@
   function macroBar(food, opts) {
     const o = opts || {};
     const e = food._d.energyShare;
+    /* Same trap the legend fell into: four independent Math.round calls on
+     * shares of one whole. The bar is rendered right next to macroLegend on
+     * every card, so an independently-rounded tooltip could say "Proteină ·
+     * 34%" while the legend one line below said 35% for the same product.
+     * The WIDTHS stay exact — that is geometry, and the segments have to fill
+     * the track — but every number spoken aloud comes from roundShares. */
+    const shown = PF.charts.roundShares(e);
     const segs = [
-      { k: 'protein', v: e.protein, label: 'P' },
-      { k: 'carbs', v: e.carbs, label: 'C' },
-      { k: 'fat', v: e.fat, label: 'G' },
-      { k: 'fiber', v: e.fiber, label: 'F' }
+      { k: 'protein', v: e.protein, pct: shown.protein, label: 'P' },
+      { k: 'carbs', v: e.carbs, pct: shown.carbs, label: 'C' },
+      { k: 'fat', v: e.fat, pct: shown.fat, label: 'G' },
+      { k: 'fiber', v: e.fiber, pct: shown.fiber, label: 'F' }
     ].filter(s => s.v > 0.5);
 
     const tall = o.tall ? ' pf-macrobar--tall' : '';
     return (
       '<div class="pf-macrobar' + tall + '" role="img" aria-label="' +
-      segs.map(s => t('card.' + s.k) + ' ' + Math.round(s.v) + '%').join(', ') + '">' +
+      fmt.esc(segs.map(s => t('card.' + s.k) + ' ' + s.pct + '%').join(', ')) + '">' +
       segs
         .map(
           s =>
             '<span class="pf-macrobar__seg pf-macrobar__seg--' + s.k +
             '" style="width:' + s.v.toFixed(1) + '%" data-tip="' +
-            fmt.esc(t('card.' + s.k) + ' · ' + Math.round(s.v) + '% din calorii') + '">' +
+            fmt.esc(t('card.' + s.k) + ' · ' + s.pct + '% din calorii') + '">' +
             (o.tall && s.v > 11 ? s.label : '') +
             '</span>'
         )
@@ -180,7 +187,41 @@
   }
 
   /* =======================================================================
-   * MACRO NUMBER STRIP
+   * STAT GRID — the `pf-macros` tile row
+   *
+   * A row of "big number over small label" tiles. It started life as the
+   * macro strip on a card, but modal.js and tray.js were each hand-writing
+   * the same six <div>s for numbers that are not macros at all (cooking
+   * time, lei/kg, effort), reusing the macro colour classes purely as a
+   * palette. Four hand-rolled copies had already drifted apart, so the
+   * markup lives here once and the callers pass data.
+   *
+   * cells: [{ v, k, cls }] — v is the number, k the caption, cls the colour
+   *        slot ('protein' | 'carbs' | 'fat' | 'fiber' | 'salt' | 'kcal').
+   * opts:  { six: boolean, style: string }
+   *
+   * Both v and k are escaped: a caller must never have to remember to.
+   * ==================================================================== */
+  function statGrid(cells, opts) {
+    const o = opts || {};
+    return (
+      '<div class="pf-macros' + (o.six ? ' pf-macros--6' : '') + '"' +
+      (o.style ? ' style="' + fmt.esc(o.style) + '"' : '') + '>' +
+      cells
+        .map(
+          c =>
+            '<div class="pf-macro pf-macro--' + c.cls + '">' +
+            '<span class="pf-macro__v">' + fmt.esc(String(c.v)) + '</span>' +
+            '<span class="pf-macro__k">' + fmt.esc(c.k) + '</span>' +
+            '</div>'
+        )
+        .join('') +
+      '</div>'
+    );
+  }
+
+  /* =======================================================================
+   * MACRO NUMBER STRIP — the stat grid filled with the four (or six) macros
    * ==================================================================== */
   function macroStrip(n, opts) {
     const o = opts || {};
@@ -194,18 +235,9 @@
       cells.push({ k: 'fiber', v: fmt.num(n.fiber, 1), cls: 'fiber' });
       cells.push({ k: 'salt', v: fmt.num(n.salt, 2), cls: 'salt' });
     }
-    return (
-      '<div class="pf-macros' + (o.six ? ' pf-macros--6' : '') + '">' +
-      cells
-        .map(
-          c =>
-            '<div class="pf-macro pf-macro--' + c.cls + '">' +
-            '<span class="pf-macro__v">' + c.v + '</span>' +
-            '<span class="pf-macro__k">' + t('card.' + c.k) + '</span>' +
-            '</div>'
-        )
-        .join('') +
-      '</div>'
+    return statGrid(
+      cells.map(c => ({ v: c.v, k: t('card.' + c.k), cls: c.cls })),
+      { six: o.six }
     );
   }
 
@@ -284,7 +316,7 @@
           '<div class="pf-timing__slot' + (isNow ? ' is-now' : '') +
           '" data-score="' + v + '" data-tip="' +
           fmt.esc(PF.i18n.slotName(slot.key) + ' · ' + v + '/5') + '">' +
-          '<span class="pf-timing__icon">' + slot.emoji + '</span>' +
+          '<span class="pf-timing__icon">' + fmt.esc(slot.emoji) + '</span>' +
           '<span class="pf-timing__name">' + fmt.esc(PF.i18n.slotName(slot.key)) + '</span>' +
           '<span class="pf-timing__bar" style="--v:' + v + '"><span></span></span>' +
           '</div>'
@@ -352,6 +384,23 @@
           return '<span class="pf-tag' + cls + '">' + fmt.esc(PF.i18n.tagName(tg)) + '</span>';
         })
         .join('') +
+      '</div>'
+    );
+  }
+
+  /**
+   * A plain row of free-text tags — equipment, pairings, and so on.
+   *
+   * Unlike `tagChips`, nothing here is looked up in the dictionary: the
+   * strings are already the label. Returns '' for an empty list so a caller
+   * can hand it straight to `block()` and have the heading disappear too.
+   */
+  function tagList(items) {
+    const list = items || [];
+    if (!list.length) return '';
+    return (
+      '<div class="pf-card__tags">' +
+      list.map(x => '<span class="pf-tag">' + fmt.esc(x) + '</span>').join('') +
       '</div>'
     );
   }
@@ -426,6 +475,86 @@
   }
 
   /* =======================================================================
+   * BARE APPROXIMATE NUMBER
+   *
+   * A price in a column that already says "lei/100g P" must not repeat the
+   * unit, so `fmt.ronApprox` is the wrong tool — but it still has to carry
+   * the `≈`, because no price in this atlas was ever read off a shelf.
+   * Seven call sites in three files were spelling out
+   * `(verified ? '' : '≈') + fmt.num(v, 1)`, and two of them had dropped
+   * the `≈`. One function, so the marker cannot be forgotten again.
+   *
+   * A missing price is an em dash, never "≈ —".
+   * ==================================================================== */
+  function approxNum(value, verified, decimals) {
+    if (!value || !Number.isFinite(value)) return '—';
+    return (verified ? '' : '≈') + fmt.num(value, decimals === undefined ? 1 : decimals);
+  }
+
+  /* =======================================================================
+   * FOOD EMOJI
+   *
+   * The ONE place a data-supplied emoji reaches innerHTML unescaped.
+   *
+   * It cannot be escaped: `fmt.esc` would turn a perfectly good 🍽️ into
+   * itself but a stray quote into `&#39;`, and the field is meant to be a
+   * glyph, not markup. What makes that safe is `tools/check.js` section 9b,
+   * which refuses any `emoji` field on a food or a recipe that is longer
+   * than three code points or contains < > & " ' \. Six files were each
+   * inlining `(f.emoji || '🍽️')`, so the guarantee was spread over ten
+   * call sites; now there is one to audit.
+   *
+   * Note the fallbacks used to disagree — cards fell back to the category
+   * emoji, the shopping list to an empty string, everybody else to 🍽️.
+   * Pass `fallback` where that difference is deliberate.
+   * ==================================================================== */
+  const EMOJI_FALLBACK = '🍽️';
+
+  function foodEmoji(food, fallback) {
+    const e = food && food.emoji;
+    if (typeof e === 'string' && e) return e;
+    return fallback === undefined ? EMOJI_FALLBACK : fallback;
+  }
+
+  /* =======================================================================
+   * EMPTY STATE
+   *
+   * "Nothing to show" was written out longhand in boards, compare, recipes
+   * and the tray — six copies, three of which had quietly lost the
+   * explanatory line, which is the only part that tells you what to do next.
+   * ==================================================================== */
+  function emptyState(o) {
+    return (
+      '<div class="pf-empty"' + (o.style ? ' style="' + fmt.esc(o.style) + '"' : '') + '>' +
+      '<span class="pf-empty__icon">' + (o.icon || '∅') + '</span>' +
+      '<span class="pf-empty__title">' + fmt.esc(o.title) + '</span>' +
+      (o.text ? '<span class="pf-empty__text">' + fmt.esc(o.text) + '</span>' : '') +
+      /* `action` is raw markup on purpose — it is a button the caller built. */
+      (o.action || '') +
+      '</div>'
+    );
+  }
+
+  /* =======================================================================
+   * TITLED BLOCK — the dossier/section wrapper
+   *
+   * Lived in modal.js while recipes.js hand-wrote the same two elements
+   * seven times. Returns nothing for an empty body, so a caller can build
+   * the body conditionally without also guarding the heading.
+   * ==================================================================== */
+  function block(title, bodyHtml, badge) {
+    if (!bodyHtml) return '';
+    return (
+      '<section class="pf-block">' +
+      '<div class="pf-block__head">' + fmt.esc(title) +
+      (badge ? '<span class="pf-badge">' + fmt.esc(badge) + '</span>' : '') +
+      '</div>' +
+      '<div class="pf-block__body">' + bodyHtml + '</div>' +
+      '</section>'
+    );
+  }
+
+  /* =======================================================================
    * AVAILABILITY DOT
    * ==================================================================== */
   const AVAIL_LABEL = {
@@ -452,6 +581,11 @@
     macroBar: macroBar,
     macroLegend: macroLegend,
     macroStrip: macroStrip,
+    statGrid: statGrid,
+    emptyState: emptyState,
+    block: block,
+    foodEmoji: foodEmoji,
+    approxNum: approxNum,
     effortChip: effortChip,
     timeChip: timeChip,
     storePill: storePill,
@@ -461,6 +595,7 @@
     purityMeter: purityMeter,
     orb: orb,
     tagChips: tagChips,
+    tagList: tagList,
     dietChips: dietChips,
     qualityNote: qualityNote,
     qualityBadge: qualityBadge,

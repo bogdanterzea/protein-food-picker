@@ -87,7 +87,7 @@
 
       /* ---------- header ---------- */
       '<header class="pf-card__head">' +
-      '<span class="pf-card__icon">' + (food.emoji || PF.i18n.catEmoji(food.category)) + '</span>' +
+      '<span class="pf-card__icon">' + ui.foodEmoji(food, PF.i18n.catEmoji(food.category)) + '</span>' +
       '<span class="pf-card__id">' +
       '<h3 class="pf-card__name">' + fmt.highlight(food.nameRo || food.name, q) + '</h3>' +
       '<span class="pf-card__brand">' +
@@ -157,7 +157,7 @@
     return (
       '<tr data-id="' + fmt.esc(food.id) + '">' +
       '<td><div class="pf-td-name">' +
-      '<span>' + (food.emoji || '🍽️') + '</span>' +
+      '<span>' + ui.foodEmoji(food) + '</span>' +
       '<span><b>' + fmt.highlight(food.nameRo || food.name, q) + '</b>' +
       '<small>' + fmt.esc(food.brand !== 'generic' ? food.brand : PF.i18n.catName(food.category)) +
       '</small></span></div></td>' +
@@ -169,8 +169,7 @@
       '<td class="num">' + fmt.num(d.carbs100, 1) + '</td>' +
       '<td class="num">' + fmt.num(d.fat100, 1) + '</td>' +
       '<td class="num">' + fmt.num(d.perServing.protein, 1) + '</td>' +
-      '<td class="num">' + (d.ronPer100gProtein
-        ? (d.priceVerified ? '' : '≈') + fmt.num(d.ronPer100gProtein, 1) : '—') + '</td>' +
+      '<td class="num">' + ui.approxNum(d.ronPer100gProtein, d.priceVerified, 1) + '</td>' +
       '<td class="num">' + fmt.minutes(food.timeMin, PF.i18n.lang()) + '</td>' +
       '<td class="num">' + Math.round(d.score) + '</td>' +
       '</tr>'

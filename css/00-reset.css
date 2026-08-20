@@ -33,8 +33,7 @@ fieldset, legend {
 }
 
 ul[role='list'],
-ol[role='list'],
-.pf-list-reset {
+ol[role='list'] {
   list-style: none;
 }
 
@@ -136,7 +135,7 @@ dialog::backdrop {
 /* Scrollbars — subtle, themed, non-intrusive. */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--border-strong, #2b3648) transparent;
+  scrollbar-color: var(--border-strong, rgba(140, 175, 225, 0.26)) transparent;
 }
 
 *::-webkit-scrollbar {
@@ -149,20 +148,20 @@ dialog::backdrop {
 }
 
 *::-webkit-scrollbar-thumb {
-  background: var(--border-strong, #2b3648);
+  background: var(--border-strong, rgba(140, 175, 225, 0.26));
   border-radius: 999px;
   border: 2px solid transparent;
   background-clip: padding-box;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-dim, #3b4a63);
+  background: var(--accent-dim, rgba(30, 201, 159, 0.2));
   background-clip: padding-box;
 }
 
 /* Focus: always visible, always themed. Never remove without replacing. */
 :focus-visible {
-  outline: 2px solid var(--focus, #7dd3fc);
+  outline: 2px solid var(--focus, #38bdf8);
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -190,8 +189,12 @@ dialog::backdrop {
   left: 8px;
   z-index: 9999;
   padding: 10px 16px;
-  background: var(--accent, #4ade80);
-  color: #04121a;
+  background: var(--accent, #1ec99f);
+  /* Was a hardcoded #04121a. In light mode that put near-black on the dark
+   * green light-accent for 3.73:1 — a WCAG AA failure on the one control
+   * that exists purely for accessibility. --accent-ink flips per theme:
+   * 8.09:1 dark, 5.09:1 light. */
+  color: var(--accent-ink);
   font-weight: 700;
   border-radius: 8px;
   transition: top 0.18s ease;

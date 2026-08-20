@@ -577,11 +577,28 @@
   color: var(--text-3);
 }
 
+/* Taste axes. These five were picked against the dark surface, where they sit
+ * at 6.7-12.6:1 — but on white they collapse to 1.44-2.72:1, under even the
+ * 3:1 floor for a non-text fill. A pastel that reads as a colour on near-black
+ * reads as almost-nothing on near-white; there is no single value that serves
+ * both, so the light theme gets its own step of the same hue.
+ *
+ * Light values are the same hue and saturation, darkened until each clears
+ * 3.2:1 on #fff. Checked for mutual distinctness with CIE76 rather than with
+ * contrast ratios — tuning them all to one contrast makes their luminances
+ * identical by construction, so a contrast check cannot see hue at all. The
+ * closest pair is ΔE 31, comfortably above the ~20 categorical colours need. */
 .pf-taste__axis[data-axis='sweetness']  { --c: #f0abfc; }
 .pf-taste__axis[data-axis='saltiness']  { --c: #93c5fd; }
 .pf-taste__axis[data-axis='umami']      { --c: #fca5a5; }
 .pf-taste__axis[data-axis='richness']   { --c: #fcd34d; }
 .pf-taste__axis[data-axis='intensity']  { --c: #a78bfa; }
+
+:root[data-theme='light'] .pf-taste__axis[data-axis='sweetness'] { --c: #e247fd; }
+:root[data-theme='light'] .pf-taste__axis[data-axis='saltiness'] { --c: #2e90ff; }
+:root[data-theme='light'] .pf-taste__axis[data-axis='umami']     { --c: #fd5252; }
+:root[data-theme='light'] .pf-taste__axis[data-axis='richness']  { --c: #b38900; }
+:root[data-theme='light'] .pf-taste__axis[data-axis='intensity'] { --c: #9a79fc; }
 
 /* =========================================================================
  * 9. SCORE ORB — the single headline number

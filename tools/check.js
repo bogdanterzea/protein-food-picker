@@ -237,6 +237,60 @@ compFiles.forEach(f => {
 rawPrice.length ? fail('preț afișat fără ≈', rawPrice.join(', '))
                 : ok('toate prețurile trec prin formatorul de estimare');
 
+/* ----------------------------------------------------------- 8a. PWA --- */
+section('8a. Instalare și offline');
+const crypto = require('crypto');
+const swPath = path.join(ROOT, 'sw.js');
+const manPath = path.join(ROOT, 'manifest.webmanifest');
+
+if (!fs.existsSync(swPath) || !fs.existsSync(manPath)) {
+  fail('sw.js sau manifest.webmanifest lipsesc', 'rulează node tools/build-sw.js');
+} else {
+  const idxSrc = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+
+  /* Recompute exactly what tools/build-sw.js would, and compare. A stale
+   * service worker is worse than none: it serves an old app from cache with
+   * no sign that it is old. */
+  const refs = [];
+  const rx = /(?:href|src)="((?:css|js)\/[^"]+)"/g;
+  let mm;
+  while ((mm = rx.exec(idxSrc))) if (refs.indexOf(mm[1]) === -1) refs.push(mm[1]);
+  const all = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon-192.png',
+    'icons/icon-512.png', 'icons/icon-maskable-512.png'].concat(refs);
+
+  const h = crypto.createHash('sha256');
+  all.forEach(a => {
+    const fp = path.join(ROOT, a === './' ? 'index.html' : a);
+    if (fs.existsSync(fp) && fs.statSync(fp).isFile()) h.update(fs.readFileSync(fp));
+  });
+  const expect = h.digest('hex').slice(0, 12);
+  const swSrc = fs.readFileSync(swPath, 'utf8');
+
+  swSrc.indexOf("pf-atlas-" + expect) !== -1
+    ? ok('service worker la zi', expect + ' · ' + all.length + ' fișiere')
+    : fail('service worker învechit', 'rulează node tools/build-sw.js');
+
+  const notCached = all.filter(a => a !== './' && swSrc.indexOf('"' + a + '"') === -1);
+  notCached.length ? fail('fișiere neincluse în precache', notCached.slice(0, 4).join(', '))
+                   : ok('tot ce încarcă index.html e în precache');
+
+  const man = JSON.parse(fs.readFileSync(manPath, 'utf8'));
+  const need = ['name', 'short_name', 'start_url', 'display', 'icons'];
+  const gaps = need.filter(k => !man[k]);
+  const sizes = (man.icons || []).map(i => i.sizes);
+  if (gaps.length) fail('manifest incomplet', gaps.join(', '));
+  else if (sizes.indexOf('192x192') === -1 || sizes.indexOf('512x512') === -1) {
+    fail('manifest fără iconițele cerute de Chrome', '192x192 și 512x512');
+  } else if (!(man.icons || []).some(i => i.purpose === 'maskable')) {
+    warn('manifest fără iconiță maskable', 'Android o va decupa pătrat');
+  } else ok('manifest instalabil', man.icons.length + ' iconițe');
+
+  /* The app must keep working from file://, where service workers are banned. */
+  /^\s*if \(location\.protocol === 'file:'\) return;/m.test(idxSrc)
+    ? ok('înregistrarea e sărită pe file://')
+    : fail('lipsește garda pentru file://', 'aplicația trebuie să meargă și fără server');
+}
+
 /* --------------------------------------------------- 8b. DOCUMENTAȚIE --- */
 section('8b. Documentația generată');
 /* Fiecare .md trebuie să aibă perechea .html generată, iar aceasta nu are
@@ -282,7 +336,12 @@ section('9b. Siguranța injectării în DOM');
 /* Emoji-urile se pun direct în innerHTML fără escapare, deci trebuie să fie
  * cu adevărat emoji — nu text arbitrar care ar putea conține markup. */
 const badEmoji = [];
-RAW.concat(RECIPES).forEach(f => {
+/* Not just products and recipes: cooking methods and stores carry emoji into
+ * innerHTML too, and that gap let PF_METHODS through unchecked for a while. */
+const METHODS = global.window.PF_METHODS || {};
+const emojiBearing = RAW.concat(RECIPES).concat(STORES)
+  .concat(Object.keys(METHODS).map(k => Object.assign({ id: 'method:' + k }, METHODS[k])));
+emojiBearing.forEach(f => {
   const e = f.emoji;
   if (e === undefined) return;
   if (typeof e !== 'string' || [...e].length > 3 || /[<>&"'\\]/.test(e)) {
@@ -290,7 +349,7 @@ RAW.concat(RECIPES).forEach(f => {
   }
 });
 badEmoji.length ? fail('câmp emoji nesigur sau prea lung', badEmoji.slice(0, 5).join(', '))
-                : ok('toate emoji-urile sunt sigure pentru injectare');
+                : ok('emoji sigure', emojiBearing.length + ' intrări: produse, rețete, magazine, metode');
 
 /* ------------------------------------------------------------ 10. I18N --- */
 section('10. Dicționar RO/EN');

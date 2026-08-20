@@ -40,6 +40,7 @@ global.document = {
 };
 
 require(path.join(ROOT, 'js/utils/format.js'));
+require(path.join(ROOT, 'js/utils/i18n.js'));
 require(path.join(ROOT, 'js/utils/compute.js'));
 require(path.join(ROOT, 'js/utils/storage.js'));
 
@@ -47,6 +48,7 @@ const PF = global.window.PF;
 const C = PF.compute;
 const F = PF.fmt;
 const ST = PF.store;
+const I = PF.i18n;
 
 /* -----------------------------------------------------------------------
  * TINY TEST HARNESS
@@ -640,6 +642,35 @@ t('every goal is defined with min ≤ rec ≤ max', function () {
   });
 });
 
+t('the meal split keeps every meal near the leucine threshold', function () {
+  /* Muscle protein synthesis needs ~25-30 g of quality protein per meal to
+   * cross the ~2.5-3 g leucine threshold, and gains no further signal past
+   * ~40 g. A fixed "divide by four" misses that window at both ends: 50 g a
+   * meal at a 200 g target, 19 g a meal at 75 g. Assert the window instead
+   * of the divisor, so the rule is what is pinned, not the arithmetic. */
+  [50, 60, 70, 80, 90, 100, 110].forEach(function (w) {
+    const r = C.proteinTarget(w, 'muscle');
+    ok(r.meals >= 3 && r.meals <= 6, w + ' kg: ' + r.meals + ' meals is a plausible day');
+    ok(r.perMeal >= 25 && r.perMeal <= 40,
+      w + ' kg: ' + r.perMeal + ' g per meal is inside 25-40');
+    eq(Math.round(r.target / r.meals), r.perMeal, w + ' kg: perMeal matches target/meals');
+  });
+});
+
+t('a low target uses fewer, not smaller, meals', function () {
+  /* The failure mode this guards: dividing a small target by four drops every
+   * meal under the threshold, so the whole day signals less than it should. */
+  const low = C.proteinTarget(50, 'sedentary');
+  eq(low.meals, 3, 'floor of three meals');
+  ok(low.perMeal >= 13, 'still splits rather than collapsing to one meal');
+});
+
+t('a very large target caps the meal count instead of exploding it', function () {
+  const big = C.proteinTarget(250, 'muscle');
+  eq(big.meals, 6, 'capped at six');
+  ok(big.perMeal > 40, 'honest that the cap is exceeded rather than faking six 35 g meals');
+});
+
 t('the five documented goals exist', function () {
   eq(Object.keys(C.GOALS).sort().join(','), 'active,cutting,muscle,sedentary,senior');
 });
@@ -737,6 +768,15 @@ t('the flag threshold is ±18% and is symmetric', function () {
     '+26.9% must fail');
   ok(food({ per100g: { protein: 20, carbs: 10, fat: 5, kcal: 220 } })._d.flags.indexOf('energy-mismatch') !== -1,
     '−25% must fail');
+});
+
+/* Nothing to compare against means no measurement, not a 100% mismatch.
+ * energyDelta() used to answer the literal 1 for a kcal-less entry, which the
+ * flag check filtered out but which any other reader saw as a real figure. */
+t('no declared kcal means no delta at all', function () {
+  const d = food({ per100g: { protein: 20, carbs: 10, fat: 5 } })._d;
+  eq(d.energyDelta, null, 'delta');
+  ok(d.flags.indexOf('energy-mismatch') === -1, 'no flag');
 });
 
 t('sugars > carbs and satFat > fat raise their own flags', function () {
@@ -1009,6 +1049,26 @@ t('a small non-zero value never collapses to a bare 0', function () {
   eq(F.num(0.05), '0.1', '0.05 rounds up instead');
 });
 
+/* The "<" bound has to follow the decimals asked for. It used to be the
+ * hard-coded 0.05/"<0.1" pair, so num(0.004, 2) claimed "<0.1" — true but a
+ * hundred times vaguer than the caller asked for — and num(0.4, 0) fell
+ * through the bound entirely and printed the bare "0" the rule forbids. */
+t('the "<" bound follows the requested decimals', function () {
+  eq(F.num(0.004, 2), '<0.01', '2 decimals');
+  eq(F.num(0.4, 0), '<1', '0 decimals');
+  eq(F.num(0.0004, 3), '<0.001', '3 decimals');
+  eq(F.num(-0.4, 0), '0', 'negatives still round to a plain 0');
+});
+
+t('dec() prints num() in the locale separator', function () {
+  F.setLocale('ro');
+  eq(F.dec(5.4), '5,4', 'ro-RO');
+  eq(F.dec(0.04), '<0,1', 'the "<" form is localised too');
+  F.setLocale('en');
+  eq(F.dec(5.4), '5.4', 'en-GB');
+  F.setLocale('ro');
+});
+
 t('num never renders a negative zero', function () {
   eq(F.num(-0.04, 1), '0', '-0.04');
   eq(F.num(-0.0), '0', '-0');
@@ -1081,6 +1141,15 @@ t('timeBucket colours the chip', function () {
   eq(F.timeBucket(31), 'slow', '31');
 });
 
+/* minutes() renders a missing time as "—", so the chip beside it must not
+ * claim a colour. It used to answer 'instant' for null and 'slow' for
+ * undefined — the same absent field painting the chip green or red. */
+t('a missing time has no bucket', function () {
+  eq(F.timeBucket(null), 'unknown', 'null');
+  eq(F.timeBucket(undefined), 'unknown', 'undefined');
+  eq(F.timeBucket(NaN), 'unknown', 'NaN');
+});
+
 /* =======================================================================
  * 15. MONEY
  * ==================================================================== */
@@ -1137,6 +1206,24 @@ t('ronRange falls back when the band is unknown', function () {
 
 t('a verified price drops both the ≈ and the range', function () {
   eq(F.ronRange(30, 24, 36, { verified: true }), '30,00 lei');
+});
+
+/* The money formatters used to guard with Number.isNaN() only, which lets
+ * Infinity and numeric strings straight through: ron(Infinity) printed
+ * "Infinity lei" and ron('12.5') threw, because a string has no .toFixed. */
+t('no money formatter can print Infinity or throw on a string', function () {
+  eq(F.ron(Infinity), '—', 'ron Infinity');
+  eq(F.ronShort(Infinity), '—', 'ronShort Infinity');
+  eq(F.ronApprox(Infinity), '—', 'ronApprox Infinity');
+  eq(F.ronApprox(NaN), '—', 'ronApprox NaN');
+  eq(F.ronRange(Infinity, 1, 2), '—', 'ronRange Infinity');
+  eq(F.ron('12.5'), '12,50 lei', 'a numeric string is coerced, not thrown at');
+  eq(F.ron('nu e număr'), '—', 'a non-numeric string');
+});
+
+t('zero is a missing price on every money path, including the range', function () {
+  eq(F.ronRange(0, 0, 0), '—', 'ronRange with a zero band');
+  eq(F.ronShort(NaN), '—', 'ronShort NaN');
 });
 
 /* =======================================================================
@@ -1297,9 +1384,136 @@ t('clamp and scale behave', function () {
 });
 
 /* =======================================================================
- * 19. PF.store — URL HASH STATE (no DOM needed)
+ * 19. PF.i18n — LOOKUP, PLACEHOLDERS, DOM APPLICATION
+ *
+ * applyDom() needs just enough of an element to be driven: the attributes it
+ * reads, the two sinks it writes, and a selector match on "[attr]".
  * ==================================================================== */
-section('19. PF.store.readHash / writeHash');
+section('19. PF.i18n.t / tf / applyDom');
+
+function el(attrs, children) {
+  return {
+    attrs: attrs || {},
+    kids: children || [],
+    textContent: null,
+    innerHTML: null,
+    getAttribute: function (k) {
+      return Object.prototype.hasOwnProperty.call(this.attrs, k) ? this.attrs[k] : null;
+    },
+    setAttribute: function (k, v) { this.attrs[k] = v; },
+    matches: function (sel) {
+      return Object.prototype.hasOwnProperty.call(this.attrs, sel.slice(1, -1));
+    },
+    querySelectorAll: function (sel) {
+      const name = sel.slice(1, -1);
+      return this.kids.filter(function (c) {
+        return Object.prototype.hasOwnProperty.call(c.attrs, name);
+      });
+    }
+  };
+}
+
+t('an unknown key degrades to the key itself, or to the given fallback', function () {
+  eq(I.t('nope.not.here'), 'nope.not.here', 'no fallback');
+  eq(I.t('nope.not.here', 'Ceva'), 'Ceva', 'with fallback');
+  eq(I.has('nope.not.here'), false, 'has() agrees');
+  eq(I.has('app.title'), true, 'a real key');
+});
+
+/* A dotted key is looked up on a plain object literal, so an inherited name
+ * must not resolve — t('toString') returning a function would be printed. */
+t('inherited Object properties are not translations', function () {
+  eq(I.has('constructor'), false, 'constructor');
+  eq(I.has('toString'), false, 'toString');
+  eq(I.t('toString'), 'toString', 'falls through to the key');
+});
+
+t('an unknown language falls back to Romanian', function () {
+  eq(I.setLang('klingon'), 'ro', 'setLang returns what it settled on');
+  eq(I.lang(), 'ro', 'lang()');
+});
+
+t('tf substitutes every placeholder it is given a value for', function () {
+  const out = I.tf('hero.eyebrow', { n: 505, c: 8, s: 18 });
+  ok(out.indexOf('505') !== -1, 'n');
+  ok(out.indexOf('{n}') === -1, 'no placeholder left');
+});
+
+/* Leaving "{n}" on screen is how a wiring mistake gets noticed; printing
+ * "undefined" is how it ships. 0 and '' are values, not mistakes. */
+t('tf leaves a placeholder alone unless it has a real value', function () {
+  eq(I.tf('x.missing.key', { n: 1 }), 'x.missing.key', 'unknown key still returns the key');
+  const raw = I.t('hero.eyebrow');
+  ok(I.tf('hero.eyebrow', {}).indexOf('{n}') !== -1, 'no params object entry');
+  ok(I.tf('hero.eyebrow', { n: undefined }).indexOf('{n}') !== -1, 'undefined');
+  ok(I.tf('hero.eyebrow', { n: null }).indexOf('{n}') !== -1, 'null');
+  ok(I.tf('hero.eyebrow', { n: 0 }).indexOf('{n}') === -1, '0 is a value');
+  ok(I.tf('hero.eyebrow', { n: '' }).indexOf('{n}') === -1, 'empty string is a value');
+  eq(I.tf('hero.eyebrow'), raw, 'no params at all leaves the string untouched');
+});
+
+t('applyDom writes text, html and attributes, and counts what it wrote', function () {
+  const text = el({ 'data-i18n': 'app.title' });
+  const html = el({ 'data-i18n-html': 'app.title' });
+  const attr = el({ 'data-i18n-attr': 'placeholder:search.placeholder;title:app.title' });
+  const root = el({}, [text, html, attr]);
+  eq(I.applyDom(root), 4, 'two nodes plus two attributes');
+  eq(text.textContent, I.t('app.title'), 'textContent');
+  eq(html.innerHTML, I.t('app.title'), 'innerHTML');
+  eq(attr.attrs.placeholder, I.t('search.placeholder'), 'first attribute');
+  eq(attr.attrs.title, I.t('app.title'), 'second attribute');
+});
+
+/* The Romanian already in index.html is the fallback, so a typo must leave
+ * the node exactly as the author wrote it rather than printing "foo.bar". */
+t('applyDom leaves a node untouched when the key is unknown or malformed', function () {
+  const bad = el({ 'data-i18n': 'no.such.key' });
+  const empty = el({ 'data-i18n': '' });
+  const halfPair = el({ 'data-i18n-attr': 'title' });
+  const noAttrName = el({ 'data-i18n-attr': ':app.title' });
+  const root = el({}, [bad, empty, halfPair, noAttrName]);
+  eq(I.applyDom(root), 0, 'nothing written');
+  eq(bad.textContent, null, 'unknown key');
+  eq(empty.textContent, null, 'empty key');
+  eq(halfPair.attrs.title, undefined, 'pair with no colon');
+});
+
+t('applyDom translates the root element itself and survives a bad root', function () {
+  const root = el({ 'data-i18n': 'app.title' });
+  eq(I.applyDom(root), 1, 'root counted');
+  eq(root.textContent, I.t('app.title'), 'root written');
+  eq(I.applyDom({}), 0, 'an object with no querySelectorAll');
+  eq(I.applyDom(null) >= 0, true, 'null falls back to document');
+});
+
+t('label tables answer for a slug they do not know', function () {
+  eq(I.catName('dairy-eggs'), 'Lactate & ouă', 'known category');
+  eq(I.catName('nu-exista'), 'Nu Exista', 'unknown category is titleized');
+  eq(I.catEmoji('nu-exista'), '🍽️', 'unknown category emoji');
+  eq(I.dietName('vegan'), 'Vegan', 'known diet');
+  eq(I.dietName('nu-exista'), 'nu-exista', 'unknown diet keeps the key');
+  eq(I.tagName('no-cook'), 'Fără gătit', 'known tag');
+  eq(I.tagName('nu-exista'), 'Nu Exista', 'unknown tag is titleized');
+});
+
+/* SLOTS carried an `hours` array that nobody read and that disagreed with
+ * slotForHour(); slotForHour() is now the only hour → slot mapping. */
+t('slotForHour is the single source of truth for the clock', function () {
+  eq(I.SLOTS.every(function (s) { return s.hours === undefined; }), true, 'no rival table');
+  eq(I.slotForHour(8), 'breakfast', '08:00');
+  eq(I.slotForHour(13), 'lunch', '13:00');
+  eq(I.slotForHour(16), 'snack', '16:00');
+  eq(I.slotForHour(19), 'dinner', '19:00');
+  eq(I.slotForHour(22), 'beforeBed', '22:00');
+  eq(I.slotForHour(3), 'snack', '03:00 has no wrong answer');
+  eq(I.SLOTS.every(function (s) { return typeof I.slotName(s.key) === 'string'; }),
+    true, 'every slot has a name');
+});
+
+/* =======================================================================
+ * 20. PF.store — URL HASH STATE (no DOM needed)
+ * ==================================================================== */
+section('20. PF.store.readHash / writeHash');
 
 t('an empty hash means no state', function () {
   location.hash = '';
@@ -1325,6 +1539,15 @@ t('a numeric search query stays a string', function () {
   const s = ST.readHash();
   eq(s.q, '100', 'q stays text');
   eq(s.min, 100, 'other keys become numbers');
+});
+
+/* The comma rule turns a value into a list, which is right for tags and
+ * wrong for the search box: "ton, pui" used to come back as an array. */
+t('a search query keeps its commas and its spaces', function () {
+  location.hash = '#q=' + encodeURIComponent('ton, pui') + '&tags=vegan,keto';
+  const s = ST.readHash();
+  eq(s.q, 'ton, pui', 'q stays one string');
+  eq(Array.isArray(s.tags), true, 'tags still split');
 });
 
 t('readHash survives junk instead of throwing', function () {

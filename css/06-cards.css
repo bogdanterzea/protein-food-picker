@@ -405,12 +405,16 @@
 
 .pf-card__flag--local {
   background: var(--tier-s);
-  color: #2a1a00;
+  /* --tier-s is light yellow in dark mode but dark orange in light mode, so
+   * a fixed dark ink read at 3.36:1 in light. --text-inverse flips with the
+   * theme: 13.16:1 dark, 5.02:1 light. */
+  color: var(--text-inverse);
 }
 
 .pf-card__flag--cheap {
   background: var(--stat-value);
-  color: #14210a;
+  /* Same flip as --local: 2.96:1 in light with the old fixed ink. */
+  color: var(--text-inverse);
 }
 
 /* The corner ribbon sits in the same corner as the tier badge, so give the

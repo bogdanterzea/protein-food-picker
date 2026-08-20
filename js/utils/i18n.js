@@ -196,7 +196,7 @@
       'calc.goal.cutting': 'Definire / deficit caloric',
       'calc.goal.senior': 'Peste 65 de ani',
       'calc.perDay': 'g de proteină pe zi',
-      'calc.perMeal': 'pe masă (4 mese)',
+      'calc.perMeal': 'pe masă ({n} mese)',
       'calc.targetShort': 'țintă',
 
       /* --- oracle -------------------------------------------------------------- */
@@ -267,6 +267,17 @@
       'res.none': 'Niciun produs nu trece de filtre',
       'res.noneHelp': 'Relaxează un filtru — de obicei „proteină minimă” sau „cost maxim” e vinovatul.',
       'res.resetFilters': 'Resetează filtrele',
+      'preset.title': 'Ce cauți?',
+      'preset.value': 'Ieftin și bogat',
+      'preset.value.hint': 'Cea mai multă proteină pe leu',
+      'preset.ready': 'Fără gătit',
+      'preset.ready.hint': 'Se mănâncă direct din ambalaj',
+      'preset.quick': 'Sub 20 de minute',
+      'preset.quick.hint': 'Gata până se face garnitura',
+      'preset.lean': 'Slab',
+      'preset.lean.hint': 'Peste 45% din calorii din proteină',
+      'preset.best': 'Cele mai bune',
+      'preset.best.hint': 'Proteină completă, rang mare',
       'res.loadMore': 'Încarcă încă {n} produse',
       'res.remaining': '({n} rămase)',
 
@@ -504,7 +515,7 @@
       'calc.goal.cutting': 'Cutting / calorie deficit',
       'calc.goal.senior': 'Over 65',
       'calc.perDay': 'g of protein per day',
-      'calc.perMeal': 'per meal (4 meals)',
+      'calc.perMeal': 'per meal ({n} meals)',
       'calc.targetShort': 'target',
 
       'oracle.title': 'What do I eat right now?',
@@ -571,6 +582,17 @@
       'res.none': 'No product passes the filters',
       'res.noneHelp': 'Relax a filter — usually "min protein" or "max cost" is the culprit.',
       'res.resetFilters': 'Reset filters',
+      'preset.title': 'What are you after?',
+      'preset.value': 'Cheap and rich',
+      'preset.value.hint': 'The most protein per leu',
+      'preset.ready': 'No cooking',
+      'preset.ready.hint': 'Eaten straight from the pack',
+      'preset.quick': 'Under 20 minutes',
+      'preset.quick.hint': 'Done before the side dish is',
+      'preset.lean': 'Lean',
+      'preset.lean.hint': 'Over 45% of calories from protein',
+      'preset.best': 'The best ones',
+      'preset.best.hint': 'Complete protein, high tier',
       'res.loadMore': 'Load {n} more products',
       'res.remaining': '({n} left)',
 
@@ -644,34 +666,52 @@
 
   let LANG = 'ro';
 
-  function t(key, fallback) {
+  /**
+   * The active locale's string for a key, falling back to the Romanian base,
+   * or undefined when neither table declares it.
+   *
+   * hasOwnProperty, not a truthiness test: '' is a legitimate translation (a
+   * label deliberately blanked in one locale) and Object.prototype carries
+   * names like 'constructor' and 'toString' that a key must never resolve to.
+   * t() and has() both route through here so they can never disagree about
+   * what "the key exists" means.
+   */
+  function lookup(key) {
     const table = DICT[LANG] || DICT.ro;
     if (Object.prototype.hasOwnProperty.call(table, key)) return table[key];
     if (Object.prototype.hasOwnProperty.call(DICT.ro, key)) return DICT.ro[key];
+    return undefined;
+  }
+
+  function t(key, fallback) {
+    const hit = lookup(key);
+    if (hit !== undefined) return hit;
+    /* No fallback given means printing the key itself: a missing translation
+     * has to be visible as "card.protein", not as an empty gap nobody spots. */
     return fallback !== undefined ? fallback : key;
   }
 
   /** True when the key exists in the active locale or in the Romanian base. */
   function has(key) {
-    const table = DICT[LANG] || DICT.ro;
-    return (
-      Object.prototype.hasOwnProperty.call(table, key) ||
-      Object.prototype.hasOwnProperty.call(DICT.ro, key)
-    );
+    return lookup(key) !== undefined;
   }
 
   /**
    * Translate a string that carries {placeholders}:
    *     tf('hero.eyebrow', { n: 505, c: 8, s: 18 })
    *     -> "Sibiu · 505 produse · 8 categorii · 18 magazine"
-   * A placeholder with no matching parameter is left as-is, so a wiring
-   * mistake shows up as "{n}" in the UI instead of a silent "undefined".
+   * A placeholder with no usable parameter is left as-is, so a wiring mistake
+   * shows up as "{n}" in the UI instead of a silent "undefined". "Usable"
+   * covers the value being absent AND the value being null or undefined —
+   * passing { n: undefined } from a half-computed summary used to print the
+   * word "undefined" onto the hero strip. 0 and '' are usable and are kept.
    */
   function tf(key, params) {
     const s = t(key);
     if (!params) return s;
     return s.replace(/\{(\w+)\}/g, function (whole, name) {
-      return Object.prototype.hasOwnProperty.call(params, name) ? String(params[name]) : whole;
+      const v = params[name];
+      return v === undefined || v === null ? whole : String(v);
     });
   }
 
@@ -761,13 +801,15 @@
   function setLang(l) {
     LANG = DICT[l] ? l : 'ro';
     if (PF.fmt) PF.fmt.setLocale(LANG);
-    try {
+    /* Guarded, not try/caught: the only expected reason there is no document
+     * is the Node test harness. A blanket catch here used to swallow every
+     * genuine error thrown inside applyDom() as well, so a broken
+     * data-i18n-attr would have failed silently on a real page. */
+    if (typeof document !== 'undefined' && document.documentElement) {
       document.documentElement.setAttribute('lang', LANG);
       /* Re-translate the static markup. Keeps index.html in sync with the
        * toggle without app.js having to know which nodes exist. */
       applyDom(document);
-    } catch (e) {
-      /* ignore */
     }
     return LANG;
   }
@@ -788,10 +830,23 @@
     'bakery-drinks-sweets': { ro: 'Panificație, băuturi & dulciuri', en: 'Bakery, drinks & sweets', emoji: '🍞' }
   };
 
+  /* Pick the active language off a {ro, en, …} record, falling back to the
+   * Romanian the whole dataset is written in. Shared by every label table
+   * below so a new locale only has to be added to the tables. */
+  function localized(entry) {
+    return entry[LANG] || entry.ro;
+  }
+
+  /* A slug with no entry in a table is still shown to a human, so it goes
+   * through titleize() rather than appearing raw. PF.fmt is loaded before this
+   * file, but the guard keeps a lone i18n.js usable in a test harness. */
+  function slugLabel(slug) {
+    return PF.fmt ? PF.fmt.titleize(slug) : slug;
+  }
+
   function catName(slug) {
     const c = CATEGORIES[slug];
-    if (!c) return PF.fmt ? PF.fmt.titleize(slug) : slug;
-    return c[LANG] || c.ro;
+    return c ? localized(c) : slugLabel(slug);
   }
 
   function catEmoji(slug) {
@@ -812,24 +867,43 @@
 
   function dietName(key) {
     const d = DIETS[key];
-    return d ? d[LANG] || d.ro : key;
+    return d ? localized(d) : key;
   }
 
-  /** Timing slot metadata: icon + the hours it covers. */
+  /**
+   * The timing slots a product can be scored against, in display order.
+   *
+   * Each entry used to carry an `hours: []` array as well. Nothing ever read
+   * it — the three components that touch SLOTS use `key` and `emoji` only —
+   * and it disagreed with slotForHour() below: it put snack at 11, 15 and 16
+   * while the clock puts it at 11 and 15–17, and it claimed hours for
+   * preWorkout and postWorkout, which slotForHour() never returns at all.
+   * Two answers to "which slot is 16:00?" is one too many, so the one nobody
+   * asked was removed rather than reconciled.
+   */
   const SLOTS = [
-    { key: 'breakfast', emoji: '🌅', hours: [6, 7, 8, 9, 10] },
-    { key: 'preWorkout', emoji: '⚡', hours: [16, 17] },
-    { key: 'postWorkout', emoji: '🏋️', hours: [18, 19] },
-    { key: 'lunch', emoji: '🍽️', hours: [12, 13, 14] },
-    { key: 'snack', emoji: '🍎', hours: [11, 15, 16] },
-    { key: 'dinner', emoji: '🌆', hours: [19, 20, 21] },
-    { key: 'beforeBed', emoji: '🌙', hours: [22, 23, 0] }
+    { key: 'breakfast', emoji: '🌅' },
+    { key: 'preWorkout', emoji: '⚡' },
+    { key: 'postWorkout', emoji: '🏋️' },
+    { key: 'lunch', emoji: '🍽️' },
+    { key: 'snack', emoji: '🍎' },
+    { key: 'dinner', emoji: '🌆' },
+    { key: 'beforeBed', emoji: '🌙' }
   ];
 
   function slotName(key) {
     return t('timing.' + key, key);
   }
 
+  /**
+   * Which slot the wall clock is in. The single source of truth for the
+   * hour → slot mapping.
+   *
+   * preWorkout and postWorkout are deliberately absent: a clock cannot know
+   * when someone trains, so those two slots are only ever chosen by the user,
+   * never inferred. Anything outside the named windows — including the small
+   * hours — falls to 'snack', the slot with no wrong answer.
+   */
   function slotForHour(h) {
     if (h >= 5 && h < 11) return 'breakfast';
     if (h >= 11 && h < 12) return 'snack';
@@ -890,9 +964,11 @@
     imported: 'Import'
   };
 
+  /* TAGS is Romanian only: the slugs are already English, so titleize() is a
+   * better English label than a second hand-written table would be. */
   function tagName(slug) {
-    if (LANG === 'en') return PF.fmt ? PF.fmt.titleize(slug) : slug;
-    return TAGS[slug] || (PF.fmt ? PF.fmt.titleize(slug) : slug);
+    if (LANG === 'en') return slugLabel(slug);
+    return TAGS[slug] || slugLabel(slug);
   }
 
   PF.i18n = {

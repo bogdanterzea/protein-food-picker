@@ -282,7 +282,7 @@
         return (
           '<button class="pf-gap__pick" data-act="gap-add" data-gap-id="' + fmt.esc(p.food.id) +
           '" data-gap-n="' + p.servings + '" title="Adaugă la masă">' +
-          '<span class="pf-gap__emoji">' + (p.food.emoji || '🍽️') + '</span>' +
+          '<span class="pf-gap__emoji">' + PF.ui.foodEmoji(p.food) + '</span>' +
           '<span class="pf-gap__txt"><b>încă ' + p.servings + ' × ' +
           fmt.esc(p.food.nameRo || p.food.name) + '</b>' +
           '<small>+' + fmt.num(p.protein, 0) + ' g proteină' +
@@ -366,12 +366,15 @@
     if (!list.length) {
       el.innerHTML =
         handle +
-        '<div class="pf-tray__body"><div class="pf-empty" style="grid-column:1/-1">' +
-        '<span class="pf-empty__icon">🛒</span>' +
-        '<span class="pf-empty__title">' + t('tray.empty') + '</span>' +
-        '<span class="pf-empty__text">Apasă „+ ' + t('card.add') +
-        '” pe orice card ca să compui o masă și să vezi cât ai adunat din ținta zilnică.</span>' +
-        '</div></div>';
+        '<div class="pf-tray__body">' +
+        PF.ui.emptyState({
+          icon: '🛒',
+          title: t('tray.empty'),
+          text: 'Apasă „+ ' + t('card.add') + '” pe orice card ca să compui o masă ' +
+            'și să vezi cât ai adunat din ținta zilnică.',
+          style: 'grid-column:1/-1'
+        }) +
+        '</div>';
       return;
     }
 
@@ -384,7 +387,7 @@
         const ps = f._d.perServing;
         return (
           '<div class="pf-trayitem" data-id="' + fmt.esc(id) + '">' +
-          '<span class="pf-trayitem__emoji">' + (f.emoji || '🍽️') + '</span>' +
+          '<span class="pf-trayitem__emoji">' + PF.ui.foodEmoji(f) + '</span>' +
           '<span class="pf-trayitem__name">' +
           '<b>' + fmt.esc(f.nameRo || f.name) + '</b>' +
           '<small>' + fmt.esc((f.serving && f.serving.label) || f._d.servingGrams + ' ' + f.unit) +
@@ -416,20 +419,18 @@
       progressRow('Calorii', tot.kcal, kcalTarget, 'var(--macro-kcal)', 'kcal') +
       gapPanel(tot.protein, target.target) +
       '<div class="pf-rule pf-rule--tight"></div>' +
-      '<div class="pf-macros pf-macros--6">' +
-      '<div class="pf-macro pf-macro--protein"><span class="pf-macro__v">' + fmt.num(tot.protein, 0) +
-      '</span><span class="pf-macro__k">' + t('card.protein') + '</span></div>' +
-      '<div class="pf-macro pf-macro--carbs"><span class="pf-macro__v">' + fmt.num(tot.carbs, 0) +
-      '</span><span class="pf-macro__k">' + t('card.carbs') + '</span></div>' +
-      '<div class="pf-macro pf-macro--fat"><span class="pf-macro__v">' + fmt.num(tot.fat, 0) +
-      '</span><span class="pf-macro__k">' + t('card.fat') + '</span></div>' +
-      '<div class="pf-macro pf-macro--fiber"><span class="pf-macro__v">' + fmt.num(tot.fiber, 0) +
-      '</span><span class="pf-macro__k">' + t('card.fiber') + '</span></div>' +
-      '<div class="pf-macro pf-macro--salt"><span class="pf-macro__v">' + fmt.num(tot.salt, 1) +
-      '</span><span class="pf-macro__k">' + t('card.salt') + '</span></div>' +
-      '<div class="pf-macro pf-macro--kcal"><span class="pf-macro__v">' + fmt.num(tot.kcal, 0) +
-      '</span><span class="pf-macro__k">kcal</span></div>' +
-      '</div>' +
+      /* Whole grams: a tray total of "128,4 g" implies a precision that
+       * summing per-serving estimates does not have. Hence statGrid with our
+       * own numbers rather than ui.macroStrip, which is a per-100 g readout
+       * off a label and rightly keeps its decimal. */
+      PF.ui.statGrid([
+        { v: fmt.num(tot.protein, 0), k: t('card.protein'), cls: 'protein' },
+        { v: fmt.num(tot.carbs, 0), k: t('card.carbs'), cls: 'carbs' },
+        { v: fmt.num(tot.fat, 0), k: t('card.fat'), cls: 'fat' },
+        { v: fmt.num(tot.fiber, 0), k: t('card.fiber'), cls: 'fiber' },
+        { v: fmt.num(tot.salt, 1), k: t('card.salt'), cls: 'salt' },
+        { v: fmt.num(tot.kcal, 0), k: 'kcal', cls: 'kcal' }
+      ], { six: true }) +
       '<p class="pf-muted" style="font-size:var(--fs-3xs);line-height:1.5">' +
       '≈ Costul e o estimare (±20–30%), nu un preț de raft.' +
       (tot.unknownCost ? ' ' + tot.unknownCost + ' produse nu au niciun preț, deci totalul e și subestimat.' : '') +
@@ -456,11 +457,12 @@
   function renderShoppingView(container) {
     const groups = shoppingList();
     if (!groups.length) {
-      container.innerHTML =
-        '<div class="pf-empty"><span class="pf-empty__icon">🛒</span>' +
-        '<span class="pf-empty__title">Lista de cumpărături e goală</span>' +
-        '<span class="pf-empty__text">Adaugă produse la masă și ele apar aici, grupate ' +
-        'după magazinul unde proteina lor e cea mai ieftină.</span></div>';
+      container.innerHTML = PF.ui.emptyState({
+        icon: '🛒',
+        title: 'Lista de cumpărături e goală',
+        text: 'Adaugă produse la masă și ele apar aici, grupate după magazinul ' +
+          'unde proteina lor e cea mai ieftină.'
+      });
       return;
     }
 
@@ -484,7 +486,7 @@
                 '<li class="pf-shop__item' + (done ? ' is-done' : '') + '">' +
                 '<input type="checkbox" data-shop-check="' + fmt.esc(it.id) + '"' +
                 (done ? ' checked' : '') + '>' +
-                '<span>' + (it.food.emoji || '') + ' ' + fmt.esc(it.food.nameRo || it.food.name) + '</span>' +
+                '<span>' + PF.ui.foodEmoji(it.food) + ' ' + fmt.esc(it.food.nameRo || it.food.name) + '</span>' +
                 '<span class="pf-shop__qty">' + fmt.num(it.grams, 0) + ' ' + it.food.unit +
                 (it.cost ? ' · ' + fmt.ronApprox(it.cost, { short: true }) : '') + '</span>' +
                 '</li>'
@@ -584,6 +586,15 @@
     onChange = changeCb || function () {};
     load();
     render();
+
+    /* Four listeners get attached below, and none of them is ever removed.
+     * A second mount() on the same node would therefore double every click:
+     * one tap on "+" would add two servings, and "Șterge" would fire twice.
+     * app.js calls this exactly once today, which is precisely why the day
+     * someone calls it twice the bug would be baffling. Same guard compare.js
+     * uses on its own container. */
+    if (el.__pfTrayBound) return;
+    el.__pfTrayBound = true;
 
     el.addEventListener('click', function (ev) {
       const act = ev.target.closest('[data-act]');

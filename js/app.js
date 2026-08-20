@@ -237,11 +237,86 @@
       '<div><b>' + target.min + '</b>min</div>' +
       '<div><b>' + target.target + '</b>' + t('calc.targetShort') + '</div>' +
       '<div><b>' + target.max + '</b>max</div>' +
-      '<div><b>' + target.perMeal + '</b>' + t('calc.perMeal') + '</div>' +
+      '<div><b>' + target.perMeal + '</b>' + PF.i18n.tf('calc.perMeal', { n: target.meals }) + '</div>' +
       '</div>' +
       '</div>' +
       '</div>' +
-      '</div>';
+      '</div>' +
+      renderPresets();
+  }
+
+  /* =======================================================================
+   * 2b. TASK PRESETS — "what do you actually want right now?"
+   *
+   * The atlas opens on 503 products behind 26 filter facets. That is the
+   * right amount of power and the wrong amount of first impression: research
+   * on nutrition apps puts complexity and time cost as the top reasons people
+   * abandon them, and a wall of facets is that cost paid up front, before the
+   * app has shown anyone anything useful.
+   *
+   * These are five questions people actually arrive with. Each is a filter
+   * preset, not a new subsystem — it drives the very same engine the rail
+   * drives, so a preset can never disagree with the rail.
+   *
+   * Every chip carries its live result count, which is the faceted-search
+   * rule that matters most here: never let someone click into an empty set.
+   * ==================================================================== */
+  const PRESETS = [
+    { key: 'value', icon: '\ud83d\udcb0',
+      patch: { minProtein: 15, noCollagen: true, sort: 'value', dir: 'asc' } },
+    { key: 'ready', icon: '\u26a1',
+      patch: { readyOnly: true, minProtein: 10, sort: 'protein', dir: 'desc' } },
+    { key: 'quick', icon: '\u23f1\ufe0f',
+      patch: { maxTime: 20, minProtein: 15, sort: 'score', dir: 'desc' } },
+    { key: 'lean', icon: '\ud83e\udd57',
+      patch: { minPurity: 45, maxFat: 8, sort: 'purity', dir: 'desc' } },
+    { key: 'best', icon: '\ud83c\udfc5',
+      patch: { completeOnly: true, noCollagen: true, minProtein: 15, sort: 'score', dir: 'desc' } }
+  ];
+
+  /**
+   * How many products a preset would show, without disturbing what is on
+   * screen. `PF.filters.state` hands back the live object, so we mutate it,
+   * ask the real engine, then put every key back exactly as it was. The
+   * alternative is reimplementing `matches()` here, and two copies of the
+   * filter rules would drift apart within a week.
+   */
+  function countWith(patch) {
+    const st = PF.filters.state;
+    const before = {};
+    Object.keys(patch).forEach(function (k) { before[k] = st[k]; st[k] = patch[k]; });
+    try {
+      return PF.filters.apply(PF.data.foods, favourites).length;
+    } finally {
+      Object.keys(before).forEach(function (k) { st[k] = before[k]; });
+    }
+  }
+
+  function renderPresets() {
+    return (
+      '<div class="pf-presets">' +
+      '<div class="pf-eyebrow">' + t('preset.title') + '</div>' +
+      '<div class="pf-chips">' +
+      PRESETS.map(function (p) {
+        return '<button class="pf-chip" data-preset="' + p.key + '" title="' +
+          fmt.esc(t('preset.' + p.key + '.hint')) + '">' + p.icon + ' ' +
+          fmt.esc(t('preset.' + p.key)) +
+          '<span class="pf-chip__n">' + countWith(p.patch) + '</span></button>';
+      }).join('') +
+      '</div></div>'
+    );
+  }
+
+  function applyPreset(key) {
+    const p = PRESETS.filter(function (x) { return x.key === key; })[0];
+    if (!p) return;
+    PF.filters.reset(true);
+    const st = PF.filters.state;
+    Object.keys(p.patch).forEach(function (k) { st[k] = p.patch[k]; });
+    setView('grid');
+    refresh();
+    window.scrollTo({ top: 0 });
+    toast(t('preset.' + p.key) + ' \u00b7 ' + visible.length + ' ' + t('res.showing'), 'ok');
   }
 
   function kpi(kind, value, label) {
@@ -383,7 +458,16 @@
     );
   }
 
-  function renderGrid() {
+  /**
+   * @param {number} [from]  index of the first card to build; when given, the
+   *                         batch is APPENDED and existing cards are left alone
+   *
+   * Rebuilding the whole grid on every "load 60 more" is quadratic: by the
+   * eighth press the browser had re-parsed and re-laid-out all 503 cards
+   * eight times over, about 230 ms of JS and 150 ms of layout thrown away.
+   * Appending only the new batch keeps each press at the cost of 60 cards.
+   */
+  function renderGrid(from) {
     const el = $('#pf-view-grid');
     if (!el) return;
     if (!visible.length) {
@@ -391,7 +475,8 @@
       return;
     }
 
-    const slice = visible.slice(0, renderLimit);
+    const append = typeof from === 'number' && from > 0 && el.querySelector('.pf-card');
+    const slice = visible.slice(append ? from : 0, renderLimit);
     const cmpSet = PF.compare.set();
     const state = {
       query: PF.filters.state.q,
@@ -418,7 +503,18 @@
           '</div>'
         : '';
 
-    el.innerHTML = '<div class="pf-grid">' + cards + '</div>' + more;
+    if (append) {
+      /* The old button must go before the new cards land, or it would sit in
+       * the middle of the grid. */
+      const oldBtn = el.querySelector('[data-act="more"]');
+      if (oldBtn) oldBtn.closest('div').remove();
+      const grid = el.querySelector('.pf-grid');
+      grid.insertAdjacentHTML('beforeend', cards);
+      if (more) grid.insertAdjacentHTML('beforeend', more);
+      return;
+    }
+
+    el.innerHTML = '<div class="pf-grid">' + cards + more + '</div>';
   }
 
   function renderTable() {
@@ -473,7 +569,7 @@
 
     el.innerHTML =
       '<section class="pf-panel"><div class="pf-panel__body">' +
-      PF.charts.scatter(visible, { width: 980, height: 500 }) +
+      PF.charts.scatter(visible, { width: 980, height: 500, table: false }) +
       '<div class="pf-chart__toggle">' +
       '<button class="pf-btn pf-btn--sm" data-act="toggle-chart-table">' +
       t('misc.dataTable') + '</button></div>' +
@@ -515,19 +611,51 @@
   /* =======================================================================
    * 6. TOASTS
    * ==================================================================== */
-  function toast(message, kind) {
+  /**
+   * @param {string} message
+   * @param {string} [kind]  'ok' | 'warn' | 'bad'
+   * @param {{action?: {label: string, fn: Function}, timeout?: number}} [opts]
+   *
+   * A toast carrying an action stays up roughly twice as long and cancels its
+   * own dismissal while hovered — a two-second window to hit a button is a
+   * button nobody hits.
+   */
+  function toast(message, kind, opts) {
     const box = $('#pf-toasts');
     if (!box) return;
+    const o = opts || {};
     const el = document.createElement('div');
     el.className = 'pf-toast pf-toast--' + (kind || 'ok');
     const icon = kind === 'bad' ? '⛔' : kind === 'warn' ? '⚠️' : '✅';
+
     el.innerHTML = '<span class="pf-toast__icon">' + icon + '</span><span>' +
-      fmt.esc(message) + '</span>';
+      fmt.esc(message) + '</span>' +
+      /* Reuses the existing button styling so it looks right without waiting
+       * for a dedicated rule; .pf-toast__action only carries spacing. */
+      (o.action
+        ? '<button class="pf-btn pf-btn--sm pf-toast__action">' +
+          fmt.esc(o.action.label) + '</button>'
+        : '');
+
+    if (o.action) {
+      el.querySelector('.pf-toast__action').addEventListener('click', function () {
+        el.remove();
+        o.action.fn();
+      });
+    }
+
     box.appendChild(el);
-    setTimeout(function () {
+
+    let timer;
+    const life = o.timeout || (o.action ? 6000 : 2600);
+    function dismiss() {
       el.classList.add('is-leaving');
       setTimeout(() => el.remove(), 260);
-    }, 2600);
+    }
+    function arm() { timer = setTimeout(dismiss, life); }
+    el.addEventListener('mouseenter', () => clearTimeout(timer));
+    el.addEventListener('mouseleave', arm);
+    arm();
   }
 
   /* =======================================================================
@@ -633,6 +761,9 @@
     /* ---- global click delegation ---- */
     document.addEventListener('click', function (ev) {
       /* recipe filters and cards */
+      const pre = ev.target.closest('[data-preset]');
+      if (pre) { applyPreset(pre.getAttribute('data-preset')); return; }
+
       const rm = ev.target.closest('[data-rmethod]');
       if (rm) { PF.recipes.setMethod(rm.getAttribute('data-rmethod')); PF.recipes.render($('#pf-view-recipes')); return; }
       const rb = ev.target.closest('[data-rbase]');
@@ -724,10 +855,14 @@
         case 'flip-dir':
           PF.filters.setSort(PF.filters.state.sort);
           break;
-        case 'more':
+        case 'more': {
+          const from = renderLimit;
           renderLimit += PAGE;
-          renderView();
+          /* Only the grid grows; going through renderView() would rebuild it. */
+          if (currentView === 'grid') renderGrid(from);
+          else renderView();
           break;
+        }
         case 'oracle':
           runOracle();
           break;
@@ -883,7 +1018,7 @@
       '<div><b>' + target.min + '</b>min</div>' +
       '<div><b>' + target.target + '</b>' + t('calc.targetShort') + '</div>' +
       '<div><b>' + target.max + '</b>max</div>' +
-      '<div><b>' + target.perMeal + '</b>' + t('calc.perMeal') + '</div>' +
+      '<div><b>' + target.perMeal + '</b>' + PF.i18n.tf('calc.perMeal', { n: target.meals }) + '</div>' +
       '</div>';
     box.classList.remove('pf-flash');
     void box.offsetWidth;

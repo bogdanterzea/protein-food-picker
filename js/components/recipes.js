@@ -13,6 +13,9 @@
 
   const PF = (window.PF = window.PF || {});
   const fmt = PF.fmt;
+  /* Shared with modal.js — both render the same titled sections. */
+  const block = PF.ui.block;
+  const tagList = PF.ui.tagList;
 
   let ALL = [];
   let dlg = null;
@@ -355,7 +358,7 @@
       '<span class="pf-rcard__id">' +
       '<h3 class="pf-rcard__name">' + fmt.esc(r.name) + '</h3>' +
       '<span class="pf-rcard__meta">' +
-      '<span class="pf-badge pf-badge--accent">' + m.emoji + ' ' + fmt.esc(m.ro) + '</span>' +
+      '<span class="pf-badge pf-badge--accent">' + fmt.esc(m.emoji) + ' ' + fmt.esc(m.ro) + '</span>' +
       '<span class="pf-badge">' + fmt.esc(MEAL_LABEL[r.mealType] || r.mealType) + '</span>' +
       '<span class="pf-badge">' + r.servings + ' porții</span>' +
       '</span></span>' +
@@ -396,8 +399,11 @@
    * ==================================================================== */
   function render(container) {
     if (!ALL.length) {
-      container.innerHTML = '<div class="pf-empty"><span class="pf-empty__icon">🍳</span>' +
-        '<span class="pf-empty__title">Nicio rețetă încărcată</span></div>';
+      container.innerHTML = PF.ui.emptyState({
+        icon: '🍳',
+        title: 'Nicio rețetă încărcată',
+        text: 'Fișierul cu rețete nu s-a încărcat. Reîncarcă pagina.'
+      });
       return;
     }
 
@@ -424,7 +430,7 @@
       '<button class="pf-chip' + (activeMethod === 'all' ? ' is-on' : '') + '" data-rmethod="all">Toate metodele<span class="pf-chip__n">' + ALL.length + '</span></button>' +
       Object.keys(methods).filter(k => methodCounts[k]).map(function (k) {
         return '<button class="pf-chip' + (activeMethod === k ? ' is-on' : '') +
-          '" data-rmethod="' + k + '">' + methods[k].emoji + ' ' + fmt.esc(methods[k].ro) +
+          '" data-rmethod="' + fmt.esc(k) + '">' + fmt.esc(methods[k].emoji) + ' ' + fmt.esc(methods[k].ro) +
           '<span class="pf-chip__n">' + methodCounts[k] + '</span></button>';
       }).join('');
 
@@ -432,7 +438,7 @@
       '<button class="pf-chip' + (activeBase === 'all' ? ' is-on' : '') + '" data-rbase="all">Toate</button>' +
       Object.keys(baseCounts).map(function (k) {
         return '<button class="pf-chip' + (activeBase === k ? ' is-on' : '') +
-          '" data-rbase="' + k + '">' + fmt.esc(BASE_LABEL[k] || k) +
+          '" data-rbase="' + fmt.esc(k) + '">' + fmt.esc(BASE_LABEL[k] || k) +
           '<span class="pf-chip__n">' + baseCounts[k] + '</span></button>';
       }).join('');
 
@@ -457,9 +463,12 @@
       renderFridge() +
       (list.length
         ? '<div class="pf-grid">' + list.map(card).join('') + '</div>'
-        : '<div class="pf-empty"><span class="pf-empty__icon">🍳</span>' +
-          '<span class="pf-empty__title">Nicio rețetă cu filtrele astea</span>' +
-          '<button class="pf-btn pf-btn--sm" data-rmethod="all">Arată tot</button></div>');
+        : PF.ui.emptyState({
+            icon: '🍳',
+            title: 'Nicio rețetă cu filtrele astea',
+            text: 'Combinația de metodă și ingredient principal nu prinde nicio rețetă.',
+            action: '<button class="pf-btn pf-btn--sm" data-rmethod="all">Arată tot</button>'
+          }));
   }
 
   /* =======================================================================
@@ -499,10 +508,10 @@
     return (
       '<div class="pf-modal__head" data-cat="fresh-meat">' +
       '<button class="pf-modal__close" data-recipe-close aria-label="Închide">✕</button>' +
-      '<span class="pf-modal__icon">' + fmt.esc(r.emoji || '🍽️') + '</span>' +
+      '<span class="pf-modal__icon">' + PF.ui.foodEmoji(r) + '</span>' +
       '<div class="pf-modal__titles">' +
       '<h2 class="pf-modal__title" id="pf-recipe-title">' + fmt.esc(r.name) + '</h2>' +
-      '<div class="pf-modal__subtitle">' + m.emoji + ' ' + fmt.esc(m.ro) + ' · ' +
+      '<div class="pf-modal__subtitle">' + fmt.esc(m.emoji) + ' ' + fmt.esc(m.ro) + ' · ' +
       fmt.esc(MEAL_LABEL[r.mealType] || r.mealType) + ' · ' + r.servings + ' porții</div>' +
       '<div class="pf-modal__badges">' +
       '<span class="pf-badge pf-badge--accent">' + Math.round(per.protein) + ' g proteină / porție</span>' +
@@ -517,69 +526,52 @@
       '<div class="pf-dossier">' +
 
       '<div>' +
-      '<section class="pf-block"><div class="pf-block__head">Ingrediente · ' + r.servings + ' porții</div>' +
-      '<div class="pf-block__body">' +
-      '<table class="pf-stores-table"><thead><tr>' +
-      '<th>Ingredient</th><th class="num">Cant.</th><th class="num">Proteină</th><th class="num">kcal</th><th class="num">Cost</th>' +
-      '</tr></thead><tbody>' + c.items.map(ingredientRow).join('') +
-      '<tr><th><b>Total</b></th><td class="num"><b>' + fmt.num(c.items.reduce((a, i) => a + i.grams, 0), 0) + ' g</b></td>' +
-      '<td class="num"><b>' + fmt.num(c.total.protein, 0) + ' g</b></td>' +
-      '<td class="num"><b>' + Math.round(c.total.kcal) + '</b></td>' +
-      '<td class="num"><b>' + fmt.ronApprox(c.cost, { short: true }) + '</b></td></tr>' +
-      '</tbody></table>' +
-      '<p class="pf-muted" style="font-size:var(--fs-3xs);line-height:1.5">' +
-      '≈ Costurile sunt estimări (±20–30%), nu prețuri de raft.' +
-      (c.unpricedCount ? ' ' + c.unpricedCount + ' ingrediente nu au niciun preț.' : '') + '</p>' +
-      '</div></section>' +
+      block('Ingrediente · ' + r.servings + ' porții',
+        '<table class="pf-stores-table"><thead><tr>' +
+        '<th>Ingredient</th><th class="num">Cant.</th><th class="num">Proteină</th><th class="num">kcal</th><th class="num">Cost</th>' +
+        '</tr></thead><tbody>' + c.items.map(ingredientRow).join('') +
+        '<tr><th><b>Total</b></th><td class="num"><b>' + fmt.num(c.items.reduce((a, i) => a + i.grams, 0), 0) + ' g</b></td>' +
+        '<td class="num"><b>' + fmt.num(c.total.protein, 0) + ' g</b></td>' +
+        '<td class="num"><b>' + Math.round(c.total.kcal) + '</b></td>' +
+        '<td class="num"><b>' + fmt.ronApprox(c.cost, { short: true }) + '</b></td></tr>' +
+        '</tbody></table>' +
+        '<p class="pf-muted" style="font-size:var(--fs-3xs);line-height:1.5">' +
+        '≈ Costurile sunt estimări (±20–30%), nu prețuri de raft.' +
+        (c.unpricedCount ? ' ' + c.unpricedCount + ' ingrediente nu au niciun preț.' : '') + '</p>') +
 
-      '<section class="pf-block"><div class="pf-block__head">Cum se face</div>' +
-      '<div class="pf-block__body">' +
-      '<ol class="pf-steps">' + r.steps.map(s => '<li><span>' + fmt.esc(s) + '</span></li>').join('') + '</ol>' +
-      '</div></section>' +
+      block('Cum se face',
+        '<ol class="pf-steps">' + r.steps.map(s => '<li><span>' + fmt.esc(s) + '</span></li>').join('') + '</ol>') +
 
-      (r.equipment && r.equipment.length
-        ? '<section class="pf-block"><div class="pf-block__head">De ce ai nevoie</div>' +
-          '<div class="pf-block__body"><div class="pf-card__tags">' +
-          r.equipment.map(e => '<span class="pf-tag">' + fmt.esc(e) + '</span>').join('') +
-          '</div></div></section>'
-        : '') +
+      block('De ce ai nevoie', tagList(r.equipment)) +
       '</div>' +
 
       '<div>' +
-      '<section class="pf-block"><div class="pf-block__head">Pe porție</div>' +
-      '<div class="pf-block__body">' +
-      PF.ui.macroStrip({ protein: per.protein, carbs: per.carbs, fat: per.fat, kcal: per.kcal, fiber: per.fiber, salt: per.salt }, { six: true }) +
-      '<div class="pf-rule pf-rule--tight"></div>' +
-      PF.ui.macroBar(macroFood, { tall: true }) +
-      '<div class="pf-macrolegend" style="margin-top:var(--sp-2)">' +
-      '<span class="pf-macrolegend__item"><span class="pf-macrolegend__swatch" style="--c:var(--macro-protein)"></span>Proteină</span>' +
-      '<span class="pf-macrolegend__item"><span class="pf-macrolegend__swatch" style="--c:var(--macro-carbs)"></span>Carbo</span>' +
-      '<span class="pf-macrolegend__item"><span class="pf-macrolegend__swatch" style="--c:var(--macro-fat)"></span>Grăsimi</span>' +
-      '<span class="pf-macrolegend__item"><span class="pf-macrolegend__swatch" style="--c:var(--macro-fiber)"></span>Fibre</span>' +
-      '</div>' +
-      '<div class="pf-rule pf-rule--tight"></div>' +
-      PF.ui.statBar({ label: 'Timp total', value: fmt.clamp(100 - r.timeMin, 5, 100), color: 'var(--stat-speed)', size: 'lg', display: fmt.minutes(r.timeMin, 'ro') }) +
-      PF.ui.statBar({ label: 'Efort', value: 100 - r.effort * 20, color: 'var(--stat-convenience)', size: 'lg', display: r.effort + '/5' }) +
-      PF.ui.statBar({ label: 'Puritate', value: c.purityPct / 0.8, color: 'var(--stat-leanness)', size: 'lg', display: Math.round(c.purityPct) + '%' }) +
-      '</div></section>' +
+      block('Pe porție',
+        PF.ui.macroStrip({ protein: per.protein, carbs: per.carbs, fat: per.fat, kcal: per.kcal, fiber: per.fiber, salt: per.salt }, { six: true }) +
+        '<div class="pf-rule pf-rule--tight"></div>' +
+        PF.ui.macroBar(macroFood, { tall: true }) +
+        '<div class="pf-macrolegend" style="margin-top:var(--sp-2)">' +
+        '<span class="pf-macrolegend__item"><span class="pf-macrolegend__swatch" style="--c:var(--macro-protein)"></span>Proteină</span>' +
+        '<span class="pf-macrolegend__item"><span class="pf-macrolegend__swatch" style="--c:var(--macro-carbs)"></span>Carbo</span>' +
+        '<span class="pf-macrolegend__item"><span class="pf-macrolegend__swatch" style="--c:var(--macro-fat)"></span>Grăsimi</span>' +
+        '<span class="pf-macrolegend__item"><span class="pf-macrolegend__swatch" style="--c:var(--macro-fiber)"></span>Fibre</span>' +
+        '</div>' +
+        '<div class="pf-rule pf-rule--tight"></div>' +
+        PF.ui.statBar({ label: 'Timp total', value: fmt.clamp(100 - r.timeMin, 5, 100), color: 'var(--stat-speed)', size: 'lg', display: fmt.minutes(r.timeMin, 'ro') }) +
+        PF.ui.statBar({ label: 'Efort', value: 100 - r.effort * 20, color: 'var(--stat-convenience)', size: 'lg', display: r.effort + '/5' }) +
+        PF.ui.statBar({ label: 'Puritate', value: c.purityPct / 0.8, color: 'var(--stat-leanness)', size: 'lg', display: Math.round(c.purityPct) + '%' })) +
 
-      (r.why ? '<section class="pf-block"><div class="pf-block__head">De ce merită</div>' +
-        '<div class="pf-block__body"><p>' + fmt.esc(r.why) + '</p></div></section>' : '') +
+      block('De ce merită', r.why ? '<p>' + fmt.esc(r.why) + '</p>' : '') +
 
-      (r.tips && r.tips.length
-        ? '<section class="pf-block"><div class="pf-block__head">Sfaturi</div>' +
-          '<div class="pf-block__body"><ul class="pf-bullets pf-bullets--tips">' +
-          r.tips.map(t => '<li><span>' + fmt.esc(t) + '</span></li>').join('') +
-          '</ul></div></section>'
+      block('Sfaturi', r.tips && r.tips.length
+        ? '<ul class="pf-bullets pf-bullets--tips">' +
+          r.tips.map(t => '<li><span>' + fmt.esc(t) + '</span></li>').join('') + '</ul>'
         : '') +
 
-      (r.swaps && r.swaps.length
-        ? '<section class="pf-block"><div class="pf-block__head">Variante</div>' +
-          '<div class="pf-block__body">' +
-          r.swaps.map(s => '<div style="margin-bottom:var(--sp-3)"><b style="color:var(--text-1)">' +
+      block('Variante', r.swaps && r.swaps.length
+        ? r.swaps.map(s => '<div style="margin-bottom:var(--sp-3)"><b style="color:var(--text-1)">' +
             fmt.esc(s.label) + '</b><p class="pf-muted" style="font-size:var(--fs-sm);margin-top:2px">' +
-            fmt.esc(s.text) + '</p></div>').join('') +
-          '</div></section>'
+            fmt.esc(s.text) + '</p></div>').join('')
         : '') +
       '</div>' +
 

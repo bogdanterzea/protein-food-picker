@@ -320,10 +320,13 @@
       .join('');
 
     /* --- the table alternative every chart owes ---------------------- */
-    /* The chart-view host renders its own toggle button next to the chart;
-     * CSS drops this one there so the same table is not offered twice. */
+    /* The chart view renders its own, larger table beside the scatter. This
+     * used to be built anyway and hidden with CSS — a full sort of every
+     * product plus ~100 DOM nodes discarded on each render. Callers that
+     * provide their own table pass `table: false`; everyone else still gets
+     * one, because a chart without a text alternative is not accessible. */
     const topN = Math.min(20, foods.length);
-    const table =
+    const table = o.table === false ? '' :
       '<details class="pf-chart__details"><summary>' +
       'Tabel cu datele · primele ' + topN + ' din ' + foods.length +
       ' după puritate</summary>' +

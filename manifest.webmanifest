@@ -1,0 +1,55 @@
+{
+  "name": "Atlasul Proteinelor Sibiu",
+  "short_name": "Atlas Proteine",
+  "description": "Alimente bogate în proteine pe care le găsești efectiv în Sibiu: macro-uri complete, preț pe gram de proteină, efort de gătit și momentul potrivit din zi.",
+  "lang": "ro",
+  "dir": "ltr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#05070d",
+  "theme_color": "#05070d",
+  "categories": [
+    "food",
+    "health",
+    "shopping"
+  ],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Lista de cumpărături",
+      "short_name": "Listă",
+      "url": "./index.html#view=shop"
+    },
+    {
+      "name": "Rețete",
+      "short_name": "Rețete",
+      "url": "./index.html#view=recipes"
+    },
+    {
+      "name": "Clasamente",
+      "short_name": "Clasamente",
+      "url": "./index.html#view=boards"
+    }
+  ]
+}

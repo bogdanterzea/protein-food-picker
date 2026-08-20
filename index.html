@@ -12,6 +12,12 @@
 <!-- ======================================================================
      STYLES — plain CSS files, loaded in cascade order. No build step.
      ====================================================================== -->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Atlas Proteine">
+
 <link rel="stylesheet" href="css/00-reset.css">
 <link rel="stylesheet" href="css/01-tokens.css">
 <link rel="stylesheet" href="css/02-base.css">
@@ -219,5 +225,62 @@
 
 <script src="js/app.js"></script>
 
+
+<script>
+/* -------------------------------------------------------------------------
+ * SERVICE WORKER
+ *
+ * Motivul e concret: atlasul se folosește în magazin, pe telefon, unde
+ * semnalul e prost. Cu service worker aplicația pornește din cache, iar pe
+ * Android poate fi instalată pe ecranul principal.
+ *
+ * Se înregistrează DOAR peste http(s). Din `file://` service workerii sunt
+ * interziși de browser, iar aplicația trebuie să meargă și așa — de aceea
+ * garda nu e opțională, e ce ține promisiunea „funcționează offline, fără
+ * server".
+ * ---------------------------------------------------------------------- */
+(function () {
+  if (!('serviceWorker' in navigator)) return;
+  if (location.protocol === 'file:') return;
+
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js').then(function (reg) {
+      /* A waiting worker means a newer version is already downloaded. Never
+       * swap it in silently: the page has 39.000 lines of data loaded and a
+       * mid-session swap could mix old markup with new data. Offer it. */
+      function offer(worker) {
+        if (!worker) return;
+        if (!(window.PF && PF.app && PF.app.toast)) return;
+        PF.app.toast('Versiune nouă disponibilă — reîncarcă pagina', 'ok', {
+          action: { label: 'Reîncarcă', fn: function () {
+            worker.postMessage('skip-waiting');
+            navigator.serviceWorker.addEventListener('controllerchange', function () {
+              location.reload();
+            });
+          } }
+        });
+      }
+
+      if (reg.waiting) offer(reg.waiting);
+      reg.addEventListener('updatefound', function () {
+        const w = reg.installing;
+        if (!w) return;
+        w.addEventListener('statechange', function () {
+          /* `controller` is null on the very first install — that is not an
+           * update, it is the app becoming offline-capable for the first
+           * time, and it deserves the opposite message. */
+          if (w.state !== 'installed') return;
+          if (navigator.serviceWorker.controller) offer(w);
+          else if (window.PF && PF.app && PF.app.toast) {
+            PF.app.toast('Gata de folosit offline', 'ok');
+          }
+        });
+      });
+    }).catch(function (err) {
+      console.warn('[pf] service worker neînregistrat:', err.message);
+    });
+  });
+})();
+</script>
 </body>
 </html>

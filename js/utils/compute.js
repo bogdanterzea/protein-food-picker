@@ -19,7 +19,12 @@
   'use strict';
 
   const PF = (window.PF = window.PF || {});
-  const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+
+  /* The same clamp the formatters use. format.js is loaded first (index.html
+   * and tools/test-compute.js both order it that way), so this is a binding,
+   * not a second implementation — there used to be a private copy here that
+   * had to be kept in step with fmt.clamp by hand. */
+  const clamp = PF.fmt.clamp;
 
   /* =======================================================================
    * CALIBRATION CONSTANTS
@@ -172,6 +177,12 @@
    * label (or our transcription of it) is suspect and we flag the entry
    * rather than silently ranking on a bad number.
    * ==================================================================== */
+  /* How far the reconstructed energy may sit from the declared one before we
+   * stop trusting the entry. ±18% is the figure written down in
+   * docs/METHODOLOGY.md; it absorbs label rounding, polyols and the fibre
+   * factor without absorbing a transcription slip. */
+  const ENERGY_MISMATCH_TOLERANCE = 0.18;
+
   function atwaterKcal(n) {
     return (
       (n.protein || 0) * 4 +
@@ -181,10 +192,18 @@
     );
   }
 
+  /**
+   * Relative gap between the reconstructed and the declared energy.
+   *
+   * Null when there is no declared kcal to compare against — there is no
+   * such thing as a 0%-off or a 100%-off match with a missing denominator.
+   * It used to return the literal 1, i.e. "off by 100%", which the flag
+   * check happened to suppress but which every other reader saw as a real
+   * measurement of a label we never read.
+   */
   function energyDelta(n) {
-    const predicted = atwaterKcal(n);
-    if (!n.kcal) return 1;
-    return (predicted - n.kcal) / n.kcal;
+    if (!n.kcal) return null;
+    return (atwaterKcal(n) - n.kcal) / n.kcal;
   }
 
   /* =======================================================================
@@ -260,9 +279,18 @@
     return clamp((purityPct / CAL.purityFullBar) * 100, 0, 100);
   }
 
+  /* What an axis scores when we have no data for it. Dead centre, so a gap in
+   * our research neither rewards nor punishes the product — a 0 would bury
+   * every unpriced entry and a 100 would float it to the top. */
+  const UNKNOWN_BAR = 50;
+
+  /* The speed bar never reaches 0: a 4-hour braise is still food you can
+   * cook, and an empty bar reads as "impossible" next to a full one. */
+  const SPEED_BAR_FLOOR = 3;
+
   /** Axis 3 — what it costs you. Log scale: the spread is enormous. */
   function valueBar(ronPer100gProtein) {
-    if (!ronPer100gProtein || ronPer100gProtein <= 0) return 50; // unknown price → neutral
+    if (!ronPer100gProtein || ronPer100gProtein <= 0) return UNKNOWN_BAR;
     const lo = Math.log(CAL.costBest);
     const hi = Math.log(CAL.costWorst);
     const x = Math.log(clamp(ronPer100gProtein, CAL.costBest, CAL.costWorst));
@@ -273,14 +301,14 @@
   function speedBar(timeMin) {
     return clamp(
       100 * (1 - (timeMin - CAL.timeFullBar) / (CAL.timeZeroBar - CAL.timeFullBar)),
-      3,
+      SPEED_BAR_FLOOR,
       100
     );
   }
 
   /** Axis 5 — how lean it is (share of calories NOT from fat). */
   function leannessBar(fat, kcal) {
-    if (!kcal) return 50;
+    if (!kcal) return UNKNOWN_BAR;
     const fatPct = ((fat || 0) * 9) / kcal;
     return clamp(100 * (1 - fatPct), 0, 100);
   }
@@ -300,20 +328,43 @@
    * A few tags are objectively derivable from the numbers, so we derive
    * them instead of trusting eight different agents to agree.
    * ==================================================================== */
+  /* Thresholds for the tags we derive rather than trust.
+   *
+   * The nutrition ones follow the EU nutrition-claim regulation (1924/2006)
+   * where it defines a claim, so the badge means the same thing it means on a
+   * shelf: "high protein" is ≥20% of energy from protein, "low fat" ≤3 g/100 g,
+   * "high fibre" ≥6 g/100 g. The rest are this atlas's own house rules, set
+   * against the distribution of the 500-odd entries:
+   *   - 15 / 25 g per 100 g split the field into "worth counting" and "this is
+   *     what you buy the product for";
+   *   - 40% of energy from protein is roughly the top third of the atlas;
+   *   - 1.5 g salt per 100 g is the point where one portion is a third of the
+   *     WHO daily limit;
+   *   - 6 lei per 100 g of protein is where dry legumes, eggs and milk sit,
+   *     and it is about a fifth of the median entry. */
+  const TAG_PROTEIN_VERY_HIGH = 25;   // g per 100 g
+  const TAG_PROTEIN_HIGH = 15;        // g per 100 g
+  const TAG_PURITY_DENSE = 40;        // % of energy from protein
+  const TAG_LOW_FAT_MAX = 3;          // g per 100 g
+  const TAG_LOW_CARB_MAX = 5;         // g per 100 g
+  const TAG_HIGH_FIBER_MIN = 6;       // g per 100 g
+  const TAG_HIGH_SALT_MIN = 1.5;      // g per 100 g
+  const TAG_CHEAP_MAX = 6;            // RON per 100 g protein
+
   function derivedTags(f, d) {
     /* Same tolerance for a missing nutrition block as enrich() itself: a
      * half-written entry must degrade to zeros, not take the whole boot down. */
     const n = f.per100g || {};
     const t = [];
-    if (d.protein100 >= 25) t.push('very-high-protein');
-    else if (d.protein100 >= 15) t.push('high-protein');
-    if (d.purityPct >= 40) t.push('protein-dense');
-    if ((n.fat || 0) <= 3) t.push('low-fat');
-    if ((n.carbs || 0) <= 5) t.push('low-carb');
-    if ((n.fiber || 0) >= 6) t.push('high-fiber');
-    if ((n.salt || 0) >= 1.5) t.push('high-sodium');
+    if (d.protein100 >= TAG_PROTEIN_VERY_HIGH) t.push('very-high-protein');
+    else if (d.protein100 >= TAG_PROTEIN_HIGH) t.push('high-protein');
+    if (d.purityPct >= TAG_PURITY_DENSE) t.push('protein-dense');
+    if ((n.fat || 0) <= TAG_LOW_FAT_MAX) t.push('low-fat');
+    if ((n.carbs || 0) <= TAG_LOW_CARB_MAX) t.push('low-carb');
+    if ((n.fiber || 0) >= TAG_HIGH_FIBER_MIN) t.push('high-fiber');
+    if ((n.salt || 0) >= TAG_HIGH_SALT_MIN) t.push('high-sodium');
     if (f.timeMin === 0) t.push('no-cook');
-    if (d.ronPer100gProtein && d.ronPer100gProtein <= 6) t.push('cheap-protein');
+    if (d.ronPer100gProtein && d.ronPer100gProtein <= TAG_CHEAP_MAX) t.push('cheap-protein');
     return t;
   }
 
@@ -450,7 +501,7 @@
     const delta = energyDelta(n);
     d.energyDelta = delta;
     d.flags = [];
-    if (Math.abs(delta) > 0.18 && d.kcal100 > 0) {
+    if (delta !== null && Math.abs(delta) > ENERGY_MISMATCH_TOLERANCE && d.kcal100 > 0) {
       d.flags.push('energy-mismatch');
     }
     if ((n.sugars || 0) > (n.carbs || 0) + 0.01) d.flags.push('sugars-gt-carbs');
@@ -560,14 +611,42 @@
     senior:     { min: 1.2,  rec: 1.5, max: 1.8, key: 'senior' }
   };
 
+  /* Used when the visitor has not typed a weight yet, so the calculator can
+   * show a worked example instead of an empty form. Close to the adult mean
+   * in Romania; the slider overwrites it on first touch. */
+  const DEFAULT_WEIGHT_KG = 75;
+
+  /* The slider's ends. Below 30 kg this is a child and the per-kg ranges below
+   * do not apply; above 250 kg the arithmetic is fine but the advice is not. */
+  const MIN_WEIGHT_KG = 30;
+  const MAX_WEIGHT_KG = 250;
+
+  /* Muscle protein synthesis is a threshold process, not a linear one. A meal
+   * needs roughly 2.5-3 g of leucine to switch mTORC1 on, which is about
+   * 25-30 g of good-quality protein; below that the meal contributes far less
+   * than its grams suggest. Past ~40 g the extra protein is still used, but it
+   * adds no further signal, so one enormous meal is worth less than three
+   * ordinary ones.
+   *
+   * That is why the day is split by AIMING at a per-meal size instead of
+   * always dividing by four: at a 200 g target, four meals would be 50 g each
+   * (signal wasted), and at 75 g they would be 19 g each (threshold missed).
+   * Aiming at ~35 g keeps every meal inside the window that actually works. */
+  const AIM_PER_MEAL_G = 35;
+  const MIN_MEALS = 3;
+  const MAX_MEALS = 6;
+
   function proteinTarget(weightKg, goalKey) {
     const goal = GOALS[goalKey] || GOALS.muscle;
-    const w = clamp(weightKg || 75, 30, 250);
+    const w = clamp(weightKg || DEFAULT_WEIGHT_KG, MIN_WEIGHT_KG, MAX_WEIGHT_KG);
+    const target = Math.round(w * goal.rec);
+    const meals = clamp(Math.round(target / AIM_PER_MEAL_G), MIN_MEALS, MAX_MEALS);
     return {
       min: Math.round(w * goal.min),
-      target: Math.round(w * goal.rec),
+      target: target,
       max: Math.round(w * goal.max),
-      perMeal: Math.round((w * goal.rec) / 4),
+      meals: meals,
+      perMeal: Math.round(target / meals),
       goal: goal.key
     };
   }
@@ -575,26 +654,48 @@
   /* =======================================================================
    * SIMILARITY — used for "related items" in the dossier
    * ==================================================================== */
+  /* Points the five signals can contribute, out of a nominal 100. Shelf
+   * position (category + subcategory) is worth half of it because "related"
+   * on a dossier means "the next thing you would reach for", and the protein
+   * figure carries the rest — two 25 g/100 g products are alternatives even
+   * when one is fish and one is cheese. The decay rates (1.5 points per gram
+   * of protein, 1 point per 12 kcal) are set so a product stops counting as
+   * similar at roughly 17 g or 180 kcal of distance. */
+  const SIM = {
+    sameCategory: 30,
+    sameSubcategory: 20,
+    proteinMax: 25,
+    proteinDecayPerGram: 1.5,
+    kcalMax: 15,
+    kcalPerPoint: 12,
+    sharedTagsMax: 20,
+    perSharedTag: 3,
+    sameEffort: 6,
+    effortTolerance: 1
+  };
+
   function similarity(a, b) {
     if (a.id === b.id) return -1;
     let score = 0;
-    if (a.category === b.category) score += 30;
-    if (a.subcategory === b.subcategory) score += 20;
+    if (a.category === b.category) score += SIM.sameCategory;
+    if (a.subcategory === b.subcategory) score += SIM.sameSubcategory;
 
     const pDiff = Math.abs(a._d.protein100 - b._d.protein100);
-    score += Math.max(0, 25 - pDiff * 1.5);
+    score += Math.max(0, SIM.proteinMax - pDiff * SIM.proteinDecayPerGram);
 
     const kDiff = Math.abs(a._d.kcal100 - b._d.kcal100);
-    score += Math.max(0, 15 - kDiff / 12);
+    score += Math.max(0, SIM.kcalMax - kDiff / SIM.kcalPerPoint);
 
     const tagsA = new Set(a._d.allTags);
     let shared = 0;
     b._d.allTags.forEach(t => {
       if (tagsA.has(t)) shared++;
     });
-    score += Math.min(20, shared * 3);
+    score += Math.min(SIM.sharedTagsMax, shared * SIM.perSharedTag);
 
-    if (Math.abs(a.effort - b.effort) <= 1) score += 6;
+    /* An entry with no authored `effort` yields NaN here, and NaN <= 1 is
+     * false, so it simply misses the bonus instead of poisoning the score. */
+    if (Math.abs(a.effort - b.effort) <= SIM.effortTolerance) score += SIM.sameEffort;
     return score;
   }
 
@@ -610,13 +711,20 @@
   /* =======================================================================
    * "BETTER THAN THIS" — find a strictly superior alternative
    * ==================================================================== */
+  /* An upgrade has to be a visible step up, not a rounding difference: 15%
+   * more protein is where the two numbers stop looking like the same product.
+   * The 5 minutes of slack keep an otherwise clear win from being rejected
+   * over a difference nobody notices while cooking. */
+  const UPGRADE_PROTEIN_RATIO = 1.15;
+  const UPGRADE_EXTRA_MINUTES = 5;
+
   function findUpgrade(food, all) {
     const cands = all.filter(
       f =>
         f.id !== food.id &&
-        f._d.protein100 > food._d.protein100 * 1.15 &&
+        f._d.protein100 > food._d.protein100 * UPGRADE_PROTEIN_RATIO &&
         f._d.purityPct > food._d.purityPct &&
-        f.timeMin <= food.timeMin + 5
+        f.timeMin <= food.timeMin + UPGRADE_EXTRA_MINUTES
     );
     if (!cands.length) return null;
     cands.sort((a, b) => b._d.score - a._d.score);

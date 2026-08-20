@@ -89,10 +89,6 @@
   font-size: var(--fs-md);
 }
 
-.pf-btn--block {
-  width: 100%;
-}
-
 /* ---- icon button ---- */
 .pf-iconbtn {
   display: grid;
@@ -476,20 +472,6 @@
   font-family: var(--font-mono);
   text-align: center;
   width: 68px;
-}
-
-.pf-field {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.pf-field__label {
-  font-size: var(--fs-2xs);
-  font-weight: var(--fw-semi);
-  color: var(--text-4);
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
 }
 
 /* =========================================================================

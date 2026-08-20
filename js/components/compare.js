@@ -134,17 +134,16 @@
     const foods = ids.map(id => PF.data.byId[id]).filter(Boolean);
 
     if (foods.length < 2) {
-      container.innerHTML =
-        '<div class="pf-empty">' +
-        '<span class="pf-empty__icon">⇄</span>' +
-        '<span class="pf-empty__title">Alege cel puțin două produse</span>' +
-        '<span class="pf-empty__text">Apasă butonul ⇄ pe orice card ca să-l adaugi ' +
-        'la comparație. Poți compara până la ' + MAX + ' produse simultan — util când ' +
-        'nu te decizi între trei iaurturi care arată identic pe raft.</span>' +
-        (foods.length === 1
+      container.innerHTML = PF.ui.emptyState({
+        icon: '⇄',
+        title: 'Alege cel puțin două produse',
+        text: 'Apasă butonul ⇄ pe orice card ca să-l adaugi la comparație. ' +
+          'Poți compara până la ' + MAX + ' produse simultan — util când nu te ' +
+          'decizi între trei iaurturi care arată identic pe raft.',
+        action: foods.length === 1
           ? '<button class="pf-btn pf-btn--sm" data-act="clear-compare">Golește comparația</button>'
-          : '') +
-        '</div>';
+          : ''
+      });
       return;
     }
 
@@ -153,7 +152,7 @@
       .map(function (f) {
         return (
           '<th><div class="pf-compare__head">' +
-          '<span class="pf-card__icon">' + (f.emoji || '🍽️') + '</span>' +
+          '<span class="pf-card__icon">' + PF.ui.foodEmoji(f) + '</span>' +
           PF.ui.tier(f._d.tier, { size: 'sm' }) +
           '<span class="pf-compare__name">' + fmt.esc(f.nameRo || f.name) + '</span>' +
           '<button class="pf-compare__remove" data-uncompare="' + fmt.esc(f.id) + '">✕ scoate</button>' +

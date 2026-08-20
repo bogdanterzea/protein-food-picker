@@ -14,17 +14,6 @@
  *    from a legend plus direct labels, never from colour alone.
  * ========================================================================= */
 
-.pf-chart {
-  position: relative;
-  width: 100%;
-}
-
-.pf-chart svg {
-  width: 100%;
-  height: auto;
-  overflow: visible;
-}
-
 .pf-chart__title {
   font-size: var(--fs-sm);
   font-weight: var(--fw-semi);
@@ -285,11 +274,6 @@
   fill: var(--text-4);
 }
 
-.pf-scatter__zone {
-  fill: var(--macro-protein);
-  opacity: 0.05;
-}
-
 /* =========================================================================
  * 4. RANKED BAR — leaderboard bars
  * ========================================================================= */
@@ -362,43 +346,6 @@
 }
 
 /* =========================================================================
- * 6. CHART TOOLTIP
- * ========================================================================= */
-.pf-charttip {
-  position: absolute;
-  z-index: 40;
-  padding: 7px 10px;
-  border-radius: var(--r-sm);
-  background: var(--bg-raised);
-  border: 1px solid var(--border-strong);
-  box-shadow: var(--shadow-lg);
-  font-size: var(--fs-2xs);
-  color: var(--text-1);
-  pointer-events: none;
-  opacity: 0;
-  transform: translate(-50%, -120%);
-  transition: opacity var(--dur-fast) var(--ease-out);
-  white-space: nowrap;
-  max-width: 250px;
-}
-
-.pf-charttip.is-on {
-  opacity: 1;
-}
-
-.pf-charttip b {
-  display: block;
-  font-size: var(--fs-xs);
-  margin-bottom: 2px;
-  white-space: normal;
-}
-
-.pf-charttip span {
-  font-family: var(--font-mono);
-  color: var(--text-3);
-}
-
-/* =========================================================================
  * 7. TABLE VIEW TOGGLE — every chart has a data-table alternative
  * ========================================================================= */
 .pf-chart__toggle {
@@ -428,12 +375,6 @@
  * (The scroll lives on the container so the table stays a real table.) */
 .pf-chart__details[open] {
   overflow-x: auto;
-}
-
-/* The chart view renders its own toggle button beside the scatter; don't
- * offer the same table twice on that screen. */
-.pf-scatter:has(~ .pf-chart__toggle) > .pf-chart__details {
-  display: none;
 }
 
 .pf-chart__table {

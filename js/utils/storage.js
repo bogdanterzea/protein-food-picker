@@ -11,7 +11,13 @@
   const PF = (window.PF = window.PF || {});
   const NS = 'pf.atlas.v1.';
 
+  /* `backend` is the live Storage object, or null once we know there isn't
+   * one. `probed` separates "not looked yet" from "looked and found nothing",
+   * which a single null could not express — be() would have re-run the probe
+   * on every call after a failure, and after set() demoted a dying
+   * localStorage it would have resurrected it on the very next read. */
   let backend = null;
+  let probed = false;
   const memory = {};
 
   function detect() {
@@ -21,12 +27,18 @@
       window.localStorage.removeItem(k);
       return window.localStorage;
     } catch (e) {
+      /* No storage: private mode, a file:// origin, or a blocking policy.
+       * Not an error to report — the in-memory fallback below covers it and
+       * isPersistent() tells the UI to stop promising anything is saved. */
       return null;
     }
   }
 
   function be() {
-    if (backend === null) backend = detect();
+    if (!probed) {
+      backend = detect();
+      probed = true;
+    }
     return backend;
   }
 
@@ -53,7 +65,8 @@
        * backend permanently — otherwise get() would keep reading the dead
        * localStorage and never see the value we just saved here. */
       memory[key] = raw;
-      backend = false;
+      backend = null;
+      probed = true;
       return false;
     }
   }
@@ -63,7 +76,9 @@
     try {
       if (store) store.removeItem(NS + key);
     } catch (e) {
-      /* ignore */
+      /* Nothing useful to do and nothing to tell the user: the memory delete
+       * below still happens, so the value is gone for this session either
+       * way. Reported by isPersistent(), not by throwing at the caller. */
     }
     delete memory[key];
   }
@@ -80,7 +95,8 @@
         doomed.forEach(k => store.removeItem(k));
       }
     } catch (e) {
-      /* ignore */
+      /* Same as remove(): the in-memory wipe below still runs, so "clear my
+       * data" is honoured for the session even if the disk refuses. */
     }
     Object.keys(memory).forEach(k => delete memory[k]);
   }
@@ -112,6 +128,13 @@
   /* -----------------------------------------------------------------------
    * URL HASH STATE — shareable filter state
    * -------------------------------------------------------------------- */
+  /* Keys whose value is free text a human typed, so it must survive readHash()
+   * exactly as written. Everything else is app state and gets coerced.
+   * `q` was already exempt from the number rule — but not from the comma rule,
+   * so a search for "ton, pui" came back as the array ['ton', ' pui'] and the
+   * search box was restored holding "ton, pui".toString() nonsense. */
+  const TEXT_KEYS = ['q'];
+
   function readHash() {
     const raw = window.location.hash.replace(/^#/, '');
     if (!raw) return null;
@@ -119,17 +142,25 @@
       const params = new URLSearchParams(raw);
       const out = {};
       params.forEach((v, k) => {
-        if (v.indexOf(',') !== -1) out[k] = v.split(',');
+        if (TEXT_KEYS.indexOf(k) !== -1) out[k] = v;
+        else if (v.indexOf(',') !== -1) out[k] = v.split(',');
         else if (v === 'true') out[k] = true;
         else if (v === 'false') out[k] = false;
-        else if (v !== '' && !Number.isNaN(Number(v)) && k !== 'q') out[k] = Number(v);
+        else if (v !== '' && !Number.isNaN(Number(v))) out[k] = Number(v);
         else out[k] = v;
       });
       return out;
     } catch (e) {
+      /* A hash we cannot parse is not state we can restore. Returning null
+       * makes the caller fall back to its defaults rather than half-apply. */
       return null;
     }
   }
+
+  /* Long enough that dragging a slider writes once instead of forty times,
+   * short enough that the address bar is already shareable by the time the
+   * user reaches for it. */
+  const HASH_DEBOUNCE_MS = 200;
 
   let hashTimer = null;
   function writeHash(obj) {
@@ -147,13 +178,17 @@
         }
       });
       const str = params.toString();
-      const next = str ? '#' + str : window.location.pathname;
+      /* Clearing the state must not also clear a query string the page was
+       * opened with — replaceState with a bare pathname would drop it. */
+      const next = str
+        ? '#' + str
+        : window.location.pathname + (window.location.search || '');
       try {
         window.history.replaceState(null, '', next);
       } catch (e) {
         /* file:// may reject replaceState — harmless */
       }
-    }, 200);
+    }, HASH_DEBOUNCE_MS);
   }
 
   PF.store = {

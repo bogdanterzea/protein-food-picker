@@ -976,6 +976,24 @@
   font-size: var(--fs-md);
 }
 
+/* The message is a bare <span> between the icon and the optional action
+ * button. Without an explicit flex basis it shares the row on content width
+ * and the button squeezes it; letting it absorb the free space (and allowing
+ * min-width: 0 so it may actually wrap) keeps the text readable inside the
+ * 360px toast. */
+.pf-toast > span:not([class]) {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Action button (e.g. the service worker's "Reîncarcă"). margin-left: auto
+ * pins it right even when the message is short; flex: none stops the label
+ * from being compressed to an unreadable sliver. */
+.pf-toast__action {
+  margin-left: auto;
+  flex: none;
+}
+
 .pf-toast--ok   { border-left: 3px solid var(--ok); }
 .pf-toast--warn { border-left: 3px solid var(--warn); }
 .pf-toast--bad  { border-left: 3px solid var(--bad); }

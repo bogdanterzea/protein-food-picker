@@ -253,10 +253,6 @@ html.pf-scroll-locked body {
   align-items: start;
 }
 
-.pf-dossier--single {
-  grid-template-columns: minmax(0, 1fr);
-}
-
 .pf-block {
   border: 1px solid var(--border);
   border-radius: var(--r-md);
