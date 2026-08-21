@@ -23,16 +23,45 @@ const path = require('path');
 const crypto = require('crypto');
 
 const ROOT = path.resolve(__dirname, '..');
-const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+/* Every page the app ships. A page left out here still works online but goes
+ * blank offline, which is the worst of both — so the list is derived from the
+ * filesystem rather than remembered. */
+const PAGES = ['index.html', 'deserturi.html'].filter(p => fs.existsSync(path.join(ROOT, p)));
 
-/* Everything index.html pulls in, in the order it pulls it. */
+/* Everything those pages pull in, in the order they pull it. */
 const assets = [];
-const re = /(?:href|src)="((?:css|js)\/[^"]+)"/g;
-let m;
-while ((m = re.exec(html))) if (assets.indexOf(m[1]) === -1) assets.push(m[1]);
+PAGES.forEach(function (page) {
+  const html = fs.readFileSync(path.join(ROOT, page), 'utf8');
+  const re = /(?:href|src)="((?:css|js)\/[^"]+)"/g;
+  let m;
+  while ((m = re.exec(html))) if (assets.indexOf(m[1]) === -1) assets.push(m[1]);
+});
 
-const extra = ['./', 'index.html', 'manifest.webmanifest',
-  'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png'];
+/* The generated documentation ships with the app and is linked from both
+ * pages' footers. Leaving it out meant that offline, every docs link fell
+ * through to the navigation fallback and got served the app shell at a
+ * /docs/ URL — where all its relative paths resolve wrong, so the reader got
+ * a blank, unstyled page instead of the document. */
+const docs = [];
+if (fs.existsSync(path.join(ROOT, 'docs'))) {
+  fs.readdirSync(path.join(ROOT, 'docs'))
+    .filter(f => f.endsWith('.html')).sort()
+    .forEach(f => docs.push('docs/' + f));
+  const catDir = path.join(ROOT, 'docs/categories');
+  if (fs.existsSync(catDir)) {
+    fs.readdirSync(catDir).filter(f => f.endsWith('.html')).sort()
+      .forEach(f => docs.push('docs/categories/' + f));
+  }
+}
+if (fs.existsSync(path.join(ROOT, 'README.html'))) docs.push('README.html');
+
+/* The docs pages load a stylesheet the app never does. */
+const docCss = ['css/00-reset.css', 'css/01-tokens.css', 'css/15-docs.css']
+  .filter(f => fs.existsSync(path.join(ROOT, f)));
+
+const extra = ['./'].concat(PAGES).concat(['manifest.webmanifest',
+  'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png'])
+  .concat(docs).concat(docCss);
 
 const all = extra.concat(assets);
 
@@ -108,8 +137,28 @@ self.addEventListener('fetch', function (event) {
         }
         return res;
       }).catch(function () {
-        /* Offline and not cached: a navigation still gets the app shell. */
-        if (req.mode === 'navigate') return caches.match('index.html');
+        /* Offline and not cached. Handing back the app shell here was worse
+         * than handing back nothing: at a /docs/ URL the shell's relative
+         * paths resolve against /docs/, so the reader got a blank page that
+         * still claimed to be the atlas. Only the app's own routes get the
+         * shell; anything else says plainly that it is not available. */
+        const inDocs = url.pathname.indexOf('/docs/') !== -1;
+        if (req.mode === 'navigate' && !inDocs) {
+          return caches.match('index.html');
+        }
+        if (req.mode === 'navigate') {
+          return new Response(
+            '<!doctype html><meta charset="utf-8">' +
+            '<title>Indisponibil offline</title>' +
+            '<body style="font:16px/1.6 system-ui;padding:2rem;max-width:34rem;' +
+            'margin:auto;background:#05070d;color:#c8d3e4">' +
+            '<h1 style="font-size:1.3rem">Pagina asta nu e în cache</h1>' +
+            '<p>Documentul nu a fost descărcat înainte să dispară rețeaua. ' +
+            'Atlasul funcționează în continuare offline.</p>' +
+            '<p><a style="color:#1ec99f" href="/index.html">← Înapoi la atlas</a></p>',
+            { status: 503, headers: { 'Content-Type': 'text/html; charset=utf-8' } }
+          );
+        }
         return new Response('', { status: 504, statusText: 'Offline' });
       });
     })
@@ -122,5 +171,14 @@ self.addEventListener('message', function (event) {
 });
 `;
 
-fs.writeFileSync(path.join(ROOT, 'sw.js'), sw);
-console.log('sw.js generat · versiune ' + VERSION + ' · ' + all.length + ' fișiere în precache');
+/* `--print-version` lets tools/check.js ask THIS file what the version and the
+ * precache list should be, instead of reimplementing the computation. The two
+ * copies drifted three times — once on the page list, once on the docs — and
+ * each time the gate reported a stale worker that no amount of regenerating
+ * could fix. One implementation, asked twice. */
+if (process.argv.indexOf('--print-version') !== -1) {
+  console.log(JSON.stringify({ version: VERSION, files: all }));
+} else {
+  fs.writeFileSync(path.join(ROOT, 'sw.js'), sw);
+  console.log('sw.js generat · versiune ' + VERSION + ' · ' + all.length + ' fișiere în precache');
+}

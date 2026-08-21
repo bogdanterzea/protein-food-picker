@@ -1,5 +1,86 @@
 # Changelog
 
+## v1.2 — august 2026 · deserturi cheat
+
+O pagină separată, `deserturi.html`, cu **48 de deserturi bogate în proteină**
+făcute din ingrediente găsibile în Sibiu. Cercetate de cinci agenți în paralel,
+pe un contract de date scris înainte (`docs/DESSERT-SCHEMA.md`).
+
+### De ce o pagină separată
+
+Atlasul răspunde la „ce cumpăr". Asta răspunde la „e 22:00 și vreau ceva
+dulce". Sunt două stări mintale diferite, iar bara de file a atlasului deja
+derulează orizontal pe telefon la șapte file — a opta ar fi stricat-o.
+
+### Ideea centrală: comparația
+
+Un desert proteic **nu e mâncare sănătoasă**. E o variantă care rezolvă
+aceeași poftă la alt cost nutrițional, iar singurul mod onest de a spune asta
+e să pui cifrele una lângă alta.
+
+Fiecare rețetă declară `vs` — desertul real pe care îl înlocuiește, cu
+macro-urile lui — iar pagina nu afișează niciodată o rețetă fără comparația ei.
+Barele stau pe aceeași scară, iar scara e maximul dintre cele două valori: dacă
+diferența e mică, barele arată aproape la fel. O comparație care exagerează
+vizual diferența e o minciună cu grafice.
+
+Registrul de referință are **40 de dulciuri reale** din România, cu încrederea
+declarată onest: doar 10 au valori de producător, 13 sunt estimări pentru
+lucruri pe care fiecare cofetărie le face altfel. Papanașii de restaurant ies
+la 928 kcal și 28 g de proteină pe porție — sunt și cel mai caloric, și cel mai
+proteic desert din registru, ceea ce arată exact de ce „are proteină" nu e un
+argument.
+
+### Scorul de schimb
+
+Cântărește proteina câștigată (40%), zahărul economisit (35%) și caloriile
+economisite (25%) față de desertul real, apoi înmulțește totul cu cât de
+aproape e de original. Un desert pe care nu-l mănânci cu plăcere nu înlocuiește
+nimic — de aceea autenticitatea se înmulțește, nu se adună.
+
+Rezultate pe cele 48: proteină 15,6–36,5 g pe porție (median 21), calorii
+146–332 (median 233), scor de schimb 59–87 (median 74). **Niciun desert nu e
+mai slab decât originalul pe toate cele trei axe** — iar unul dintre ele,
+cacao cu lapte, e practic egal la calorii și a fost păstrat cu explicația
+scrisă în rețetă.
+
+### Onestitatea, pe card, nu în subsol
+
+Poliolii peste 15 g pe porție, zahărul peste 25 g, proteina din gelatină care
+nu se pune la ținta zilnică, xilitolul toxic pentru câini — toate apar pe card,
+înainte să alegi, nu în modal după. Poarta respinge o rețetă cu polioli mari
+fără avertisment.
+
+Macro-urile nu sunt scrise de mână nicăieri: se calculează din ingrediente,
+care trimit la produse reale din atlas sau la o cămară de 50 de ingrediente.
+Poarta respinge orice câmp `kcal`/`protein`/`carbs`/`fat` scris la nivel de
+rețetă. O rețetă nu poate să mintă despre ce conține, pentru că nu ea deține
+cifrele.
+
+### Documentație
+
+- `docs/DESSERT-SCIENCE.md` (794 linii) — îndulcitorii unul câte unul cu starea
+  actuală a dovezilor, cum se poartă whey-ul și cazeina la căldură, de ce
+  înghețata proteică se face piatră, structura fără gluten.
+- `docs/DESSERT-SHOPPING.md` (556 linii) — de unde se cumpără fiecare
+  ingredient în Sibiu, cele 21 de pudre ordonate după lei per 100 g proteină,
+  capcanele de etichetă, buget de pornire.
+- `docs/DESSERT-SCHEMA.md` — contractul de date.
+
+### Ce s-a învățat construind
+
+- **Raportul cazeină:whey se indexează după geometria vasului, nu după
+  rețetă.** Contează cât timp stă compoziția în fereastra 70-80 °C, unde zerul
+  coagulează și stoarce apa. Aluat subțire → whey e în regulă; chec de un
+  kilogram → cazeină.
+- **Air fryerul nu e un cuptor mai mic, e un uscător cu ventilator.**
+- **„Desert proteic" nu e sinonim cu „desert cu pudră".** Budinca de orez
+  coaptă are zero pudră și 20,6 g proteină pe porție, din ouă și albuș.
+- **Ciocolata neagră 70% are mai multe calorii decât cea cu lapte** — mai multă
+  grăsime de cacao, mai puțin zahăr.
+
+---
+
 ## v1.1 — august 2026
 
 O rundă de audit și consolidare, rulată de zece agenți în paralel pe fișiere

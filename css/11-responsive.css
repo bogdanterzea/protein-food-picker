@@ -149,6 +149,7 @@
  * ≤ 700px — phone layout
  * ========================================================================= */
 @media (max-width: 700px) {
+
   :root {
     /* Two rows on phones. Everything that offsets against the bar — rail
      * top, rail height, scrim inset, sticky table header — reads this. */

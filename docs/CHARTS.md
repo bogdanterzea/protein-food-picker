@@ -160,7 +160,7 @@ starea finală. Cu `data-fx="off"` dispar doar efectele decorative.
 
 S / A / B / C / D / E, cu culori care se încălzesc pe măsură ce rangul urcă.
 Rangul S are o margine animată — trebuie să pară un premiu, și e: trei produse
-din 505.
+din 503.
 
 Litera nu e niciodată singurul indiciu: tooltip-ul scrie scorul numeric și
 componentele din care e calculat.
@@ -192,7 +192,7 @@ pot fi separate corect.
 deschis → închis. Un curcubeu ar sugera categorii acolo unde există o mărime
 continuă.
 
-**Etichete pe fiecare punct.** 505 etichete înseamnă zero etichete lizibile.
+**Etichete pe fiecare punct.** 503 etichete înseamnă zero etichete lizibile.
 Identificarea se face prin hover și prin tabelul alternativ.
 
 **O bibliotecă de grafice.** Ar fi însemnat un fișier extern, deci fie un CDN

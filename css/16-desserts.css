@@ -1,0 +1,556 @@
+/* =========================================================================
+ * 16 — PAGINA DE DESERTURI „CHEAT"
+ *
+ * Folosită doar de `deserturi.html`. Împrumută tot ce se poate din tokenele
+ * și componentele atlasului (`pf-panel`, `pf-chip`, `pf-badge`, `pf-nutri`,
+ * `pf-modal`, `pf-empty`) — pagina trebuie să pară o cameră din aceeași casă,
+ * nu o casă vecină.
+ *
+ * Ce e nou aici e doar ce n-are corespondent în atlas: comparația cu desertul
+ * real, scorul de schimb și panoul de onestitate.
+ * ========================================================================= */
+
+.pf-dessert-page .pf-topbar {
+  gap: var(--sp-3);
+}
+
+/* ---------------------------------------------------------------- hero -- */
+
+.pf-dhero {
+  margin-bottom: var(--sp-4);
+}
+
+.pf-dhero__title {
+  margin: var(--sp-2) 0 var(--sp-3);
+  font-size: clamp(1.9rem, 5vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: var(--text-1);
+}
+
+.pf-dhero__title em {
+  font-style: normal;
+  background: linear-gradient(96deg, var(--accent), var(--macro-fat, var(--accent-2)));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.pf-dhero .pf-lede + .pf-lede {
+  margin-top: var(--sp-3);
+}
+
+/* The three rules are the page's contract with the reader; they get a frame
+ * so they read as terms, not as marketing copy. */
+.pf-dhero__rules {
+  display: grid;
+  gap: var(--sp-2);
+  margin: var(--sp-5) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pf-dhero__rules li {
+  position: relative;
+  padding: var(--sp-3) var(--sp-4) var(--sp-3) calc(var(--sp-4) + 14px);
+  background: var(--bg-inset);
+  border-radius: var(--r-md);
+  border-left: 3px solid var(--border-strong);
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+  color: var(--text-3);
+}
+
+.pf-dhero__rules li::before {
+  content: '·';
+  position: absolute;
+  left: var(--sp-3);
+  color: var(--accent);
+  font-weight: 900;
+}
+
+.pf-dhero__rules b { color: var(--text-1); }
+
+/* ------------------------------------------------------------ bara de sus -- */
+
+.pf-dbar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+}
+
+.pf-dbar__count {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+.pf-dbar__count b {
+  color: var(--accent);
+  font-size: var(--fs-md);
+}
+
+/* ---------------------------------------------------------------- card -- */
+
+.pf-dcard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  cursor: pointer;
+  transition: border-color var(--dur-fast) ease, transform var(--dur-fast) ease;
+}
+
+.pf-dcard:hover {
+  border-color: var(--border-loud);
+  transform: translateY(-2px);
+}
+
+.pf-dcard:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.pf-dcard__head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+}
+
+.pf-dcard__icon {
+  flex: none;
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.pf-dcard__name {
+  margin: 0 0 var(--sp-2);
+  font-size: var(--fs-md);
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--text-1);
+}
+
+.pf-dcard__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* ------------------------------------------------------ scorul de schimb -- */
+
+/* Deliberately not the same shape as the atlas score orb. That one grades a
+ * product in absolute terms; this one grades a TRADE, and conflating the two
+ * would be a lie of visual language. */
+.pf-dscore {
+  flex: none;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  row-gap: 1px;
+  width: 54px;
+  height: 54px;
+  border-radius: var(--r-md);
+  background: var(--bg-inset);
+  border: 1px solid var(--border-strong);
+}
+
+.pf-dscore b {
+  font-size: 1.15rem;
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-2);
+}
+
+.pf-dscore span {
+  font-size: var(--fs-3xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-4);
+}
+
+.pf-dscore.is-great { border-color: var(--ok);   background: var(--ok-soft); }
+.pf-dscore.is-great b { color: var(--ok); }
+.pf-dscore.is-good  { border-color: var(--accent); background: var(--accent-dim); }
+.pf-dscore.is-good b { color: var(--accent); }
+.pf-dscore.is-meh   { border-color: var(--warn); background: var(--warn-soft); }
+.pf-dscore.is-meh b { color: var(--warn); }
+
+/* ---------------------------------------------------------------- hero -- */
+
+.pf-dcard__hero {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-3);
+  background: var(--bg-inset);
+  border-radius: var(--r-md);
+}
+
+.pf-dcard__protein {
+  flex: none;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.pf-dcard__protein b {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--macro-protein, var(--accent));
+  font-variant-numeric: tabular-nums;
+}
+
+.pf-dcard__protein span {
+  font-size: var(--fs-3xs);
+  line-height: 1.15;
+  color: var(--text-4);
+}
+
+.pf-dcard__nums {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px var(--sp-3);
+  font-size: var(--fs-2xs);
+  color: var(--text-4);
+}
+
+.pf-dcard__nums b {
+  color: var(--text-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.pf-dcard__foot {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-top: auto;
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--border);
+}
+
+.pf-dcard__foot .pf-muted {
+  flex: 1 1 auto;
+  font-size: var(--fs-2xs);
+}
+
+/* =========================================================================
+ * COMPARAȚIA — piesa centrală
+ *
+ * Două bare pe aceeași scară. Scara e maximul dintre cele două valori, nu o
+ * constantă: dacă diferența e mică, barele TREBUIE să arate aproape la fel.
+ * O comparație care exagerează vizual diferența e o minciună cu grafice.
+ * ========================================================================= */
+
+.pf-vs {
+  display: grid;
+  gap: 6px;
+  padding: var(--sp-3);
+  background: var(--bg-panel-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+}
+
+.pf-vs__head {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  margin-bottom: 2px;
+  font-size: var(--fs-3xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.pf-vs__mine   { color: var(--accent); font-weight: 700; }
+.pf-vs__theirs { color: var(--text-4); text-align: right; }
+
+.pf-vs__row {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.pf-vs__label {
+  font-size: var(--fs-2xs);
+  color: var(--text-4);
+}
+
+.pf-vs__bars {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.pf-vs__bar {
+  position: relative;
+  display: block;
+  height: 14px;
+  border-radius: var(--r-xs);
+  background: var(--bg-inset);
+  overflow: hidden;
+}
+
+.pf-vs__bar i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  display: block;
+  border-radius: var(--r-xs);
+  background: var(--text-4);
+  transition: width var(--dur-base) ease;
+}
+
+.pf-vs__bar b {
+  position: absolute;
+  right: 6px;
+  top: 0;
+  line-height: 14px;
+  font-size: var(--fs-3xs);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-2);
+}
+
+/* Ours is the accent bar; theirs stays grey. Colour carries "which is which",
+ * and the win state adds a second signal so it is never colour alone. */
+.pf-vs__bar--ours i { background: var(--accent); opacity: 0.55; }
+.pf-vs__bar--ours.is-win i { opacity: 1; }
+.pf-vs__bar--ours.is-win b { color: var(--text-1); }
+.pf-vs__bar--ours.is-win::after {
+  content: '✓';
+  position: absolute;
+  left: 5px;
+  top: 0;
+  line-height: 14px;
+  font-size: var(--fs-3xs);
+  font-weight: 800;
+  color: var(--accent-ink, #032019);
+}
+
+.pf-vs__bar--theirs i { background: var(--border-loud); }
+
+/* =========================================================================
+ * PANOUL DE ONESTITATE
+ *
+ * Deliberat plasat pe CARD, nu ascuns în modal. Dacă un desert are 30 g de
+ * polioli pe porție, aflarea trebuie să se întâmple înainte să-l alegi.
+ * ========================================================================= */
+
+.pf-honesty {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pf-honesty__i {
+  position: relative;
+  padding: 5px var(--sp-3) 5px 24px;
+  border-radius: var(--r-sm);
+  font-size: var(--fs-2xs);
+  line-height: 1.4;
+}
+
+.pf-honesty__i::before {
+  position: absolute;
+  left: 7px;
+  top: 5px;
+  font-size: var(--fs-2xs);
+}
+
+.pf-honesty__i--warn { background: var(--warn-soft); color: var(--text-2); }
+.pf-honesty__i--warn::before { content: '⚠️'; }
+.pf-honesty__i--bad  { background: var(--bad-soft);  color: var(--text-2); }
+.pf-honesty__i--bad::before  { content: '⛔'; }
+.pf-honesty__i--info { background: var(--bg-inset);  color: var(--text-3); }
+.pf-honesty__i--info::before { content: 'ℹ️'; }
+
+/* ------------------------------------------------------------- modal ---- */
+
+.pf-dessert-page .pf-modal__icon {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.pf-dessert-page .pf-modal__body .pf-vs {
+  margin-bottom: var(--sp-4);
+}
+
+.pf-dessert-page .pf-nutri td.is-good { color: var(--ok); font-weight: 650; }
+.pf-dessert-page .pf-nutri td.is-bad  { color: var(--bad); font-weight: 650; }
+
+/* Variantele de substituție, care n-aveau stil nicăieri în proiect. */
+.pf-swaps {
+  margin: 0;
+  display: grid;
+  gap: var(--sp-2);
+}
+
+.pf-swaps dt {
+  font-weight: 650;
+  font-size: var(--fs-sm);
+  color: var(--text-1);
+}
+
+.pf-swaps dd {
+  margin: 0 0 var(--sp-2);
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+  color: var(--text-3);
+}
+
+/* --------------------------------------------------------------- ≤620 --- */
+
+@media (max-width: 620px) {
+  .pf-dcard { padding: var(--sp-3); }
+
+  .pf-dcard__hero {
+    flex-wrap: wrap;
+    row-gap: var(--sp-2);
+  }
+
+  /* The label column would squeeze the bars to nothing on a phone, so the
+   * label moves above them. */
+  .pf-vs__row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+
+  .pf-vs__label {
+    font-size: var(--fs-3xs);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .pf-dhero__title { font-size: clamp(1.6rem, 8vw, 2.2rem); }
+
+  .pf-dessert-page .pf-topbar__actions .pf-btn { padding: 6px 10px; }
+}
+
+/* --------------------------------------------------------------- print -- */
+
+@media print {
+  .pf-dhero__rules,
+  .pf-dbar,
+  .pf-dcard__foot { display: none; }
+
+  .pf-dcard {
+    break-inside: avoid;
+    border: 1pt solid #000;
+  }
+
+  /* The comparison is the one thing worth keeping on paper. */
+  .pf-vs { border: 1pt solid #666; }
+  .pf-vs__bar i { background: #666 !important; }
+  .pf-vs__bar--ours i { background: #000 !important; }
+}
+
+/* ----------------------------------------------------- reduced motion --- */
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-dcard,
+  .pf-vs__bar i { transition: none; }
+  .pf-dcard:hover { transform: none; }
+}
+
+/* =========================================================================
+ * „CU CE TE LUPȚI" — registrul dulciurilor reale
+ *
+ * Pliat implicit. Închis costă o linie; deschis e un tabel de 40 de rânduri
+ * pe care nu vrei să-l derulezi din greșeală de fiecare dată.
+ * ========================================================================= */
+
+.pf-refpanel {
+  margin-top: var(--sp-5);
+  overflow: hidden;
+}
+
+.pf-refpanel__head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  width: 100%;
+  padding: var(--sp-3) var(--sp-4);
+  background: none;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.pf-refpanel__head:hover { background: var(--bg-hover); }
+.pf-refpanel__head:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+.pf-refpanel__icon { flex: none; font-size: 1.25rem; line-height: 1; }
+
+.pf-refpanel__title {
+  flex: none;
+  font-weight: 650;
+  color: var(--text-1);
+}
+
+.pf-refpanel__sum {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: var(--fs-xs);
+  color: var(--text-4);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pf-refpanel__chev { flex: none; color: var(--text-4); font-size: var(--fs-xs); }
+
+.pf-refpanel__body {
+  padding: var(--sp-4);
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--border);
+}
+
+.pf-reftable th { font-weight: 600; }
+
+.pf-refrow__serv {
+  display: block;
+  font-size: var(--fs-3xs);
+  font-weight: 400;
+  color: var(--text-4);
+}
+
+/* Sugar is the column people came to look at. */
+.pf-refrow__sugar { color: var(--macro-carbs, var(--warn)); font-weight: 650; }
+
+/* Confidence is not decoration here: half of these numbers are estimates for
+ * a papanaș that every cofetărie makes differently, and the badge has to say
+ * so without a tooltip being the only way to find out. */
+.pf-conf { font-size: var(--fs-3xs); }
+.pf-conf--high   { border-color: var(--ok);   color: var(--ok); }
+.pf-conf--medium { border-color: var(--border-strong); color: var(--text-4); }
+.pf-conf--low    { border-color: var(--warn); color: var(--warn); }
+
+@media (max-width: 620px) {
+  .pf-refpanel__head { flex-wrap: wrap; row-gap: 2px; padding: var(--sp-3); }
+  .pf-refpanel__sum { flex: 1 0 100%; order: 3; white-space: normal; }
+  .pf-refpanel__body { padding: var(--sp-3); }
+  .pf-reftable { font-size: var(--fs-2xs); }
+}
+
+/* Când o parte din proteină vine din gelatină, numărul mare de deasupra e cel
+ * de pe etichetă, nu cel din corp. Cifra reală stă lângă el, marcată. */
+.pf-dcard__usable {
+  color: var(--warn);
+}
+
+.pf-dcard__usable b { color: var(--warn); }

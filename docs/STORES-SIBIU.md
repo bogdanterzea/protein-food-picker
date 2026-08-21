@@ -37,7 +37,7 @@ fiecare.
 
 ## Kaufland — magazinul implicit
 
-**374 din 505 produse.** Dacă mergi într-un singur loc, acesta e.
+**380 din 503 produse.** Dacă mergi într-un singur loc, acesta e.
 
 **Ce ia numai de aici:**
 - **Tejgheaua de carne** — ceri tranșarea exact cum vrei, iar piept de pui fără
@@ -193,7 +193,7 @@ oficiale (`încredere: scăzută`). Porțiile variază enorm de la local la loca
 ## Strategii de cumpărare
 
 ### Un singur drum pe săptămână
-**Kaufland.** Acoperă 374 din 505 produse. Ia carnea de la tejghea, un pui la
+**Kaufland.** Acoperă 374 din 503 produse. Ia carnea de la tejghea, un pui la
 rotisor pentru ziua respectivă, lactate, conserve, lapte praf de la patiserie.
 
 ### Două drumuri, buget optimizat

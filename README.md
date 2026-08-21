@@ -1,12 +1,17 @@
 # Atlasul Proteinelor Sibiu
 
-**505 alimente bogate în proteine pe care le poți cumpăra efectiv în Sibiu**, cu
+**503 alimente bogate în proteine pe care le poți cumpăra efectiv în Sibiu**, cu
 macro-uri complete, preț pe gram de proteină, efort de gătit, gust evaluat onest
 și momentul din zi în care merită mâncate — afișate cu bare de statistici ca
 într-un joc video.
 
+Plus **43 de mese complete**, **48 de deserturi „cheat"** pe o pagină separată, și
+un **ghid al celor 18 locuri de cumpărat** din oraș.
+
 Deschide `index.html` în orice browser. Nu are nevoie de server, de instalare, de
-internet și de niciun build step.
+internet și de niciun build step. Servit peste http, se și **instalează pe telefon
+și funcționează offline** — pentru că se folosește în magazin, unde semnalul e
+prost.
 
 ---
 
@@ -33,10 +38,27 @@ Fiecare produs din atlas are:
 
 ```
 proteinFood/
-└── index.html      ← deschide asta
+├── index.html      ← atlasul: ce cumpăr
+└── deserturi.html  ← deserturi cheat: e 22:00 și vreau ceva dulce
 ```
 
 Serios, atât. Dublu-click pe `index.html`.
+
+### Cele patru moduri de a intra
+
+| Vrei să… | Unde |
+|---|---|
+| Vezi repede ce merită | Pastilele **„Ce cauți?"** din capul paginii — ieftin și bogat, fără gătit, sub 20 de minute, slab, cele mai bune. Fiecare arată câte produse rămân **înainte** să apeși. |
+| Gătești o masă întreagă | Fila **Rețete**. Bifează în **„Ce am în frigider"** ce ai în casă și îți arată ce poți găti acum și exact ce-ți lipsește. |
+| Știi unde să te duci | Fila **Hartă**, jos: fișă per magazin, cu indice de preț, program și cea mai ieftină proteină de acolo. |
+| Ceva dulce | **`deserturi.html`**. Fiecare rețetă arată cu ce se compară: desertul real pe care îl înlocuiește, cu cifrele lui. |
+
+### Instalare pe telefon
+
+Deschide aplicația servită peste http(s), apoi „Adaugă pe ecranul principal".
+După prima încărcare merge complet offline — toate cele 503 produse, rețetele și
+deserturile sunt în cache. Din `file://` service workerii sunt interziși de
+browser, dar aplicația funcționează oricum, doar fără instalare.
 
 ### Cele șapte vizualizări
 
@@ -74,7 +96,7 @@ poți trimite un link cu exact ce vezi pe ecran.
 
 ## Ce e în atlas
 
-**505 produse · 8 categorii · 89 subcategorii · 18 locuri de cumpărat**
+**503 produse · 8 categorii · 89 subcategorii · 18 locuri de cumpărat**
 
 | Categorie | Produse |
 |---|---:|
@@ -140,7 +162,7 @@ Media pe atlas e de **19,8 g proteină / 100 g**. Prețul median al proteinei e 
 Atlasul îți spune *ce* să cumperi. Fila **Rețete** îți spune *ce faci din el* —
 o masă întreagă, nu un ingredient.
 
-- **21 de mese**, filtrabile după **metodă** (la cuptor, la tigaie, la grătar,
+- **43 de mese**, filtrabile după **metodă** (la cuptor, la tigaie, la grătar,
   air fryer, fiert/supă, gătit lent, fără gătit) și după **ingredientul
   principal** (pui, curcan, porc, vită, pește, ouă, lactate, leguminoase, tofu).
 - Fiecare rețetă are proteina, garnitura și legumele în aceeași listă, cu pași
@@ -159,58 +181,97 @@ o masă întreagă, nu un ingredient.
 Intervalul actual: de la **23 g proteină / porție la 2,54 lei** (linte cu orez)
 până la **63 g / porție** (șnițel de curcan cu piure).
 
+## Deserturi cheat (`deserturi.html`)
+
+**48 de deserturi bogate în proteină**, din ingrediente găsibile în Sibiu:
+fără coacere, la cuptor și air fryer, la congelator, la cană în trei minute,
+de băut, sau pentru toată săptămâna.
+
+Un desert proteic **nu e mâncare sănătoasă**. E o variantă care rezolvă aceeași
+poftă la alt cost nutrițional, iar singurul mod onest de a spune asta e să pui
+cifrele una lângă alta. De aceea fiecare rețetă declară **cu ce se compară** —
+desertul real pe care îl înlocuiește, cu proteina, zahărul și caloriile lui — și
+pagina nu afișează niciodată o rețetă fără comparația ei.
+
+Barele de comparație stau pe aceeași scară: dacă diferența e mică, arată aproape
+la fel. O comparație care exagerează vizual diferența ar fi o minciună cu grafice.
+
+| | |
+|---|---|
+| Proteină pe porție | 15,6–36,5 g (median 21) |
+| Calorii pe porție | 146–332 (median 233) |
+| Registru de referință | 40 de dulciuri reale, cu încrederea declarată: doar 10 au valori de producător |
+
+**Onestitatea e pe card, nu în subsol.** Poliolii pe porție apar lângă zahăr,
+nu doar când depășesc pragul. Xilitolul e marcat ca toxic pentru câini. Proteina
+din gelatină e scăzută din cea utilizabilă, iar poarta măsoară pragul de 15 g pe
+proteina utilizabilă, nu pe cea de pe etichetă.
+
+Ca peste tot, macro-urile nu sunt scrise de mână: se calculează din ingrediente,
+care trimit la produse reale din atlas sau la cămara de deserturi. Poarta respinge
+orice câmp `kcal`/`protein`/`carbs`/`fat` scris la nivel de rețetă.
+
+Detaliile în [`docs/DESSERT-SCIENCE.md`](docs/DESSERT-SCIENCE.md) (îndulcitori,
+proteina la căldură, de ce înghețata proteică se face piatră) și
+[`docs/DESSERT-SHOPPING.md`](docs/DESSERT-SHOPPING.md) (de unde cumperi, cu prețuri
+estimate).
+
+---
+
 ## Structura proiectului
 
 ```
 proteinFood/
-├── index.html                  Aplicația. Un singur fișier de deschis.
-├── css/                        13 fișiere, în ordinea cascadei
-│   ├── 00-reset.css            reset minimal
-│   ├── 01-tokens.css           TOATE culorile și dimensiunile trăiesc aici
-│   ├── 02-base.css             tipografie, panouri, badge-uri, tooltip-uri
-│   ├── 03-layout.css           bara de sus, coloana de filtre, scena
-│   ├── 04-controls.css         butoane, chips, slidere, comutatoare
-│   ├── 05-statbars.css         barele de joc, insignele de rang, macro-barele
-│   ├── 06-cards.css            cardul de produs
-│   ├── 07-modal.css            dosarul complet al unui produs
-│   ├── 08-panels.css           hero, calculator, masă, clasamente, listă
-│   ├── 09-charts.css           donut, radar, scatter, histogramă
-│   ├── 10-animations.css       toate keyframe-urile
-│   ├── 11-responsive.css       5 praguri + suport touch
-│   └── 12-print.css            lista de cumpărături pe hârtie
+├── index.html                  Atlasul. Un singur fișier de deschis.
+├── deserturi.html              Deserturile cheat. Pagină separată, aceleași tokene.
+├── manifest.webmanifest        Instalare pe telefon
+├── sw.js                       GENERAT de tools/build-sw.js — nu se editează
+├── icons/                      GENERATE de tools/make-icons.js
+├── css/                        17 fișiere, în ordinea cascadei
+│   ├── 00-reset  01-tokens     TOATE culorile și dimensiunile trăiesc în 01
+│   ├── 02-base   03-layout     tipografie · bara de sus, filtre, scena
+│   ├── 04-controls 05-statbars butoane, chips · barele de joc, insignele
+│   ├── 06-cards  07-modal      cardul · dosarul complet
+│   ├── 08-panels 09-charts     hero, masă, clasamente · donut, radar, scatter
+│   ├── 10-animations           toate keyframe-urile
+│   ├── 11-responsive           5 praguri + suport touch
+│   ├── 13-fridge 14-stores     „Ce am în frigider" · ghidul magazinelor
+│   ├── 15-docs   16-desserts   paginile de documentație · deserturile
+│   └── 12-print                ULTIMA în index.html, ca să bată restul
 ├── js/
-│   ├── data/                   35 138 de linii de date cercetate
-│   │   ├── 00-stores.js        registrul magazinelor din Sibiu
-│   │   ├── 01..08-*.js         câte un fișier per categorie
-│   │   └── 09-recipes.js       21 de mese complete + cămara
-│   ├── utils/
-│   │   ├── format.js           numere, lei, minute, diacritice, highlight
-│   │   ├── i18n.js             dicționar RO/EN complet
-│   │   ├── compute.js          TOATE metricile derivate și scorurile
-│   │   └── storage.js          localStorage + starea din URL
-│   ├── components/
-│   │   ├── ui.js               bare, insigne, pips, pastile de magazin
-│   │   ├── charts.js           SVG scris de mână, fără biblioteci
-│   │   ├── card.js             cardul + rândul de tabel
-│   │   ├── modal.js            dosarul, în 6 file
-│   │   ├── filters.js          motorul de filtrare + coloana de filtre
-│   │   ├── tray.js             masa + lista de cumpărături
-│   │   ├── recipes.js          mesele complete, calculate din atlas
-│   │   ├── tooltip.js          tooltip flotant, nu pseudo-element
-│   │   ├── boards.js           cele 10 clasamente
-│   │   └── compare.js          comparația cap la cap
-│   └── app.js                  boot, evenimente, vizualizări, scurtături
-└── docs/
-    ├── DATA-SCHEMA.md          contractul de date (citește-l înainte să adaugi ceva)
-    ├── METHODOLOGY.md          cum se calculează scorurile și de ce
-    ├── PROTEIN-GUIDE.md        de câtă proteină ai nevoie și de unde
-    ├── STORES-SIBIU.md         ghid magazin cu magazin
-    ├── MEAL-TIMING.md          distribuția proteinei pe parcursul zilei
-    ├── BUDGET.md               proteină ieftină, ordonată de la cea mai bună
-    ├── CHARTS.md               deciziile de design ale graficelor
-    ├── CHANGELOG.md            istoricul proiectului
-    └── categories/             8 ghiduri de cumpărare, unul per categorie
+│   ├── data/                   40641 de linii de date cercetate
+│   │   ├── 00-stores           registrul celor 18 locuri din Sibiu
+│   │   ├── 01..08              câte un fișier per categorie · 503 produse
+│   │   ├── 09-recipes          43 de mese complete + cămara
+│   │   ├── 10-dessert-pantry   50 de ingrediente de desert
+│   │   ├── 11..13-desserts     48 de deserturi: fără coacere, coapte, rapide
+│   │   └── 14-dessert-reference 40 de dulciuri reale, cu ce se compară
+│   ├── utils/                  format · i18n · compute · storage
+│   ├── components/             ui, charts, card, modal, filters, tray,
+│   │                           recipes, stores, boards, compare, tooltip,
+│   │                           desserts
+│   └── app.js                  starea, vizualizările, evenimentele
+├── tools/                      node, zero dependențe
+│   ├── check.js                POARTA. Rulează asta după orice modificare.
+│   ├── test-compute.js         174 de teste pe scoruri și formatare
+│   ├── build-docs.js           .md → pagini HTML stilizate
+│   ├── build-sw.js             regenerează sw.js din ce încarcă paginile
+│   ├── make-icons.js           iconițele PWA, desenate în cod
+│   └── verify-prices.js        singura cale prin care un preț devine confirmat
+└── docs/                       metodologie, scheme, ghiduri, changelog
 ```
+
+### După orice modificare
+
+```sh
+node tools/check.js          # poarta: date, vocabulare, prețuri, PWA, deserturi
+node tools/test-compute.js   # 174 de teste pe scoruri și formatare
+```
+
+Dacă ai atins CSS sau JS, `sw.js` devine învechit și poarta ți-o spune —
+`node tools/build-sw.js`. Dacă ai atins un `.md` din `docs/`,
+`node tools/build-docs.js`.
+
 
 ---
 
@@ -236,7 +297,7 @@ Ficatul de porc are 22. Dacă totul ar fi 90, barele n-ar spune nimic.
 ### Rangul (S / A / B / C / D / E)
 
 Un singur scor compus, cu ponderile scrise pe față în `docs/METHODOLOGY.md`.
-**Doar 3 produse din 505 ajung la rang S.** Asta e intenționat: dacă rangul S ar
+**Doar 3 produse din 503 ajung la rang S.** Asta e intenționat: dacă rangul S ar
 fi ieftin, n-ar însemna nimic.
 
 ---
@@ -266,11 +327,11 @@ Fiecare produs are un nivel de încredere declarat:
 
 | Nivel | Produse | Ce înseamnă |
 |---|---:|---|
-| **Ridicată** | 167 | Valori citite de pe o etichetă reală sau de pe site-ul oficial |
-| **Medie** | 260 | Valori tipice pentru tipul de produs; marca variază |
-| **Scăzută** | 78 | Estimare — raion cald, restaurant, produs fără etichetă |
+| **Ridicată** | 168 | Valori citite de pe o etichetă reală sau de pe site-ul oficial |
+| **Medie** | 259 | Valori tipice pentru tipul de produs; marca variază |
+| **Scăzută** | 76 | Estimare — raion cald, restaurant, produs fără etichetă |
 
-Toate cele 505 intrări trec o verificare automată de coerență energetică
+Toate cele 503 intrări trec o verificare automată de coerență energetică
 (`kcal ≈ proteină×4 + carbo×4 + grăsimi×9 + fibre×2`, toleranță ±15%), plus
 `zaharuri ≤ carbohidrați` și `grăsimi saturate ≤ grăsimi`.
 

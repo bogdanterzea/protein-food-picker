@@ -499,6 +499,47 @@
   background: var(--bg-hover);
 }
 
+/* Coloana cu numele produsului rămâne pe loc la derulare laterală.
+ *
+ * Tabelul are 1080px minimi într-o cutie de 364px pe telefon: fără asta,
+ * derulezi spre dreapta și rămâi cu o grilă de numere fără să mai știi al cui
+ * e rândul. Numele e singura coloană care dă sens celorlalte.
+ *
+ * Fundalul trebuie să fie OPAC, altfel conținutul care trece pe dedesubt se
+ * vede prin el. Iar celula din colț e lipită pe ambele axe simultan, deci are
+ * nevoie de un z-index peste antetul lipit de sus (5), nu doar peste rânduri.
+ */
+.pf-table tbody td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 3;
+  background: var(--bg-panel);
+}
+
+.pf-table thead th:first-child {
+  left: 0;
+  z-index: 6;
+}
+
+/* Hover-ul de rând e semitransparent și n-ar acoperi celula opacă de mai sus,
+ * deci coloana lipită își primește propria stare, cu un token tot opac. */
+.pf-table tbody tr:hover td:first-child {
+  background: var(--bg-raised);
+}
+
+/* Muchia care spune că textul chiar trece pe dedesubt, nu că se termină acolo.
+ * Apare doar cât timp există derulare laterală de făcut. */
+.pf-table tbody td:first-child::after,
+.pf-table thead th:first-child::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--border);
+}
+
 .pf-table tbody tr:last-child {
   border-bottom: none;
 }

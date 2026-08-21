@@ -416,7 +416,6 @@ se strică, nu are nevoie de frigider.
 ---
 
 ## 10. Surse & incertitudine cunoscută
-## 10. Surse & incertitudine cunoscută
 
 **Cum au fost strânse datele.** 22 de intrări au `dataConfidence: 'high'` — valori citite de pe
 eticheta reală sau calculate direct din etichetele componentelor (toate cele 7 hack-uri intră aici).

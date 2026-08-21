@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ro" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Schema deserturilor · Atlasul Proteinelor Sibiu</title>
+<link rel="stylesheet" href="../css/00-reset.css">
+<link rel="stylesheet" href="../css/01-tokens.css">
+<link rel="stylesheet" href="../css/15-docs.css">
+</head>
+<body class="pf-doc-body">
+
+<header class="pf-doc-top">
+  <a class="pf-doc-back" href="../index.html">‹ Atlasul Proteinelor</a>
+  <a class="pf-doc-back" href="index.html">Toată documentația</a>
+  <button class="pf-doc-theme" id="pf-doc-theme" title="Temă">☀️</button>
+</header>
+
+<div class="pf-doc-shell">
+  <nav class="pf-doc-toc" aria-label="Cuprins"><div class="pf-doc-toc__title">Pe această pagină</div><ul><li class="lv2"><a href="#0-ce-inseamna-cheat-aici-si-ce-nu">0. Ce înseamnă „cheat&quot; aici, și ce nu</a></li><li class="lv2"><a href="#1-forma-unei-intrari">1. Forma unei intrări</a></li><li class="lv2"><a href="#2-vocabulare-controlate">2. Vocabulare controlate</a></li><li class="lv2"><a href="#3-ingrediente-reguli">3. Ingrediente: reguli</a></li><li class="lv2"><a href="#4-avertismente-obligatorii">4. Avertismente obligatorii</a></li><li class="lv2"><a href="#5-calitatea-nu-doar-cantitatea">5. Calitatea, nu doar cantitatea</a></li><li class="lv2"><a href="#6-ce-se-verifica-automat">6. Ce se verifică automat</a></li></ul></nav>
+  <main class="pf-doc-main">
+<h1 id="schema-deserturilor-cheat">Schema deserturilor „cheat&quot;</h1>
+<p>Contractul pe care îl respectă fiecare intrare din <code>js/data/1*-desserts-*.js</code>. Scris înainte de cercetare, exact ca <code>DATA-SCHEMA.md</code>, ca patru oameni care lucrează în paralel să producă un set coerent, nu patru seturi diferite.</p>
+<hr>
+<h2 id="0-ce-inseamna-cheat-aici-si-ce-nu">0. Ce înseamnă „cheat&quot; aici, și ce nu</h2>
+<p>Un desert proteic <strong>rămâne un desert</strong>. Nu e mâncare sănătoasă cu care poți să te îndopi, e o variantă care satisface aceeași poftă la un cost nutrițional mai mic. Atât.</p>
+<p>Trei reguli de onestitate, la fel de obligatorii ca la prețuri:</p>
+<ol class="pf-doc-list"><li><strong>Nicio afirmație de sănătate.</strong> Nu scrie „sănătos&quot;, „curat&quot;, „detox&quot;, „arde grăsimi&quot;. Scrie cifre și lasă cititorul să compare.</li><li><strong>Fiecare desert declară ce înlocuiește</strong>, cu macro-urile reale ale lucrului înlocuit. Dacă un „brownie proteic&quot; are 280 kcal și cel de cofetărie are 310, spune-o — poate concluzia e că nu merită efortul.</li><li><strong>Îndulcitorii se declară în grame.</strong> Un desert „fără zahăr&quot; cu 35 g de eritritol pe porție e o problemă digestivă, nu o victorie.</li></ol>
+<p>O rețetă care nu are gust bun e o rețetă eșuată, oricât de bune sunt macro-urile. De asta există axa <code>authenticity</code>: cât de aproape e de lucrul real.</p>
+<hr>
+<h2 id="1-forma-unei-intrari">1. Forma unei intrări</h2>
+<pre class="pf-doc-code" data-lang="js"><code>{
+  id: 'ds-cheesecake-borcan',          // 'ds-' + slug, unic în tot proiectul
+  name: 'Cheesecake la borcan, fără coacere',
+  emoji: '🍰',                          // exact unul, fără text
+
+  family: 'no-bake',                    // vezi §2
+  craving: 'cremos',                    // vezi §2 — ce poftă rezolvă
+  servings: 2,
+
+  /* Ingredientele. Macro-urile NU se scriu de mână niciodată — se calculează
+     din astea la încărcare. O rețetă cu macro-uri scrise de mână va fi
+     respinsă de poartă. */
+  ing: [
+    { id: 'd-skyr-natural-pilos', g: 300 },   // produs din atlas
+    { p: 'cacao', g: 12 },                     // cheie din cămara de deserturi
+    { p: 'eritritol', g: 16 },
+    { p: 'vanilie', g: 2, free: true }         // free = nu se pune la cost
+  ],
+
+  time: { total: 15, active: 10, chill: 240 }, // minute; chill = doar așteptare
+  effort: 1,                                    // 0-5, cât de mult muncești
+  difficulty: 'usor',                           // usor | mediu | greu
+  equipment: ['bol', 'tel'],
+
+  steps: [ 'Text imperativ, un pas pe element.', /* 3-8 pași */ ],
+  tips:  [ /* 2-4, concrete, nu generalități */ ],
+  swaps: [ { label: 'Fără lactate', text: '...' } ],   // 1-3
+  warnings: [ /* obligatoriu unde e cazul, vezi §4 */ ],
+
+  taste: {
+    sweetness: 70,      // 0-100, cât de dulce iese
+    richness: 55,       // cât de bogat/cremos
+    texture: 80,        // cât de plăcută e textura (uscat/cauciucat = mic)
+    authenticity: 75    // cât de aproape de desertul real pe care îl imită
+  },
+
+  /* Lucrul pe care îl înlocuiește, cu valorile lui reale, per porție
+     comparabilă. Sursa se trece în `vsSource`. */
+  vs: {
+    name: 'Cheesecake de cofetărie',
+    grams: 120, kcal: 380, protein: 6, carbs: 34, sugars: 28, fat: 24
+  },
+  vsSource: 'Valori tipice de etichetă pentru cheesecake ambalat, 2026',
+
+  sweetener: { kind: 'eritritol', gPerServing: 8 },   // null dacă nu e niciunul
+
+  storage: 'Frigider, 3 zile. Nu se congelează — se brânzește.',
+
+  /* Când merită mâncat. Aceeași scară 0-5 ca la atlas. */
+  mealFit: { desert: 5, gustare: 4, micDejun: 3, postAntrenament: 4, seara: 3 },
+
+  dataConfidence: 'medium'   // high | medium | low, ca în atlas
+}</code></pre>
+<hr>
+<h2 id="2-vocabulare-controlate">2. Vocabulare controlate</h2>
+<p><strong><code>family</code></strong> — cum se face, adică ce fel de efort ceri:</p>
+<div class="pf-doc-tablewrap"><table class="pf-doc-table"><thead><tr><th style="text-align:left">valoare</th><th style="text-align:left">ce înseamnă</th></tr></thead><tbody><tr><td style="text-align:left"><code>no-bake</code></td><td style="text-align:left">Se amestecă și se răcește. Zero căldură.</td></tr><tr><td style="text-align:left"><code>baked</code></td><td style="text-align:left">Cuptor sau air fryer.</td></tr><tr><td style="text-align:left"><code>frozen</code></td><td style="text-align:left">Congelator: înghețată, batoane, bombe.</td></tr><tr><td style="text-align:left"><code>drink</code></td><td style="text-align:left">Se bea: shake, smoothie, ciocolată caldă.</td></tr><tr><td style="text-align:left"><code>mug</code></td><td style="text-align:left">O cană, microunde, sub 5 minute, o porție.</td></tr><tr><td style="text-align:left"><code>batch</code></td><td style="text-align:left">Se face o dată, ține toată săptămâna.</td></tr></tbody></table></div>
+<p><strong><code>craving</code></strong> — ce poftă rezolvă. Asta e axa după care caută omul la 22:00:</p>
+<p><code>ciocolata</code> · <code>cremos</code> · <code>crocant</code> · <code>fructat</code> · <code>patiserie</code> · <code>inghetata</code> · <code>caramel</code></p>
+<p><strong><code>difficulty</code></strong>: <code>usor</code> | <code>mediu</code> | <code>greu</code> <strong><code>dataConfidence</code></strong>: <code>high</code> (făcut și verificat) | <code>medium</code> (rețetă standard, valori tipice) | <code>low</code> (estimare)</p>
+<hr>
+<h2 id="3-ingrediente-reguli">3. Ingrediente: reguli</h2>
+<ol class="pf-doc-list"><li><strong>Dacă există în atlas, se referă prin <code>id</code>.</strong> Skyr, brânză de vaci, iaurt grecesc, whey, cazeină, gelatină, albuș, ovăz, arahide, nuci, migdale, ciocolată proteică — toate sunt deja acolo. Rulează <code>grep &quot;id: 'x-&quot; js/data/*.js</code> înainte să inventezi o cheie de cămară.</li><li><strong>Restul vine din <code>js/data/10-dessert-pantry.js</code></strong> (45 de chei). Dacă îți lipsește una, <strong>nu o adăuga singur</strong> — raportează și o adaug eu, ca să nu apară trei variante de „cacao&quot; scrise de trei agenți.</li><li><strong>Gramele sunt reale.</strong> 300 g de skyr pentru 2 porții, nu „un pahar&quot;.</li><li><code>free: true</code> doar pentru lucruri pe care nimeni nu le cântărește: vanilie, scorțișoară, sare, praf de copt.</li></ol>
+<hr>
+<h2 id="4-avertismente-obligatorii">4. Avertismente obligatorii</h2>
+<p>Se pune <code>warnings</code> când:</p>
+<ul class="pf-doc-list"><li><strong>Polioli peste 15 g pe porție</strong> — spune cifra și efectul digestiv.</li><li><strong>Xilitol în rețetă</strong> — e toxic pentru câini, la doze mici. Se scrie mereu.</li><li><strong>Proteina din gelatină sau colagen</strong> — nu se pune la ținta zilnică, e incompletă. Aplicația penalizează deja scorul, dar textul trebuie să existe.</li><li><strong>Peste 25 g de zahăr pe porție</strong> — e un desert cu zahăr, spune-o.</li><li><strong>Alergeni evidenți</strong> — arahide, nuci, lactate, ou, gluten.</li><li><strong>Cofeină</strong>, dacă rețeta are cacao multă sau cafea și e propusă seara.</li></ul>
+<hr>
+<h2 id="5-calitatea-nu-doar-cantitatea">5. Calitatea, nu doar cantitatea</h2>
+<p>Ținte pentru setul tău de rețete:</p>
+<ul class="pf-doc-list"><li><strong>Minimum 15 g proteină pe porție.</strong> Sub atât nu e un desert proteic, e un desert.</li><li><strong>Sub 350 kcal pe porție</strong>, cu excepții justificate în <code>tips</code>.</li><li><strong>Fiecare rețetă trebuie să funcționeze cu ingrediente din Sibiu.</strong> Fără allulose, fără „protein fluff powder&quot;, fără lucruri comandate din altă țară.</li><li><strong>Diversitate de efort</strong>: cel puțin o treime din setul tău sub 10 minute active.</li><li><strong><code>authenticity</code> sub 50 e un semnal de alarmă.</strong> Dacă rețeta nu seamănă cu ce imită, întreabă-te de ce e în listă.</li></ul>
+<hr>
+<h2 id="6-ce-se-verifica-automat">6. Ce se verifică automat</h2>
+<p><code>node tools/check.js</code> va respinge:</p>
+<ul class="pf-doc-list"><li>id duplicat, <code>emoji</code> cu mai mult de 3 caractere sau cu markup</li><li>un <code>ing[].id</code> care nu există în atlas, sau un <code>ing[].p</code> care nu e în cămară</li><li><code>family</code>, <code>craving</code>, <code>difficulty</code>, <code>dataConfidence</code> în afara vocabularului</li><li>macro-uri scrise de mână în intrare (câmpurile <code>kcal</code>, <code>protein</code>, <code>carbs</code>, <code>fat</code> la nivel de rețetă sunt INTERZISE — se calculează)</li><li>lipsa lui <code>vs</code> sau a lui <code>vsSource</code></li><li>polioli peste 15 g pe porție fără <code>warnings</code></li><li>mai puțin de 3 pași</li></ul>
+  </main>
+</div>
+
+<footer class="pf-doc-foot">
+  Generat din <code>docs/DESSERT-SCHEMA.md</code> cu <code>tools/build-docs.js</code>.
+  Nu edita fișierul HTML — modifică Markdown-ul și regenerează.
+</footer>
+
+<script>
+/* Theme toggle, mirroring the app's own so the docs do not fight it. */
+(function () {
+  var KEY = 'pf.atlas.v1.theme';
+  var root = document.documentElement;
+  var saved;
+  try { saved = JSON.parse(localStorage.getItem(KEY)); } catch (e) { saved = null; }
+  if (saved === 'light' || saved === 'dark') root.setAttribute('data-theme', saved);
+  var btn = document.getElementById('pf-doc-theme');
+  function paint() { btn.textContent = root.getAttribute('data-theme') === 'light' ? '🌙' : '☀️'; }
+  paint();
+  btn.addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem(KEY, JSON.stringify(next)); } catch (e) {}
+    paint();
+  });
+})();
+</script>
+</body>
+</html>

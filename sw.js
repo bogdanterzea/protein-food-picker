@@ -11,15 +11,41 @@
  * ========================================================================= */
 'use strict';
 
-const CACHE = 'pf-atlas-483e423e6750';
+const CACHE = 'pf-atlas-30c5440b9626';
 
 const PRECACHE = [
   "./",
   "index.html",
+  "deserturi.html",
   "manifest.webmanifest",
   "icons/icon-192.png",
   "icons/icon-512.png",
   "icons/icon-maskable-512.png",
+  "docs/BUDGET.html",
+  "docs/CHANGELOG.html",
+  "docs/CHARTS.html",
+  "docs/DATA-SCHEMA.html",
+  "docs/DESSERT-SCHEMA.html",
+  "docs/DESSERT-SCIENCE.html",
+  "docs/DESSERT-SHOPPING.html",
+  "docs/MEAL-TIMING.html",
+  "docs/METHODOLOGY.html",
+  "docs/PROTEIN-GUIDE.html",
+  "docs/ROADMAP.html",
+  "docs/STORES-SIBIU.html",
+  "docs/index.html",
+  "docs/categories/bakery-drinks-sweets.html",
+  "docs/categories/dairy-eggs.html",
+  "docs/categories/deli-processed.html",
+  "docs/categories/fish-seafood.html",
+  "docs/categories/fresh-meat.html",
+  "docs/categories/plant-protein.html",
+  "docs/categories/ready-meals.html",
+  "docs/categories/supplements-snacks.html",
+  "README.html",
+  "css/00-reset.css",
+  "css/01-tokens.css",
+  "css/15-docs.css",
   "css/00-reset.css",
   "css/01-tokens.css",
   "css/02-base.css",
@@ -60,7 +86,14 @@ const PRECACHE = [
   "js/components/stores.js",
   "js/components/boards.js",
   "js/components/compare.js",
-  "js/app.js"
+  "js/app.js",
+  "css/16-desserts.css",
+  "js/data/10-dessert-pantry.js",
+  "js/data/11-desserts-nobake.js",
+  "js/data/12-desserts-baked.js",
+  "js/data/13-desserts-fast.js",
+  "js/data/14-dessert-reference.js",
+  "js/components/desserts.js"
 ];
 
 self.addEventListener('install', function (event) {
@@ -104,8 +137,28 @@ self.addEventListener('fetch', function (event) {
         }
         return res;
       }).catch(function () {
-        /* Offline and not cached: a navigation still gets the app shell. */
-        if (req.mode === 'navigate') return caches.match('index.html');
+        /* Offline and not cached. Handing back the app shell here was worse
+         * than handing back nothing: at a /docs/ URL the shell's relative
+         * paths resolve against /docs/, so the reader got a blank page that
+         * still claimed to be the atlas. Only the app's own routes get the
+         * shell; anything else says plainly that it is not available. */
+        const inDocs = url.pathname.indexOf('/docs/') !== -1;
+        if (req.mode === 'navigate' && !inDocs) {
+          return caches.match('index.html');
+        }
+        if (req.mode === 'navigate') {
+          return new Response(
+            '<!doctype html><meta charset="utf-8">' +
+            '<title>Indisponibil offline</title>' +
+            '<body style="font:16px/1.6 system-ui;padding:2rem;max-width:34rem;' +
+            'margin:auto;background:#05070d;color:#c8d3e4">' +
+            '<h1 style="font-size:1.3rem">Pagina asta nu e în cache</h1>' +
+            '<p>Documentul nu a fost descărcat înainte să dispară rețeaua. ' +
+            'Atlasul funcționează în continuare offline.</p>' +
+            '<p><a style="color:#1ec99f" href="/index.html">← Înapoi la atlas</a></p>',
+            { status: 503, headers: { 'Content-Type': 'text/html; charset=utf-8' } }
+          );
+        }
         return new Response('', { status: 504, statusText: 'Offline' });
       });
     })

@@ -307,7 +307,7 @@ Calculat din cel mai ieftin magazin listat pentru fiecare produs, prețuri Sibiu
 | 11 | Bulgur | 12,3 g | 8,8 | **72** | 14,0 |
 | 12 | Paste integrale | 13,5 g | 10,0 | **74** | 13,5 |
 | 13 | Năut uscat | 20 g | 15,0 | **75** | 13,3 |
-| 14 | 15 | 14 | Semințe de in | 18 g | 16,0 | **89** | 11,3 |
+| 14 | Semințe de in | 18 g | 16,0 | **89** | 11,3 |
 | 15 | Semințe de floarea-soarelui | 21 g | 20,0 | **95** | 10,5 |
 | 16 | Arahide crude | 26 g | 24,8 | **95** | 10,5 |
 | 17 | Tărâțe de ovăz | 17 g | 18,0 | **106** | 9,5 |

@@ -90,7 +90,9 @@ global.document = { documentElement: { setAttribute() {}, style: { setProperty()
 
 const DATA = ['00-stores', '01-dairy-eggs', '02-fresh-meat', '03-deli-processed',
   '04-fish-seafood', '05-plant-protein', '06-supplements-snacks',
-  '07-ready-meals', '08-bakery-drinks-sweets', '09-recipes'];
+  '07-ready-meals', '08-bakery-drinks-sweets', '09-recipes',
+  '10-dessert-pantry', '11-desserts-nobake', '12-desserts-baked',
+  '13-desserts-fast', '14-dessert-reference'];
 try {
   DATA.forEach(f => require(path.join(ROOT, 'js/data', f + '.js')));
   ['format', 'i18n', 'compute', 'storage'].forEach(f => require(path.join(ROOT, 'js/utils', f + '.js')));
@@ -105,6 +107,9 @@ const RAW = global.window.PF_FOODS || [];
 const STORES = global.window.PF_STORES || [];
 const RECIPES = global.window.PF_RECIPES || [];
 const PANTRY = global.window.PF_PANTRY || {};
+const DESSERTS = global.window.PF_DESSERTS || [];
+const DPANTRY = global.window.PF_DESSERT_PANTRY || {};
+const DREF = global.window.PF_DESSERT_REF || [];
 
 const ids = new Set();
 const dupes = [];
@@ -237,6 +242,138 @@ compFiles.forEach(f => {
 rawPrice.length ? fail('preț afișat fără ≈', rawPrice.join(', '))
                 : ok('toate prețurile trec prin formatorul de estimare');
 
+/* ------------------------------------------------------- 8c. DESERTURI -- */
+section('8c. Deserturi cheat');
+
+if (!DESSERTS.length) {
+  warn('niciun desert încărcat', 'js/data/1*-desserts-*.js');
+} else {
+  const FAMILY_OK = new Set(['no-bake', 'baked', 'frozen', 'drink', 'mug', 'batch']);
+  const CRAVING_OK = new Set(['ciocolata', 'cremos', 'crocant', 'fructat',
+    'patiserie', 'inghetata', 'caramel']);
+  const DIFF_OK = new Set(['usor', 'mediu', 'greu']);
+  const CONF2_OK = new Set(['high', 'medium', 'low']);
+  /* Macros belong to the ingredients, never to the recipe. A recipe that
+   * declares its own kcal can drift away from what it actually contains,
+   * which is the one thing this project refuses to allow. */
+  const FORBIDDEN = ['kcal', 'protein', 'carbs', 'fat', 'sugars', 'fiber'];
+
+  const dIds = new Set();
+  const dupes2 = [], badVocab = [], unresolved = [], handTyped = [],
+        noVs = [], shortSteps = [], polyolNoWarn = [];
+  const atlasIds = new Set(RAW.map(f => f.id));
+
+  DESSERTS.forEach(function (d) {
+    if (dIds.has(d.id)) dupes2.push(d.id);
+    dIds.add(d.id);
+    if (!/^ds-/.test(d.id || '')) badVocab.push((d.id || '?') + ': prefix');
+
+    if (!FAMILY_OK.has(d.family)) badVocab.push(d.id + ':family=' + d.family);
+    if (!CRAVING_OK.has(d.craving)) badVocab.push(d.id + ':craving=' + d.craving);
+    if (d.difficulty && !DIFF_OK.has(d.difficulty)) badVocab.push(d.id + ':difficulty=' + d.difficulty);
+    if (d.dataConfidence && !CONF2_OK.has(d.dataConfidence)) badVocab.push(d.id + ':conf=' + d.dataConfidence);
+
+    FORBIDDEN.forEach(k => { if (typeof d[k] === 'number') handTyped.push(d.id + '.' + k); });
+
+    if (!d.vs || !d.vs.name || !d.vsSource) noVs.push(d.id);
+    if (!d.steps || d.steps.length < 3) shortSteps.push(d.id);
+
+    (d.ing || []).forEach(function (i) {
+      if (i.id && !atlasIds.has(i.id)) unresolved.push(d.id + ' -> atlas:' + i.id);
+      if (i.p && !DPANTRY[i.p]) unresolved.push(d.id + ' -> cămară:' + i.p);
+    });
+
+    /* Polyols per serving, computed the same way the page computes them. */
+    let polyol = 0;
+    (d.ing || []).forEach(function (i) {
+      const src = i.p ? DPANTRY[i.p] : null;
+      if (src && src.polyol) polyol += (src.polyol * (i.g || 0)) / 100;
+    });
+    polyol = polyol / Math.max(1, d.servings || 1);
+    if (polyol >= 15 && !(d.warnings || []).length) {
+      polyolNoWarn.push(d.id + ' (' + Math.round(polyol) + ' g)');
+    }
+  });
+
+  dupes2.length ? fail('id-uri de desert duplicate', dupes2.slice(0, 4).join(', '))
+                : ok(DESSERTS.length + ' deserturi, id-uri unice');
+  badVocab.length ? fail('vocabular în afara schemei', badVocab.slice(0, 4).join(', '))
+                  : ok('familii, pofte și dificultăți valide');
+  unresolved.length ? fail('ingrediente care nu se rezolvă', unresolved.slice(0, 4).join(', '))
+                    : ok('toate ingredientele se rezolvă la atlas sau cămară');
+  handTyped.length ? fail('macro-uri scrise de mână în rețetă', handTyped.slice(0, 4).join(', '))
+                   : ok('niciun macro scris de mână — toate se calculează');
+  noVs.length ? fail('deserturi fără comparație', noVs.slice(0, 4).join(', '))
+              : ok('fiecare desert declară ce înlocuiește');
+  shortSteps.length ? fail('sub 3 pași', shortSteps.slice(0, 4).join(', '))
+                    : ok('toate au cel puțin 3 pași');
+  polyolNoWarn.length ? fail('polioli mari fără avertisment', polyolNoWarn.slice(0, 4).join(', '))
+                      : ok('poliolii peste prag sunt avertizați');
+
+  /* Quality targets from the schema: reported, not enforced — the schema
+   * allows exceptions when they are justified in `tips`. */
+  const lowP = [], heavy = [];
+  DESSERTS.forEach(function (d) {
+    let p = 0, collagen = 0, kcal = 0;
+    (d.ing || []).forEach(function (i) {
+      const food = i.id ? RAW.filter(f => f.id === i.id)[0] : null;
+      const src = food ? food.per100g : DPANTRY[i.p];
+      if (!src) return;
+      const grams = ((src.protein || 0) * (i.g || 0)) / 100;
+      p += grams;
+      kcal += ((src.kcal || 0) * (i.g || 0)) / 100;
+      /* Gelatine protein counts on a label and builds nothing — no tryptophan.
+       * Measuring the threshold against declared protein would let a recipe
+       * clear 15 g on paper and miss it in the body, which is precisely the
+       * kind of quiet lie the rest of this gate exists to prevent. */
+      const isCollagen = food
+        ? (food._d && food._d.qualityReason === 'collagen')
+        : /gelatin|colagen/i.test((src.name || ''));
+      if (isCollagen) collagen += grams;
+    });
+    const n = Math.max(1, d.servings || 1);
+    const usable = (p - collagen) / n;
+    if (usable < 15) {
+      lowP.push(d.id + ' (' + usable.toFixed(1) + ' g utilizabil' +
+        (collagen > 0 ? ', din ' + (p / n).toFixed(1) + ' declarat' : '') + ')');
+    }
+    if (kcal / n > 350) heavy.push(d.id + ' (' + Math.round(kcal / n) + ' kcal)');
+  });
+  lowP.length ? warn('sub 15 g proteină pe porție', lowP.length + ': ' + lowP.slice(0, 3).join(', '))
+              : ok('toate peste 15 g proteină UTILIZABILĂ pe porție');
+  heavy.length ? warn('peste 350 kcal pe porție', heavy.length + ': ' + heavy.slice(0, 3).join(', '))
+               : ok('toate sub 350 kcal pe porție');
+
+  /* Cămara e o paletă pentru rețete viitoare, nu o listă care trebuie
+   * consumată integral — dar dacă nimeni nu se uită, cheile nefolosite se
+   * adună tăcut, exact ca datele despre magazine care n-au ajuns niciodată
+   * pe ecran. Deci se numără, cu voce tare. */
+  const usedKeys = new Set();
+  DESSERTS.forEach(d => (d.ing || []).forEach(i => { if (i.p) usedKeys.add(i.p); }));
+  const idleKeys = Object.keys(DPANTRY).filter(k => !usedKeys.has(k));
+  idleKeys.length
+    ? warn('chei de cămară nefolosite de nicio rețetă',
+        idleKeys.length + ' din ' + Object.keys(DPANTRY).length + ': ' + idleKeys.slice(0, 6).join(', '))
+    : ok('fiecare cheie de cămară e folosită');
+}
+
+/* Referința de deserturi „reale": aceleași verificări de coerență ca atlasul. */
+if (DREF.length) {
+  const refBad = [], refSug = [];
+  DREF.forEach(function (r) {
+    const n = r.per || {};
+    if ((n.sugars || 0) > (n.carbs || 0) + 0.01) refSug.push(r.id);
+    if (n.kcal > 0) {
+      const pred = (n.protein || 0) * 4 + (n.carbs || 0) * 4 + (n.fat || 0) * 9;
+      if (Math.abs(pred - n.kcal) / n.kcal > 0.15) refBad.push(r.id);
+    }
+  });
+  refSug.length ? fail('referință: zaharuri > carbohidrați', refSug.slice(0, 4).join(', '))
+                : ok('referință: zaharuri ≤ carbohidrați', DREF.length + ' dulciuri');
+  refBad.length ? warn('referință: kcal vs Atwater peste ±15%', refBad.length + ': ' + refBad.slice(0, 3).join(', '))
+                : ok('referință: kcal coerente cu macro-urile');
+}
+
 /* ----------------------------------------------------------- 8a. PWA --- */
 section('8a. Instalare și offline');
 const crypto = require('crypto');
@@ -251,19 +388,20 @@ if (!fs.existsSync(swPath) || !fs.existsSync(manPath)) {
   /* Recompute exactly what tools/build-sw.js would, and compare. A stale
    * service worker is worse than none: it serves an old app from cache with
    * no sign that it is old. */
-  const refs = [];
-  const rx = /(?:href|src)="((?:css|js)\/[^"]+)"/g;
-  let mm;
-  while ((mm = rx.exec(idxSrc))) if (refs.indexOf(mm[1]) === -1) refs.push(mm[1]);
-  const all = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon-192.png',
-    'icons/icon-512.png', 'icons/icon-maskable-512.png'].concat(refs);
+  /* Ask the generator rather than mirroring it. Every previous version of
+   * this block reimplemented the file list, and every time the two drifted
+   * the gate cried "stale worker" forever. */
+  let expect = null, all = [];
+  try {
+    const out = execFileSync(process.execPath,
+      [path.join(ROOT, 'tools/build-sw.js'), '--print-version'], { encoding: 'utf8' });
+    const parsed = JSON.parse(out);
+    expect = parsed.version;
+    all = parsed.files;
+  } catch (e) {
+    fail('nu am putut interoga build-sw.js', e.message.split('\n')[0]);
+  }
 
-  const h = crypto.createHash('sha256');
-  all.forEach(a => {
-    const fp = path.join(ROOT, a === './' ? 'index.html' : a);
-    if (fs.existsSync(fp) && fs.statSync(fp).isFile()) h.update(fs.readFileSync(fp));
-  });
-  const expect = h.digest('hex').slice(0, 12);
   const swSrc = fs.readFileSync(swPath, 'utf8');
 
   swSrc.indexOf("pf-atlas-" + expect) !== -1
@@ -272,7 +410,7 @@ if (!fs.existsSync(swPath) || !fs.existsSync(manPath)) {
 
   const notCached = all.filter(a => a !== './' && swSrc.indexOf('"' + a + '"') === -1);
   notCached.length ? fail('fișiere neincluse în precache', notCached.slice(0, 4).join(', '))
-                   : ok('tot ce încarcă index.html e în precache');
+                   : ok('tot ce încarcă paginile e în precache', all.length + ' fișiere');
 
   const man = JSON.parse(fs.readFileSync(manPath, 'utf8'));
   const need = ['name', 'short_name', 'start_url', 'display', 'icons'];
@@ -339,7 +477,7 @@ const badEmoji = [];
 /* Not just products and recipes: cooking methods and stores carry emoji into
  * innerHTML too, and that gap let PF_METHODS through unchecked for a while. */
 const METHODS = global.window.PF_METHODS || {};
-const emojiBearing = RAW.concat(RECIPES).concat(STORES)
+const emojiBearing = RAW.concat(RECIPES).concat(DESSERTS).concat(STORES)
   .concat(Object.keys(METHODS).map(k => Object.assign({ id: 'method:' + k }, METHODS[k])));
 emojiBearing.forEach(f => {
   const e = f.emoji;

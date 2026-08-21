@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="ro" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Deserturi cheat cu proteină · Atlasul Proteinelor Sibiu</title>
+<meta name="description" content="Deserturi bogate în proteină, făcute din ingrediente găsibile în Sibiu. Fiecare rețetă arată cu ce se compară: desertul real pe care îl înlocuiește, cu cifrele lui.">
+<meta name="theme-color" content="#05070d">
+
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+
+<link rel="stylesheet" href="css/00-reset.css">
+<link rel="stylesheet" href="css/01-tokens.css">
+<link rel="stylesheet" href="css/02-base.css">
+<link rel="stylesheet" href="css/03-layout.css">
+<link rel="stylesheet" href="css/04-controls.css">
+<link rel="stylesheet" href="css/05-statbars.css">
+<link rel="stylesheet" href="css/06-cards.css">
+<link rel="stylesheet" href="css/07-modal.css">
+<link rel="stylesheet" href="css/08-panels.css">
+<link rel="stylesheet" href="css/10-animations.css">
+<link rel="stylesheet" href="css/11-responsive.css">
+<link rel="stylesheet" href="css/16-desserts.css">
+<link rel="stylesheet" href="css/12-print.css">
+</head>
+
+<body class="pf-dessert-page">
+<a class="pf-skip-link" href="#pf-desserts">Sari la deserturi</a>
+
+<div class="pf-app">
+
+  <header class="pf-topbar">
+    <a class="pf-brand" href="index.html" aria-label="Înapoi la Atlasul Proteinelor">
+      <span class="pf-brand__mark">🍰</span>
+      <span class="pf-brand__text">
+        <span class="pf-brand__title">Deserturi cheat</span>
+        <span class="pf-brand__sub">Atlasul Proteinelor · Sibiu</span>
+      </span>
+    </a>
+
+    <span class="pf-grow"></span>
+
+    <div class="pf-topbar__actions">
+      <a class="pf-btn pf-btn--sm" href="index.html">‹ Atlasul</a>
+      <a class="pf-btn pf-btn--sm" href="docs/DESSERT-SCIENCE.html">Cum funcționează</a>
+      <button class="pf-iconbtn" id="pf-theme" title="Temă">☀️</button>
+    </div>
+  </header>
+
+  <main class="pf-stage" id="pf-main">
+
+    <!-- =================================================================
+         INTRO — cadrul onest. Pagina asta nu vinde „sănătos".
+         ================================================================= -->
+    <section class="pf-panel pf-dhero">
+      <div class="pf-panel__body">
+        <div class="pf-eyebrow">
+          Sibiu · <span id="pf-dessert-count">—</span> deserturi · macro-uri calculate din produse reale
+        </div>
+        <h1 class="pf-dhero__title">Deserturi <em>cheat</em></h1>
+        <p class="pf-lede">
+          Un desert proteic nu e mâncare sănătoasă. E o variantă care rezolvă
+          aceeași poftă la un cost nutrițional diferit — și singurul mod onest
+          de a spune asta e să pui cifrele una lângă alta.
+        </p>
+        <p class="pf-lede">
+          De aceea fiecare rețetă de aici arată <strong>cu ce se compară</strong>:
+          desertul real pe care îl înlocuiește, cu proteina, zahărul și caloriile
+          lui. Dacă schimbul nu merită, se vede în bare.
+        </p>
+
+        <ul class="pf-dhero__rules">
+          <li><b>Macro-urile nu sunt scrise de mână.</b> Se calculează din
+            ingrediente, care trimit la produse reale din atlas sau la cămara
+            de deserturi. O rețetă nu poate să mintă despre ce conține.</li>
+          <li><b>Îndulcitorii se declară în grame.</b> Un desert „fără zahăr" cu
+            30 g de polioli pe porție e o problemă digestivă, nu o victorie —
+            iar pagina ți-o spune înainte, nu după.</li>
+          <li><b>Prețurile sunt estimări</b>, ca peste tot în proiect. Niciunul
+            nu e confirmat la casa de marcat.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Randat de js/components/desserts.js -->
+    <div id="pf-desserts" aria-live="polite"></div>
+
+  </main>
+
+  <footer class="pf-footer">
+    <div class="pf-footer__inner">
+      <div class="pf-footer__col">
+        <h4>Cum se citește scorul de schimb</h4>
+        <ul>
+          <li>Cântărește proteina câștigată (40%), zahărul economisit (35%) și
+              caloriile economisite (25%) față de desertul real.</li>
+          <li>Apoi înmulțește totul cu cât de aproape e de original. Un desert
+              pe care nu-l mănânci cu plăcere nu înlocuiește nimic.</li>
+          <li>Se compară porție cu porție, nu la 100 g. Un desert înlocuiește
+              un desert.</li>
+        </ul>
+      </div>
+      <div class="pf-footer__col">
+        <h4>Documentație</h4>
+        <ul>
+          <li><a class="pf-link" href="docs/DESSERT-SCIENCE.html">Îndulcitori și proteină la căldură</a></li>
+          <li><a class="pf-link" href="docs/DESSERT-SHOPPING.html">De unde cumperi ingredientele</a></li>
+          <li><a class="pf-link" href="docs/DESSERT-SCHEMA.html">Schema datelor</a></li>
+          <li><a class="pf-link" href="docs/index.html">Toată documentația</a></li>
+        </ul>
+      </div>
+      <div class="pf-footer__col">
+        <h4>Avertismente</h4>
+        <ul>
+          <li><b>Poliolii</b> (eritritol, xilitol, maltitol) dau probleme
+              digestive peste ~15–20 g pe porție la mulți oameni. Cifra e
+              afișată pe fiecare rețetă care trece pragul.</li>
+          <li><b>Xilitolul e toxic pentru câini</b> chiar și în cantități mici.</li>
+          <li><b>Gelatina și colagenul</b> nu se pun la ținta zilnică de
+              proteină — le lipsește triptofanul.</li>
+          <li>Valorile variază între loturi și producători. Eticheta din mână
+              bate baza de date.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pf-footer__legal">
+      Atlasul Proteinelor Sibiu · deserturile sunt tot deserturi · fără afiliere
+      cu niciun producător.
+    </div>
+  </footer>
+
+</div>
+
+<!-- date: atlasul întreg, pentru că ingredientele trimit la produse reale -->
+<script src="js/data/00-stores.js"></script>
+<script src="js/data/01-dairy-eggs.js"></script>
+<script src="js/data/02-fresh-meat.js"></script>
+<script src="js/data/03-deli-processed.js"></script>
+<script src="js/data/04-fish-seafood.js"></script>
+<script src="js/data/05-plant-protein.js"></script>
+<script src="js/data/06-supplements-snacks.js"></script>
+<script src="js/data/07-ready-meals.js"></script>
+<script src="js/data/08-bakery-drinks-sweets.js"></script>
+<script src="js/data/10-dessert-pantry.js"></script>
+<script src="js/data/11-desserts-nobake.js"></script>
+<script src="js/data/12-desserts-baked.js"></script>
+<script src="js/data/13-desserts-fast.js"></script>
+<script src="js/data/14-dessert-reference.js"></script>
+
+<script src="js/utils/format.js"></script>
+<script src="js/utils/i18n.js"></script>
+<script src="js/utils/compute.js"></script>
+<script src="js/utils/storage.js"></script>
+<script src="js/components/desserts.js"></script>
+
+<script>
+(function () {
+  'use strict';
+
+  /* Theme, shared with the atlas through the same storage key so the two
+   * pages never disagree about which theme the user picked. */
+  const KEY = 'pf.atlas.v1.theme';
+  const root = document.documentElement;
+  let saved = null;
+  try { saved = JSON.parse(localStorage.getItem(KEY)); } catch (e) { saved = null; }
+  if (saved === 'light' || saved === 'dark') root.setAttribute('data-theme', saved);
+
+  const btn = document.getElementById('pf-theme');
+  function paint() { btn.textContent = root.getAttribute('data-theme') === 'light' ? '🌙' : '☀️'; }
+  paint();
+  btn.addEventListener('click', function () {
+    const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem(KEY, JSON.stringify(next)); } catch (e) {}
+    paint();
+  });
+
+  function start() {
+    try {
+      window.PF.desserts.mount();
+    } catch (err) {
+      console.error('[pf] deserturile nu au pornit:', err);
+      const host = document.getElementById('pf-desserts');
+      if (host) {
+        host.innerHTML = '<div class="pf-empty"><span class="pf-empty__icon">⚠️</span>' +
+          '<span class="pf-empty__title">Deserturile nu s-au încărcat</span>' +
+          '<span class="pf-empty__text">Detalii în consolă.</span></div>';
+      }
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', start);
+  } else {
+    start();
+  }
+
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js').catch(function () { /* offline is a bonus here */ });
+    });
+  }
+})();
+</script>
+</body>
+</html>

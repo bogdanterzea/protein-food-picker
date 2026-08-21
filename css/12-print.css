@@ -46,7 +46,19 @@
   .pf-modal__close,
   .pf-chart__toggle,
   .pf-search,
-  .pf-fridge {
+  .pf-fridge,
+  /* Controalele astea se tipăreau: calculatorul, selectoarele de sortare și
+   * cele 24 de pastile de filtrare de pe cele două pagini. Un <select> pe
+   * hârtie e o casetă goală, iar o pastilă de filtru e o instrucțiune pe care
+   * nimeni n-o poate urma pe hârtie. */
+  .pf-calc,
+  .pf-presets,
+  .pf-chips,
+  .pf-select,
+  .pf-input,
+  .pf-resultbar,
+  .pf-dbar,
+  .pf-refpanel__head {
     display: none !important;
   }
 
