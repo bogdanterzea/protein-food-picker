@@ -11,7 +11,7 @@
  * ========================================================================= */
 'use strict';
 
-const CACHE = 'pf-atlas-15e63d0557f5';
+const CACHE = 'pf-atlas-12d25aa259a4';
 
 const PRECACHE = [
   "./",

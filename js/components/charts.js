@@ -298,7 +298,7 @@
           'cx="' + X(d.kcal100).toFixed(1) + '" cy="' + Y(d.protein100).toFixed(1) + '" ' +
           'fill="' + colour + '">' +
           '<title>' + fmt.esc(
-            (f.nameRo || f.name) + ' — ' + fmt.num(d.protein100, 1) + ' g proteină, ' +
+            (f.nameRo || f.name) + ' — ' + fmt.dec(d.protein100, 1) + ' g proteină, ' +
             Math.round(d.kcal100) + ' kcal, ' + Math.round(d.purityPct) + '% din calorii'
           ) + '</title></circle>'
         );
@@ -338,7 +338,7 @@
           .slice(0, topN)
           .map(f => [
             f.nameRo || f.name,
-            fmt.num(f._d.protein100, 1),
+            fmt.dec(f._d.protein100, 1),
             Math.round(f._d.kcal100),
             Math.round(f._d.purityPct) + '%'
           ])
@@ -388,7 +388,7 @@
      * prints the number in a neighbouring column it passes an empty string —
      * the bar then carries the value for screen readers and native hover
      * instead of being a mute decoration. */
-    const label = fmt.num(value, 1) + ' din ' + fmt.num(maxValue, 0) +
+    const label = fmt.dec(value, 1) + ' din ' + fmt.dec(maxValue, 0) +
       ' (' + Math.round(pct) + '%)';
     return (
       '<div class="pf-rankbar" role="img" aria-label="' + fmt.esc(label) + '" ' +
@@ -430,8 +430,8 @@
     const topIdx = buckets.indexOf(peak);
     const summary =
       'Distribuția proteinei: ' + values.length + ' produse, de la ' +
-      fmt.num(lo, 0) + ' la ' + fmt.num(hi, 0) + ' g la 100 g, median ' +
-      fmt.num(med, 0) + ' g; cel mai populat interval ' +
+      fmt.dec(lo, 0) + ' la ' + fmt.dec(hi, 0) + ' g la 100 g, median ' +
+      fmt.dec(med, 0) + ' g; cel mai populat interval ' +
       edges[topIdx].lo + '–' + edges[topIdx].up + ' g cu ' + peak + ' produse';
 
     return (

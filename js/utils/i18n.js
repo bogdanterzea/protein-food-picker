@@ -621,7 +621,10 @@
       'misc.products': 'products',
       'misc.categories': 'categories',
       'misc.stores': 'stores',
-      'misc.currency': 'RON',
+      /* Was RON. format.js ron/ronShort/ronApprox hardcode " lei" in both
+       * locales, and this key has a single consumer (boards.js), so the old
+       * value made one price read two different ways on one screen. */
+      'misc.currency': 'lei',
 
       'foot.what': 'What this is',
       'foot.what1':

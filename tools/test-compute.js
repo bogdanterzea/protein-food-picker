@@ -1097,6 +1097,47 @@ t('int and kcal are protected the same way', function () {
   eq(F.g(21.04), '21 g', 'g');
 });
 
+t('the display helpers use the locale separator, not a literal dot', function () {
+  F.setLocale('ro');
+  eq(F.g(21.04, 1), '21 g', 'g, no fraction to show');
+  eq(F.g(0.44, 1), '0,4 g', 'g localises its fraction');
+  eq(F.pct(42.4, 1), '42,4%', 'pct localises its fraction');
+  F.setLocale('en');
+  eq(F.g(0.44, 1), '0.4 g', 'g in en');
+  eq(F.pct(42.4, 1), '42.4%', 'pct in en');
+  F.setLocale('ro');
+});
+
+/* A tabular column is read down its decimal separator, so every cell has to
+ * put that separator in the same place. `dec` alone does not: it prints the
+ * shortest true form, so 19,5 / 18 / 0 land in three different positions. */
+t('decFixed pads the fraction to a fixed width', function () {
+  F.setLocale('ro');
+  eq(F.decFixed(19.5, 1), '19,5', 'already at width');
+  eq(F.decFixed(18, 1), '18,0', 'integer gains a fraction');
+  eq(F.decFixed(0, 1), '0,0', 'zero');
+  eq(F.decFixed(1.2, 2), '1,20', 'pads to two');
+  eq(F.decFixed(1, 2), '1,00', 'integer to two');
+  eq(F.decFixed(7, 0), '7', 'zero decimals asks for no separator');
+  eq(F.decFixed(-2, 1), '-2,0', 'negatives pad too');
+});
+
+t('decFixed passes the sentinels through untouched', function () {
+  F.setLocale('ro');
+  eq(F.decFixed(0.04, 1), '<0,1', 'the "<" form is already full width');
+  eq(F.decFixed(0.004, 2), '<0,01', 'and at two decimals');
+  eq(F.decFixed(null, 1), '—', 'no digits to align');
+  eq(F.decFixed(NaN, 1), '—', 'NaN');
+});
+
+t('decFixed follows the locale', function () {
+  F.setLocale('en');
+  eq(F.decFixed(18, 1), '18.0', 'en pads with a dot');
+  eq(F.decFixed(0.04, 1), '<0.1', 'en sentinel');
+  F.setLocale('ro');
+  eq(F.decFixed(18, 1), '18,0', 'back to ro');
+});
+
 /* =======================================================================
  * 14. fmt.minutes
  * ==================================================================== */

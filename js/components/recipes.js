@@ -484,8 +484,8 @@
         : fmt.esc(it.name)) +
         (it.free ? ' <span class="pf-muted" style="font-size:var(--fs-3xs)">(după gust)</span>' : '') +
       '</th>' +
-      '<td class="num">' + fmt.num(it.grams, 0) + ' g</td>' +
-      '<td class="num">' + (it.free ? '—' : fmt.fixed((it.per100.protein || 0) * k, 1) + ' g') + '</td>' +
+      '<td class="num">' + fmt.dec(it.grams, 0) + ' g</td>' +
+      '<td class="num">' + (it.free ? '—' : fmt.decFixed((it.per100.protein || 0) * k, 1) + ' g') + '</td>' +
       '<td class="num">' + (it.free ? '—' : Math.round((it.per100.kcal || 0) * k)) + '</td>' +
       '<td class="num">' + (it.cost !== null && it.cost !== undefined ? fmt.ronApprox(it.cost, { short: true }) : '—') + '</td>' +
       '</tr>'
@@ -515,9 +515,10 @@
       fmt.esc(MEAL_LABEL[r.mealType] || r.mealType) + ' · ' + r.servings + ' porții</div>' +
       '<div class="pf-modal__badges">' +
       '<span class="pf-badge pf-badge--accent">' + Math.round(per.protein) + ' g proteină / porție</span>' +
-      '<span class="pf-badge">' + Math.round(per.kcal) + ' kcal</span>' +
-      '<span class="pf-badge">' + Math.round(c.purityPct) + '% din calorii</span>' +
-      '<span class="pf-badge">' + fmt.ronApprox(c.costPerServing, { short: true }) + ' / porție</span>' +
+      /* See modal.js — these three repeat further down the dossier. */
+      '<span class="pf-badge pf-badge--dup">' + Math.round(per.kcal) + ' kcal</span>' +
+      '<span class="pf-badge pf-badge--dup">' + Math.round(c.purityPct) + '% din calorii</span>' +
+      '<span class="pf-badge pf-badge--dup">' + fmt.ronApprox(c.costPerServing, { short: true }) + ' / porție</span>' +
       '<span class="pf-badge">' + fmt.minutes(r.timeMin, 'ro') + '</span>' +
       '</div></div>' +
       '</div>' +
@@ -530,8 +531,8 @@
         '<table class="pf-stores-table"><thead><tr>' +
         '<th>Ingredient</th><th class="num">Cant.</th><th class="num">Proteină</th><th class="num">kcal</th><th class="num">Cost</th>' +
         '</tr></thead><tbody>' + c.items.map(ingredientRow).join('') +
-        '<tr><th><b>Total</b></th><td class="num"><b>' + fmt.num(c.items.reduce((a, i) => a + i.grams, 0), 0) + ' g</b></td>' +
-        '<td class="num"><b>' + fmt.fixed(c.total.protein, 1) + ' g</b></td>' +
+        '<tr><th><b>Total</b></th><td class="num"><b>' + fmt.dec(c.items.reduce((a, i) => a + i.grams, 0), 0) + ' g</b></td>' +
+        '<td class="num"><b>' + fmt.decFixed(c.total.protein, 1) + ' g</b></td>' +
         '<td class="num"><b>' + Math.round(c.total.kcal) + '</b></td>' +
         '<td class="num"><b>' + fmt.ronApprox(c.cost, { short: true }) + '</b></td></tr>' +
         '</tbody></table>' +

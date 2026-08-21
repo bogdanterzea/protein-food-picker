@@ -58,9 +58,9 @@
     const o = opts || {};
     const size = o.size || '';
     const rows = [
-      { k: 'protein', v: d.bars.protein, c: 'var(--stat-protein)', disp: fmt.num(d.protein100, 1) + 'g' },
+      { k: 'protein', v: d.bars.protein, c: 'var(--stat-protein)', disp: fmt.dec(d.protein100, 1) + 'g' },
       { k: 'purity', v: d.bars.purity, c: 'var(--stat-leanness)', disp: Math.round(d.purityPct) + '%' },
-      { k: 'value', v: d.bars.value, c: 'var(--stat-value)', disp: d.ronPer100gProtein ? fmt.num(d.ronPer100gProtein, 1) : '—' },
+      { k: 'value', v: d.bars.value, c: 'var(--stat-value)', disp: d.ronPer100gProtein ? fmt.dec(d.ronPer100gProtein, 1) : '—' },
       { k: 'convenience', v: d.bars.convenience, c: 'var(--stat-convenience)' },
       { k: 'taste', v: d.bars.taste, c: 'var(--stat-taste)' },
       { k: 'satiety', v: d.bars.satiety, c: 'var(--stat-satiety)' }
@@ -226,14 +226,14 @@
   function macroStrip(n, opts) {
     const o = opts || {};
     const cells = [
-      { k: 'protein', v: fmt.num(n.protein, 1), cls: 'protein' },
-      { k: 'carbs', v: fmt.num(n.carbs, 1), cls: 'carbs' },
-      { k: 'fat', v: fmt.num(n.fat, 1), cls: 'fat' },
+      { k: 'protein', v: fmt.dec(n.protein, 1), cls: 'protein' },
+      { k: 'carbs', v: fmt.dec(n.carbs, 1), cls: 'carbs' },
+      { k: 'fat', v: fmt.dec(n.fat, 1), cls: 'fat' },
       { k: 'kcal', v: Math.round(n.kcal), cls: 'kcal' }
     ];
     if (o.six) {
-      cells.push({ k: 'fiber', v: fmt.num(n.fiber, 1), cls: 'fiber' });
-      cells.push({ k: 'salt', v: fmt.num(n.salt, 2), cls: 'salt' });
+      cells.push({ k: 'fiber', v: fmt.dec(n.fiber, 1), cls: 'fiber' });
+      cells.push({ k: 'salt', v: fmt.dec(n.salt, 2), cls: 'salt' });
     }
     return statGrid(
       cells.map(c => ({ v: c.v, k: t('card.' + c.k), cls: c.cls })),
@@ -432,7 +432,7 @@
        * 0,25 contradicted the quality bar rendered right next to it. Read
        * the real number instead — it reads correctly at 0,25 and at 0,699. */
       const share = Math.round((d.collagenShare || 1) * 100);
-      const factor = fmt.num(d.quality, 2).replace('.', ',');
+      const factor = fmt.dec(d.quality, 2);
       return {
         level: 'bad',
         short: 'Proteină incompletă',
@@ -459,7 +459,7 @@
           'esențial (lizina la cereale, metionina la leguminoase). Într-o ' +
           'dietă variată se compensează singură: combină leguminoase cu ' +
           'cereale în aceeași zi și problema dispare. Scorul e ajustat cu ' +
-          'un factor de ' + String(d.quality).replace('.', ',') + '.'
+          'un factor de ' + fmt.dec(d.quality, 2) + '.'
       };
     }
     return null;
@@ -481,7 +481,7 @@
    * unit, so `fmt.ronApprox` is the wrong tool — but it still has to carry
    * the `≈`, because no price in this atlas was ever read off a shelf.
    * Seven call sites in three files were spelling out
-   * `(verified ? '' : '≈') + fmt.num(v, 1)`, and two of them had dropped
+   * `(verified ? '' : '≈') + fmt.dec(v, 1)`, and two of them had dropped
    * the `≈`. One function, so the marker cannot be forgotten again.
    *
    * A missing price is an em dash, never "≈ —".
@@ -491,7 +491,7 @@
     /* `fixed`, not `num`: the two callers that put this in a table (the atlas
      * Tabel view and the modal store table) right-align it in a tabular column,
      * where a dropped trailing zero moves the decimal point out of line. */
-    return (verified ? '' : '≈') + fmt.fixed(value, decimals === undefined ? 1 : decimals);
+    return (verified ? '' : '≈ ') + fmt.decFixed(value, decimals === undefined ? 1 : decimals);
   }
 
   /* =======================================================================

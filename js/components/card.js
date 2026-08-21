@@ -66,7 +66,7 @@
     const servingLine =
       '<div class="pf-card__heroline">' +
       '<span>' + fmt.esc(food.serving && food.serving.label ? fmt.truncate(food.serving.label, 30) : t('card.perServing')) + '</span>' +
-      '<b>' + fmt.num(d.perServing.protein, 1) + ' g · ' + Math.round(d.perServing.kcal) + ' kcal</b>' +
+      '<b>' + fmt.dec(d.perServing.protein, 1) + ' g · ' + Math.round(d.perServing.kcal) + ' kcal</b>' +
       '</div>';
 
     /* Replay the entrance stagger only when the LIST changed. Toggling a
@@ -81,7 +81,7 @@
       /* Deliberately NOT role="button": the card contains four real buttons,
        * and a button may not have interactive descendants — AT would flatten
        * the card and hide Details/Add/Favourite/Compare from browse mode. */
-      'aria-label="' + fmt.esc((food.nameRo || food.name) + ', ' + fmt.num(d.protein100, 1) + ' grame proteină la 100 grame') + '">' +
+      'aria-label="' + fmt.esc((food.nameRo || food.name) + ', ' + fmt.dec(d.protein100, 1) + ' grame proteină la 100 grame') + '">' +
 
       flag +
 
@@ -103,7 +103,7 @@
       /* ---------- protein headline ---------- */
       '<div class="pf-card__hero">' +
       '<span class="pf-card__protein">' +
-      '<b>' + fmt.num(d.protein100, d.protein100 >= 10 ? 0 : 1) + '</b>' +
+      '<b>' + fmt.dec(d.protein100, d.protein100 >= 10 ? 0 : 1) + '</b>' +
       '<span>g<br>' + fmt.esc(unitLabel) + '</span>' +
       '</span>' +
       '<span class="pf-card__herobars">' +
@@ -162,13 +162,13 @@
       '<small>' + fmt.esc(food.brand !== 'generic' ? food.brand : PF.i18n.catName(food.category)) +
       '</small></span></div></td>' +
       '<td>' + PF.ui.tier(d.tier, { size: 'sm' }) + '</td>' +
-      '<td class="num">' + fmt.fixed(d.protein100, 1) + '</td>' +
+      '<td class="num">' + fmt.decFixed(d.protein100, 1) + '</td>' +
       '<td class="pf-td-bar">' + PF.charts.rankBar(d.protein100, 90, 'var(--macro-protein)', '') + '</td>' +
       '<td class="num">' + Math.round(d.purityPct) + '%</td>' +
       '<td class="num">' + Math.round(d.kcal100) + '</td>' +
-      '<td class="num">' + fmt.fixed(d.carbs100, 1) + '</td>' +
-      '<td class="num">' + fmt.fixed(d.fat100, 1) + '</td>' +
-      '<td class="num">' + fmt.fixed(d.perServing.protein, 1) + '</td>' +
+      '<td class="num">' + fmt.decFixed(d.carbs100, 1) + '</td>' +
+      '<td class="num">' + fmt.decFixed(d.fat100, 1) + '</td>' +
+      '<td class="num">' + fmt.decFixed(d.perServing.protein, 1) + '</td>' +
       '<td class="num">' + ui.approxNum(d.ronPer100gProtein, d.priceVerified, 1) + '</td>' +
       '<td class="num">' + fmt.minutes(food.timeMin, PF.i18n.lang()) + '</td>' +
       '<td class="num">' + Math.round(d.score) + '</td>' +

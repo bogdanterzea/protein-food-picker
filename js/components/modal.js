@@ -100,7 +100,7 @@
    * Also names the collagen share, which is what explains an in-between
    * factor to someone reading "70%" under a collagen warning. */
   function qualityText(note, d) {
-    const real = String(Math.round(d.quality * 1000) / 1000).replace('.', ',');
+    const real = fmt.dec(d.quality, 3);
     let text = note.text.replace(
       /Scorul(?: din atlas)? e ajustat cu un factor de [0-9]+(?:[.,][0-9]+)?/,
       'Scorul din atlas e ajustat cu un factor de ' + real
@@ -110,6 +110,14 @@
         '% din proteină e colagen, de aceea penalizarea e parțială.';
     }
     return text;
+  }
+
+  /* A unit joins its number with a space, except `%`, which is glued — that is
+   * how every other percentage in the app is written, including the delta cell
+   * in this same row. */
+  function unitSuffix(unit) {
+    if (!unit) return '';
+    return unit === '%' ? unit : ' ' + unit;
   }
 
   /* One "this product vs. its category" row. `betterIsHigher` drives the
@@ -123,12 +131,16 @@
     return (
       '<tr>' +
       '<th>' + fmt.esc(label) + '</th>' +
-      '<td>' + fmt.num(mine, decimals) + (unit ? ' ' + unit : '') + '</td>' +
+      /* `%` joins without a space, matching every other percentage in the app
+       * (and the delta cell right beside it). The median carries the same unit
+       * as the value it is compared against — the header only says "mediana",
+       * so a bare number there read as a different quantity. */
+      '<td>' + fmt.dec(mine, decimals) + unitSuffix(unit) + '</td>' +
       '<td class="pf-delta ' + cls + '">' +
       (near ? '≈ ca media'
             : (pct > 0 ? '▲ +' : '▼ −') + Math.round(Math.abs(pct)) + '%') +
       '</td>' +
-      '<td class="pf-nutri__pct">' + fmt.num(med, decimals) + '</td>' +
+      '<td class="pf-nutri__pct">' + fmt.dec(med, decimals) + unitSuffix(unit) + '</td>' +
       '</tr>'
     );
   }
@@ -193,7 +205,7 @@
             '<span class="pf-similar__emoji">' + ui.foodEmoji(upgrade) + '</span>' +
             '<span class="pf-similar__txt">' +
             '<span class="pf-similar__name">' + fmt.esc(upgrade.nameRo || upgrade.name) + '</span>' +
-            '<span class="pf-similar__p">' + fmt.num(upgrade._d.protein100, 1) + ' g / 100 g · ' +
+            '<span class="pf-similar__p">' + fmt.dec(upgrade._d.protein100, 1) + ' g / 100 g · ' +
             Math.round(upgrade._d.purityPct) + '%</span>' +
             '</span></button>' +
             '<p class="pf-muted" style="font-size:var(--fs-2xs);margin-top:var(--sp-2)">' +
@@ -213,7 +225,7 @@
                 '<span class="pf-similar__emoji">' + ui.foodEmoji(f) + '</span>' +
                 '<span class="pf-similar__txt">' +
                 '<span class="pf-similar__name">' + fmt.esc(f.nameRo || f.name) + '</span>' +
-                '<span class="pf-similar__p">' + fmt.num(f._d.protein100, 1) + ' g/100 g</span>' +
+                '<span class="pf-similar__p">' + fmt.dec(f._d.protein100, 1) + ' g/100 g</span>' +
                 '</span></button>'
             )
             .join('') +
@@ -263,23 +275,23 @@
     const table =
       '<table class="pf-nutri">' +
       nutriRow('Energie', Math.round(n.kcal), 'kcal', 'is-major', 'var(--macro-kcal)') +
-      nutriRow(t('card.protein'), fmt.num(n.protein, 1), 'g', 'is-major', 'var(--macro-protein)', e.protein) +
-      nutriRow(t('card.carbs'), fmt.num(n.carbs, 1), 'g', 'is-major', 'var(--macro-carbs)', e.carbs) +
-      nutriRow('din care ' + t('card.sugars').toLowerCase(), fmt.num(n.sugars, 1), 'g', 'is-sub') +
-      nutriRow(t('card.fat'), fmt.num(n.fat, 1), 'g', 'is-major', 'var(--macro-fat)', e.fat) +
-      nutriRow('din care saturate', fmt.num(n.satFat, 1), 'g', 'is-sub') +
-      nutriRow(t('card.fiber'), fmt.num(n.fiber, 1), 'g', '', 'var(--macro-fiber)', e.fiber) +
-      nutriRow(t('card.salt'), fmt.num(n.salt, 2), 'g', 'is-divider') +
+      nutriRow(t('card.protein'), fmt.dec(n.protein, 1), 'g', 'is-major', 'var(--macro-protein)', e.protein) +
+      nutriRow(t('card.carbs'), fmt.dec(n.carbs, 1), 'g', 'is-major', 'var(--macro-carbs)', e.carbs) +
+      nutriRow('din care ' + t('card.sugars').toLowerCase(), fmt.dec(n.sugars, 1), 'g', 'is-sub') +
+      nutriRow(t('card.fat'), fmt.dec(n.fat, 1), 'g', 'is-major', 'var(--macro-fat)', e.fat) +
+      nutriRow('din care saturate', fmt.dec(n.satFat, 1), 'g', 'is-sub') +
+      nutriRow(t('card.fiber'), fmt.dec(n.fiber, 1), 'g', '', 'var(--macro-fiber)', e.fiber) +
+      nutriRow(t('card.salt'), fmt.dec(n.salt, 2), 'g', 'is-divider') +
       '</table>';
 
     /* --- derived headline numbers --- */
     const derived = ui.statGrid([
       { v: Math.round(d.purityPct) + '%', k: 'din kcal', cls: 'protein' },
-      { v: fmt.num(d.proteinPer100kcal, 1), k: 'g/100kcal', cls: 'protein' },
+      { v: fmt.dec(d.proteinPer100kcal, 1), k: 'g/100kcal', cls: 'protein' },
       { v: Math.round(d.kcal100), k: 'kcal/100' + food.unit, cls: 'kcal' },
       { v: Math.round(d.bars.leanness), k: 'slăbiciune', cls: 'fat' },
-      { v: d.ronPer100gProtein ? fmt.num(d.ronPer100gProtein, 1) : '—', k: 'lei/100g P', cls: 'carbs' },
-      { v: d.proteinPerRon ? fmt.num(d.proteinPerRon, 1) : '—', k: 'g P / leu', cls: 'fiber' }
+      { v: d.ronPer100gProtein ? fmt.dec(d.ronPer100gProtein, 1) : '—', k: 'lei/100g P', cls: 'carbs' },
+      { v: d.proteinPerRon ? fmt.dec(d.proteinPerRon, 1) : '—', k: 'g P / leu', cls: 'fiber' }
     ], { six: true, style: 'margin-top:var(--sp-3)' });
 
     /* --- micronutrients --- */
@@ -303,7 +315,7 @@
           const scaled = useServing ? (val * d.servingGrams) / 100 : val;
           const nrv = meta[2] ? Math.round((scaled / meta[2]) * 100) : null;
           return (
-            '<tr><th>' + meta[0] + '</th><td>' + fmt.num(scaled, 1) + ' ' + meta[1] +
+            '<tr><th>' + meta[0] + '</th><td>' + fmt.dec(scaled, 1) + ' ' + meta[1] +
             '</td><td class="pf-nutri__pct">' + (nrv !== null ? nrv + '% VNR' : '') + '</td></tr>'
           );
         });
@@ -369,7 +381,7 @@
       '" data-serving="serving">' +
       fmt.esc(fmt.truncate((food.serving && food.serving.label) || 'porție', 26)) + '</button>' +
       '</div>' +
-      '<span class="pf-servingbar__out">' + fmt.num(n.protein, 1) + ' g proteină</span>' +
+      '<span class="pf-servingbar__out">' + fmt.dec(n.protein, 1) + ' g proteină</span>' +
       '</div>' +
       '<div class="pf-dossier">' +
       '<div>' + block('Tabel nutrițional · ' + basis, table + derived + quality) + micros + '</div>' +
@@ -592,7 +604,9 @@
       block('Cost real',
         ui.statGrid([
           { v: ui.approxNum(d.ronPer100gProtein, d.priceVerified, 1), k: 'lei/100g P', cls: 'protein' },
-          { v: d.proteinPerRon ? fmt.num(d.proteinPerRon, 1) : '—', k: 'g P / leu', cls: 'carbs' },
+          /* Derived from the same unverified price as its neighbours, so it
+           * carries the same marker. */
+          { v: d.proteinPerRon ? ui.approxNum(d.proteinPerRon, d.priceVerified, 1) : '—', k: 'g P / leu', cls: 'carbs' },
           { v: ui.approxNum(d.costPerServing, d.priceVerified, 2), k: 'lei/porție', cls: 'kcal' },
           { v: ui.approxNum(d.pricePerKg, d.priceVerified, 0), k: 'lei/kg', cls: 'fat' }
         ]) +
@@ -692,11 +706,14 @@
       fmt.esc(food.name) + ' · ' + fmt.esc(PF.i18n.catName(food.category)) +
       '</div>' +
       '<div class="pf-modal__badges">' +
-      '<span class="pf-badge pf-badge--accent">' + fmt.num(d.protein100, 1) + ' g proteină / 100 ' + food.unit + '</span>' +
-      '<span class="pf-badge">' + Math.round(d.kcal100) + ' kcal</span>' +
-      '<span class="pf-badge">' + Math.round(d.purityPct) + '% din calorii</span>' +
-      (d.ronPer100gProtein ? '<span class="pf-badge">' +
-        (d.priceVerified ? '' : '≈ ') + fmt.num(d.ronPer100gProtein, 1) +
+      '<span class="pf-badge pf-badge--accent">' + fmt.dec(d.protein100, 1) + ' g proteină / 100 ' + food.unit + '</span>' +
+      /* `--dup`: repeated verbatim in the Nutriție tab, so 11-responsive.css
+       * drops these three on a phone. The headline protein badge and the
+       * prep-time badge appear nowhere else and stay. */
+      '<span class="pf-badge pf-badge--dup">' + Math.round(d.kcal100) + ' kcal</span>' +
+      '<span class="pf-badge pf-badge--dup">' + Math.round(d.purityPct) + '% din calorii</span>' +
+      (d.ronPer100gProtein ? '<span class="pf-badge pf-badge--dup">' +
+        ui.approxNum(d.ronPer100gProtein, d.priceVerified, 1) +
         ' lei / 100 g proteină</span>' : '') +
       '<span class="pf-badge">' + fmt.minutes(food.timeMin, PF.i18n.lang()) + '</span>' +
       '</div>' +
@@ -930,11 +947,11 @@
     const lines = [
       (f.nameRo || f.name) + branded,
       'Rang ' + d.tier + ' · ' + Math.round(d.purityPct) + '% din calorii din proteină',
-      'La 100 ' + f.unit + ': ' + fmt.num(d.protein100, 1) + ' g proteină, ' +
-        fmt.num(d.carbs100, 1) + ' g carbohidrați, ' + fmt.num(d.fat100, 1) + ' g grăsimi, ' +
+      'La 100 ' + f.unit + ': ' + fmt.dec(d.protein100, 1) + ' g proteină, ' +
+        fmt.dec(d.carbs100, 1) + ' g carbohidrați, ' + fmt.dec(d.fat100, 1) + ' g grăsimi, ' +
         Math.round(d.kcal100) + ' kcal',
       'Porție: ' + ((f.serving && f.serving.label) || d.servingGrams + ' ' + f.unit) +
-        ' → ' + fmt.num(d.perServing.protein, 1) + ' g proteină, ' +
+        ' → ' + fmt.dec(d.perServing.protein, 1) + ' g proteină, ' +
         Math.round(d.perServing.kcal) + ' kcal'
     ];
 

@@ -270,16 +270,19 @@
     const theirsPct = (theirs / max) * 100;
     const win = moreIsBetter ? ours > theirs : ours < theirs;
 
+    /* One precision for the pair. Chosen per value, a bar reading 8.5 sat
+     * beside one reading 24 — and the pair exists to be compared. */
+    const dp = Math.max(ours, theirs) < 10 ? 1 : 0;
     return (
       '<div class="pf-vs__row">' +
       '<span class="pf-vs__label">' + fmt.esc(label) + '</span>' +
       '<span class="pf-vs__bars">' +
       '<span class="pf-vs__bar pf-vs__bar--ours' + (win ? ' is-win' : '') + '">' +
       '<i style="width:' + oursPct.toFixed(1) + '%"></i>' +
-      '<b>' + fmt.num(ours, ours < 10 ? 1 : 0) + unit + '</b></span>' +
+      '<b>' + fmt.dec(ours, dp) + unit + '</b></span>' +
       '<span class="pf-vs__bar pf-vs__bar--theirs">' +
       '<i style="width:' + theirsPct.toFixed(1) + '%"></i>' +
-      '<b>' + fmt.num(theirs, theirs < 10 ? 1 : 0) + unit + '</b></span>' +
+      '<b>' + fmt.dec(theirs, dp) + unit + '</b></span>' +
       '</span></div>'
     );
   }
@@ -373,19 +376,19 @@
       '</b><span>g proteină<br>pe porție</span></span>' +
       '<span class="pf-dcard__nums">' +
       '<span><b>' + Math.round(per.kcal) + '</b> kcal</span>' +
-      '<span><b>' + fmt.num(per.sugars, 1) + '</b> g zahăr</span>' +
+      '<span><b>' + fmt.dec(per.sugars, 1) + '</b> g zahăr</span>' +
       /* Polyols get the same billing as sugar. The 15 g threshold is reached
        * by stacking three ordinary ingredients, without anyone deciding to
        * use "a lot of sweetener" — so the number has to be on the card, not
        * only in a warning that fires after the fact. */
       (per.polyol >= 2
-        ? '<span><b>' + fmt.num(per.polyol, 1) + '</b> g polioli</span>'
+        ? '<span><b>' + fmt.dec(per.polyol, 1) + '</b> g polioli</span>'
         : '') +
       '<span><b>' + Math.round(e.servingGrams) + '</b> g porția</span>' +
       /* When part of the protein is gelatine, the headline number above is
        * the label's number, not the body's. Both belong on the card. */
       (e.collagenShare > 0.02
-        ? '<span class="pf-dcard__usable"><b>' + fmt.num(e.usableProtein, 1) +
+        ? '<span class="pf-dcard__usable"><b>' + fmt.dec(e.usableProtein, 1) +
           '</b> g proteină utilizabilă</span>'
         : '') +
       '</span>' +
@@ -470,9 +473,9 @@
       '<span class="pf-refrow__serv">' + fmt.esc((r.serving && r.serving.label) || '') + '</span>' +
       '</th>' +
       '<td class="num">' + Math.round(per.kcal || 0) + '</td>' +
-      '<td class="num">' + fmt.fixed(per.protein || 0, 1) + '</td>' +
-      '<td class="num pf-refrow__sugar">' + fmt.fixed(per.sugars || 0, 1) + '</td>' +
-      '<td class="num">' + fmt.fixed(per.fat || 0, 1) + '</td>' +
+      '<td class="num">' + fmt.decFixed(per.protein || 0, 1) + '</td>' +
+      '<td class="num pf-refrow__sugar">' + fmt.decFixed(per.sugars || 0, 1) + '</td>' +
+      '<td class="num">' + fmt.decFixed(per.fat || 0, 1) + '</td>' +
       '<td><span class="pf-badge pf-conf pf-conf--' + fmt.esc(r.confidence || 'low') + '" title="' +
       fmt.esc((CONF_FULL[r.confidence] || '') + (r.source ? ' Sursă: ' + r.source : '')) + '">' +
       fmt.esc(CONF_LABEL[r.confidence] || r.confidence || '') + '</span></td>' +
@@ -617,7 +620,7 @@
       return '<tr><th>' + name +
         (it.free ? ' <span class="pf-muted" style="font-size:var(--fs-3xs)">(după gust)</span>' : '') +
         '</th><td class="num">' + Math.round(it.grams) + ' g</td>' +
-        '<td class="num">' + fmt.fixed(it.protein, 1) + ' g</td>' +
+        '<td class="num">' + fmt.decFixed(it.protein, 1) + ' g</td>' +
         '<td class="num">' + Math.round(it.kcal) + '</td></tr>';
     }).join('');
   }
@@ -625,15 +628,21 @@
   function scoreBreakdown(d) {
     const c = d._e.cheat;
     if (!c) return '';
-    const row = (label, delta, unit, good) =>
+    /* Precision per quantity, not per value. It used to be
+     * `Math.abs(delta) < 10 ? 1 : 0`, so the SAME quantity printed 6,2 for one
+     * dessert and 24 for the next. Grams take one decimal so the two gram rows
+     * align with each other; calories take none, because a calorie count is a
+     * whole number everywhere else in the app and "162,0 kcal" claims a
+     * precision the figure does not have. */
+    const row = (label, delta, unit, good, dp) =>
       '<tr><th>' + label + '</th><td class="num ' + (good ? 'is-good' : 'is-bad') + '">' +
-      (delta > 0 ? '+' : '') + fmt.num(delta, Math.abs(delta) < 10 ? 1 : 0) + unit + '</td></tr>';
+      (delta > 0 ? '+' : '') + fmt.decFixed(delta, dp) + unit + '</td></tr>';
 
     return (
       '<table class="pf-nutri">' +
-      row('Proteină câștigată', c.dProtein, ' g', c.dProtein > 0) +
-      row('Zahăr economisit', c.dSugar, ' g', c.dSugar > 0) +
-      row('Calorii economisite', c.dKcal, '', c.dKcal > 0) +
+      row('Proteină câștigată', c.dProtein, ' g', c.dProtein > 0, 1) +
+      row('Zahăr economisit', c.dSugar, ' g', c.dSugar > 0, 1) +
+      row('Calorii economisite', c.dKcal, '', c.dKcal > 0, 0) +
       '<tr><th>Cât de aproape e de original</th><td class="num">' +
       Math.round((d.taste && d.taste.authenticity) || 50) + ' / 100</td></tr>' +
       '</table>' +
@@ -677,17 +686,17 @@
 
     const nutri =
       '<table class="pf-nutri">' +
-      '<tr><th>Proteină</th><td class="num">' + fmt.fixed(per.protein, 1) + ' g</td></tr>' +
+      '<tr><th>Proteină</th><td class="num">' + fmt.decFixed(per.protein, 1) + ' g</td></tr>' +
       (e.collagenShare > 0
-        ? '<tr><th>din care utilizabilă</th><td class="num">' + fmt.fixed(e.usableProtein, 1) + ' g</td></tr>'
+        ? '<tr><th>din care utilizabilă</th><td class="num">' + fmt.decFixed(e.usableProtein, 1) + ' g</td></tr>'
         : '') +
       '<tr><th>Calorii</th><td class="num">' + Math.round(per.kcal) + '</td></tr>' +
-      '<tr><th>Carbohidrați</th><td class="num">' + fmt.fixed(per.carbs, 1) + ' g</td></tr>' +
-      '<tr><th>din care zaharuri</th><td class="num">' + fmt.fixed(per.sugars, 1) + ' g</td></tr>' +
+      '<tr><th>Carbohidrați</th><td class="num">' + fmt.decFixed(per.carbs, 1) + ' g</td></tr>' +
+      '<tr><th>din care zaharuri</th><td class="num">' + fmt.decFixed(per.sugars, 1) + ' g</td></tr>' +
       (per.polyol > 0.5
-        ? '<tr><th>din care polioli</th><td class="num">' + fmt.fixed(per.polyol, 1) + ' g</td></tr>' : '') +
-      '<tr><th>Grăsimi</th><td class="num">' + fmt.fixed(per.fat, 1) + ' g</td></tr>' +
-      '<tr><th>Fibre</th><td class="num">' + fmt.fixed(per.fiber, 1) + ' g</td></tr>' +
+        ? '<tr><th>din care polioli</th><td class="num">' + fmt.decFixed(per.polyol, 1) + ' g</td></tr>' : '') +
+      '<tr><th>Grăsimi</th><td class="num">' + fmt.decFixed(per.fat, 1) + ' g</td></tr>' +
+      '<tr><th>Fibre</th><td class="num">' + fmt.decFixed(per.fiber, 1) + ' g</td></tr>' +
       '<tr><th>% din calorii din proteină</th><td class="num">' + Math.round(e.purityPct) + '%</td></tr>' +
       '</table>';
 
@@ -716,7 +725,7 @@
         '<p class="pf-muted" style="font-size:var(--fs-xs);margin-top:var(--sp-2)">' +
         'Pentru ' + d.servings + ' porții. Produsele subliniate se deschid în atlas.</p>') +
       block('Cum se face', steps) +
-      (d.tips && d.tips.length ? block('Ce contează', list(d.tips)) : '') +
+      (d.tips && d.tips.length ? block('Ce contează', list(d.tips, 'pf-bullets--tips')) : '') +
       (swaps ? block('Variante', swaps) : '') +
       block('Pe porție', nutri) +
       block('De ce e un schimb bun', scoreBreakdown(d)) +

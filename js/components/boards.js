@@ -36,7 +36,7 @@
       icon: '🥇',
       color: 'var(--macro-protein)',
       value: f => f._d.protein100,
-      display: f => fmt.num(f._d.protein100, 1) + ' g',
+      display: f => fmt.dec(f._d.protein100, 1) + ' g',
       filter: usableProtein
     },
     {
@@ -63,7 +63,7 @@
       icon: '🍽️',
       color: 'var(--macro-protein)',
       value: f => f._d.perServing.protein,
-      display: f => fmt.num(f._d.perServing.protein, 1) + ' g',
+      display: f => fmt.dec(f._d.perServing.protein, 1) + ' g',
       filter: usableProtein
     },
     {
@@ -71,7 +71,7 @@
       icon: '⚡',
       color: 'var(--stat-convenience)',
       value: f => f._d.protein100,
-      display: f => fmt.num(f._d.protein100, 1) + ' g',
+      display: f => fmt.dec(f._d.protein100, 1) + ' g',
       filter: f => usableProtein(f) && f.timeMin === 0 && f.effort === 0
     },
     {
@@ -79,7 +79,7 @@
       icon: '🪶',
       color: 'var(--stat-leanness)',
       value: f => f._d.proteinPer100kcal,
-      display: f => fmt.num(f._d.proteinPer100kcal, 1) + ' g',
+      display: f => fmt.dec(f._d.proteinPer100kcal, 1) + ' g',
       filter: f => usableProtein(f) && f._d.protein100 >= 8
     },
     {
@@ -110,7 +110,7 @@
       icon: '🏛️',
       color: 'var(--tier-s)',
       value: f => f._d.protein100,
-      display: f => fmt.num(f._d.protein100, 1) + ' g',
+      display: f => fmt.dec(f._d.protein100, 1) + ' g',
       filter: f =>
         (f.tags || []).indexOf('local-sibiu') !== -1 ||
         (f.stores || []).some(s => s.name === 'Piața Cibin' || s.name === 'Măcelărie locală')

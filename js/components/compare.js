@@ -38,7 +38,7 @@
 
   /** Formatter for a nutrient in grams that may be undeclared. */
   function grams(decimals) {
-    return v => (v === null ? '—' : fmt.num(v, decimals) + ' g');
+    return v => (v === null ? '—' : fmt.dec(v, decimals) + ' g');
   }
 
   function load() {
@@ -85,25 +85,25 @@
    * ==================================================================== */
   const ROWS = [
     { group: 'Nutriție la 100 g' },
-    { label: 'Proteină', get: f => f._d.protein100, fmt: v => fmt.num(v, 1) + ' g', better: 'high' },
+    { label: 'Proteină', get: f => f._d.protein100, fmt: v => fmt.dec(v, 1) + ' g', better: 'high' },
     { label: '% din calorii', get: f => f._d.purityPct, fmt: v => Math.round(v) + '%', better: 'high' },
-    { label: 'g proteină / 100 kcal', get: f => f._d.proteinPer100kcal, fmt: v => fmt.num(v, 1), better: 'high' },
+    { label: 'g proteină / 100 kcal', get: f => f._d.proteinPer100kcal, fmt: v => fmt.dec(v, 1), better: 'high' },
     { label: 'Calorii', get: f => f._d.kcal100, fmt: v => Math.round(v) + ' kcal', better: 'low' },
-    { label: 'Carbohidrați', get: f => f._d.carbs100, fmt: v => fmt.num(v, 1) + ' g', better: null },
+    { label: 'Carbohidrați', get: f => f._d.carbs100, fmt: v => fmt.dec(v, 1) + ' g', better: null },
     { label: 'din care zaharuri', get: f => n100(f, 'sugars'), fmt: grams(1), better: 'low' },
-    { label: 'Grăsimi', get: f => f._d.fat100, fmt: v => fmt.num(v, 1) + ' g', better: null },
+    { label: 'Grăsimi', get: f => f._d.fat100, fmt: v => fmt.dec(v, 1) + ' g', better: null },
     { label: 'din care saturate', get: f => n100(f, 'satFat'), fmt: grams(1), better: 'low' },
-    { label: 'Fibre', get: f => f._d.fiber100, fmt: v => fmt.num(v, 1) + ' g', better: 'high' },
+    { label: 'Fibre', get: f => f._d.fiber100, fmt: v => fmt.dec(v, 1) + ' g', better: 'high' },
     { label: 'Sare', get: f => n100(f, 'salt'), fmt: grams(2), better: 'low' },
 
     { group: 'Porție reală' },
     { label: 'Mărimea porției', get: f => f._d.servingGrams, fmt: (v, f) => (f.serving && f.serving.label) || v + ' ' + f.unit, better: null, text: true },
-    { label: 'Proteină / porție', get: f => f._d.perServing.protein, fmt: v => fmt.num(v, 1) + ' g', better: 'high' },
+    { label: 'Proteină / porție', get: f => f._d.perServing.protein, fmt: v => fmt.dec(v, 1) + ' g', better: 'high' },
     { label: 'Calorii / porție', get: f => f._d.perServing.kcal, fmt: v => Math.round(v) + ' kcal', better: 'low' },
 
     { group: 'Bani' },
     { label: 'lei / 100 g proteină (est.)', get: f => f._d.ronPer100gProtein, fmt: (v, f) => (v ? fmt.ronApprox(v, { short: true, verified: f._d.priceVerified }) : '—'), better: 'low' },
-    { label: 'g proteină / leu', get: f => f._d.proteinPerRon, fmt: v => (v ? fmt.num(v, 1) + ' g' : '—'), better: 'high' },
+    { label: 'g proteină / leu', get: f => f._d.proteinPerRon, fmt: v => (v ? fmt.dec(v, 1) + ' g' : '—'), better: 'high' },
     { label: 'lei / kg (est.)', get: f => f._d.pricePerKg, fmt: (v, f) => (v ? fmt.ronApprox(v, { short: true, verified: f._d.priceVerified }) : '—'), better: 'low' },
     { label: 'Cost / porție (est.)', get: f => f._d.costPerServing, fmt: (v, f) => (v ? fmt.ronApprox(v, { verified: f._d.priceVerified }) : '—'), better: 'low' },
 

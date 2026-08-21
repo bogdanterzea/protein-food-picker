@@ -250,7 +250,7 @@
     return (
       '<div class="pf-progress__row' + (over ? ' is-over' : '') + '">' +
       '<div class="pf-progress__head"><span>' + fmt.esc(label) + '</span>' +
-      '<span><b>' + fmt.num(value, 0) + '</b> / ' + fmt.num(target, 0) + ' ' + (unit || '') +
+      '<span><b>' + fmt.dec(value, 0) + '</b> / ' + fmt.dec(target, 0) + ' ' + (unit || '') +
       ' · ' + Math.round(pct) + '%</span></div>' +
       '<div class="pf-progress__track" style="--c:' + color + '">' +
       '<div class="pf-progress__fill" style="--v:' + fmt.clamp(pct, 0, 100).toFixed(1) + '"></div>' +
@@ -264,15 +264,15 @@
     const remaining = target - protein;
     if (remaining <= 0.5) {
       return (
-        '<p class="pf-gap pf-gap--done">✅ Ținta de ' + fmt.num(target, 0) +
-        ' g e atinsă' + (remaining < -0.5 ? ' (+' + fmt.num(-remaining, 0) + ' g peste)' : '') +
+        '<p class="pf-gap pf-gap--done">✅ Ținta de ' + fmt.dec(target, 0) +
+        ' g e atinsă' + (remaining < -0.5 ? ' (+' + fmt.dec(-remaining, 0) + ' g peste)' : '') +
         '.</p>'
       );
     }
 
     const picks = gapSuggestions(remaining, 3);
     const head =
-      '<p class="pf-gap__head">Îți mai lipsesc <b>' + fmt.num(remaining, 0) +
+      '<p class="pf-gap__head">Îți mai lipsesc <b>' + fmt.dec(remaining, 0) +
       ' g</b> de proteină.' + (picks.length ? ' Ajungi la țintă cu:' : '') + '</p>';
 
     if (!picks.length) return '<div class="pf-gap">' + head + '</div>';
@@ -285,7 +285,7 @@
           '<span class="pf-gap__emoji">' + PF.ui.foodEmoji(p.food) + '</span>' +
           '<span class="pf-gap__txt"><b>încă ' + p.servings + ' × ' +
           fmt.esc(p.food.nameRo || p.food.name) + '</b>' +
-          '<small>+' + fmt.num(p.protein, 0) + ' g proteină' +
+          '<small>+' + fmt.dec(p.protein, 0) + ' g proteină' +
           (p.cost ? ' · ' + fmt.ronApprox(p.cost, { short: true }) : '') + '</small></span>' +
           '<span class="pf-gap__plus">+</span>' +
           '</button>'
@@ -306,7 +306,7 @@
           '<li class="pf-meal">' +
           '<button class="pf-meal__load" data-act="meal-load" data-meal="' + fmt.esc(m.id) + '">' +
           '<b>' + fmt.esc(m.name) + '</b>' +
-          '<small>' + s.count + ' produse · ' + fmt.num(s.protein, 0) + ' g P' +
+          '<small>' + s.count + ' produse · ' + fmt.dec(s.protein, 0) + ' g P' +
           (s.cost ? ' · ' + fmt.ronApprox(s.cost, { short: true }) : '') + '</small>' +
           '</button>' +
           '<button class="pf-iconbtn" data-act="meal-del" data-meal="' + fmt.esc(m.id) +
@@ -346,13 +346,13 @@
       '<span class="pf-tray__badge">' + list.length + '</span></span>' +
       '<div class="pf-tray__totals">' +
       '<div class="pf-tray__total" style="--c:var(--macro-protein)"><b>' +
-      fmt.num(tot.protein, 0) + ' g</b><span>' + t('card.protein') + '</span></div>' +
+      fmt.dec(tot.protein, 0) + ' g</b><span>' + t('card.protein') + '</span></div>' +
       '<div class="pf-tray__total" style="--c:var(--macro-kcal)"><b>' +
-      fmt.num(tot.kcal, 0) + '</b><span>kcal</span></div>' +
+      fmt.dec(tot.kcal, 0) + '</b><span>kcal</span></div>' +
       '<div class="pf-tray__total" style="--c:var(--macro-carbs)"><b>' +
-      fmt.num(tot.carbs, 0) + ' g</b><span>' + t('card.carbs') + '</span></div>' +
+      fmt.dec(tot.carbs, 0) + ' g</b><span>' + t('card.carbs') + '</span></div>' +
       '<div class="pf-tray__total" style="--c:var(--macro-fat)"><b>' +
-      fmt.num(tot.fat, 0) + ' g</b><span>' + t('card.fat') + '</span></div>' +
+      fmt.dec(tot.fat, 0) + ' g</b><span>' + t('card.fat') + '</span></div>' +
       '<div class="pf-tray__total" style="--c:var(--stat-value)"><b>' +
       fmt.ronApprox(tot.cost, { short: true }) + '</b><span>' + t('tray.cost') + '</span></div>' +
       '</div>' +
@@ -391,13 +391,13 @@
           '<span class="pf-trayitem__name">' +
           '<b>' + fmt.esc(f.nameRo || f.name) + '</b>' +
           '<small>' + fmt.esc((f.serving && f.serving.label) || f._d.servingGrams + ' ' + f.unit) +
-          ' × ' + fmt.num(q, 1) + ' = ' + fmt.num(f._d.servingGrams * q, 0) + ' ' + f.unit + '</small>' +
+          ' × ' + fmt.dec(q, 1) + ' = ' + fmt.dec(f._d.servingGrams * q, 0) + ' ' + f.unit + '</small>' +
           '</span>' +
           '<span class="pf-trayitem__macros">' +
-          '<span style="color:var(--macro-protein)">' + fmt.num(ps.protein * q, 1) + '<i>P</i></span>' +
-          '<span style="color:var(--macro-carbs)">' + fmt.num(ps.carbs * q, 1) + '<i>C</i></span>' +
-          '<span style="color:var(--macro-fat)">' + fmt.num(ps.fat * q, 1) + '<i>G</i></span>' +
-          '<span style="color:var(--macro-kcal)">' + fmt.num(ps.kcal * q, 0) + '<i>kcal</i></span>' +
+          '<span style="color:var(--macro-protein)">' + fmt.dec(ps.protein * q, 1) + '<i>P</i></span>' +
+          '<span style="color:var(--macro-carbs)">' + fmt.dec(ps.carbs * q, 1) + '<i>C</i></span>' +
+          '<span style="color:var(--macro-fat)">' + fmt.dec(ps.fat * q, 1) + '<i>G</i></span>' +
+          '<span style="color:var(--macro-kcal)">' + fmt.dec(ps.kcal * q, 0) + '<i>kcal</i></span>' +
           '</span>' +
           '<span class="pf-stepper">' +
           '<button data-act="dec" aria-label="Mai puțin">−</button>' +
@@ -424,12 +424,12 @@
        * own numbers rather than ui.macroStrip, which is a per-100 g readout
        * off a label and rightly keeps its decimal. */
       PF.ui.statGrid([
-        { v: fmt.num(tot.protein, 0), k: t('card.protein'), cls: 'protein' },
-        { v: fmt.num(tot.carbs, 0), k: t('card.carbs'), cls: 'carbs' },
-        { v: fmt.num(tot.fat, 0), k: t('card.fat'), cls: 'fat' },
-        { v: fmt.num(tot.fiber, 0), k: t('card.fiber'), cls: 'fiber' },
-        { v: fmt.num(tot.salt, 1), k: t('card.salt'), cls: 'salt' },
-        { v: fmt.num(tot.kcal, 0), k: 'kcal', cls: 'kcal' }
+        { v: fmt.dec(tot.protein, 0), k: t('card.protein'), cls: 'protein' },
+        { v: fmt.dec(tot.carbs, 0), k: t('card.carbs'), cls: 'carbs' },
+        { v: fmt.dec(tot.fat, 0), k: t('card.fat'), cls: 'fat' },
+        { v: fmt.dec(tot.fiber, 0), k: t('card.fiber'), cls: 'fiber' },
+        { v: fmt.dec(tot.salt, 1), k: t('card.salt'), cls: 'salt' },
+        { v: fmt.dec(tot.kcal, 0), k: 'kcal', cls: 'kcal' }
       ], { six: true }) +
       '<p class="pf-muted" style="font-size:var(--fs-3xs);line-height:1.5">' +
       '≈ Costul e o estimare (±20–30%), nu un preț de raft.' +
@@ -487,7 +487,7 @@
                 '<input type="checkbox" data-shop-check="' + fmt.esc(it.id) + '"' +
                 (done ? ' checked' : '') + '>' +
                 '<span>' + PF.ui.foodEmoji(it.food) + ' ' + fmt.esc(it.food.nameRo || it.food.name) + '</span>' +
-                '<span class="pf-shop__qty">' + fmt.num(it.grams, 0) + ' ' + it.food.unit +
+                '<span class="pf-shop__qty">' + fmt.dec(it.grams, 0) + ' ' + it.food.unit +
                 (it.cost ? ' · ' + fmt.ronApprox(it.cost, { short: true }) : '') + '</span>' +
                 '</li>'
               );
@@ -503,7 +503,7 @@
     container.innerHTML =
       '<div class="pf-resultbar" style="margin-bottom:var(--sp-4)">' +
       '<span class="pf-resultbar__count"><em>' + Object.keys(items).length + '</em> produse · ' +
-      fmt.num(tot.protein, 0) + ' g proteină · ' + fmt.ronApprox(tot.cost, { short: true }) + '</span>' +
+      fmt.dec(tot.protein, 0) + ' g proteină · ' + fmt.ronApprox(tot.cost, { short: true }) + '</span>' +
       '<span class="pf-grow"></span>' +
       '<button class="pf-btn pf-btn--sm" data-act="print">🖨️ ' + t('tray.print') + '</button>' +
       '<button class="pf-btn pf-btn--sm" data-act="tray-export">📋 ' + t('tray.export') + '</button>' +
@@ -530,11 +530,11 @@
          * list unusable at the shelf when a portion was not 100 g. */
         lines.push(
           '  [ ] ' + (it.food.nameRo || it.food.name) +
-          ' — ' + fmt.num(it.servings, 2) + ' × ' +
+          ' — ' + fmt.dec(it.servings, 2) + ' × ' +
           ((it.food.serving && it.food.serving.label) ||
             it.food._d.servingGrams + ' ' + it.food.unit) +
-          ' = ' + fmt.num(it.grams, 0) + ' ' + it.food.unit +
-          ' (' + fmt.num(it.food._d.perServing.protein * it.servings, 1) + ' g proteină' +
+          ' = ' + fmt.dec(it.grams, 0) + ' ' + it.food.unit +
+          ' (' + fmt.dec(it.food._d.perServing.protein * it.servings, 1) + ' g proteină' +
           (it.cost ? ', ' + fmt.ronApprox(it.cost) : ', pret necunoscut') + ')'
         );
       });
@@ -543,22 +543,22 @@
     });
 
     lines.push('── TOTAL ──');
-    lines.push('Proteină: ' + fmt.num(tot.protein, 1) + ' g  (ținta zilnică: ' + target.target + ' g → ' +
+    lines.push('Proteină: ' + fmt.dec(tot.protein, 1) + ' g  (ținta zilnică: ' + target.target + ' g → ' +
       Math.round((tot.protein / target.target) * 100) + '%)');
-    lines.push('Carbohidrați: ' + fmt.num(tot.carbs, 1) + ' g');
-    lines.push('Grăsimi: ' + fmt.num(tot.fat, 1) + ' g');
-    lines.push('Fibre: ' + fmt.num(tot.fiber, 1) + ' g');
-    lines.push('Sare: ' + fmt.num(tot.salt, 2) + ' g');
-    lines.push('Calorii: ' + fmt.num(tot.kcal, 0) + ' kcal');
+    lines.push('Carbohidrați: ' + fmt.dec(tot.carbs, 1) + ' g');
+    lines.push('Grăsimi: ' + fmt.dec(tot.fat, 1) + ' g');
+    lines.push('Fibre: ' + fmt.dec(tot.fiber, 1) + ' g');
+    lines.push('Sare: ' + fmt.dec(tot.salt, 2) + ' g');
+    lines.push('Calorii: ' + fmt.dec(tot.kcal, 0) + ' kcal');
     lines.push('Cost estimat: ' + fmt.ronApprox(tot.cost));
 
     const gap = target.target - tot.protein;
     if (gap > 0.5) {
       lines.push('');
-      lines.push('Iti mai lipsesc ' + fmt.num(gap, 0) + ' g de proteina. Ajungi la tinta cu:');
+      lines.push('Iti mai lipsesc ' + fmt.dec(gap, 0) + ' g de proteina. Ajungi la tinta cu:');
       gapSuggestions(gap, 3).forEach(function (p) {
         lines.push('  - inca ' + p.servings + ' x ' + (p.food.nameRo || p.food.name) +
-          ' (+' + fmt.num(p.protein, 0) + ' g)');
+          ' (+' + fmt.dec(p.protein, 0) + ' g)');
       });
     } else {
       lines.push('');

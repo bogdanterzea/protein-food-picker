@@ -209,10 +209,16 @@
       '<h1 class="pf-hero__title">Atlasul <em>Proteinelor</em></h1>' +
       '<p class="pf-hero__sub">' + t('app.heroLead') + '</p>' +
       '<div class="pf-hero__stats">' +
-      kpi('protein', fmt.num(summary.maxProtein, 0) + ' g', t('kpi.protein')) +
+      kpi('protein', fmt.dec(summary.maxProtein, 0) + ' g', t('kpi.protein')) +
       kpi('ready', summary.readyToEat, t('kpi.ready')) +
+      /* Through `approxNum`, like every other rendering of this quantity — the
+       * caption says "lei/100g proteină min" but the number carried neither the
+       * estimate marker nor a unit. */
       kpi('cheap',
-        summary.cheapest ? fmt.num(summary.cheapest._d.ronPer100gProtein, 1) : '—',
+        summary.cheapest
+          ? PF.ui.approxNum(summary.cheapest._d.ronPer100gProtein,
+                            summary.cheapest._d.priceVerified, 1)
+          : '—',
         t('kpi.value')) +
       kpi('stores', summary.storeList.length, t('kpi.stores')) +
       kpi('cats', summary.tiers.S + summary.tiers.A, t('kpi.tier')) +
@@ -564,7 +570,7 @@
       .slice(0, 40)
       .map(f => [
         f.nameRo || f.name,
-        fmt.num(f._d.protein100, 1),
+        fmt.dec(f._d.protein100, 1),
         Math.round(f._d.kcal100),
         Math.round(f._d.purityPct) + '%'
       ]);
@@ -668,7 +674,7 @@
     const f = PF.data.byId[id];
     toast(
       (f ? (f.nameRo || f.name) : '') + ' — ' + t('misc.added') +
-      ' (' + fmt.num(f._d.perServing.protein, 1) + ' g proteină)',
+      ' (' + fmt.dec(f._d.perServing.protein, 1) + ' g proteină)',
       'ok'
     );
   }

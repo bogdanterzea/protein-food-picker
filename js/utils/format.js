@@ -67,21 +67,29 @@
     return num(v, decimals).replace('.', decimalSep());
   }
 
-  /** Fixed-decimal variant of `num`, for numbers stacked in a tabular column.
+  /** `dec` with the fraction padded to a fixed width, for numbers stacked in a
+   *  tabular column.
+   *
    *  `num` prints the shortest true form of a value, so a column holding 19.5,
    *  18 and 0 scatters its decimal point across three positions. That is right
    *  for prose and wrong for a column, where the decimal point is the thing the
-   *  eye tracks downward. Pads the fraction back out to a fixed width.
-   *  The "<0.1" sentinel and the em-dash pass through untouched: the first is
-   *  already at full width, the second has no digits to align. */
-  function fixed(v, decimals) {
+   *  eye tracks downward.
+   *
+   *  Named `decFixed`, not `fixed`, so the call site says which separator it
+   *  gets. Reaching for `num` in display code — where `dec` was meant — is what
+   *  put comma prices next to dot grams throughout the app.
+   *
+   *  The "<0,1" sentinel and the em-dash pass through: the first is already at
+   *  full width, the second has no digits to align. */
+  function decFixed(v, decimals) {
     const d = decimals === undefined ? 1 : decimals;
-    const s = num(v, d);
+    const sep = decimalSep();
+    const s = dec(v, d);
     if (s.charAt(0) === '<' || !/\d/.test(s)) return s;
-    const dot = s.indexOf('.');
-    const have = dot < 0 ? 0 : s.length - dot - 1;
+    const at = s.indexOf(sep);
+    const have = at < 0 ? 0 : s.length - at - 1;
     if (have >= d) return s;
-    return (dot < 0 ? s + '.' : s) + '0'.repeat(d - have);
+    return (at < 0 ? s + sep : s) + '0'.repeat(d - have);
   }
 
   /** Integer with thousands separators. */
@@ -91,14 +99,14 @@
     return Math.round(x).toLocaleString(LOCALE);
   }
 
-  /** Grams: "21 g", "0.4 g" */
+  /** Grams: "21 g", "0,4 g" in RO. `dec`, not `num` — this is display text. */
   function g(v, decimals) {
-    return num(v, decimals === undefined ? 1 : decimals) + ' g';
+    return dec(v, decimals === undefined ? 1 : decimals) + ' g';
   }
 
-  /** Percentage: "42%" */
+  /** Percentage: "42%". `dec`, not `num` — this is display text. */
   function pct(v, decimals) {
-    return num(v, decimals === undefined ? 0 : decimals) + '%';
+    return dec(v, decimals === undefined ? 0 : decimals) + '%';
   }
 
   /** kcal, grouped by the locale: "1.240 kcal" in RO, "1,240 kcal" in EN. */
@@ -349,7 +357,7 @@
     setLocale: setLocale,
     num: num,
     dec: dec,
-    fixed: fixed,
+    decFixed: decFixed,
     int: int,
     g: g,
     pct: pct,

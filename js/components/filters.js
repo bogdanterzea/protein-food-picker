@@ -105,9 +105,9 @@
 
   function saltStopLabel(v) {
     if (v >= 1e6) return L('orice', 'any');
-    const n = fmt.num(v, 2);
-    /* Romanian writes 2,5 — not 2.5. */
-    return '≤ ' + L(n.replace('.', ','), n) + ' g';
+    /* Romanian writes 2,5 — not 2.5; `fmt.dec` is the formatter that knows it,
+     * so both locales come out of the same call. */
+    return '≤ ' + fmt.dec(v, 2) + ' g';
   }
 
   function nearestStopIndex(stops, v) {
@@ -707,7 +707,7 @@
       maxKcal: v => '≤ ' + v + ' kcal',
       maxCarbs: v => '≤ ' + v + ' g carbo',
       maxFat: v => '≤ ' + v + ' g grăsimi',
-      maxSalt: v => '≤ ' + fmt.num(v, 2) + ' g ' + L('sare', 'salt'),
+      maxSalt: v => '≤ ' + fmt.dec(v, 2) + ' g ' + L('sare', 'salt'),
       maxTime: v => timeStopLabel(v),
       maxEffort: v => 'efort ≤ ' + v,
       maxCost: v => '≤ ' + v + ' lei/100g P'

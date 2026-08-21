@@ -7,6 +7,17 @@
 /* =========================================================================
  * ≤ 1400px — narrow the rail, tighten the stage
  * ========================================================================= */
+/* The rail toggle only exists on small screens.
+ *
+ * Declared BEFORE the media blocks that show it. It used to sit at the end of
+ * the file, after them — same specificity, later in source, so it won every
+ * width and the only thing keeping the button on screen was an `!important` in
+ * the 920px block. Deleting that one keyword made the entire filter rail
+ * unreachable on a phone, with no visible cause. */
+.pf-railtoggle {
+  display: none;
+}
+
 @media (max-width: 1400px) {
   :root {
     --rail-w: 272px;
@@ -101,7 +112,7 @@
   }
 
   .pf-railtoggle {
-    display: inline-grid !important;
+    display: inline-grid;
   }
 
   .pf-brand__text {
@@ -167,9 +178,11 @@
     min-height: var(--topbar-h);
     flex-wrap: wrap;
     align-content: center;
-    row-gap: 6px;
     padding: 6px var(--sp-3);
-    gap: var(--sp-2);
+    /* One shorthand, both axes. A `row-gap` longhand here was reset by the
+     * `gap` shorthand that followed it, so the two-row phone topbar used 8px
+     * between rows and rendered 2px taller than --topbar-h budgets for. */
+    gap: 6px var(--sp-2);
   }
 
   .pf-search {
@@ -345,9 +358,11 @@
     gap: var(--sp-3);
   }
 
-  /* Badges 3–5 (kcal, % of calories, lei/100g) are all repeated verbatim in
-   * the Nutriție tab, so on a phone they are pure height. */
-  .pf-modal__badges .pf-badge:nth-child(n + 3) {
+  /* Marked at the emitting site, not counted by index. `nth-child(n + 3)` was
+   * off by one — kcal is badge 2, so it survived while the prep-time badge,
+   * which is NOT repeated anywhere, was the one hidden. The price badge is also
+   * conditional, so every index shifts for an unpriced product. */
+  .pf-modal__badges .pf-badge--dup {
     display: none;
   }
 
@@ -395,13 +410,20 @@
     padding: var(--sp-3);
   }
 
+  /* Four tracks, not three: the row emits five children (emoji, name, macros,
+   * stepper, remove). At three tracks the macros took the whole of row 2 and
+   * sparse auto-placement — which never moves the cursor backwards — pushed the
+   * stepper and the remove button onto a THIRD row, detached from their item. */
   .pf-trayitem {
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
     row-gap: var(--sp-2);
   }
 
+  /* Fully definite, so it is placed before the auto items and cannot drag the
+   * placement cursor past row 1. */
   .pf-trayitem__macros {
     grid-column: 1 / -1;
+    grid-row: 2;
     justify-content: space-between;
   }
 
@@ -543,9 +565,4 @@
   .pf-shell {
     max-width: min(var(--content-max), calc(100vw - 2 * var(--sp-6)));
   }
-}
-
-/* The rail toggle only exists on small screens. */
-.pf-railtoggle {
-  display: none;
 }

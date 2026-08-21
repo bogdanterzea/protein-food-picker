@@ -10,10 +10,6 @@
  * real, scorul de schimb și panoul de onestitate.
  * ========================================================================= */
 
-.pf-dessert-page .pf-topbar {
-  gap: var(--sp-3);
-}
-
 /* ---------------------------------------------------------------- hero -- */
 
 .pf-dhero {
@@ -386,6 +382,16 @@
 .pf-dessert-page .pf-modal__icon {
   font-size: 1.8rem;
   line-height: 1;
+}
+
+/* `.pf-dessert-page .pf-modal__icon` is (0,2,0) in a file that loads after
+ * 11-responsive.css, so it outranked the phone rule there — specificity beats
+ * a media query. Without this the glyph stayed at 1.8rem inside the 46px tile
+ * the phone rule shrinks it to. */
+@media (max-width: 700px) {
+  .pf-dessert-page .pf-modal__icon {
+    font-size: 25px;
+  }
 }
 
 .pf-dessert-page .pf-modal__body .pf-vs {
