@@ -189,7 +189,15 @@
   flex-shrink: 0;
 }
 
+/* The hero is the only row in the card whose x positions depend on the data.
+ * `fmt.num(protein, protein >= 10 ? 0 : 1)` renders 1, 2 or 3 glyphs ("8", "11",
+ * "8.9") and `.pf-card__herobars` is `flex: 1 1 auto`, so the macro bar started
+ * wherever the digits happened to end — measured 39.8px of drift across one
+ * screen of sibling cards. `ch` and not px: tabular-nums makes 1ch exactly one
+ * digit advance, and `data-density='compact'` rescales --fs-base. */
 .pf-card__protein b {
+  min-width: 3ch;
+  text-align: right;
   font-family: var(--font-mono);
   font-size: var(--fs-2xl);
   font-weight: var(--fw-black);
@@ -199,7 +207,10 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* Reserved for the longest unit label ("la 100 ml"); the shorter "la 100 g"
+ * would otherwise pull the bars 6px left on every solid food. */
 .pf-card__protein span {
+  min-width: 7ch;
   font-size: var(--fs-3xs);
   font-weight: var(--fw-bold);
   letter-spacing: 0.02em;
@@ -549,11 +560,18 @@
   vertical-align: middle;
 }
 
+/* Alignment and tabular metrics apply to the header too, so a numeric column's
+ * label sits over its own digits. The mono face does NOT: header text is caps
+ * micro-type, and switching its family mid-row makes one half of the header row
+ * disagree with the other. Same split as `.pf-stores-table` and `.pf-nutri`. */
 .pf-table .num {
-  font-family: var(--font-mono);
   text-align: right;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+}
+
+.pf-table td.num {
+  font-family: var(--font-mono);
 }
 
 .pf-table .pf-td-name {

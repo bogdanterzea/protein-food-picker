@@ -67,6 +67,23 @@
     return num(v, decimals).replace('.', decimalSep());
   }
 
+  /** Fixed-decimal variant of `num`, for numbers stacked in a tabular column.
+   *  `num` prints the shortest true form of a value, so a column holding 19.5,
+   *  18 and 0 scatters its decimal point across three positions. That is right
+   *  for prose and wrong for a column, where the decimal point is the thing the
+   *  eye tracks downward. Pads the fraction back out to a fixed width.
+   *  The "<0.1" sentinel and the em-dash pass through untouched: the first is
+   *  already at full width, the second has no digits to align. */
+  function fixed(v, decimals) {
+    const d = decimals === undefined ? 1 : decimals;
+    const s = num(v, d);
+    if (s.charAt(0) === '<' || !/\d/.test(s)) return s;
+    const dot = s.indexOf('.');
+    const have = dot < 0 ? 0 : s.length - dot - 1;
+    if (have >= d) return s;
+    return (dot < 0 ? s + '.' : s) + '0'.repeat(d - have);
+  }
+
   /** Integer with thousands separators. */
   function int(v) {
     const x = finiteOf(v);
@@ -332,6 +349,7 @@
     setLocale: setLocale,
     num: num,
     dec: dec,
+    fixed: fixed,
     int: int,
     g: g,
     pct: pct,

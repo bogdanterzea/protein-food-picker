@@ -470,9 +470,9 @@
       '<span class="pf-refrow__serv">' + fmt.esc((r.serving && r.serving.label) || '') + '</span>' +
       '</th>' +
       '<td class="num">' + Math.round(per.kcal || 0) + '</td>' +
-      '<td class="num">' + fmt.num(per.protein || 0, 1) + '</td>' +
-      '<td class="num pf-refrow__sugar">' + fmt.num(per.sugars || 0, 1) + '</td>' +
-      '<td class="num">' + fmt.num(per.fat || 0, 1) + '</td>' +
+      '<td class="num">' + fmt.fixed(per.protein || 0, 1) + '</td>' +
+      '<td class="num pf-refrow__sugar">' + fmt.fixed(per.sugars || 0, 1) + '</td>' +
+      '<td class="num">' + fmt.fixed(per.fat || 0, 1) + '</td>' +
       '<td><span class="pf-badge pf-conf pf-conf--' + fmt.esc(r.confidence || 'low') + '" title="' +
       fmt.esc((CONF_FULL[r.confidence] || '') + (r.source ? ' Sursă: ' + r.source : '')) + '">' +
       fmt.esc(CONF_LABEL[r.confidence] || r.confidence || '') + '</span></td>' +
@@ -526,7 +526,7 @@
           tab('sugars', 'După zahăr') + tab('kcal', 'După calorii') +
           tab('protein', 'După proteină') + tab('name', 'Alfabetic') +
           '</div>' +
-          '<div class="pf-block__body"><table class="pf-nutri pf-reftable">' +
+          '<div class="pf-reftable-wrap"><table class="pf-nutri pf-reftable">' +
           '<thead><tr><th>Dulcele</th><th class="num">kcal</th><th class="num">Prot.</th>' +
           '<th class="num">Zahăr</th><th class="num">Grăs.</th><th>Încredere</th>' +
           '<th>Variante</th></tr></thead><tbody>' +
@@ -617,7 +617,7 @@
       return '<tr><th>' + name +
         (it.free ? ' <span class="pf-muted" style="font-size:var(--fs-3xs)">(după gust)</span>' : '') +
         '</th><td class="num">' + Math.round(it.grams) + ' g</td>' +
-        '<td class="num">' + fmt.num(it.protein, 1) + ' g</td>' +
+        '<td class="num">' + fmt.fixed(it.protein, 1) + ' g</td>' +
         '<td class="num">' + Math.round(it.kcal) + '</td></tr>';
     }).join('');
   }
@@ -644,8 +644,15 @@
     );
   }
 
+  /* `pf-block__head` — not `pf-block__title`. The shared block in ui.js styles
+   * its heading with that class, and ui.js is not loaded on this page, so this
+   * page hand-rolls the markup. Naming the class anything else leaves the
+   * heading with no rule at all: no inset strip, no caps, and no left padding
+   * to match `.pf-block__body`, so the title hangs 16px left of its own
+   * content. An h4 is safe here — the reset zeroes heading margins and makes
+   * size and weight inherit, so the class supplies the whole treatment. */
   function block(title, body) {
-    return '<section class="pf-block"><h4 class="pf-block__title">' + fmt.esc(title) +
+    return '<section class="pf-block"><h4 class="pf-block__head">' + fmt.esc(title) +
       '</h4><div class="pf-block__body">' + body + '</div></section>';
   }
 
@@ -670,17 +677,17 @@
 
     const nutri =
       '<table class="pf-nutri">' +
-      '<tr><th>Proteină</th><td class="num">' + fmt.num(per.protein, 1) + ' g</td></tr>' +
+      '<tr><th>Proteină</th><td class="num">' + fmt.fixed(per.protein, 1) + ' g</td></tr>' +
       (e.collagenShare > 0
-        ? '<tr><th>din care utilizabilă</th><td class="num">' + fmt.num(e.usableProtein, 1) + ' g</td></tr>'
+        ? '<tr><th>din care utilizabilă</th><td class="num">' + fmt.fixed(e.usableProtein, 1) + ' g</td></tr>'
         : '') +
       '<tr><th>Calorii</th><td class="num">' + Math.round(per.kcal) + '</td></tr>' +
-      '<tr><th>Carbohidrați</th><td class="num">' + fmt.num(per.carbs, 1) + ' g</td></tr>' +
-      '<tr><th>din care zaharuri</th><td class="num">' + fmt.num(per.sugars, 1) + ' g</td></tr>' +
+      '<tr><th>Carbohidrați</th><td class="num">' + fmt.fixed(per.carbs, 1) + ' g</td></tr>' +
+      '<tr><th>din care zaharuri</th><td class="num">' + fmt.fixed(per.sugars, 1) + ' g</td></tr>' +
       (per.polyol > 0.5
-        ? '<tr><th>din care polioli</th><td class="num">' + fmt.num(per.polyol, 1) + ' g</td></tr>' : '') +
-      '<tr><th>Grăsimi</th><td class="num">' + fmt.num(per.fat, 1) + ' g</td></tr>' +
-      '<tr><th>Fibre</th><td class="num">' + fmt.num(per.fiber, 1) + ' g</td></tr>' +
+        ? '<tr><th>din care polioli</th><td class="num">' + fmt.fixed(per.polyol, 1) + ' g</td></tr>' : '') +
+      '<tr><th>Grăsimi</th><td class="num">' + fmt.fixed(per.fat, 1) + ' g</td></tr>' +
+      '<tr><th>Fibre</th><td class="num">' + fmt.fixed(per.fiber, 1) + ' g</td></tr>' +
       '<tr><th>% din calorii din proteină</th><td class="num">' + Math.round(e.purityPct) + '%</td></tr>' +
       '</table>';
 
@@ -694,7 +701,7 @@
       '<div class="pf-modal__head">' +
       '<span class="pf-modal__icon">' + fmt.esc(d.emoji || '🍰') + '</span>' +
       '<div><h2 id="pf-dessert-title" class="pf-modal__title">' + fmt.esc(d.name) + '</h2>' +
-      '<p class="pf-modal__sub">' + fam.emoji + ' ' + fmt.esc(fam.ro) + ' · ' +
+      '<p class="pf-modal__subtitle">' + fam.emoji + ' ' + fmt.esc(fam.ro) + ' · ' +
       fmt.esc(timing) + ' · ' + d.servings + ' porții</p></div>' +
       '<button class="pf-modal__close" data-dessert-close aria-label="Închide">✕</button>' +
       '</div>' +

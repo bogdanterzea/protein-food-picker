@@ -94,6 +94,11 @@
 }
 
 .pf-doc-toc__title {
+  /* `.pf-doc-toc a` is `padding-left: var(--sp-3)` plus a 2px `border-left`
+   * rail, so its text starts 14px in while this title started at 0 — the
+   * heading sat outside the rail it heads. Undone at <=900px, where the links
+   * lose both the rail and the padding. */
+  padding-left: calc(var(--sp-3) + 2px);
   margin-bottom: var(--sp-2);
   color: var(--text-4);
   text-transform: uppercase;

@@ -488,7 +488,10 @@
    * ==================================================================== */
   function approxNum(value, verified, decimals) {
     if (!value || !Number.isFinite(value)) return '—';
-    return (verified ? '' : '≈') + fmt.num(value, decimals === undefined ? 1 : decimals);
+    /* `fixed`, not `num`: the two callers that put this in a table (the atlas
+     * Tabel view and the modal store table) right-align it in a tabular column,
+     * where a dropped trailing zero moves the decimal point out of line. */
+    return (verified ? '' : '≈') + fmt.fixed(value, decimals === undefined ? 1 : decimals);
   }
 
   /* =======================================================================

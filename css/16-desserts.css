@@ -270,6 +270,10 @@
   font-size: var(--fs-3xs);
   text-transform: uppercase;
   letter-spacing: 0.06em;
+  /* `.pf-vs__row` is `72px minmax(0,1fr)` with a 12px gap, so the bars start
+   * 84px in. Without this the left legend item sits 84px left of the bar it
+   * labels while the right one lands correctly on the bars' right edge. */
+  padding-left: calc(72px + var(--sp-3));
 }
 
 .pf-vs__mine   { color: var(--accent); font-weight: 700; }
@@ -421,6 +425,9 @@
     row-gap: var(--sp-2);
   }
 
+  /* One column here, so the 84px legend inset above must come back off. */
+  .pf-vs__head { padding-left: 0; }
+
   /* The label column would squeeze the bars to nothing on a phone, so the
    * label moves above them. */
   .pf-vs__row {
@@ -521,6 +528,24 @@
 }
 
 .pf-reftable th { font-weight: 600; }
+
+/* `.pf-nutri td` right-aligns in the mono face because `.pf-nutri` was built as
+ * a two-column label/value table. The reference table reuses it with seven
+ * columns, two of which hold text (a confidence badge, a "N variante" link):
+ * those were pinned right, in monospace, under a left-aligned header. */
+.pf-reftable td:not(.num) {
+  text-align: left;
+  font-family: inherit;
+}
+
+/* Scroll container without `.pf-block__body`'s 16px padding — the reference
+ * table sits inside `.pf-refpanel__body`, which already pads by 16px, so
+ * reusing the block body double-indented the table 32px from the copy and
+ * chips above it. `.pf-refpanel` clips with overflow:hidden, so the scroller
+ * itself is genuinely needed. */
+.pf-reftable-wrap {
+  overflow-x: auto;
+}
 
 .pf-refrow__serv {
   display: block;

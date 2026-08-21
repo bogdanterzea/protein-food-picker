@@ -527,8 +527,10 @@
 
     const st = PF.filters.state;
     const head = PF.card.TABLE_COLUMNS.map(function (c) {
-      const sorted = st.sort === c.sort ? ' data-sorted="' + (st.dir === 'asc' ? 'asc' : 'desc') + '"' : '';
-      return '<th data-sort="' + c.sort + '"' + sorted + '>' + fmt.esc(c.label) + '</th>';
+      const sorted = st.sort === c.sort && c.mark !== false
+        ? ' data-sorted="' + (st.dir === 'asc' ? 'asc' : 'desc') + '"' : '';
+      return '<th' + (c.num ? ' class="num"' : '') + ' data-sort="' + c.sort + '"' +
+        sorted + '>' + fmt.esc(c.label) + '</th>';
     }).join('');
 
     const rows = visible

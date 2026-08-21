@@ -265,6 +265,9 @@ html.pf-scroll-locked body {
   display: flex;
   align-items: center;
   gap: var(--sp-2);
+  /* Declared so an <h4> head (line-height 1.2 from the reset) and a <div> head
+   * (inheriting --lh-base) produce the same band height. */
+  line-height: var(--lh-base);
   padding: var(--sp-3) var(--sp-4);
   border-bottom: 1px solid var(--border);
   font-size: var(--fs-2xs);
@@ -313,6 +316,14 @@ html.pf-scroll-locked body {
   font-weight: var(--fw-semi);
   padding: 5px 0;
   white-space: nowrap;
+}
+
+/* A `th.num` marks the header of a numeric column. Without this rule it fell
+ * through to `.pf-nutri th`'s left alignment while the cells under it stayed
+ * right-aligned, so label and numbers sat pinned to opposite edges of the same
+ * column. Alignment only — the mono face stays off header text on purpose. */
+.pf-nutri th.num {
+  text-align: right;
 }
 
 .pf-nutri td.pf-nutri__pct {
@@ -523,7 +534,7 @@ html.pf-scroll-locked body {
   font-size: var(--fs-sm);
 }
 
-.pf-stores-table th {
+.pf-stores-table thead th {
   text-align: left;
   padding: 6px var(--sp-2) 6px 0;
   font-size: var(--fs-3xs);
@@ -540,15 +551,31 @@ html.pf-scroll-locked body {
   vertical-align: top;
 }
 
-.pf-stores-table tr:last-child td {
+/* The recipe ingredient table puts its names in `<th>` (they label the row, so
+ * they are headers). The rule above is scoped to `thead` precisely so those do
+ * not inherit 10px uppercase micro-caps — which made every ingredient name
+ * render identically to the column header above it. */
+.pf-stores-table tbody th {
+  text-align: left;
+  font-weight: var(--fw-medium);
+  color: var(--text-2);
+  padding: var(--sp-2) var(--sp-2) var(--sp-2) 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.pf-stores-table tr:last-child td,
+.pf-stores-table tr:last-child th {
   border-bottom: none;
 }
 
 .pf-stores-table .num {
-  font-family: var(--font-mono);
   text-align: right;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
+}
+
+.pf-stores-table td.num {
+  font-family: var(--font-mono);
 }
 
 .pf-stores-table__note {

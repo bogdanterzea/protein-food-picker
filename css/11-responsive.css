@@ -419,7 +419,12 @@
     max-width: none;
   }
 
-  .pf-stat {
+  /* Must not reach the size variants. This file loads after 05-statbars.css and
+   * `.pf-stat` ties them on specificity, so a bare `.pf-stat` here overrode
+   * --lg, --xs AND --bare — and --bare is a SINGLE-column variant that hides
+   * its label and value, so it was handed three tracks and squeezed its bar
+   * into the 84px label slot. */
+  .pf-stat:not([class*='pf-stat--']) {
     grid-template-columns: 84px minmax(0, 1fr) 30px;
   }
 

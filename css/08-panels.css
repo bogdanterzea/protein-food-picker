@@ -656,6 +656,14 @@
  * 5. COMPARE GRID
  * ========================================================================= */
 .pf-compare {
+  /* `overflow-x: auto` makes this a scroll container on BOTH axes, so the
+   * sticky `thead th` below resolves against this box rather than the page.
+   * With no height cap the box never scrolls vertically and `top: 0` can never
+   * engage — the product names scroll away. Same trap, same fix, as
+   * `.pf-table-wrap` in 06-cards.css. */
+  max-height: calc(100vh - var(--topbar-h) - var(--sp-8));
+  scroll-margin-top: calc(var(--topbar-h) + var(--sp-3));
+  overscroll-behavior: contain;
   overflow-x: auto;
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
@@ -680,6 +688,14 @@
   top: 0;
   background: var(--bg-panel-2);
   z-index: 2;
+}
+
+/* The corner cell must pin on BOTH axes, above the row headers it sits over —
+ * otherwise it scrolls away sideways and a product name slides into the slot
+ * directly above the pinned label column, appearing to label it. */
+.pf-compare thead th:first-child {
+  left: 0;
+  z-index: 3;
 }
 
 .pf-compare tbody th {
@@ -1012,7 +1028,10 @@
 }
 
 .pf-help__body {
-  padding: var(--sp-5) var(--sp-6) var(--sp-6);
+  /* 20px left, matching `.pf-panel__head`'s --sp-5 inset. Every other
+   * head/body pair in the app agrees at 20/20; this one had the title 4px
+   * left of every shortcut row beneath it. */
+  padding: var(--sp-5) var(--sp-6) var(--sp-6) var(--sp-5);
   display: flex;
   flex-direction: column;
   gap: var(--sp-3);

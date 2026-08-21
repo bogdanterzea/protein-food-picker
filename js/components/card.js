@@ -162,13 +162,13 @@
       '<small>' + fmt.esc(food.brand !== 'generic' ? food.brand : PF.i18n.catName(food.category)) +
       '</small></span></div></td>' +
       '<td>' + PF.ui.tier(d.tier, { size: 'sm' }) + '</td>' +
-      '<td class="num">' + fmt.num(d.protein100, 1) + '</td>' +
+      '<td class="num">' + fmt.fixed(d.protein100, 1) + '</td>' +
       '<td class="pf-td-bar">' + PF.charts.rankBar(d.protein100, 90, 'var(--macro-protein)', '') + '</td>' +
       '<td class="num">' + Math.round(d.purityPct) + '%</td>' +
       '<td class="num">' + Math.round(d.kcal100) + '</td>' +
-      '<td class="num">' + fmt.num(d.carbs100, 1) + '</td>' +
-      '<td class="num">' + fmt.num(d.fat100, 1) + '</td>' +
-      '<td class="num">' + fmt.num(d.perServing.protein, 1) + '</td>' +
+      '<td class="num">' + fmt.fixed(d.carbs100, 1) + '</td>' +
+      '<td class="num">' + fmt.fixed(d.fat100, 1) + '</td>' +
+      '<td class="num">' + fmt.fixed(d.perServing.protein, 1) + '</td>' +
       '<td class="num">' + ui.approxNum(d.ronPer100gProtein, d.priceVerified, 1) + '</td>' +
       '<td class="num">' + fmt.minutes(food.timeMin, PF.i18n.lang()) + '</td>' +
       '<td class="num">' + Math.round(d.score) + '</td>' +
@@ -176,19 +176,27 @@
     );
   }
 
+  /* `num` mirrors the `class="num"` that `row()` puts on the matching cell, so a
+   * numeric column's header is right-aligned over its own digits instead of
+   * pinned to the far edge of the column.
+   *
+   * `mark: false` keeps the sort caret off a column that shares another
+   * column's sort key. `tier` and `score` both sort by score, `protein` and
+   * `bar` both sort by protein, so without this one sort lights up two headers
+   * — including `bar`, whose label is empty, leaving a caret floating alone. */
   const TABLE_COLUMNS = [
     { key: 'name', label: 'Produs', sort: 'name' },
-    { key: 'tier', label: 'Rang', sort: 'score' },
-    { key: 'protein', label: 'Prot/100', sort: 'protein' },
-    { key: 'bar', label: '', sort: 'protein' },
-    { key: 'purity', label: '% kcal', sort: 'purity' },
-    { key: 'kcal', label: 'kcal', sort: 'kcal' },
-    { key: 'carbs', label: 'Carb', sort: 'carbs' },
-    { key: 'fat', label: 'Grăs', sort: 'fat' },
-    { key: 'serving', label: 'Prot/porție', sort: 'proteinServing' },
-    { key: 'cost', label: 'lei/100gP', sort: 'value' },
-    { key: 'time', label: 'Timp', sort: 'time' },
-    { key: 'score', label: 'Scor', sort: 'score' }
+    { key: 'tier', label: 'Rang', sort: 'score', mark: false },
+    { key: 'protein', label: 'Prot/100', sort: 'protein', num: true },
+    { key: 'bar', label: '', sort: 'protein', mark: false },
+    { key: 'purity', label: '% kcal', sort: 'purity', num: true },
+    { key: 'kcal', label: 'kcal', sort: 'kcal', num: true },
+    { key: 'carbs', label: 'Carb', sort: 'carbs', num: true },
+    { key: 'fat', label: 'Grăs', sort: 'fat', num: true },
+    { key: 'serving', label: 'Prot/porție', sort: 'proteinServing', num: true },
+    { key: 'cost', label: 'lei/100gP', sort: 'value', num: true },
+    { key: 'time', label: 'Timp', sort: 'time', num: true },
+    { key: 'score', label: 'Scor', sort: 'score', num: true }
   ];
 
   PF.card = {

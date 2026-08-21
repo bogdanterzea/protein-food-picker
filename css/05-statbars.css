@@ -118,7 +118,11 @@
 
 /* --- size variants --- */
 .pf-stat--lg {
-  grid-template-columns: 104px minmax(0, 1fr) 46px;
+  /* 76px, not 46px: this variant also carries the speed row, whose value comes
+   * from `fmt.minutes`. The data reaches timeMin 2900 -> "48 h 20 min", 11
+   * mono glyphs at --fs-2xs (~73px). At 46px the value is right-aligned with no
+   * overflow rule, so the overspill lands on top of the bar's fill. */
+  grid-template-columns: 104px minmax(0, 1fr) 76px;
   min-height: 24px;
 }
 
@@ -133,7 +137,16 @@
 }
 
 .pf-stat--xs {
-  grid-template-columns: 56px minmax(0, 1fr) 26px;
+  grid-template-columns: 62px minmax(0, 1fr) 32px;
+}
+
+/* This variant narrows both side tracks but never lowers the font, so the
+ * uppercase caps-tracked labels ("COMODITATE", "SAȚIETATE") were ellipsised in
+ * the compare view, where the label repeats per product and is the only way to
+ * tell one bar from another. 11-responsive.css:426 already zeroes this tracking
+ * for the same reason, but only below 700px. */
+.pf-stat--xs .pf-stat__label {
+  letter-spacing: 0;
 }
 
 .pf-stat--xs .pf-stat__track {
