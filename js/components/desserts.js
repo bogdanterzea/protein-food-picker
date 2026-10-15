@@ -27,6 +27,23 @@
 
   let ALL = [];
 
+  /* Două linii, două întrebări diferite. Linia proteică întreabă „cât câștig
+   * față de desertul real"; linia ușoară întreabă „cât de puțin mă costă pofta".
+   * Un desert de 70 kcal din gelatină și fructe ar pica orice test proteic,
+   * iar un cheesecake de 300 kcal cu 30 g de proteină ar pica orice test de
+   * calorii — de aceea fiecare linie are scorul ei, nu un scor comun. */
+  const LINES = {
+    light: {
+      ro: 'Ușoare', emoji: '🍃', hash: 'usoare',
+      lede: 'Sub ~150 kcal pe porție. Ou, gelatină, fructe, lactate slabe — dulce din fructe și miere, mult volum.'
+    },
+    protein: {
+      ro: 'Proteice', emoji: '💪', hash: 'proteice',
+      lede: 'Minimum 15 g de proteină pe porție. Deserturile clasice, refăcute pe skyr, brânză, albuș și proteină de soia — fără zer și fără cazeină.'
+    }
+  };
+  const lineOf = d => (d.line === 'light' ? 'light' : 'protein');
+
   const FAMILY = {
     'no-bake': { ro: 'Fără coacere', emoji: '🥣', desc: 'Se amestecă și se răcește. Zero căldură.' },
     baked:     { ro: 'La cuptor',    emoji: '🔥', desc: 'Cuptor sau air fryer.' },
@@ -80,6 +97,7 @@
         fat: (n.fat || 0) * k,
         fiber: (n.fiber || 0) * k,
         polyol: (n.polyols || 0) * k,
+        addedSugar: 0,
         /* Gelatine and collagen carry protein that the body cannot use to
          * build anything — no tryptophan. The atlas already knows which
          * products those are; the dessert page must not quietly re-credit it. */
@@ -93,6 +111,7 @@
     return {
       kind: 'pantry',
       ref: p,
+      key: i.p,
       name: p.name,
       grams: g,
       free: !!i.free || !!p.free,
@@ -103,6 +122,7 @@
       fat: (p.fat || 0) * k,
       fiber: (p.fiber || 0) * k,
       polyol: (p.polyol || 0) * k,
+      addedSugar: p.freeSugar ? (p.sugars || 0) * k : 0,
       collagen: /gelatin|colagen/i.test(p.name),
       ron: p.ronKg ? (p.ronKg / 1000) * g : null
     };
@@ -160,6 +180,81 @@
   }
 
   /* =======================================================================
+   * SCORUL LINIEI UȘOARE
+   *
+   * Aici proteina nu e motivul pentru care exiști. Desertul ușor câștigă când
+   * costă puțin pentru aceeași poftă, așa că ponderile se mută:
+   *
+   *   calorii economisite, relativ la original ........ 0,30
+   *   zahăr ADĂUGAT economisit ........................ 0,30
+   *   densitate energetică (kcal/g) ................... 0,20
+   *   proteină (gelatina contează pe jumătate) ........ 0,10
+   *   fibre ........................................... 0,10
+   *
+   * Nicio rețetă nu folosește îndulcitori fără zahăr (eritritol, xilitol,
+   * stevie, sucraloză) — e o regulă a proiectului, păzită de tools/check.js.
+   * Dulcele vine din miere, fructe, curmale sau zahăr, iar tot ce nu e fruct
+   * întreg se numără la zahărul adăugat. De aceea zahărul adăugat cântărește
+   * cât caloriile.
+   *
+   * Zahărul ADĂUGAT, nu cel total. OMS numără ca „zahăr liber" zahărul,
+   * mierea, siropurile și sucurile — nu zahărul din fructul întreg sau
+   * lactoza. Un scor care penalizează un măr copt pentru zahărul mărului ar
+   * fi exact pe dos. Zahărul total rămâne totuși pe card, cu cifra lui.
+   *
+   * Densitatea energetică e axa pe care lucrează studiile lui Rolls: sub
+   * ~0,6 kcal/g (fructe, compot, spumă) mănânci un bol întreg pentru
+   * caloriile unei felii mici. Peste 2 kcal/g nu mai primește nimic.
+   *
+   * Gelatina ia jumătate din credit: proteina ei nu construiește nimic
+   * (zero triptofan), dar sătură — Veldhorst 2009 a măsurat ~20% mai puțin
+   * mâncat la prânz după un mic dejun cu gelatină.
+   *
+   * Autenticitatea se înmulțește la fel ca la linia proteică, cu același
+   * plafon de 0,6 — altfel benzile de culoare (75 / 55) ar însemna altceva
+   * pe fiecare filă și un jeleu de 60 kcal ar ieși „slab" doar pentru că nu
+   * e o prăjitură. Poliolii — doar din produsele de atlas care îi au pe
+   * etichetă, ca ciocolata proteică — scad la final, în puncte:
+   * 0 · ≤10 g −2 · ≤20 g −6 · peste −15.
+   * ==================================================================== */
+  const LIGHT_KCAL_CAP = 150;
+  const LIGHT_W = { kcal: 0.30, sugar: 0.30, density: 0.20, protein: 0.10, fiber: 0.10 };
+
+  function lightScore(per, grams, vs, authenticity, extra) {
+    if (!vs) return null;
+    const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+
+    const dKcal = (vs.kcal || 0) - per.kcal;
+    /* The real dessert's sugar is almost all added — a cofetărie cake's
+     * lactose is a rounding error next to its syrup. */
+    const vsAdded = vs.sugars || 0;
+    const density = grams > 0 ? per.kcal / grams : 4;
+    const completeProtein = per.protein - 0.5 * (extra.collagenProtein || 0);
+
+    const parts = {
+      kcal: vs.kcal > 0 ? clamp(dKcal / vs.kcal, 0, 1) : 0,
+      sugar: vsAdded > 0 ? clamp((vsAdded - per.addedSugar) / vsAdded, 0, 1) : 1,
+      density: clamp((2.0 - density) / 1.4, 0, 1),
+      protein: clamp(completeProtein / 15, 0, 1),
+      fiber: clamp(per.fiber / 5, 0, 1)
+    };
+    const base = Object.keys(LIGHT_W).reduce((sum, k) => sum + LIGHT_W[k] * parts[k], 0);
+    const auth = AUTHENTICITY_FLOOR + (1 - AUTHENTICITY_FLOOR) * (clamp(authenticity || 50, 0, 100) / 100);
+    const polyolPenalty = per.polyol <= 0.5 ? 0 : per.polyol <= 10 ? 2 : per.polyol <= 20 ? 6 : 15;
+
+    return {
+      score: Math.max(0, Math.round(base * auth * 100 - polyolPenalty)),
+      dKcal: Math.round(dKcal),
+      dSugar: Math.round((vsAdded - per.addedSugar) * 10) / 10,
+      dProtein: Math.round((per.protein - (vs.protein || 0)) * 10) / 10,
+      density: Math.round(density * 100) / 100,
+      polyolPenalty: polyolPenalty,
+      parts: parts,
+      authFactor: auth
+    };
+  }
+
+  /* =======================================================================
    * ENRICH
    * ==================================================================== */
   function enrich(d) {
@@ -167,14 +262,14 @@
     const missing = (d.ing || []).length - items.length;
     const servings = Math.max(1, d.servings || 1);
 
-    const tot = { kcal: 0, protein: 0, carbs: 0, sugars: 0, fat: 0, fiber: 0, polyol: 0, ron: 0 };
+    const tot = { kcal: 0, protein: 0, carbs: 0, sugars: 0, addedSugar: 0, fat: 0, fiber: 0, polyol: 0, ron: 0 };
     let collagenProtein = 0;
     let anyPriceMissing = false;
 
     items.forEach(function (it) {
       tot.kcal += it.kcal; tot.protein += it.protein; tot.carbs += it.carbs;
       tot.sugars += it.sugars; tot.fat += it.fat; tot.fiber += it.fiber;
-      tot.polyol += it.polyol;
+      tot.polyol += it.polyol; tot.addedSugar += it.addedSugar;
       if (it.collagen) collagenProtein += it.protein;
       if (it.free) return;
       if (it.ron === null) anyPriceMissing = true; else tot.ron += it.ron;
@@ -187,11 +282,20 @@
      * and not here — the same correction the atlas applies to its rankings. */
     const usableProtein = (tot.protein - collagenProtein) / servings;
 
-    const grams = items.reduce((s, i) => s + i.grams, 0) / servings;
+    /* Ingredient weight is the right serving weight for almost everything
+     * here — except where the oven takes the water out. 360 g of apple come
+     * out as 50 g of chips; dividing kcal by 184 g per serving would make them
+     * look four times lighter per bite than they are. `yieldG` is the finished
+     * weight of the whole batch, declared only where it differs. */
+    const grams = (d.yieldG > 0 ? d.yieldG : items.reduce((s, i) => s + i.grams, 0)) / servings;
     const proteinKcal = per.protein * 4;
     const purity = per.kcal > 0 ? (proteinKcal / per.kcal) * 100 : 0;
 
-    const cheat = cheatScore(per, d.vs, d.taste && d.taste.authenticity);
+    const isLight = lineOf(d) === 'light';
+    const cheat = isLight
+      ? lightScore(per, grams, d.vs, d.taste && d.taste.authenticity,
+          { collagenProtein: collagenProtein / servings })
+      : cheatScore(per, d.vs, d.taste && d.taste.authenticity);
 
     return {
       items: items,
@@ -210,8 +314,10 @@
         highPolyol: per.polyol >= 15,
         highSugar: per.sugars >= 25,
         collagen: collagenProtein > 0,
-        lowProtein: per.protein < 15,
-        heavy: per.kcal > 350
+        lowProtein: !isLight && per.protein < 15,
+        heavy: per.kcal > (isLight ? LIGHT_KCAL_CAP : 350),
+        /* A 30-kcal "dessert" of 40 g wins every ratio and satisfies nobody. */
+        tinyPortion: isLight && grams < 60 && per.kcal < 50
       }
     };
   }
@@ -223,7 +329,15 @@
    * Deliberat mult mai simplă decât rail-ul atlasului. Aici nu cauți printre
    * 503 produse cu 26 de fațete — ai o poftă, ai un timp disponibil, atât.
    * ==================================================================== */
-  const state = { craving: 'all', family: 'all', maxTime: 0, sort: 'cheat' };
+  const state = { line: 'light', craving: 'all', family: 'all', maxTime: 0, sort: 'cheat', seasonal: false };
+
+  /* `season` lists the months a recipe's fruit is cheap and good in Sibiu.
+   * Recipes without it are year-round — frozen fruit, milk, eggs — and are
+   * never "out of season", so they never get the badge either. */
+  const MONTHS_RO = ['ianuarie', 'februarie', 'martie', 'aprilie', 'mai', 'iunie', 'iulie',
+    'august', 'septembrie', 'octombrie', 'noiembrie', 'decembrie'];
+  const thisMonth = () => new Date().getMonth() + 1;
+  const inSeason = d => !!(d.season && d.season.indexOf(thisMonth()) !== -1);
 
   const TIME_STOPS = [
     { v: 0, ro: 'Oricât' },
@@ -232,13 +346,18 @@
     { v: 40, ro: 'Sub 40 min' }
   ];
 
+  /* `lines` says where a sort makes sense. "Most protein" on a list of
+   * 60-kcal jellies ranks gelatine first — true and useless. */
   const SORTS = {
     cheat:   { ro: 'Cel mai bun schimb', get: d => (d._e.cheat ? d._e.cheat.score : 0) },
-    protein: { ro: 'Cea mai multă proteină', get: d => d._e.perServing.protein },
+    protein: { ro: 'Cea mai multă proteină', get: d => d._e.perServing.protein, lines: ['protein'] },
     quick:   { ro: 'Cel mai rapid', get: d => -(d.time ? d.time.active : 999) },
     light:   { ro: 'Cele mai puține calorii', get: d => -d._e.perServing.kcal },
+    volume:  { ro: 'Cea mai mare porție la calorie', lines: ['light'],
+               get: d => (d._e.perServing.kcal > 0 ? d._e.servingGrams / d._e.perServing.kcal : 0) },
     sugar:   { ro: 'Cel mai puțin zahăr', get: d => -d._e.perServing.sugars }
   };
+  const sortFits = k => !SORTS[k].lines || SORTS[k].lines.indexOf(state.line) !== -1;
 
   /** Active time is what people actually budget for; chilling is not work. */
   function activeTime(d) {
@@ -246,14 +365,16 @@
   }
 
   function matches(d) {
+    if (lineOf(d) !== state.line) return false;
     if (state.craving !== 'all' && d.craving !== state.craving) return false;
     if (state.family !== 'all' && d.family !== state.family) return false;
     if (state.maxTime && activeTime(d) > state.maxTime) return false;
+    if (state.seasonal && !inSeason(d)) return false;
     return true;
   }
 
   function visible() {
-    const get = (SORTS[state.sort] || SORTS.cheat).get;
+    const get = (SORTS[state.sort] && sortFits(state.sort) ? SORTS[state.sort] : SORTS.cheat).get;
     return ALL.filter(matches).sort(function (a, b) { return get(b) - get(a); });
   }
 
@@ -297,9 +418,16 @@
       '<span class="pf-vs__mine">Varianta asta</span>' +
       '<span class="pf-vs__theirs">' + fmt.esc(d.vs.name) + '</span>' +
       '</div>' +
-      versusRow('Proteină', per.protein, d.vs.protein || 0, ' g', true) +
-      versusRow('Zahăr', per.sugars, d.vs.sugars || 0, ' g', false) +
-      versusRow('Calorii', per.kcal, d.vs.kcal || 0, '', false) +
+      /* The light line leads with what it is for. Protein moves to the end
+       * there and fat takes its middle slot: a 70-kcal jelly "losing" on
+       * protein to a cheesecake is true, and also beside the point. */
+      (lineOf(d) === 'light'
+        ? versusRow('Calorii', per.kcal, d.vs.kcal || 0, '', false) +
+          versusRow('Zahăr adăugat', per.addedSugar, d.vs.sugars || 0, ' g', false) +
+          versusRow('Grăsimi', per.fat, d.vs.fat || 0, ' g', false)
+        : versusRow('Proteină', per.protein, d.vs.protein || 0, ' g', true) +
+          versusRow('Zahăr', per.sugars, d.vs.sugars || 0, ' g', false) +
+          versusRow('Calorii', per.kcal, d.vs.kcal || 0, '', false)) +
       '</div>'
     );
   }
@@ -315,6 +443,7 @@
     const e = d._e;
     const f = e.flags;
     const out = [];
+    const light = lineOf(d) === 'light';
 
     if (f.highPolyol) {
       out.push({ k: 'warn', t: Math.round(e.perServing.polyol) +
@@ -324,15 +453,25 @@
       out.push({ k: 'warn', t: Math.round(e.perServing.sugars) +
         ' g zahăr pe porție. E un desert cu zahăr, doar unul cu proteină în el' });
     }
-    if (f.collagen) {
+    /* On the protein line, gelatine protein is a broken promise. On the light
+     * line nobody was promised protein: there it is a footnote, not an alarm. */
+    if (f.collagen && light) {
+      out.push({ k: 'info', t: Math.round(e.collagenShare * 100) +
+        '% din proteină e gelatină — ajută la sațietate, nu se pune la ținta zilnică' });
+    } else if (f.collagen) {
       out.push({ k: 'bad', t: Math.round(e.collagenShare * 100) +
         '% din proteină vine din gelatină — nu se pune la ținta zilnică' });
     }
     if (f.lowProtein) {
       out.push({ k: 'warn', t: 'Sub 15 g proteină pe porție — e mai aproape de un desert obișnuit' });
     }
-    if (d.sweetener && d.sweetener.kind === 'xilitol') {
-      out.push({ k: 'bad', t: 'Conține xilitol — toxic pentru câini chiar și în cantități mici' });
+    if (f.tinyPortion) {
+      out.push({ k: 'warn', t: 'Porție mică: ' + e.servingGrams + ' g. Cifrele arată bine pentru că e puțin, ' +
+        'nu pentru că e ușor' });
+    }
+    if (f.heavy && lineOf(d) === 'light') {
+      out.push({ k: 'warn', t: Math.round(e.perServing.kcal) + ' kcal pe porție — peste ținta de ' +
+        LIGHT_KCAL_CAP + ' a secțiunii ușoare' });
     }
     (d.warnings || []).forEach(w => out.push({ k: 'info', t: w }));
 
@@ -352,6 +491,7 @@
     const cr = CRAVING[d.craving] || { ro: d.craving, emoji: '' };
     const sc = e.cheat ? e.cheat.score : null;
     const band = sc === null ? '' : sc >= 75 ? ' is-great' : sc >= 55 ? ' is-good' : ' is-meh';
+    const light = lineOf(d) === 'light';
 
     return (
       '<article class="pf-dcard" data-dessert="' + fmt.esc(d.id) + '" tabindex="0">' +
@@ -364,6 +504,7 @@
       '<span class="pf-badge pf-badge--accent">' + fam.emoji + ' ' + fmt.esc(fam.ro) + '</span>' +
       '<span class="pf-badge">' + cr.emoji + ' ' + fmt.esc(cr.ro) + '</span>' +
       '<span class="pf-badge">' + activeTime(d) + ' min activ</span>' +
+      (inSeason(d) ? '<span class="pf-badge pf-badge--season">🍂 în sezon</span>' : '') +
       '</span></span>' +
       (sc !== null
         ? '<span class="pf-dscore' + band + '" title="Cât de bun e schimbul față de desertul real">' +
@@ -372,11 +513,22 @@
       '</header>' +
 
       '<div class="pf-dcard__hero">' +
-      '<span class="pf-dcard__protein"><b>' + Math.round(per.protein) +
-      '</b><span>g proteină<br>pe porție</span></span>' +
-      '<span class="pf-dcard__nums">' +
-      '<span><b>' + Math.round(per.kcal) + '</b> kcal</span>' +
-      '<span><b>' + fmt.dec(per.sugars, 1) + '</b> g zahăr</span>' +
+      (light
+        ? '<span class="pf-dcard__protein pf-dcard__protein--kcal"><b>' + Math.round(per.kcal) +
+          '</b><span>kcal<br>pe porție</span></span>' +
+          '<span class="pf-dcard__nums">' +
+          /* Total and added side by side: an apple's sugar is still sugar,
+           * and hiding it behind "0 g added" would be the same trick the
+           * "fără zahăr adăugat" labels play. */
+          '<span><b>' + fmt.dec(per.sugars, 1) + '</b> g zahăr' +
+          (per.sugars >= 1 ? ' (<b>' + fmt.dec(per.addedSugar, 1) + '</b> adăugat)' : '') + '</span>' +
+          '<span><b>' + fmt.dec(per.protein, 1) + '</b> g proteină</span>' +
+          (per.fiber >= 1 ? '<span><b>' + fmt.dec(per.fiber, 1) + '</b> g fibre</span>' : '')
+        : '<span class="pf-dcard__protein"><b>' + Math.round(per.protein) +
+          '</b><span>g proteină<br>pe porție</span></span>' +
+          '<span class="pf-dcard__nums">' +
+          '<span><b>' + Math.round(per.kcal) + '</b> kcal</span>' +
+          '<span><b>' + fmt.dec(per.sugars, 1) + '</b> g zahăr</span>') +
       /* Polyols get the same billing as sugar. The 15 g threshold is reached
        * by stacking three ordinary ingredients, without anyone deciding to
        * use "a lot of sweetener" — so the number has to be on the card, not
@@ -522,7 +674,7 @@
         ? '<div class="pf-refpanel__body" id="pf-refbody">' +
           '<p class="pf-muted" style="font-size:var(--fs-xs);margin-bottom:var(--sp-3)">' +
           'Fără morală: sunt doar cifrele. ' + covered + ' din ' + REF.length +
-          ' au o variantă proteică în pagina asta. Coloana de încredere spune ' +
+          ' au o variantă în pagina asta, ușoară sau proteică. Coloana de încredere spune ' +
           'cât de sigure sunt valorile — un baton ambalat are tabel nutrițional, ' +
           'un papanaș de cofetărie nu.</p>' +
           '<div class="pf-chips" style="margin-bottom:var(--sp-3)">' +
@@ -568,10 +720,31 @@
       return chip('dtime', t.v, fmt.esc(t.ro), countIf({ maxTime: t.v }), state.maxTime === t.v);
     }).join('');
 
-    const sortOptions = Object.keys(SORTS).map(function (k) {
+    const nSeason = countIf({ seasonal: true });
+    const seasonChip = nSeason
+      ? chip('dseason', state.seasonal ? '0' : '1', '🍂 De sezon în ' + MONTHS_RO[thisMonth() - 1],
+          nSeason, state.seasonal)
+      : '';
+
+    const sortOptions = Object.keys(SORTS).filter(sortFits).map(function (k) {
       return '<option value="' + k + '"' + (state.sort === k ? ' selected' : '') + '>' +
         fmt.esc(SORTS[k].ro) + '</option>';
     }).join('');
+
+    /* The two lines are the first decision on the page, so they are tabs,
+     * not a ninth chip lost among the cravings. Counts are the raw size of
+     * each line — the filters below apply inside a line, not across. */
+    const lineTabs = Object.keys(LINES).map(function (k) {
+      const L = LINES[k];
+      const n = ALL.filter(d => lineOf(d) === k).length;
+      const on = state.line === k;
+      return '<button class="pf-dline' + (on ? ' is-on' : '') + '" role="tab" aria-selected="' +
+        on + '" data-dline="' + k + '">' +
+        '<span class="pf-dline__top"><span class="pf-dline__emoji">' + L.emoji + '</span>' +
+        '<b>' + fmt.esc(L.ro) + '</b><span class="pf-chip__n">' + n + '</span></span>' +
+        '<span class="pf-dline__lede">' + fmt.esc(L.lede) + '</span></button>';
+    }).join('');
+    const lineTotal = ALL.filter(d => lineOf(d) === state.line).length;
 
     const list = visible();
     const famNote = state.family !== 'all' && FAMILY[state.family]
@@ -580,6 +753,7 @@
       : '';
 
     container.innerHTML =
+      '<div class="pf-dlines" role="tablist" aria-label="Felul de desert">' + lineTabs + '</div>' +
       '<section class="pf-panel" style="margin-bottom:var(--sp-4)">' +
       '<div class="pf-panel__body">' +
       '<div class="pf-eyebrow">Ce poftă ai?</div>' +
@@ -587,11 +761,12 @@
       '<div class="pf-eyebrow">Cum îl faci</div>' +
       '<div class="pf-chips" style="margin:var(--sp-2) 0">' + familyChips + '</div>' + famNote +
       '<div class="pf-eyebrow" style="margin-top:var(--sp-4)">Cât timp ai</div>' +
-      '<div class="pf-chips" style="margin-top:var(--sp-2)">' + timeChips + '</div>' +
+      '<div class="pf-chips" style="margin-top:var(--sp-2)">' + timeChips + seasonChip + '</div>' +
       '</div></section>' +
 
       '<div class="pf-dbar">' +
-      '<span class="pf-dbar__count"><b>' + list.length + '</b> / ' + ALL.length + ' deserturi</span>' +
+      '<span class="pf-dbar__count"><b>' + list.length + '</b> / ' + lineTotal + ' deserturi ' +
+      fmt.esc(LINES[state.line].ro.toLowerCase()) + '</span>' +
       '<span class="pf-grow"></span>' +
       '<span class="pf-select pf-select--sm"><select id="pf-dsort" aria-label="Ordonează">' +
       sortOptions + '</select></span>' +
@@ -637,6 +812,32 @@
     const row = (label, delta, unit, good, dp) =>
       '<tr><th>' + label + '</th><td class="num ' + (good ? 'is-good' : 'is-bad') + '">' +
       (delta > 0 ? '+' : '') + fmt.decFixed(delta, dp) + unit + '</td></tr>';
+
+    if (lineOf(d) === 'light') {
+      const per = d._e.perServing;
+      return (
+        '<table class="pf-nutri">' +
+        row('Calorii economisite', c.dKcal, '', c.dKcal > 0, 0) +
+        row('Zahăr adăugat economisit', c.dSugar, ' g', c.dSugar > 0, 1) +
+        '<tr><th>Densitate energetică</th><td class="num ' + (c.density <= 1.0 ? 'is-good' : '') + '">' +
+        fmt.decFixed(c.density, 2) + ' kcal/g</td></tr>' +
+        '<tr><th>Proteină · fibre</th><td class="num">' + fmt.decFixed(per.protein, 1) + ' g · ' +
+        fmt.decFixed(per.fiber, 1) + ' g</td></tr>' +
+        (c.polyolPenalty > 0
+          ? '<tr><th>Penalizare polioli (' + fmt.decFixed(per.polyol, 1) + ' g)</th>' +
+            '<td class="num is-bad">−' + c.polyolPenalty + ' puncte</td></tr>'
+          : '') +
+        '<tr><th>Cât de aproape e de original</th><td class="num">' +
+        Math.round((d.taste && d.taste.authenticity) || 50) + ' / 100</td></tr>' +
+        '</table>' +
+        '<p class="pf-muted" style="font-size:var(--fs-xs);margin-top:var(--sp-2)">' +
+        'Scorul ușor cântărește caloriile economisite (30%), zahărul adăugat economisit (30%), ' +
+        'densitatea energetică — câte calorii are un gram (20%) —, proteina (10%, gelatina pe ' +
+        'jumătate) și fibrele (10%), apoi se înmulțește cu cât de aproape e de desertul real. ' +
+        'Mierea, siropul și zahărul se socotesc adăugate; zahărul din fructul întreg și lactoza ' +
+        'nu, după definiția OMS.</p>'
+      );
+    }
 
     return (
       '<table class="pf-nutri">' +
@@ -693,6 +894,7 @@
       '<tr><th>Calorii</th><td class="num">' + Math.round(per.kcal) + '</td></tr>' +
       '<tr><th>Carbohidrați</th><td class="num">' + fmt.decFixed(per.carbs, 1) + ' g</td></tr>' +
       '<tr><th>din care zaharuri</th><td class="num">' + fmt.decFixed(per.sugars, 1) + ' g</td></tr>' +
+      '<tr><th>din care adăugate</th><td class="num">' + fmt.decFixed(per.addedSugar, 1) + ' g</td></tr>' +
       (per.polyol > 0.5
         ? '<tr><th>din care polioli</th><td class="num">' + fmt.decFixed(per.polyol, 1) + ' g</td></tr>' : '') +
       '<tr><th>Grăsimi</th><td class="num">' + fmt.decFixed(per.fat, 1) + ' g</td></tr>' +
@@ -710,7 +912,8 @@
       '<div class="pf-modal__head">' +
       '<span class="pf-modal__icon">' + fmt.esc(d.emoji || '🍰') + '</span>' +
       '<div><h2 id="pf-dessert-title" class="pf-modal__title">' + fmt.esc(d.name) + '</h2>' +
-      '<p class="pf-modal__subtitle">' + fam.emoji + ' ' + fmt.esc(fam.ro) + ' · ' +
+      '<p class="pf-modal__subtitle">' + LINES[lineOf(d)].emoji + ' ' + fmt.esc(LINES[lineOf(d)].ro) +
+      ' · ' + fam.emoji + ' ' + fmt.esc(fam.ro) + ' · ' +
       fmt.esc(timing) + ' · ' + d.servings + ' porții</p></div>' +
       '<button class="pf-modal__close" data-dessert-close aria-label="Închide">✕</button>' +
       '</div>' +
@@ -788,13 +991,44 @@
     window.scrollTo(0, y);
   }
 
+  /* The line lives in the hash so a link can open straight onto it —
+   * deserturi.html#usoare — and Back returns to the line you came from.
+   * Filters reset on a switch: a "crocant" filter carried into a list that
+   * has no crunchy desserts shows an empty page and no reason why. */
+  function lineFromHash() {
+    const h = (location.hash || '').replace('#', '');
+    const hit = Object.keys(LINES).filter(k => LINES[k].hash === h)[0];
+    return hit || null;
+  }
+
+  function setLine(k, push) {
+    if (!LINES[k] || k === state.line) return;
+    state.line = k;
+    state.craving = 'all';
+    state.family = 'all';
+    state.seasonal = false;
+    if (!sortFits(state.sort)) state.sort = 'cheat';
+    if (push) {
+      try { history.replaceState(null, '', '#' + LINES[k].hash); } catch (e) { /* file:// */ }
+    }
+    repaint();
+  }
+
   function wire() {
+    window.addEventListener('hashchange', function () {
+      const k = lineFromHash();
+      if (k) setLine(k, false);
+    });
+
     document.addEventListener('click', function (ev) {
       const t = ev.target;
       if (!t || !t.closest) return;
 
       const openBtn = t.closest('[data-dessert-open]');
       if (openBtn) { open(openBtn.getAttribute('data-dessert-open')); return; }
+
+      const ln = t.closest('[data-dline]');
+      if (ln) { setLine(ln.getAttribute('data-dline'), true); return; }
 
       if (t.closest('[data-dref-toggle]')) { refOpen = !refOpen; repaint(); return; }
       const rs = t.closest('[data-dref-sort]');
@@ -805,6 +1039,9 @@
 
       const fa = t.closest('[data-dfamily]');
       if (fa) { state.family = fa.getAttribute('data-dfamily'); repaint(); return; }
+
+      const se = t.closest('[data-dseason]');
+      if (se) { state.seasonal = se.getAttribute('data-dseason') === '1'; repaint(); return; }
 
       const ti = t.closest('[data-dtime]');
       if (ti) { state.maxTime = Number(ti.getAttribute('data-dtime')); repaint(); return; }
@@ -850,6 +1087,7 @@
     });
 
     const n = boot();
+    state.line = lineFromHash() || 'light';
     wire();
     repaint();
 
@@ -869,7 +1107,9 @@
     state: state,
     enrich: enrich,
     cheatScore: cheatScore,
+    lightScore: lightScore,
     all: function () { return ALL; },
+    LINES: LINES,
     FAMILY: FAMILY,
     CRAVING: CRAVING
   };

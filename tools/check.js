@@ -92,7 +92,8 @@ const DATA = ['00-stores', '01-dairy-eggs', '02-fresh-meat', '03-deli-processed'
   '04-fish-seafood', '05-plant-protein', '06-supplements-snacks',
   '07-ready-meals', '08-bakery-drinks-sweets', '09-recipes',
   '10-dessert-pantry', '11-desserts-nobake', '12-desserts-baked',
-  '13-desserts-fast', '14-dessert-reference'];
+  '13-desserts-fast', '14-dessert-reference', '15-desserts-light', '16-desserts-light-fruit',
+  '17-desserts-protein-classics'];
 try {
   DATA.forEach(f => require(path.join(ROOT, 'js/data', f + '.js')));
   ['format', 'i18n', 'compute', 'storage'].forEach(f => require(path.join(ROOT, 'js/utils', f + '.js')));
@@ -252,6 +253,7 @@ if (!DESSERTS.length) {
   const CRAVING_OK = new Set(['ciocolata', 'cremos', 'crocant', 'fructat',
     'patiserie', 'inghetata', 'caramel']);
   const DIFF_OK = new Set(['usor', 'mediu', 'greu']);
+  const LINE_OK = new Set(['light', 'protein']);
   const CONF2_OK = new Set(['high', 'medium', 'low']);
   /* Macros belong to the ingredients, never to the recipe. A recipe that
    * declares its own kcal can drift away from what it actually contains,
@@ -270,6 +272,7 @@ if (!DESSERTS.length) {
 
     if (!FAMILY_OK.has(d.family)) badVocab.push(d.id + ':family=' + d.family);
     if (!CRAVING_OK.has(d.craving)) badVocab.push(d.id + ':craving=' + d.craving);
+    if (d.line !== undefined && !LINE_OK.has(d.line)) badVocab.push(d.id + ':line=' + d.line);
     if (d.difficulty && !DIFF_OK.has(d.difficulty)) badVocab.push(d.id + ':difficulty=' + d.difficulty);
     if (d.dataConfidence && !CONF2_OK.has(d.dataConfidence)) badVocab.push(d.id + ':conf=' + d.dataConfidence);
 
@@ -295,6 +298,17 @@ if (!DESSERTS.length) {
     }
   });
 
+  /* No non-sugar sweeteners, anywhere. The user asked for it outright, and a
+   * pantry key is the only way one could slip back in — so the gate reads the
+   * pantry itself, not just the recipes. */
+  const NSS = /eritritol|erythritol|xilitol|xylitol|stevi|sucraloz|aspartam|maltitol|sorbitol|ciclamat|zaharin/i;
+  const nssKeys = Object.keys(DPANTRY).filter(k => NSS.test(k) || NSS.test(DPANTRY[k].name || '') || DPANTRY[k].sweet);
+  const nssUses = [];
+  DESSERTS.forEach(d => (d.ing || []).forEach(i => { if (i.p && NSS.test(i.p)) nssUses.push(d.id + ' -> ' + i.p); }));
+  nssKeys.length || nssUses.length
+    ? fail('îndulcitori fără zahăr în cămară sau în rețete', nssKeys.concat(nssUses).slice(0, 4).join(', '))
+    : ok('niciun îndulcitor fără zahăr — dulcele vine din fructe, miere sau zahăr');
+
   dupes2.length ? fail('id-uri de desert duplicate', dupes2.slice(0, 4).join(', '))
                 : ok(DESSERTS.length + ' deserturi, id-uri unice');
   badVocab.length ? fail('vocabular în afara schemei', badVocab.slice(0, 4).join(', '))
@@ -312,8 +326,13 @@ if (!DESSERTS.length) {
 
   /* Quality targets from the schema: reported, not enforced — the schema
    * allows exceptions when they are justified in `tips`. */
-  const lowP = [], heavy = [];
+  /* Each line has its own bar. A 60-kcal jelly is not a failed protein
+   * dessert, and a 300-kcal cheesecake is not a failed light one — so the
+   * protein floor applies to the protein line only, and the calorie ceiling
+   * is 350 there and 150 on the light line. */
+  const lowP = [], heavy = [], heavyLight = [];
   DESSERTS.forEach(function (d) {
+    const isLight = d.line === 'light';
     let p = 0, collagen = 0, kcal = 0;
     (d.ing || []).forEach(function (i) {
       const food = i.id ? RAW.filter(f => f.id === i.id)[0] : null;
@@ -333,16 +352,26 @@ if (!DESSERTS.length) {
     });
     const n = Math.max(1, d.servings || 1);
     const usable = (p - collagen) / n;
-    if (usable < 15) {
+    if (!isLight && usable < 15) {
       lowP.push(d.id + ' (' + usable.toFixed(1) + ' g utilizabil' +
         (collagen > 0 ? ', din ' + (p / n).toFixed(1) + ' declarat' : '') + ')');
     }
-    if (kcal / n > 350) heavy.push(d.id + ' (' + Math.round(kcal / n) + ' kcal)');
+    if (isLight) {
+      if (kcal / n > 150) heavyLight.push(d.id + ' (' + Math.round(kcal / n) + ' kcal)');
+    } else if (kcal / n > 350) {
+      heavy.push(d.id + ' (' + Math.round(kcal / n) + ' kcal)');
+    }
   });
   lowP.length ? warn('sub 15 g proteină pe porție', lowP.length + ': ' + lowP.slice(0, 3).join(', '))
-              : ok('toate peste 15 g proteină UTILIZABILĂ pe porție');
+              : ok('toate cele proteice peste 15 g proteină UTILIZABILĂ pe porție');
   heavy.length ? warn('peste 350 kcal pe porție', heavy.length + ': ' + heavy.slice(0, 3).join(', '))
-               : ok('toate sub 350 kcal pe porție');
+               : ok('toate cele proteice sub 350 kcal pe porție');
+  const lightN = DESSERTS.filter(d => d.line === 'light').length;
+  if (lightN) {
+    heavyLight.length
+      ? warn('ușoare peste 150 kcal pe porție', heavyLight.length + ': ' + heavyLight.slice(0, 3).join(', '))
+      : ok(lightN + ' deserturi ușoare, toate sub 150 kcal pe porție');
+  }
 
   /* Cămara e o paletă pentru rețete viitoare, nu o listă care trebuie
    * consumată integral — dar dacă nimeni nu se uită, cheile nefolosite se

@@ -7,35 +7,34 @@
  * REGULA CARE NU SE ÎNCALCĂ: dacă ingredientul există în atlas, rețeta îl
  * referă prin `id`, nu prin cămară. Cămara e pentru lucrurile pe care nimeni
  * nu le cumpără ca „sursă de proteină" și care deci n-au ce căuta în atlas:
- * cacao, îndulcitori, arome, praf de copt, fructe la kilogram.
+ * cacao, miere, arome, praf de copt, fructe la kilogram.
  *
  * Valorile sunt la 100 g de produs așa cum se cumpără (uscat pentru pudre,
  * proaspăt pentru fructe). `ronKg` e o ESTIMARE, ca peste tot în proiect —
  * niciun preț din acest proiect nu e confirmat.
  *
- * `polyol` marchează gramele de polioli la 100 g. Contează: peste ~20-30 g de
- * polioli pe zi, majoritatea oamenilor au probleme digestive, iar un desert
- * „fără zahăr" poate livra atât dintr-o singură porție generoasă.
+ * FĂRĂ ÎNDULCITORI FĂRĂ ZAHĂR. Cămara nu conține eritritol, xilitol, stevie
+ * sau sucraloză — e o regulă a proiectului, iar `tools/check.js` respinge orice
+ * cheie care seamănă cu ele. Dulcele vine din miere, zahăr, curmale și fructe.
+ * `freeSugar: true` marchează ingredientele al căror zahăr se numără ca ADĂUGAT
+ * (după OMS): zahăr, miere, siropuri, gem, sucuri, pișcoturi, biscuiți.
+ *
+ * `polyol` rămâne în schemă pentru simetrie cu atlasul; aici e peste tot 0.
  * ========================================================================= */
 (function () {
   'use strict';
 
   const P = {
-    /* ---- îndulcitori --------------------------------------------------- */
-    'eritritol':        { name: 'Eritritol',                    kcal: 20,  protein: 0,   carbs: 100, sugars: 0,  fat: 0,   fiber: 0,  polyol: 100, ronKg: 45,  note: 'Aproape zero calorii, dar răcorește pe limbă și cristalizează la rece.' },
-    'xilitol':          { name: 'Xilitol',                      kcal: 240, protein: 0,   carbs: 100, sugars: 0,  fat: 0,   fiber: 0,  polyol: 100, ronKg: 55,  note: 'Gust cel mai apropiat de zahăr. TOXIC pentru câini.' },
-    'stevie-pudra':     { name: 'Stevie (pudră, cu eritritol)',  kcal: 20,  protein: 0,   carbs: 98,  sugars: 0,  fat: 0,   fiber: 0,  polyol: 96,  ronKg: 70,  note: 'Amăreală la doze mari; se combină bine cu eritritol.' },
-    'stevie-lichida':   { name: 'Stevie lichidă',               kcal: 0,   protein: 0,   carbs: 0,   sugars: 0,  fat: 0,   fiber: 0,  polyol: 0,   ronKg: 400, note: 'Câteva picături. Nu dă volum, deci nu înlocuiește zahărul în coacere.' },
-    'zahar':            { name: 'Zahăr alb',                    kcal: 400, protein: 0,   carbs: 100, sugars: 100, fat: 0,  fiber: 0,  polyol: 0,   ronKg: 5,   note: 'Referința. Apare în rețete unde chiar e nevoie de el.' },
-    'miere':            { name: 'Miere',                        kcal: 304, protein: 0.3, carbs: 82,  sugars: 82, fat: 0,   fiber: 0.2, polyol: 0,  ronKg: 35,  note: 'Zahăr cu aromă. Nu e „mai sănătos", e mai gustos.' },
-    'sirop-artar':      { name: 'Sirop de arțar',               kcal: 260, protein: 0,   carbs: 67,  sugars: 60, fat: 0,   fiber: 0,  polyol: 0,   ronKg: 90,  note: 'Idem mierea, cu altă aromă.' },
+    /* ---- dulce: doar zahăr adevărat ------------------------------------ */
+    'zahar':            { name: 'Zahăr alb',                    kcal: 400, protein: 0,   carbs: 100, sugars: 100, fat: 0,  fiber: 0,  polyol: 0,   ronKg: 5,   note: 'Referința. Apare în rețete unde chiar e nevoie de el.', freeSugar: true },
+    'miere':            { name: 'Miere',                        kcal: 304, protein: 0.3, carbs: 82,  sugars: 82, fat: 0,   fiber: 0.2, polyol: 0,  ronKg: 35,  note: 'Zahăr cu aromă. Nu e „mai sănătos", e mai gustos.', freeSugar: true },
+    'sirop-artar':      { name: 'Sirop de arțar',               kcal: 260, protein: 0,   carbs: 67,  sugars: 60, fat: 0,   fiber: 0,  polyol: 0,   ronKg: 90,  note: 'Idem mierea, cu altă aromă.', freeSugar: true },
     'curmale':          { name: 'Curmale uscate (Medjool)',     kcal: 277, protein: 1.8, carbs: 75,  sugars: 66, fat: 0.2, fiber: 6.7, polyol: 0,  ronKg: 40,  note: 'Îndulcesc ȘI leagă. Baza oricărei bile energizante.' },
 
     /* ---- cacao și ciocolată -------------------------------------------- */
     'cacao':            { name: 'Cacao pudră neîndulcită',      kcal: 228, protein: 19.6, carbs: 58, sugars: 1.8, fat: 13.7, fiber: 37, polyol: 0, ronKg: 60,  note: '20 g de proteină la 100 g — cacao chiar contribuie.' },
     'cacao-alcalina':   { name: 'Cacao alcalinizată (Dutch)',   kcal: 220, protein: 18,  carbs: 55,  sugars: 1.5, fat: 13,  fiber: 33, polyol: 0,  ronKg: 75,  note: 'Mai închisă și mai puțin acră. NU reacționează cu bicarbonatul.' },
     'ciocolata-neagra': { name: 'Ciocolată neagră 85%',         kcal: 592, protein: 10.3, carbs: 22, sugars: 14, fat: 46,  fiber: 11, polyol: 0,   ronKg: 90,  note: 'Cea mai onestă indulgență din listă: puțin zahăr, multă grăsime.' },
-    'fulgi-ciocolata':  { name: 'Fulgi de ciocolată fără zahăr', kcal: 500, protein: 6,  carbs: 55,  sugars: 1,  fat: 38,  fiber: 12, polyol: 40,  ronKg: 160, note: 'Scumpi și plini de polioli. 15 g pe porție e maximul rezonabil.' },
 
     /* ---- făinuri și structură ------------------------------------------ */
     'faina-migdale':    { name: 'Făină de migdale',             kcal: 610, protein: 21,  carbs: 8,   sugars: 4,  fat: 53,  fiber: 11, polyol: 0,   ronKg: 90,  note: 'Umezeală și structură. Nu are gluten, deci nu se întărește.' },
@@ -46,7 +45,7 @@
     'praf-copt':        { name: 'Praf de copt',                 kcal: 53,  protein: 0,   carbs: 28,  sugars: 0,  fat: 0,   fiber: 0,  polyol: 0,   ronKg: 40,  note: '', free: true },
     'bicarbonat':       { name: 'Bicarbonat de sodiu',          kcal: 0,   protein: 0,   carbs: 0,   sugars: 0,  fat: 0,   fiber: 0,  polyol: 0,   ronKg: 12,  note: 'Are nevoie de un acid ca să lucreze: iaurt, cacao naturală, lămâie.', free: true },
     'gelatina-foi':     { name: 'Gelatină foi',                 kcal: 335, protein: 84,  carbs: 0,   sugars: 0,  fat: 0,   fiber: 0,  polyol: 0,   ronKg: 120, note: 'Proteina ei NU se pune la ținta zilnică — zero triptofan.' },
-    'agar':             { name: 'Agar-agar',                    kcal: 306, protein: 6,   carbs: 81,  sugars: 0,  fat: 0.3, fiber: 74, polyol: 0,   ronKg: 400, note: 'Varianta vegetală a gelatinei. Se fierbe, altfel nu se leagă.' },
+    'agar':             { name: 'Agar-agar',                    kcal: 306, protein: 6,   carbs: 81,  sugars: 0,  fat: 0.3, fiber: 74, polyol: 0,   ronKg: 900, note: 'Varianta vegetală a gelatinei. Se fierbe, altfel nu se leagă.' },
 
     /* ---- grăsimi și paste ---------------------------------------------- */
     'unt-arahide':      { name: 'Unt de arahide 100%',          kcal: 588, protein: 25,  carbs: 20,  sugars: 6,  fat: 50,  fiber: 8,  polyol: 0,   ronKg: 45,  note: 'Verifică eticheta: „100% arahide", fără zahăr și ulei de palmier.' },
@@ -63,7 +62,7 @@
     'visine-congelate': { name: 'Vișine congelate',             kcal: 50,  protein: 1,   carbs: 12,  sugars: 8,  fat: 0.3, fiber: 1.6, polyol: 0,  ronKg: 18,  note: 'Vișinele bat cireșele la orice desert: aciditatea face treaba.' },
     'mere':             { name: 'Mere',                         kcal: 52,  protein: 0.3, carbs: 14,  sugars: 10, fat: 0.2, fiber: 2.4, polyol: 0,  ronKg: 5,   note: '' },
     'lamaie':           { name: 'Lămâie (zeamă și coajă)',      kcal: 22,  protein: 0.4, carbs: 6.9, sugars: 2.5, fat: 0.2, fiber: 0.3, polyol: 0, ronKg: 12,  note: '' },
-    'gem-fara-zahar':   { name: 'Gem fără zahăr adăugat',       kcal: 130, protein: 0.5, carbs: 30,  sugars: 25, fat: 0.2, fiber: 1.5, polyol: 0,  ronKg: 30,  note: '„Fără zahăr adăugat" nu înseamnă fără zahăr — fructele îl au deja.' },
+    'gem-fara-zahar':   { name: 'Gem fără zahăr adăugat',       kcal: 130, protein: 0.5, carbs: 30,  sugars: 25, fat: 0.2, fiber: 1.5, polyol: 0,  ronKg: 30,  note: '„Fără zahăr adăugat" nu înseamnă fără zahăr — fructele îl au deja.', freeSugar: true },
 
     /* ---- semințe, cereale, crocant -------------------------------------- */
     'chia':             { name: 'Semințe de chia',              kcal: 486, protein: 17,  carbs: 42,  sugars: 0,  fat: 31,  fiber: 34, polyol: 0,   ronKg: 45,  note: 'Absorb de 10 ori greutatea lor. Budinca se face singură peste noapte.' },
@@ -87,7 +86,44 @@
     'sare':             { name: 'Sare',                         kcal: 0,   protein: 0,   carbs: 0,   sugars: 0,  fat: 0,   fiber: 0,  polyol: 0,   ronKg: 2,   note: 'Un vârf de cuțit într-un desert dulce nu se simte, dar se observă lipsa.', free: true },
     'cafea-instant':    { name: 'Cafea instant',                kcal: 353, protein: 12,  carbs: 41,  sugars: 0,  fat: 0.5, fiber: 0, polyol: 0,    ronKg: 200, note: 'O linguriță în orice desert cu cacao adâncește ciocolata.', free: true },
     'apa':              { name: 'Apă',                          kcal: 0,   protein: 0,   carbs: 0,   sugars: 0,  fat: 0,   fiber: 0,  polyol: 0,   ronKg: 0,   note: '', free: true },
-    'gheata':           { name: 'Gheață',                       kcal: 0,   protein: 0,   carbs: 0,   sugars: 0,  fat: 0,   fiber: 0,  polyol: 0,   ronKg: 0,   note: '', free: true }
+    'gheata':           { name: 'Gheață',                       kcal: 0,   protein: 0,   carbs: 0,   sugars: 0,  fat: 0,   fiber: 0,  polyol: 0,   ronKg: 0,   note: '', free: true },
+
+    /* ---- linia ușoară: fructe întregi (USDA FoodData Central, rotunjit) -- */
+    'pere':             { name: 'Pere',                          kcal: 57, protein: 0.4, carbs: 15.2, sugars: 9.8, fat: 0.1, fiber: 3.1, polyol: 0, ronKg: 9, note: 'Pentru copt și poșat: tari, nu coapte — Williams, Conference.' },
+    'gutui':            { name: 'Gutui',                         kcal: 57, protein: 0.4, carbs: 15.3, sugars: 12, fat: 0.1, fiber: 1.9, polyol: 0, ronKg: 8, note: 'Crude sunt astringente. Au nevoie de o oră de cuptor.' },
+    'prune':            { name: 'Prune',                         kcal: 46, protein: 0.7, carbs: 11.4, sugars: 9.9, fat: 0.3, fiber: 1.4, polyol: 0, ronKg: 6, note: 'Brumării sau Stanley: se desprind de sâmbure.' },
+    'piersici':         { name: 'Piersici / nectarine',          kcal: 39, protein: 0.9, carbs: 9.5, sugars: 8.4, fat: 0.3, fiber: 1.5, polyol: 0, ronKg: 10, note: '' },
+    'pepene-rosu':      { name: 'Pepene roșu (miez)',            kcal: 30, protein: 0.6, carbs: 7.6, sugars: 6.2, fat: 0.2, fiber: 0.4, polyol: 0, ronKg: 3, note: '92% apă — cel mai mic număr de calorii pe gram din cămară.' },
+    'struguri':         { name: 'Struguri fără sâmburi',         kcal: 69, protein: 0.7, carbs: 18.1, sugars: 15.5, fat: 0.2, fiber: 0.9, polyol: 0, ronKg: 9, note: 'Cel mai dulce fruct de aici, gram la gram.' },
+    'portocale':        { name: 'Portocale (pulpă)',             kcal: 47, protein: 0.9, carbs: 11.8, sugars: 9.4, fat: 0.1, fiber: 2.4, polyol: 0, ronKg: 7, note: '' },
+    'mandarine':        { name: 'Mandarine (pulpă)',             kcal: 53, protein: 0.8, carbs: 13.3, sugars: 10.6, fat: 0.3, fiber: 1.8, polyol: 0, ronKg: 8, note: '' },
+    'fructe-padure':    { name: 'Fructe de pădure congelate (mix)', kcal: 45, protein: 0.9, carbs: 10, sugars: 6, fat: 0.3, fiber: 4, polyol: 0, ronKg: 30, note: 'Pungile de 450 g de la Lidl/Kaufland. Ieftine iarna, la fel de bune ca proaspete pentru gătit.' },
+    'rubarba':          { name: 'Rubarbă (tulpini)',             kcal: 21, protein: 0.9, carbs: 4.5, sugars: 1.1, fat: 0.2, fiber: 1.8, polyol: 0, ronKg: 15, note: 'Doar tulpinile. Frunzele au acid oxalic și nu se mănâncă.' },
+
+    /* ---- linia ușoară: lichide ------------------------------------------ */
+    'suc-mere':         { name: 'Suc de mere 100%',              kcal: 46, protein: 0.1, carbs: 11.3, sugars: 10, fat: 0.1, fiber: 0.2, polyol: 0, ronKg: 6, note: 'Fără zahăr adăugat pe etichetă, dar după OMS zahărul din suc e zahăr liber.', freeSugar: true },
+    'suc-portocale':    { name: 'Suc de portocale 100%',         kcal: 45, protein: 0.7, carbs: 10.4, sugars: 8.4, fat: 0.2, fiber: 0.2, polyol: 0, ronKg: 8, note: 'Idem sucul de mere: se socotește zahăr adăugat.', freeSugar: true },
+    'ceai-fructe':      { name: 'Ceai de fructe / hibiscus (infuzie)', kcal: 1, protein: 0, carbs: 0.2, sugars: 0, fat: 0, fiber: 0, polyol: 0, ronKg: 4, note: 'Aromă și culoare fără calorii. Infuzie dublă, ca să nu iasă „apos".' },
+    'cafea-preparata':  { name: 'Cafea preparată (filtru / espresso)', kcal: 2, protein: 0.1, carbs: 0, sugars: 0, fat: 0, fiber: 0, polyol: 0, ronKg: 15, note: '' },
+    'vin-rosu':         { name: 'Vin roșu sec',                  kcal: 85, protein: 0.1, carbs: 2.6, sugars: 0.6, fat: 0, fiber: 0, polyol: 0, ronKg: 25, note: 'Caloriile vin din alcool. La poșat se evaporă doar o parte — nu e pentru copii.' },
+
+    /* ---- linia ușoară: amidonuri și făinuri ----------------------------- */
+    'amidon-cartofi':   { name: 'Amidon din cartofi',            kcal: 333, protein: 0.1, carbs: 83, sugars: 0, fat: 0.1, fiber: 0, polyol: 0, ronKg: 12, note: 'Pentru kisiel: dă un jeleu limpede. Dacă fierbe după ce s-a îngroșat, se subțiază.' },
+    'gris':             { name: 'Griș',                          kcal: 360, protein: 10.3, carbs: 73, sugars: 0.4, fat: 1, fiber: 3.9, polyol: 0, ronKg: 6, note: '' },
+    'faina-alba':       { name: 'Făină albă 000',                kcal: 364, protein: 10, carbs: 76, sugars: 0.3, fat: 1, fiber: 2.7, polyol: 0, ronKg: 4, note: '' },
+    'piscoturi':        { name: 'Pișcoturi',                     kcal: 390, protein: 8, carbs: 78, sugars: 40, fat: 4, fiber: 1, polyol: 0, ronKg: 25, note: 'Jumătate din greutate e zahăr. Câte bucăți pui contează mai mult decât orice îndulcitor.', freeSugar: true },
+
+    /* ---- pentru clasicele refăcute pe linia proteică -------------------- */
+    'biscuiti-simpli':  { name: 'Biscuiți simpli (tip Petit Beurre)', kcal: 445, protein: 7.5, carbs: 73, sugars: 22, fat: 13, fiber: 2.5, polyol: 0, ronKg: 18, note: 'Baza salamului de biscuiți. Un sfert din greutate e zahăr.', freeSugar: true },
+    'foietaj':          { name: 'Aluat foietaj congelat',       kcal: 400, protein: 6,   carbs: 37,  sugars: 2,  fat: 25,  fiber: 1.5, polyol: 0, ronKg: 20,  note: 'Aproape toată grăsimea unui cremșnit stă aici, nu în cremă.' },
+    'galbenus':         { name: 'Gălbenuș de ou (L ≈ 17 g)',    kcal: 322, protein: 15.9, carbs: 3.6, sugars: 0.6, fat: 26.5, fiber: 0, polyol: 0, ronKg: 50,  note: 'Atlasul are oul întreg și albușul; gălbenușul singur are alt profil — de 3 ori mai multă grăsime decât oul.' },
+    'pesmet':           { name: 'Pesmet',                       kcal: 395, protein: 13,  carbs: 72,  sugars: 6,  fat: 5,   fiber: 4.5, polyol: 0,   ronKg: 12,  note: '' },
+
+    /* ---- arome fără calorii de numărat ------------------------------------- */
+    'condimente':       { name: 'Condimente întregi (cuișoare, anason, baton de scorțișoară)', kcal: 0, protein: 0, carbs: 0, sugars: 0, fat: 0, fiber: 0, polyol: 0, ronKg: 0, note: '', free: true },
+    'menta':            { name: 'Mentă proaspătă',              kcal: 0,   protein: 0,   carbs: 0,   sugars: 0,  fat: 0,   fiber: 0,  polyol: 0,   ronKg: 0,   note: '', free: true },
+    'aroma-migdale':    { name: 'Aromă de migdale amare',       kcal: 0,   protein: 0,   carbs: 0,   sugars: 0,  fat: 0,   fiber: 0,  polyol: 0,   ronKg: 0,   note: 'Câteva picături. Dr. Oetker, Haas sau Kotányi, la raftul de arome.', free: true },
+    'cremor-tartru':    { name: 'Cremor tartru (sau zeamă de lămâie)', kcal: 0, protein: 0, carbs: 0, sugars: 0, fat: 0, fiber: 0, polyol: 0, ronKg: 0, note: 'Stabilizează albușul bătut. ⅛ linguriță la un albuș.', free: true },
   };
 
   Object.keys(P).forEach(function (k) { P[k].key = k; });

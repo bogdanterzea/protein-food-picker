@@ -10,6 +10,69 @@
  * real, scorul de schimb și panoul de onestitate.
  * ========================================================================= */
 
+/* ------------------------------------------------------- the two lines -- */
+
+/* Two tabs, side by side even on a phone: the choice between them is the
+ * first one on the page, and a stacked pair pushes the filters off-screen. */
+.pf-dlines {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-4);
+}
+
+.pf-dline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  min-width: 0;
+  padding: var(--sp-3) var(--sp-4);
+  text-align: left;
+  color: var(--text-2);
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.pf-dline:hover { background: var(--bg-hover); }
+.pf-dline:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.pf-dline.is-on {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+  color: var(--text-1);
+}
+
+.pf-dline__top {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-md);
+}
+
+.pf-dline__top b { font-weight: 750; }
+.pf-dline__emoji { font-size: 1.25rem; line-height: 1; }
+
+.pf-dline__lede {
+  font-size: var(--fs-2xs);
+  line-height: 1.35;
+  color: var(--text-3);
+}
+
+@media (max-width: 520px) {
+  .pf-dline { padding: var(--sp-3); }
+  .pf-dline__lede { display: none; }
+}
+
+/* In season: the one badge that changes by itself from month to month. */
+.pf-badge--season {
+  color: var(--ok);
+  border-color: var(--ok);
+  background: var(--ok-soft);
+}
+
 /* ---------------------------------------------------------------- hero -- */
 
 .pf-dhero {
@@ -207,6 +270,10 @@
   color: var(--macro-protein, var(--accent));
   font-variant-numeric: tabular-nums;
 }
+
+/* The light line heads its card with calories, so the big number takes the
+ * energy hue instead of the protein one — same slot, honest colour. */
+.pf-dcard__protein--kcal b { color: var(--macro-kcal, var(--accent)); }
 
 .pf-dcard__protein span {
   font-size: var(--fs-3xs);

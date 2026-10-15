@@ -21,7 +21,7 @@
   <main class="pf-doc-main">
 <h1 id="atlasul-proteinelor-sibiu">Atlasul Proteinelor Sibiu</h1>
 <p><strong>503 alimente bogate în proteine pe care le poți cumpăra efectiv în Sibiu</strong>, cu macro-uri complete, preț pe gram de proteină, efort de gătit, gust evaluat onest și momentul din zi în care merită mâncate — afișate cu bare de statistici ca într-un joc video.</p>
-<p>Plus <strong>43 de mese complete</strong>, <strong>48 de deserturi „cheat&quot;</strong> pe o pagină separată, și un <strong>ghid al celor 18 locuri de cumpărat</strong> din oraș.</p>
+<p>Plus <strong>43 de mese complete</strong>, <strong>109 deserturi „cheat&quot;</strong> pe o pagină separată, și un <strong>ghid al celor 18 locuri de cumpărat</strong> din oraș.</p>
 <p>Deschide <code>index.html</code> în orice browser. Nu are nevoie de server, de instalare, de internet și de niciun build step. Servit peste http, se și <strong>instalează pe telefon și funcționează offline</strong> — pentru că se folosește în magazin, unde semnalul e prost.</p>
 <hr>
 <h2 id="ce-este">Ce este</h2>
@@ -63,11 +63,13 @@
 <ul class="pf-doc-list"><li><strong>43 de mese</strong>, filtrabile după <strong>metodă</strong> (la cuptor, la tigaie, la grătar, air fryer, fiert/supă, gătit lent, fără gătit) și după <strong>ingredientul principal</strong> (pui, curcan, porc, vită, pește, ouă, lactate, leguminoase, tofu).</li><li>Fiecare rețetă are proteina, garnitura și legumele în aceeași listă, cu pași scriși pentru cineva care nu gătește des, plus sfaturi și <strong>variante</strong> („cu paste în loc de cartofi”, „mai ieftin”, „fără cuptor”).</li><li><strong>Macro-urile nu sunt scrise de mână.</strong> Fiecare ingredient trimite fie către un produs din atlas, fie către cămara din <code>js/data/09-recipes.js</code>, iar totalurile — proteină, calorii, cost pe porție — se calculează la încărcare. Dacă se corectează eticheta unui produs, se corectează și toate mesele care îl folosesc.</li><li>Costul e real: fiecare ingredient are prețul lui, deci vezi câți lei costă porția, nu doar câte grame de proteină are.</li><li>În dosarul fiecărui produs, fila <strong>Preparare</strong> listează mesele care îl folosesc — puntea de la „am piept de pui în frigider” la „ce gătesc diseară”.</li></ul>
 <p>Intervalul actual: de la <strong>23 g proteină / porție la 2,54 lei</strong> (linte cu orez) până la <strong>63 g / porție</strong> (șnițel de curcan cu piure).</p>
 <h2 id="deserturi-cheat-deserturi-html">Deserturi cheat (<code>deserturi.html</code>)</h2>
-<p><strong>48 de deserturi bogate în proteină</strong>, din ingrediente găsibile în Sibiu: fără coacere, la cuptor și air fryer, la congelator, la cană în trei minute, de băut, sau pentru toată săptămâna.</p>
+<p><strong>109 deserturi</strong> din ingrediente găsibile în Sibiu, pe două file:</p>
+<ul class="pf-doc-list"><li><strong>Ușoare</strong> — 47 de rețete sub ~150 kcal, din ou, gelatină, fructe de sezon și lactate slabe. Scorul lor măsoară caloriile și zahărul <strong>adăugat</strong> economisite și câte calorii are un gram de desert.</li><li><strong>Proteice</strong> — 62 de rețete cu minimum 15 g de proteină, de la brownie la lapte de pasăre, cremșnit și cozonac refăcute pe skyr, brânză, albuș și izolat proteic din soia. Nicio rețetă nu folosește zer (whey) sau cazeină.</li></ul>
+<p>Fără coacere, la cuptor și air fryer, la congelator, la cană în trei minute, de băut, sau pentru toată săptămâna. Cercetarea liniei ușoare, cu surse: <code>docs/DESSERT-LIGHT.md</code>.</p>
 <p>Un desert proteic <strong>nu e mâncare sănătoasă</strong>. E o variantă care rezolvă aceeași poftă la alt cost nutrițional, iar singurul mod onest de a spune asta e să pui cifrele una lângă alta. De aceea fiecare rețetă declară <strong>cu ce se compară</strong> — desertul real pe care îl înlocuiește, cu proteina, zahărul și caloriile lui — și pagina nu afișează niciodată o rețetă fără comparația ei.</p>
 <p>Barele de comparație stau pe aceeași scară: dacă diferența e mică, arată aproape la fel. O comparație care exagerează vizual diferența ar fi o minciună cu grafice.</p>
 <div class="pf-doc-tablewrap"><table class="pf-doc-table"><thead><tr><th style="text-align:left"></th><th style="text-align:left"></th></tr></thead><tbody><tr><td style="text-align:left">Proteină pe porție</td><td style="text-align:left">15,6–36,5 g (median 21)</td></tr><tr><td style="text-align:left">Calorii pe porție</td><td style="text-align:left">146–332 (median 233)</td></tr><tr><td style="text-align:left">Registru de referință</td><td style="text-align:left">40 de dulciuri reale, cu încrederea declarată: doar 10 au valori de producător</td></tr></tbody></table></div>
-<p><strong>Onestitatea e pe card, nu în subsol.</strong> Poliolii pe porție apar lângă zahăr, nu doar când depășesc pragul. Xilitolul e marcat ca toxic pentru câini. Proteina din gelatină e scăzută din cea utilizabilă, iar poarta măsoară pragul de 15 g pe proteina utilizabilă, nu pe cea de pe etichetă.</p>
+<p><strong>Onestitatea e pe card, nu în subsol.</strong> Nicio rețetă nu folosește îndulcitori fără zahăr — dulcele vine din fructe, miere sau zahăr, iar zahărul adăugat apare pe card în grame, lângă cel total. Proteina din gelatină e scăzută din cea utilizabilă, iar poarta măsoară pragul de 15 g pe proteina utilizabilă, nu pe cea de pe etichetă.</p>
 <p>Ca peste tot, macro-urile nu sunt scrise de mână: se calculează din ingrediente, care trimit la produse reale din atlas sau la cămara de deserturi. Poarta respinge orice câmp <code>kcal</code>/<code>protein</code>/<code>carbs</code>/<code>fat</code> scris la nivel de rețetă.</p>
 <p>Detaliile în <a href="docs/DESSERT-SCIENCE.html"><code>docs/DESSERT-SCIENCE.md</code></a> (îndulcitori, proteina la căldură, de ce înghețata proteică se face piatră) și <a href="docs/DESSERT-SHOPPING.html"><code>docs/DESSERT-SHOPPING.md</code></a> (de unde cumperi, cu prețuri estimate).</p>
 <hr>
@@ -94,9 +96,11 @@
 │   │   ├── 00-stores           registrul celor 18 locuri din Sibiu
 │   │   ├── 01..08              câte un fișier per categorie · 503 produse
 │   │   ├── 09-recipes          43 de mese complete + cămara
-│   │   ├── 10-dessert-pantry   50 de ingrediente de desert
-│   │   ├── 11..13-desserts     48 de deserturi: fără coacere, coapte, rapide
-│   │   └── 14-dessert-reference 40 de dulciuri reale, cu ce se compară
+│   │   ├── 10-dessert-pantry   77 de ingrediente de desert
+│   │   ├── 11..13-desserts     48 de deserturi proteice: fără coacere, coapte, rapide
+│   │   ├── 14-dessert-reference 40 de dulciuri reale, cu ce se compară
+│   │   ├── 15..16-desserts-light 47 de deserturi ușoare: creme și jeleuri, fructe
+│   │   └── 17-desserts-protein-classics 14 clasice refăcute pe proteină
 │   ├── utils/                  format · i18n · compute · storage
 │   ├── components/             ui, charts, card, modal, filters, tray,
 │   │                           recipes, stores, boards, compare, tooltip,

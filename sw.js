@@ -11,7 +11,7 @@
  * ========================================================================= */
 'use strict';
 
-const CACHE = 'pf-atlas-12d25aa259a4';
+const CACHE = 'pf-atlas-e87147a9f70d';
 
 const PRECACHE = [
   "./",
@@ -25,6 +25,7 @@ const PRECACHE = [
   "docs/CHANGELOG.html",
   "docs/CHARTS.html",
   "docs/DATA-SCHEMA.html",
+  "docs/DESSERT-LIGHT.html",
   "docs/DESSERT-SCHEMA.html",
   "docs/DESSERT-SCIENCE.html",
   "docs/DESSERT-SHOPPING.html",
@@ -93,6 +94,9 @@ const PRECACHE = [
   "js/data/12-desserts-baked.js",
   "js/data/13-desserts-fast.js",
   "js/data/14-dessert-reference.js",
+  "js/data/15-desserts-light.js",
+  "js/data/16-desserts-light-fruit.js",
+  "js/data/17-desserts-protein-classics.js",
   "js/components/desserts.js"
 ];
 

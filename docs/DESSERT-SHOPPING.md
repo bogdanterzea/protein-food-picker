@@ -3,6 +3,14 @@
 Documentul ăsta răspunde la o singură întrebare: **de unde iei, concret, în
 Sibiu, ingredientele care nu se găsesc la raftul de lactate.**
 
+> **Actualizare, octombrie 2026.** Rețetele de pe `deserturi.html` nu mai
+> folosesc **niciun îndulcitor fără zahăr** (eritritol, xilitol, stevie,
+> sucraloză) și **nicio pudră din lapte** (zer/whey, cazeină). Dulcele vine
+> din fructe, miere, curmale sau zahăr, iar pudra proteică e izolat din soia.
+> Capitolele de mai jos despre îndulcitori, zer și cazeină rămân ca
+> referință — sunt utile când citești etichete în magazin — dar nu mai
+> descriu ce e în rețete. Regulile curente: [DESSERT-LIGHT.md](DESSERT-LIGHT.md).
+
 Rețetele din secțiunea de deserturi presupun că ai în casă cinci-șase lucruri
 pe care un om normal nu le are: pudră proteică, un îndulcitor care nu e zahăr,
 cacao neîndulcită adevărată, unt de arahide fără zahăr, și de obicei ceva care

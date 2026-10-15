@@ -5,7 +5,7 @@ macro-uri complete, preț pe gram de proteină, efort de gătit, gust evaluat on
 și momentul din zi în care merită mâncate — afișate cu bare de statistici ca
 într-un joc video.
 
-Plus **43 de mese complete**, **48 de deserturi „cheat"** pe o pagină separată, și
+Plus **43 de mese complete**, **109 deserturi „cheat"** pe o pagină separată, și
 un **ghid al celor 18 locuri de cumpărat** din oraș.
 
 Deschide `index.html` în orice browser. Nu are nevoie de server, de instalare, de
@@ -183,9 +183,18 @@ până la **63 g / porție** (șnițel de curcan cu piure).
 
 ## Deserturi cheat (`deserturi.html`)
 
-**48 de deserturi bogate în proteină**, din ingrediente găsibile în Sibiu:
-fără coacere, la cuptor și air fryer, la congelator, la cană în trei minute,
-de băut, sau pentru toată săptămâna.
+**109 deserturi** din ingrediente găsibile în Sibiu, pe două file:
+
+- **Ușoare** — 47 de rețete sub ~150 kcal, din ou, gelatină, fructe de sezon
+  și lactate slabe. Scorul lor măsoară caloriile și zahărul **adăugat**
+  economisite și câte calorii are un gram de desert.
+- **Proteice** — 62 de rețete cu minimum 15 g de proteină, de la brownie la
+  lapte de pasăre, cremșnit și cozonac refăcute pe skyr, brânză, albuș și
+  izolat proteic din soia. Nicio rețetă nu folosește zer (whey) sau cazeină.
+
+Fără coacere, la cuptor și air fryer, la congelator, la cană în trei minute,
+de băut, sau pentru toată săptămâna. Cercetarea liniei ușoare, cu surse:
+`docs/DESSERT-LIGHT.md`.
 
 Un desert proteic **nu e mâncare sănătoasă**. E o variantă care rezolvă aceeași
 poftă la alt cost nutrițional, iar singurul mod onest de a spune asta e să pui
@@ -202,8 +211,9 @@ la fel. O comparație care exagerează vizual diferența ar fi o minciună cu gr
 | Calorii pe porție | 146–332 (median 233) |
 | Registru de referință | 40 de dulciuri reale, cu încrederea declarată: doar 10 au valori de producător |
 
-**Onestitatea e pe card, nu în subsol.** Poliolii pe porție apar lângă zahăr,
-nu doar când depășesc pragul. Xilitolul e marcat ca toxic pentru câini. Proteina
+**Onestitatea e pe card, nu în subsol.** Nicio rețetă nu folosește îndulcitori
+fără zahăr — dulcele vine din fructe, miere sau zahăr, iar zahărul adăugat apare
+pe card în grame, lângă cel total. Proteina
 din gelatină e scăzută din cea utilizabilă, iar poarta măsoară pragul de 15 g pe
 proteina utilizabilă, nu pe cea de pe etichetă.
 
@@ -243,9 +253,11 @@ proteinFood/
 │   │   ├── 00-stores           registrul celor 18 locuri din Sibiu
 │   │   ├── 01..08              câte un fișier per categorie · 503 produse
 │   │   ├── 09-recipes          43 de mese complete + cămara
-│   │   ├── 10-dessert-pantry   50 de ingrediente de desert
-│   │   ├── 11..13-desserts     48 de deserturi: fără coacere, coapte, rapide
-│   │   └── 14-dessert-reference 40 de dulciuri reale, cu ce se compară
+│   │   ├── 10-dessert-pantry   77 de ingrediente de desert
+│   │   ├── 11..13-desserts     48 de deserturi proteice: fără coacere, coapte, rapide
+│   │   ├── 14-dessert-reference 40 de dulciuri reale, cu ce se compară
+│   │   ├── 15..16-desserts-light 47 de deserturi ușoare: creme și jeleuri, fructe
+│   │   └── 17-desserts-protein-classics 14 clasice refăcute pe proteină
 │   ├── utils/                  format · i18n · compute · storage
 │   ├── components/             ui, charts, card, modal, filters, tray,
 │   │                           recipes, stores, boards, compare, tooltip,

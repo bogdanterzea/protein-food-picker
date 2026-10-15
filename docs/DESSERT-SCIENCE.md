@@ -5,6 +5,14 @@ Conține motivele pentru care rețetele arată așa cum arată: de ce un blat cu
 whey iese cauciucat, de ce înghețata „fără zahăr" se face piatră, câte grame
 de eritritol sunt prea multe și de ce gelatina nu se pune la ținta zilnică.
 
+> **Actualizare, octombrie 2026.** Rețetele de pe `deserturi.html` nu mai
+> folosesc **niciun îndulcitor fără zahăr** (eritritol, xilitol, stevie,
+> sucraloză) și **nicio pudră din lapte** (zer/whey, cazeină). Dulcele vine
+> din fructe, miere, curmale sau zahăr, iar pudra proteică e izolat din soia.
+> Capitolele de mai jos despre îndulcitori, zer și cazeină rămân ca
+> referință — sunt utile când citești etichete în magazin — dar nu mai
+> descriu ce e în rețete. Regulile curente: [DESSERT-LIGHT.md](DESSERT-LIGHT.md).
+
 Aceleași reguli ca peste tot în proiect: **cifre, nu adjective**. Unde dovada e
 solidă, se spune. Unde e slabă sau contestată, se spune că e slabă — nu se
 alege o tabără ca să sune documentul mai hotărât.

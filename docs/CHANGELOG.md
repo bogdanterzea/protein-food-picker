@@ -1,5 +1,97 @@
 # Changelog
 
+## v1.3.2 — octombrie 2026 · fără îndulcitori fără zahăr
+
+Toate cele 109 deserturi au renunțat la eritritol, xilitol, stevie (pudră și
+lichidă) și la fulgii de ciocolată „fără zahăr" (40% polioli). Dulcele vine
+acum din **miere** (implicit), fructe, curmale și **zahăr** acolo unde ține
+structura — bezele, pavlova, chec înger, sufleuri, albușul din laptele de
+pasăre și din cremșnit.
+
+- **Cantitățile:** mierea e cam de două ori mai dulce la gram decât
+  eritritolul, deci a intrat la jumătate din grame — și uneori deloc, unde
+  fructele îndulceau deja. Deserturile ies ceva mai puțin dulci decât
+  înainte. E intenționat.
+- **Cifrele s-au mișcat cinstit:** 2–18 g de zahăr adăugat pe porție, afișat
+  pe card. Toate rămân în țintă — ușoarele sub 150 kcal, proteicele peste 15 g
+  de proteină și sub 350 kcal. Scorurile ușoare au scăzut unde zahărul e
+  structural: bezelele au 32, iar asta e adevărul despre bezele.
+- **Ingrediente de magazin cu maltitol înlocuite:** biscuiții, granola și
+  cookie-urile „proteice" din patru rețete au devenit pișcoturi, fulgi de
+  ovăz prăjiți și biscuiți simpli.
+- **Scorul ușor** a pierdut componenta „fără îndulcitori" (5%) — acum ar fi
+  fost mereu maximă — iar ponderea ei a trecut la zahărul adăugat (30%).
+- **Poarta nouă:** `tools/check.js` respinge orice îndulcitor fără zahăr din
+  cămară sau din rețete. Nu se mai poate strecura înapoi din greșeală.
+- Cheile `eritritol`, `xilitol`, `stevie-pudra`, `stevie-lichida` și
+  `fulgi-ciocolata` au fost scoase din cămară.
+
+## v1.3.1 — octombrie 2026 · fără zer și fără cazeină
+
+Toate rețetele proteice folosesc acum **izolat proteic din soia** în locul
+cazeinei micelare și al zerului (concentrat, izolat, clear whey). Motivul e
+simplu: pudrele din lapte au lactoză, iar cazeina e un produs de nișă pe
+care puțini îl au în casă. Izolatul de soia se cumpără online (Ostrovit,
+eMAG), ~70 lei pentru 390 g.
+
+Nu a fost un „caută și înlocuiește". Rețetele explicau de ce cazeina și nu
+zerul — budinca ce se îngroașă singură, aluatul care nu se usucă, spuma care
+ține. Toate explicațiile au fost rescrise pentru felul în care se poartă
+soia: leagă apa mai mult decât zerul și mai puțin decât cazeina, se închegă
+la căldură (e proteina din tofu), face spumă mai mică decât izolatul de zer
+și are un gust ușor de boabe pe care cacao, cafeaua și fructele îl acoperă.
+
+- **Alergeni:** fiecare rețetă cu pudră declară acum „soia". Lactatele
+  rămân declarate acolo unde rețeta are skyr, lapte sau brânză — n-au fost
+  schimbate.
+- **Numele** care pomeneau cazeina au fost schimbate; id-urile au rămas.
+- **„Fluff"-ul de zmeură** crește de ~2 ori cu soia, nu de 3–4 ori ca
+  cu izolatul de zer, și se lasă în 10–20 de minute. Rețeta e marcată cu
+  încredere scăzută în date, iar textul o spune.
+
+## v1.3 — octombrie 2026 · deserturi ușoare
+
+Pagina de deserturi are acum **două file**: **Ușoare** (47 de rețete noi, sub
+~150 kcal) și **Proteice** (48 existente + 14 noi). Cercetare nouă, nouă
+agenți în paralel: gelatină și agar, deserturi din albuș, fructe de sezon,
+budinci și creme din alte bucătării, „volume eating" și dovezile din spatele
+lui, clasice românești refăcute pe proteină, rețete proteice internaționale,
+ingrediente și prețuri în România, chimia deserturilor.
+
+### De ce două linii, nu un filtru
+
+Un jeleu de 60 kcal ar pica orice test proteic, iar un cheesecake de 300 kcal
+cu 30 g de proteină ar pica orice test de calorii. Un singur scor le-ar fi
+pus pe amândouă pe ultimul loc. Fiecare linie are deci scorul ei:
+
+- **Proteică** — neschimbat: proteină câștigată, zahăr, calorii.
+- **Ușoară** — calorii economisite (30%), zahăr **adăugat** economisit (25%),
+  densitate energetică (20%), proteină cu gelatina pe jumătate (10%), fibre
+  (10%), fără îndulcitori (5%); poliolii scad puncte la final.
+
+### Zahăr total și zahăr adăugat
+
+Cardurile ușoare arată ambele cifre. Un măr copt are 20 g de zahăr și 0 g
+adăugat; ascunderea primei cifre ar fi exact trucul etichetelor „fără zahăr
+adăugat". Cămara marchează acum ingredientele al căror zahăr e „liber" după
+OMS: zahăr, miere, siropuri, gem, sucuri, pișcoturi, biscuiți.
+
+### Mai mic, dar important
+
+- **Sezon.** Rețetele cu fructe declară lunile; pagina arată „🍂 în sezon"
+  și filtrul „De sezon în octombrie".
+- **`yieldG`.** Chipsurile de mere pierd 85% din greutate la cuptor;
+  densitatea lor se calculează acum pe chipsuri, nu pe mere crude.
+- **Gălbenușul** are cheia lui în cămară. Rețetele care foloseau doar
+  gălbenușuri le numărau ca ouă întregi — o treime din grăsime lipsea.
+- **Gelatina pe linia ușoară** e o notă, nu o alarmă: acolo nimeni n-a
+  promis proteină.
+- **Eritritolul** are o notă în rețetă despre studiul cardiovascular din
+  2023 — ca asociere, nu ca dovadă, cum îl tratează și EFSA.
+- **Agarul** costă ~900 lei/kg, nu 400: se vinde doar în pachete de 30 g.
+
+Detalii și surse: `docs/DESSERT-LIGHT.md`.
+
 ## v1.2 — august 2026 · deserturi cheat
 
 O pagină separată, `deserturi.html`, cu **48 de deserturi bogate în proteină**

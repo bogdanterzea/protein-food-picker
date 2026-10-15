@@ -22,9 +22,11 @@
  * TREI LUCRURI ÎNVĂȚATE PE PIELEA NOASTRĂ, care explică de ce rețetele arată
  * cum arată:
  *
- * 1. MICROUNDELE GĂTESC DIN INTERIOR. Proteinele din zer se strâng brutal și
- *    dau textura aia de burete de vase. Trei contramăsuri, toate obligatorii:
- *    cazeină în loc de zer, un ingredient umed (iaurt, albuș, banană) și
+ * 1. MICROUNDELE GĂTESC DIN INTERIOR. Proteina pudră se strânge și dă textura
+ *    aia de burete de vase. Pudra de aici e izolatul de soia — fără lactoză,
+ *    leagă apa bine și rămâne mai umedă decât zerul, dar se închegă mai dens.
+ *    Trei contramăsuri, toate obligatorii: un ingredient umed (iaurt, albuș,
+ *    banană), puțină pudră, și
  *    OPRIT CU 20-30 DE SECUNDE MAI DEVREME decât pare corect. Un mug cake
  *    lucios în mijloc când îl scoți e un mug cake bun; unul uscat e ratat.
  *    De asta toate timpurile de aici sunt în SECUNDE, la 700-800 W.
@@ -34,9 +36,14 @@
  *    câștigat de spălat cuptorul — exact lucrurile care te fac să nu mai
  *    faci rețeta a doua oară.
  *
- * 3. PUDRA DE ZER SE TAIE ÎN LICHID FIERBINTE. Peste ~70°C zerul coagulează
- *    și rămâi cu grunji. Ori faci pastă cu lichid RECE și încălzești pe urmă,
- *    ori folosești cazeină, care rezistă. Ciocolata caldă de aici face ambele.
+ * 3. PUDRA PROTEICĂ FACE GRUNJI ÎN LICHID FIERBINTE. Turnată direct în lapte
+ *    clocotit sau în cafea fierbinte, soia face cocoloașe care nu se mai
+ *    desfac. Regula: pastă netedă cu puțin lichid RECE, apoi lichidul cald,
+ *    sub ~60-70°C, amestecând. Toate băuturile calde de aici fac așa.
+ *
+ * Gustul: izolatul de soia are o notă ușoară „de boabe". Cacao, cafeaua,
+ * vanilia, banana, fructele și un vârf de sare o acoperă bine — de aceea
+ * aproape toate rețetele de aici au măcar una dintre ele.
  * ========================================================================= */
 (function () {
   'use strict';
@@ -57,12 +64,12 @@
       servings: 1,
 
       ing: [
-        { id: 's-casein-micellar-ostrovit', g: 25 },
+        { id: 's-soy-protein-isolate', g: 25 },
         { p: 'cacao', g: 10 },
         { p: 'faina-ovaz', g: 15 },
         { id: 'd-albus-lichid', g: 60 },
         { id: 'd-iaurt-grecesc-olympus-0', g: 40 },
-        { p: 'eritritol', g: 12 },
+        { p: 'miere', g: 7 },
         { p: 'praf-copt', g: 2, free: true },
         { p: 'sare', g: 0.3, free: true },
         { p: 'vanilie', g: 2, free: true }
@@ -74,16 +81,17 @@
       equipment: ['cana', 'furculita'],
 
       steps: [
-        'Pune în cană, în ordinea asta, toate pudrele: cazeina, cacaoa, făina de ovăz, eritritolul, praful de copt și sarea. Amestecă-le uscate cu furculița 10 secunde — altfel rămân cocoloașe de cacao.',
-        'Toarnă albușul, iaurtul și vanilia. Amestecă până nu mai vezi pudră uscată pe pereți, maximum 30 de secunde. Nu bate mult, nu e prăjitură de cofetărie.',
+        'Pune în cană, în ordinea asta, toate pudrele: izolatul de soia, cacaoa, făina de ovăz, praful de copt și sarea. Amestecă-le uscate cu furculița 10 secunde — altfel rămân cocoloașe de cacao.',
+        'Toarnă albușul, iaurtul, mierea și vanilia. Amestecă până nu mai vezi pudră uscată pe pereți, maximum 30 de secunde. Nu bate mult, nu e prăjitură de cofetărie.',
         'Verifică: aluatul trebuie să ajungă cel mult la jumătatea cănii. Dacă e mai sus, mută jumătate în altă cană.',
         'Microunde 50 de secunde la putere maximă (700-800 W). Deschide și uită-te.',
         'Dacă marginile s-au prins și mijlocul e încă lucios, ESTE GATA. Dacă mijlocul e lichid, mai dă 15 secunde și oprește-te acolo.',
         'Lasă cana pe blat 60 de secunde. Se termină de gătit din căldura proprie și se dezlipește de pereți.'
       ],
       tips: [
-        'Cazeină, nu zer. Zerul se strânge în microunde și dă textură de cauciuc; cazeina leagă apa și rămâne umedă. Dacă ai doar zer, taie 10 secunde din timp și pune încă 15 g de iaurt.',
+        'Izolatul de soia leagă apa și rămâne mai umed în microunde decât zerul, dar se închegă mai dens. Nu-l ține mai mult: la prima încercare scoate-l cu 10 secunde mai devreme decât scrie aici — mai bine puțin lucios la mijloc decât cauciuc.',
         'Cele 50 de secunde sunt pentru un microunde de 800 W. La 700 W pune 60, la 900 W pune 40. Prima dată cronometrează, a doua oară o să știi.',
+        'Mierea merge cu ingredientele umede, nu peste pudre: așa se împrăștie uniform și ține mug cake-ul mai umed decât orice pudră dulce.',
         'Cacao naturală (nu alcalinizată) reacționează cu praful de copt și crește mai bine. Dacă folosești Dutch, creșterea e mai mică — nu e o problemă, doar arată altfel.'
       ],
       swaps: [
@@ -91,8 +99,8 @@
         { label: 'Mai bogat', text: 'Înlocuiește iaurtul cu 40 g brânză de vaci 6,5%. Iese mai dens, mai aproape de un chec.' }
       ],
       warnings: [
-        'Conține lactate (cazeină, iaurt), ou (albuș) și ovăz — ovăzul e contaminat frecvent cu gluten dacă nu scrie explicit „fără gluten" pe pungă.',
-        'Are 12 g de eritritol. E sub pragul la care majoritatea oamenilor simt ceva, dar dacă mai mănânci și altceva îndulcit în aceeași zi, se adună.'
+        'Conține soia (izolat proteic), lactate (iaurt), ou (albuș) și ovăz — ovăzul e contaminat frecvent cu gluten dacă nu scrie explicit „fără gluten" pe pungă.',
+        'Are 7 g de miere, adică ~6 g de zahăr adăugat. Puțin, dar zahăr adevărat.'
       ],
 
       taste: {
@@ -108,7 +116,7 @@
       },
       vsSource: 'Valori tipice de etichetă pentru muffin industrial ambalat, 2026',
 
-      sweetener: { kind: 'eritritol', gPerServing: 12 },
+      sweetener: { kind: 'miere', gPerServing: 7 },
 
       storage: 'Se mănâncă din cană, în 5 minute. Rece a doua zi devine tare și cauciucat — nu are sens să îl păstrezi.',
 
@@ -127,11 +135,11 @@
       servings: 1,
 
       ing: [
-        { id: 's-casein-micellar-ostrovit', g: 25 },
+        { id: 's-soy-protein-isolate', g: 25 },
         { p: 'faina-migdale', g: 15 },
         { id: 'd-albus-lichid', g: 55 },
         { id: 'd-iaurt-grecesc-olympus-0', g: 45 },
-        { p: 'eritritol', g: 12 },
+        { p: 'miere', g: 7 },
         { p: 'praf-copt', g: 2, free: true },
         { p: 'vanilie', g: 3, free: true },
         { p: 'sare', g: 0.3, free: true }
@@ -143,8 +151,8 @@
       equipment: ['cana', 'furculita'],
 
       steps: [
-        'Amestecă în cană cazeina, făina de migdale, eritritolul, praful de copt și sarea.',
-        'Adaugă albușul, iaurtul și vanilia (fii generos cu vanilia — ea face diferența într-un desert fără cacao care să acopere gustul de pudră).',
+        'Amestecă în cană izolatul de soia, făina de migdale, praful de copt și sarea.',
+        'Adaugă albușul, iaurtul, mierea și vanilia (fii generos cu vanilia — ea face diferența într-un desert fără cacao care să acopere gustul de pudră).',
         'Amestecă până se omogenizează. Aluatul trebuie să fie gros, cam ca o smântână care curge greu, și să stea la jumătatea cănii.',
         'Microunde 45 de secunde la putere maximă (700-800 W).',
         'Dacă suprafața e umflată dar încă umedă la atingere, oprește-te. Mai dă 10 secunde doar dacă vezi aluat lichid la mijloc.',
@@ -160,8 +168,8 @@
         { label: 'Fără migdale', text: '15 g făină de ovăz în loc de făină de migdale. Mai puține calorii, dar iese mai uscat — scade timpul cu 10 secunde.' }
       ],
       warnings: [
-        'Conține lactate (cazeină, iaurt), ou (albuș) și migdale — alergen pentru fructe cu coajă.',
-        'Are 12 g de eritritol pe porție.'
+        'Conține soia (izolat proteic), lactate (iaurt), ou (albuș) și migdale — alergen pentru fructe cu coajă.',
+        'Are 7 g de miere pe porție, adică ~6 g de zahăr adăugat.'
       ],
 
       taste: {
@@ -177,7 +185,7 @@
       },
       vsSource: 'Valori tipice de etichetă pentru chec industrial ambalat, 2026',
 
-      sweetener: { kind: 'eritritol', gPerServing: 12 },
+      sweetener: { kind: 'miere', gPerServing: 7 },
 
       storage: 'Se mănâncă imediat. Nu se păstrează.',
 
@@ -197,11 +205,11 @@
 
       ing: [
         { id: 'd-branza-vaci-covalact-05', g: 80 },
-        { id: 's-casein-micellar-ostrovit', g: 15 },
+        { id: 's-soy-protein-isolate', g: 15 },
         { id: 'd-oua-gaina-l', g: 50 },
         { p: 'cacao', g: 12 },
         { p: 'unt-arahide', g: 10 },
-        { p: 'eritritol', g: 12 },
+        { p: 'miere', g: 8 },
         { p: 'sare', g: 0.3, free: true },
         { p: 'vanilie', g: 2, free: true }
       ],
@@ -214,7 +222,7 @@
       steps: [
         'Sparge oul direct în cană și bate-l 15 secunde cu furculița.',
         'Adaugă brânza de vaci și amestecă bine — brânza slabă are grunji, iar dacă nu îi desfaci acum îi vei simți în brownie.',
-        'Pune cazeina, cacaoa, eritritolul, sarea și vanilia. Amestecă până e uniform.',
+        'Pune izolatul de soia, cacaoa, mierea, sarea și vanilia. Amestecă până e uniform.',
         'Bagă untul de arahide la mijloc, ca pe un dop, fără să îl amesteci. Se topește în timpul gătirii și face un miez mai gras.',
         'Microunde 60 de secunde la putere maximă (700-800 W). Fără praf de copt, aluatul nu crește mult, deci nu se revarsă.',
         'Mijlocul trebuie să rămână evident umed și lucios. Ăsta e brownie, nu prăjitură — dacă e uscat, l-ai gătit prea mult.'
@@ -222,15 +230,15 @@
       tips: [
         'Nu are praf de copt intenționat. Un brownie bun e dens, nu pufos. Dacă adaugi praf de copt îți iese un mug cake, care e altă rețetă, mai sus.',
         'Fără făină deloc. Brânza de vaci și oul dau toată structura, iar rezultatul e mult mai apropiat de un brownie de cofetărie decât variantele cu făină de ovăz.',
-        'La 278 kcal e cea mai calorică rețetă `mug` din listă, din cauza oului și a untului de arahide. Sunt exact cele două lucruri care o fac să semene cu un brownie, deci le-am păstrat.'
+        'La ~310 kcal e cea mai calorică rețetă `mug` din listă, din cauza oului și a untului de arahide. Sunt exact cele două lucruri care o fac să semene cu un brownie, deci le-am păstrat.'
       ],
       swaps: [
         { label: 'Fără arahide', text: '10 g tahini în loc de unt de arahide. Amăreala lui merge surprinzător de bine cu cacaoa.' },
-        { label: 'Mai puține calorii', text: 'Scoate untul de arahide. Cobori la ~220 kcal, dar pierzi senzația de gras care face brownie-ul să fie brownie.' }
+        { label: 'Mai puține calorii', text: 'Scoate untul de arahide. Cobori la ~250 kcal, dar pierzi senzația de gras care face brownie-ul să fie brownie.' }
       ],
       warnings: [
-        'Conține lactate (brânză de vaci, cazeină), ou și arahide.',
-        'Are 12 g de eritritol pe porție.'
+        'Conține soia (izolat proteic), lactate (brânză de vaci), ou și arahide.',
+        'Are 8 g de miere pe porție, adică ~7 g de zahăr adăugat.'
       ],
 
       taste: {
@@ -246,7 +254,7 @@
       },
       vsSource: 'Valori tipice pentru brownie de cofetărie, porție de vitrină, 2026',
 
-      sweetener: { kind: 'eritritol', gPerServing: 12 },
+      sweetener: { kind: 'miere', gPerServing: 8 },
 
       storage: 'Se mănâncă din cană. Rece se întărește ca o cărămidă.',
 
@@ -265,13 +273,13 @@
       servings: 1,
 
       ing: [
-        { id: 's-casein-micellar-ostrovit', g: 22 },
+        { id: 's-soy-protein-isolate', g: 22 },
         { p: 'cacao', g: 8 },
         { p: 'faina-ovaz', g: 12 },
         { id: 'd-albus-lichid', g: 50 },
         { id: 'd-iaurt-grecesc-olympus-0', g: 40 },
-        { id: 'b-ciocolata-proteica', g: 15 },
-        { p: 'eritritol', g: 10 },
+        { p: 'ciocolata-neagra', g: 12 },
+        { p: 'miere', g: 6 },
         { p: 'praf-copt', g: 1.5, free: true },
         { p: 'sare', g: 0.3, free: true }
       ],
@@ -282,24 +290,24 @@
       equipment: ['cana', 'furculita'],
 
       steps: [
-        'Amestecă în cană cazeina, cacaoa, făina de ovăz, eritritolul, praful de copt și sarea.',
-        'Toarnă albușul și iaurtul, amestecă până se omogenizează.',
-        'Rupe pătrățelul de ciocolată proteică în două-trei bucăți și înfige-le în mijlocul aluatului, până dispar sub suprafață. Nu le amesteca — ele sunt lava.',
+        'Amestecă în cană izolatul de soia, cacaoa, făina de ovăz, praful de copt și sarea.',
+        'Toarnă albușul, iaurtul și mierea, amestecă până se omogenizează.',
+        'Rupe pătrățelul de ciocolată neagră 85% în două-trei bucăți și înfige-le în mijlocul aluatului, până dispar sub suprafață. Nu le amesteca — ele sunt lava.',
         'Microunde 40 de secunde la putere maximă (700-800 W). Atât. Nu 50, nu 60.',
         'Marginile trebuie să fie prinse, mijlocul moale. Bagă lingura imediat — ciocolata din centru e topită acum și se întărește la loc în 3-4 minute.'
       ],
       tips: [
         'Toată rețeta stă în cele 40 de secunde. Un lava cake e un mug cake sub-copt intenționat, cu ciocolată topită la mijloc. Dacă îl gătești până e „gata", ai făcut un mug cake obișnuit cu un cocoloș de ciocolată în el.',
-        'Ciocolata proteică se topește mai încet decât cea obișnuită, pentru că are mai puțină grăsime de cacao. De asta o rupem în bucăți mici, nu o punem întreagă.',
+        'Ciocolata neagră 85% are puțin zahăr și multă grăsime de cacao, deci se topește repede și curge. O rupem în bucăți mici ca să se topească toată în 40 de secunde, nu doar pe margini.',
         'Se mănâncă în picioare, direct din cană, în primele 3 minute. E singura rețetă din fișier unde întârzierea chiar strică rezultatul.'
       ],
       swaps: [
-        { label: 'Fără ciocolată proteică', text: '12 g ciocolată neagră 85% la mijloc. Curge mai bine, adaugă ~70 kcal și scade proteina cu ~3 g.' },
+        { label: 'Miez de fructe', text: '15 g de zmeură în loc de ciocolată. Nu mai e lava de ciocolată, e un miez acrișor, cu ~65 kcal mai puțin.' },
         { label: 'Miez de arahide', text: '15 g unt de arahide în loc de ciocolată. Nu se întărește deloc la loc, deci ai fereastră mai mare.' }
       ],
       warnings: [
-        'Conține lactate (cazeină, iaurt, ciocolată proteică), ou (albuș) și ovăz.',
-        'Are 10 g de eritritol, plus poliolii din ciocolata proteică.',
+        'Conține soia (izolat proteic), lactate (iaurt), ou (albuș) și ovăz. Ciocolata neagră poate conține urme de lapte.',
+        'Are 6 g de miere și ~2 g de zahăr din ciocolată pe porție.',
         'Miezul e foarte fierbinte când iese din microunde. Ciocolata topită trece de 90°C și arde limba mai rău decât aluatul din jur.'
       ],
 
@@ -316,7 +324,7 @@
       },
       vsSource: 'Valori tipice de etichetă pentru moelleux au chocolat congelat, 2026',
 
-      sweetener: { kind: 'eritritol', gPerServing: 10 },
+      sweetener: { kind: 'miere', gPerServing: 6 },
 
       storage: 'Nu se păstrează. Lava se solidifică și rămâi cu un mug cake mediocru.',
 
@@ -337,7 +345,7 @@
       ing: [
         { id: 'v-fulgi-ovaz-instant', g: 30 },
         { id: 'd-lapte-15', g: 120 },
-        { id: 's-casein-micellar-ostrovit', g: 20 },
+        { id: 's-soy-protein-isolate', g: 20 },
         { p: 'banane', g: 40 },
         { p: 'scortisoara', g: 1, free: true },
         { p: 'sare', g: 0.3, free: true }
@@ -352,20 +360,20 @@
         'Pune ovăzul, laptele, sarea și scorțișoara în cană. Amestecă o dată.',
         'Microunde 90 de secunde la putere maximă (700-800 W). Cana trebuie să fie umplută cel mult pe jumătate — laptele dă în foc exact ca pe aragaz.',
         'Scoate cana și AȘTEAPTĂ un minut, până nu mai e fierbinte, doar caldă. Ăsta e pasul pe care toată lumea îl sare.',
-        'Abia acum pune cazeina și amestecă viguros 20 de secunde. Dacă o pui în lapte clocotit se strânge și rămâi cu grunji.',
-        'Feliază banana deasupra și presară încă puțină scorțișoară. Nu mai are nevoie de îndulcitor — banana coaptă și scorțișoara fac toată treaba.'
+        'Abia acum pune izolatul de soia și amestecă viguros 20 de secunde. Pus în lapte clocotit face grunji care nu se mai desfac.',
+        'Feliază banana deasupra și presară încă puțină scorțișoară. Nu mai are nevoie de miere sau zahăr — banana coaptă și scorțișoara fac toată treaba.'
       ],
       tips: [
-        'Nu are niciun îndulcitor adăugat. Banana are 12 g de zahăr la 100 g, iar scorțișoara e trucul cel mai ieftin din bucătărie: creierul o citește ca dulceață. Dacă tot îți trebuie mai dulce, 4-5 g de eritritol în pasul 1.',
+        'Nu are zahăr adăugat deloc. Banana are 12 g de zahăr la 100 g, iar scorțișoara e trucul cel mai ieftin din bucătărie: creierul o citește ca dulceață. Dacă tot îți trebuie mai dulce, o linguriță rasă de miere (5 g) amestecată la final.',
         'Ovăzul instant, nu fulgii mari. Fulgii mari au nevoie de 3-4 minute în microunde și rămân tari; instantul se face în 90 de secunde. Diferența de macro-uri e neglijabilă.',
-        'Dacă vrei textura de budincă și nu de terci, lasă cana 2 minute după ce ai amestecat cazeina. Cazeina continuă să lege apa și se îngroașă vizibil.'
+        'Dacă vrei textura de budincă și nu de terci, lasă cana 2 minute după ce ai amestecat pudra. Soia continuă să lege apa și terciul se îngroașă vizibil; dacă iese prea gros, o lingură de lapte.'
       ],
       swaps: [
         { label: 'Fără lactate', text: 'Băutură de soia neîndulcită în loc de lapte. Pierzi ~1 g de proteină la 100 ml, dar textura rămâne.' },
         { label: 'Cu cacao', text: '6 g de cacao în pasul 1. Devine budincă de ciocolată, plus ~1 g proteină și ~14 kcal.' }
       ],
       warnings: [
-        'Conține lactate (lapte, cazeină) și ovăz.',
+        'Conține soia (izolat proteic), lactate (lapte) și ovăz.',
         'Laptele fierbe și dă pe dinafară în microunde fără avertisment. Cana pe jumătate, nu mai mult.'
       ],
 
@@ -403,10 +411,10 @@
       ing: [
         { p: 'faina-ovaz', g: 25 },
         { id: 'd-albus-lichid', g: 70 },
-        { id: 's-whey-concentrate-ostrovit', g: 15 },
+        { id: 's-soy-protein-isolate', g: 15 },
         { id: 'd-iaurt-grecesc-olympus-0', g: 40 },
         { p: 'zmeura', g: 40 },
-        { p: 'eritritol', g: 8 },
+        { p: 'miere', g: 5 },
         { p: 'praf-copt', g: 2, free: true },
         { p: 'vanilie', g: 2, free: true },
         { p: 'sare', g: 0.3, free: true }
@@ -418,14 +426,14 @@
       equipment: ['cana', 'furculita'],
 
       steps: [
-        'Amestecă în cană făina de ovăz, pudra de zer, eritritolul, praful de copt și sarea.',
-        'Adaugă albușul, iaurtul și vanilia. Amestecă până dispar cocoloașele — aluatul iese subțire, ca de clătite, și așa trebuie să fie.',
+        'Amestecă în cană făina de ovăz, izolatul de soia, praful de copt și sarea.',
+        'Adaugă albușul, iaurtul, mierea și vanilia. Amestecă până dispar cocoloașele — aluatul iese subțire, ca de clătite, și așa trebuie să fie.',
         'Presară zmeura deasupra. Nu o amesteca, se lasă la fund și lipește aluatul de cană.',
         'Microunde 55 de secunde la putere maximă (700-800 W).',
         'Suprafața trebuie să fie umflată și mată, cu urme umede în jurul zmeurei. Lasă 30 de secunde și mănâncă din cană.'
       ],
       tips: [
-        'Singura rețetă `mug` din listă cu zer și nu cazeină, pentru că o clătită are voie să fie puțin mai elastică — chiar așa e și clătita adevărată. Chiar și așa, nu depăși 55 de secunde.',
+        'O clătită are voie să fie puțin mai elastică decât un mug cake — chiar așa e și clătita adevărată. Doar 15 g de pudră, tocmai ca să nu devină densă; nu depăși 55 de secunde.',
         'Zmeura congelată merge la fel de bine, dar adaugă 10 secunde și lasă un pic mai mult după. Nu o dezgheța: se face terci.',
         'Dacă vrei senzația reală de clătită, răstoarnă cana pe o farfurie după ce s-a răcit 1 minut. Iese un disc gros, care se taie cu furculița.'
       ],
@@ -434,8 +442,8 @@
         { label: 'Fără ovăz', text: '15 g făină de migdale + 10 g amidon de porumb. Iese mai fină, fără gust de cereale.' }
       ],
       warnings: [
-        'Conține lactate (zer, iaurt), ou (albuș) și ovăz.',
-        'Are 8 g de eritritol pe porție.'
+        'Conține soia (izolat proteic), lactate (iaurt), ou (albuș) și ovăz.',
+        'Are 5 g de miere pe porție, adică ~4 g de zahăr adăugat.'
       ],
 
       taste: {
@@ -451,7 +459,7 @@
       },
       vsSource: 'Valori tipice pentru clătite din făină albă cu gem, calculate din ingrediente, 2026',
 
-      sweetener: { kind: 'eritritol', gPerServing: 8 },
+      sweetener: { kind: 'miere', gPerServing: 5 },
 
       storage: 'Se mănâncă imediat. Rece devine gumoasă.',
 
@@ -483,7 +491,7 @@
 
       ing: [
         { p: 'banane', g: 90 },
-        { id: 's-whey-concentrate-ostrovit', g: 25 },
+        { id: 's-soy-protein-isolate', g: 25 },
         { id: 'd-skyr-natural-pilos', g: 80 },
         { id: 'd-lapte-15', g: 80 },
         { p: 'gheata', g: 80, free: true },
@@ -497,7 +505,7 @@
 
       steps: [
         'Banana trebuie să fie congelată. Feliaz-o când e coaptă și ține feliile într-o pungă la congelator — asta e singura muncă de anticipare din toată rețeta și se face o dată la două săptămâni.',
-        'Pune în blender, în ordinea asta: laptele, skyrul, pudra de zer, banana congelată, gheața, vanilia. Lichidul jos, solidele sus — altfel lamele se învârt în gol.',
+        'Pune în blender, în ordinea asta: laptele, skyrul, izolatul de soia, banana congelată, gheața, vanilia. Lichidul jos, solidele sus — altfel lamele se învârt în gol.',
         'Blenduiește 40-50 de secunde, până gheața nu se mai aude scârțâind.',
         'Verifică cu paiul: dacă paiul stă drept în pahar, e cum trebuie. Dacă se lasă pe o parte, mai pune 30 g de gheață și încă 15 secunde.'
       ],
@@ -507,11 +515,11 @@
         'Dacă ai gumă xantan în casă, un vârf de cuțit (sub un gram, nu merită cântărit) face shake-ul să rămână gros și după 10 minute. Fără ea, se separă puțin — bea-l în primele 5 minute.'
       ],
       swaps: [
-        { label: 'Fără banană', text: '90 g căpșuni congelate. Iese mai acru și mai puțin cremos, dar cu ~60 kcal mai puțin. Pune 5 g de eritritol.' },
+        { label: 'Fără banană', text: '90 g căpșuni congelate. Iese mai acru și mai puțin cremos, dar cu ~60 kcal mai puțin. Pune 5 g de miere, căpșunile nu îndulcesc cât banana.' },
         { label: 'La shaker, fără blender', text: 'Scoate gheața și banana congelată, pune 60 g banană proaspătă pasată cu furculița. Nu iese milkshake, iese shake — dar se face în 90 de secunde.' }
       ],
       warnings: [
-        'Conține lactate (zer, skyr, lapte).'
+        'Conține soia (izolat proteic) și lactate (skyr, lapte).'
       ],
 
       taste: {
@@ -547,10 +555,10 @@
 
       ing: [
         { id: 'd-lapte-15', g: 250 },
-        { id: 's-casein-micellar-ostrovit', g: 25 },
+        { id: 's-soy-protein-isolate', g: 25 },
         { p: 'cacao', g: 8 },
         { p: 'amidon-porumb', g: 3 },
-        { p: 'eritritol', g: 10 },
+        { p: 'miere', g: 8 },
         { p: 'sare', g: 0.3, free: true },
         { p: 'vanilie', g: 2, free: true }
       ],
@@ -561,15 +569,15 @@
       equipment: ['cana', 'tel mic'],
 
       steps: [
-        'Pune în cană cazeina, cacaoa, amidonul, eritritolul și sarea. Amestecă-le uscate.',
+        'Pune în cană izolatul de soia, cacaoa, amidonul și sarea. Amestecă-le uscate.',
         'Toarnă peste ele DOAR 50 ml din laptele rece, direct de la frigider. Freacă cu telul până obții o pastă groasă și lucioasă, fără niciun cocoloș. Ăsta e pasul care decide totul.',
         'Adaugă restul de lapte rece, tot amestecând.',
         'Microunde 80-90 de secunde. Oprește la 60 de secunde, amestecă o dată, apoi mai dă 30.',
-        'Scoate când e fierbinte dar NU clocotită — dacă vezi bule la margine, e deja prea mult. Amestecă vanilia la final.'
+        'Scoate când e fierbinte dar NU clocotită — dacă vezi bule la margine, e deja prea mult. Amestecă mierea și vanilia la final; în lichidul cald mierea se dizolvă în câteva secunde.'
       ],
       tips: [
         'Nu turna niciodată pudra proteică în lichid deja fierbinte. Peste ~70°C proteinele se desfac și se agață una de alta, iar ce obții e o supă cu fulgi. Pasta cu lichid rece rezolvă problema definitiv, indiferent de pudră.',
-        'Cazeina rezistă la căldură mult mai bine decât zerul — se îngroașă, nu se brânzește. Dacă ai doar zer, fă pasta rece la fel, dar oprește microundele la 60 de secunde: caldă, nu fierbinte.',
+        'Cu soia, pasta rece e obligatorie, nu un sfat: o pastă netedă din pudră, cacao și puțin lapte rece, abia apoi restul laptelui. Și oprește microundele când e caldă, nu fierbinte — sub ~70°C pudra rămâne catifelată, peste face grunji.',
         'Cele 3 g de amidon par o nimica toată, dar sunt diferența între o ciocolată caldă care se bea și una care „îmbracă" lingura. Fără el, gustul e acolo, dar senzația de cofetărie nu.'
       ],
       swaps: [
@@ -577,7 +585,7 @@
         { label: 'Mai intens', text: 'Adaugă 1 g de cafea instant. Nu se simte a cafea, doar adâncește ciocolata. Adaugă însă și cofeină.' }
       ],
       warnings: [
-        'Conține lactate (lapte, cazeină).',
+        'Conține soia (izolat proteic) și lactate (lapte).',
         'Cele 8 g de cacao aduc aproximativ 15-20 mg de cofeină și teobromină — puțin, cam cât un sfert de espresso, dar dacă ești sensibil și o bei la 23:00, e bine să știi.'
       ],
 
@@ -594,7 +602,7 @@
       },
       vsSource: 'Valori tipice de etichetă pentru plic de ciocolată caldă instant plus lapte integral, 2026',
 
-      sweetener: { kind: 'eritritol', gPerServing: 10 },
+      sweetener: { kind: 'miere', gPerServing: 8 },
 
       storage: 'Se bea caldă. Reîncălzită se îngroașă și mai tare — mai pune 40 ml lapte și amestecă.',
 
@@ -616,7 +624,7 @@
         { p: 'visine-congelate', g: 100 },
         { p: 'capsuni', g: 80 },
         { id: 'd-iaurt-grecesc-olympus-0', g: 120 },
-        { id: 's-clear-whey-isolate-ostrovit', g: 20 },
+        { id: 's-soy-protein-isolate', g: 20 },
         { p: 'apa', g: 60, free: true }
       ],
 
@@ -627,13 +635,13 @@
 
       steps: [
         'Pune apa și iaurtul în blender primele.',
-        'Adaugă izolatul clear, apoi vișinele congelate și căpșunile.',
+        'Adaugă izolatul de soia, apoi vișinele congelate și căpșunile.',
         'Blenduiește 30-40 de secunde. Vișinele congelate au sâmburele scos, dar verifică punga — unele mărci nu îl scot și îți distrugi lamele.',
-        'Gustă. Vișinele sunt acre; dacă îți trebuie mai dulce, 5 g de eritritol și încă 5 secunde de blender.'
+        'Gustă. Vișinele sunt acre; dacă îți trebuie mai dulce, 5 g de miere și încă 5 secunde de blender.'
       ],
       tips: [
         'Fructele congelate ÎN LOC de gheață. Gheața răcește și diluează; fructele congelate răcesc și concentrează. E singurul motiv pentru care aici nu apare gheață deloc.',
-        'Izolat „clear", nu zer clasic. Zerul clasic cu fructe acre are tendința să se lege în cocoloașe și dă un gust lăptos care se bate cu fructul. Clear whey e făcut exact pentru asta și rămâne limpede.',
+        'Izolatul de soia se blenduiește fără probleme, dar la același gramaj iese mai gros decât zerul. Dacă smoothie-ul se oprește pe lame, încă 30-40 ml de apă rece. Aciditatea vișinelor acoperă bine gustul ușor de boabe al soiei.',
         'Vișinele bat orice alt fruct roșu aici: aciditatea lor face smoothie-ul să pară de fructe adevărate, nu de aromă. Zmeura merge, căpșunile singure ies fade.'
       ],
       swaps: [
@@ -641,7 +649,7 @@
         { label: 'Mai gros', text: '8 g de semințe de chia, blenduite odată cu restul, apoi 10 minute de așteptare. Se îngroașă până la consistență de smoothie bowl.' }
       ],
       warnings: [
-        'Conține lactate (iaurt, izolat din zer).'
+        'Conține soia (izolat proteic) și lactate (iaurt).'
       ],
 
       taste: {
@@ -678,8 +686,8 @@
       ing: [
         { p: 'cafea-instant', g: 4, free: true },
         { id: 'd-lapte-15', g: 200 },
-        { id: 's-whey-concentrate-ostrovit', g: 25 },
-        { p: 'eritritol', g: 6 },
+        { id: 's-soy-protein-isolate', g: 25 },
+        { p: 'miere', g: 6 },
         { p: 'gheata', g: 100, free: true },
         { p: 'apa', g: 30, free: true }
       ],
@@ -691,7 +699,7 @@
 
       steps: [
         'Dizolvă cafeaua instant în 30 ml de apă RECE, într-un pahar. Cafeaua instant se dizolvă și la rece, doar mai încet — amestecă 20 de secunde. Nu folosi apă fierbinte, ar tăia pudra la pasul următor.',
-        'Toarnă cafeaua în blender peste lapte, pudra de zer și eritritol.',
+        'Separat, dizolvă mierea într-o linguriță de apă caldă — mierea rece nu se amestecă în lichid rece, se duce la fund. Toarnă cafeaua și mierea în blender peste lapte și izolatul de soia.',
         'Adaugă gheața la final, deasupra.',
         'Blenduiește 40 de secunde, până se face spumă groasă la suprafață. Spuma e semnul că gheața s-a măcinat, nu doar s-a spart.',
         'Toarnă în paharul cel mai mare pe care îl ai — își dublează volumul.'
@@ -699,7 +707,7 @@
       tips: [
         'Gheața măcinată e trucul aici, nu îngroșătorul. 100 g de gheață bătută 40 de secunde dublează volumul fără să adauge nimic, și dă exact senzația de frappé de la terasă.',
         'Cei 4 g de cafea instant sunt cam 140 mg de cofeină — echivalentul a două espresso. Nu e o rețetă de seară, oricât de bine ar suna ca desert.',
-        'Apa rece la pasul 1 nu e o excentricitate: dacă dizolvi cafeaua în apă fiartă și torni peste pudră, zerul se strânge instantaneu și rămâi cu fulgi în pahar.'
+        'Apa rece la pasul 1 nu e o excentricitate: cafeaua e acidă, iar acid plus căldură e exact combinația în care pudra proteică face fulgi. Cafea fierbinte turnată peste soia înseamnă grunji în pahar; cafea rece, nu.'
       ],
       swaps: [
         { label: 'Cu espresso', text: 'Un espresso dublu răcit (60 ml) în loc de cafea instant plus apă. Gust net mai bun, dar trebuie să îl faci înainte și să îl lași să se răcească.' },
@@ -707,7 +715,7 @@
       ],
       warnings: [
         'Conține aproximativ 140 mg de cofeină, cât două espresso. Nu se bea seara.',
-        'Conține lactate (lapte, zer).'
+        'Conține soia (izolat proteic) și lactate (lapte).'
       ],
 
       taste: {
@@ -723,7 +731,7 @@
       },
       vsSource: 'Valori tipice afișate de lanțurile de cafenele pentru băutură de cafea rece cu frișcă, 350 ml, 2026',
 
-      sweetener: { kind: 'eritritol', gPerServing: 6 },
+      sweetener: { kind: 'miere', gPerServing: 6 },
 
       storage: 'Se bea în 10 minute, cât timp gheața nu s-a topit. Nu se păstrează.',
 
@@ -743,9 +751,9 @@
 
       ing: [
         { id: 'd-lapte-15', g: 250 },
-        { id: 's-whey-concentrate-ostrovit', g: 25 },
+        { id: 's-soy-protein-isolate', g: 25 },
         { p: 'cacao', g: 6 },
-        { p: 'eritritol', g: 8 },
+        { p: 'miere', g: 7 },
         { p: 'apa', g: 20, free: true },
         { p: 'sare', g: 0.2, free: true }
       ],
@@ -756,22 +764,22 @@
       equipment: ['shaker'],
 
       steps: [
-        'Pune cacaoa, eritritolul și sarea într-un pahar cu 20 ml de apă CALDĂ (nu fiartă — de la robinet, cât suporți degetul). Freacă 20 de secunde până se face o pastă neagră, lucioasă.',
+        'Pune cacaoa, mierea și sarea într-un pahar cu 20 ml de apă CALDĂ (nu fiartă — de la robinet, cât suporți degetul). Freacă 20 de secunde până se face o pastă neagră, lucioasă.',
         'Toarnă pasta în shaker peste laptele rece.',
-        'Adaugă pudra de zer, închide și agită energic 20 de secunde.',
+        'Adaugă izolatul de soia, închide și agită energic 30 de secunde. Soia se dizolvă ceva mai greu decât zerul; dacă rămân grunji, încă 10 secunde.',
         'Bea rece, direct din shaker. Nu se răstoarnă nimic, nu se spală nimic.'
       ],
       tips: [
         'Pasul cu pasta de cacao e ce fac și producătorii de pudre instant, doar că ei o rezolvă cu lecitină. Cacao uscată aruncată direct în lapte rece plutește la suprafață în grunji și nu se lasă înmuiată nici după un minut de agitat.',
-        'Aici nu câștigi la calorii: 230 kcal față de 237 la varianta cu pudră comercială. Câștigi la proteină (29 g față de 8,5) și la zahăr (12 g de lactoză față de 30 g, din care 18 adăugat). Dacă îți numeri caloriile, cele două sunt echivalente — dacă îți numeri proteina, nu sunt.',
+        'Aici nu câștigi la calorii: ~245 kcal față de 237 la varianta cu pudră comercială. Câștigi la proteină (31 g față de 8,5) și la zahărul adăugat (6 g din miere față de 18 g). Dacă îți numeri caloriile, cele două sunt echivalente — dacă îți numeri proteina, nu sunt.',
         'Sarea. Un vârf de cuțit într-o cacao cu lapte scoate gustul de ciocolată în față. Se face în toate cofetăriile și nu se simte ca sare.'
       ],
       swaps: [
-        { label: 'Cu pudră neutră', text: 'Dacă zerul tău e cu vanilie sau neutru, mărește cacaoa la 10 g. Adaugă ~1 g proteină și ~9 kcal.' },
+        { label: 'Cu pudră neutră', text: 'Dacă soia ta e neutră, fără aromă, mărește cacaoa la 10 g — acoperă și gustul de boabe. Adaugă ~1 g proteină și ~9 kcal.' },
         { label: 'Mai gros', text: 'Înlocuiește 100 g din lapte cu 100 g de skyr și agită mai lung. Devine aproape de un shake.' }
       ],
       warnings: [
-        'Conține lactate (lapte, zer).'
+        'Conține soia (izolat proteic) și lactate (lapte).'
       ],
 
       taste: {
@@ -787,7 +795,7 @@
       },
       vsSource: 'Valori tipice de etichetă pentru pudră de cacao instant pentru copii plus lapte 3,5%, 2026',
 
-      sweetener: { kind: 'eritritol', gPerServing: 8 },
+      sweetener: { kind: 'miere', gPerServing: 7 },
 
       storage: 'Frigider, 24 h în shaker închis. Se agită din nou înainte de băut.',
 
@@ -809,7 +817,7 @@
         { id: 'd-skyr-bautura-milbona', g: 250 },
         { p: 'zmeura', g: 70 },
         { p: 'capsuni', g: 60 },
-        { p: 'eritritol', g: 5 }
+        { p: 'miere', g: 5 }
       ],
 
       time: { total: 2, active: 2, chill: 0 },
@@ -819,13 +827,13 @@
 
       steps: [
         'Pune zmeura și căpșunile într-un pahar înalt și strivește-le cu furculița, 20 de secunde. Nu ai nevoie de blender pentru fructe moi.',
-        'Adaugă eritritolul peste fructele strivite și mai amestecă o dată — se dizolvă în zeama lor.',
+        'Adaugă mierea peste fructele strivite și mai amestecă o dată — se dizolvă în zeama lor.',
         'Toarnă sticla de skyr de băut peste ele și amestecă de trei ori. Atât.'
       ],
       tips: [
         'Cea mai leneșă rețetă din tot fișierul, și de asta e cea care se face cel mai des. Băutura de skyr vine deja groasă și cu 7,4 g de proteină la 100 ml — nu trebuie îngroșată, nu trebuie completată cu pudră.',
         'Fructele strivite, nu blenduite. Blenderul le face suc și pierzi bucățile, care sunt jumătate din plăcere. Plus că ai de spălat blenderul, ceea ce anulează tot rostul rețetei.',
-        'Cu nici 20 g de proteină e cea mai slabă din listă la capitolul densitate, dar e și singura care se face în două minute fără niciun aparat. Dacă vrei mai mult, 10 g de izolat clear agitat în sticlă o duc la ~28 g.'
+        'Cu nici 20 g de proteină e cea mai slabă din listă la capitolul densitate, dar e și singura care se face în două minute fără niciun aparat. Dacă vrei mai mult, 10 g de izolat de soia agitat bine în sticlă o duc la ~28 g.'
       ],
       swaps: [
         { label: 'Iarna', text: '100 g vișine congelate dezghețate la microunde 40 de secunde, în loc de fructele proaspete. Aceeași treabă, disponibile tot anul.' },
@@ -848,7 +856,7 @@
       },
       vsSource: 'Valori tipice de etichetă pentru iaurt de băut cu fructe, sticlă 250 ml, 2026',
 
-      sweetener: { kind: 'eritritol', gPerServing: 5 },
+      sweetener: { kind: 'miere', gPerServing: 5 },
 
       storage: 'Frigider, 24 h. Fructele strivite lasă zeamă și se separă — se amestecă din nou.',
 
@@ -881,11 +889,11 @@
 
       ing: [
         { p: 'unt-arahide', g: 120 },
-        { id: 's-whey-concentrate-ostrovit', g: 110 },
+        { id: 's-soy-protein-isolate', g: 110 },
         { id: 'v-fulgi-ovaz-instant', g: 70 },
         { p: 'miere', g: 60 },
         { id: 'd-lapte-15', g: 80 },
-        { p: 'fulgi-ciocolata', g: 40 },
+        { p: 'ciocolata-neagra', g: 40 },
         { p: 'sare', g: 1, free: true },
         { p: 'vanilie', g: 3, free: true }
       ],
@@ -898,25 +906,25 @@
       steps: [
         'Încălzește untul de arahide cu mierea 30 de secunde la microunde, într-un bol mare. Devin lichide și se amestecă singure.',
         'Adaugă vanilia, sarea și laptele. Amestecă.',
-        'Toarnă peste ele pudra de zer și ovăzul, tot deodată. Amestecă întâi cu lingura, apoi cu mâna — la 110 g de pudră lingura nu mai face față.',
+        'Toarnă peste ele izolatul de soia și ovăzul, tot deodată. Amestecă întâi cu lingura, apoi cu mâna — la 110 g de pudră lingura nu mai face față.',
         'Verifică textura: trebuie să fie un aluat care se strânge în palmă și nu se sfărâmă. Dacă e nisipos, mai pune lapte câte 10 g. Dacă se lipește de degete, mai pune 10 g de ovăz.',
-        'Amestecă fulgii de ciocolată la final, când aluatul e călduț — dacă e fierbinte se topesc și îl fac maro.',
+        'Amestecă ciocolata neagră tocată mărunt la final, când aluatul e călduț — dacă e fierbinte se topesc și îl fac maro.',
         'Presează tot aluatul într-o tavă mică tapetată cu hârtie de copt, într-un strat de aproximativ 2 cm. Apasă tare cu dosul unei linguri: batoanele care se sfărâmă sunt batoane pe care nu le-ai presat destul.',
         'Frigider 2 ore, apoi taie 8 batoane. Se taie mult mai curat rece decât cald.'
       ],
       tips: [
         'Nu conțin niciun ingredient proaspăt: fără fructe, fără ouă, fără brânză. De asta țin. Un baton cu banană sau curmale înmuiate mucegăiește în 3-4 zile pentru că are apă liberă în el; ăsta nu are.',
-        'Zer, nu cazeină, aici. Cazeina absoarbe atât de multă apă încât batonul iese ca guma de mestecat. E singurul loc din fișier unde zerul e alegerea mai bună.',
+        'Izolatul de soia absoarbe mult lichid. Dacă la amestecat aluatul se sfărâmă, încă o lingură-două de lapte — trebuie să se lege ca o plastilină moale, nu să rămână nisip. Untul de arahide și ciocolata neagră acoperă complet gustul soiei.',
         'Sunt cea mai bună afacere pe leu din tot fișierul, pentru că pudra e diluată în ovăz și unt de arahide ieftine. Un baton comercial cu 16 g de proteină costă, estimativ, 10-14 lei în Sibiu.'
       ],
       swaps: [
         { label: 'Fără arahide', text: '120 g tahini. Iese mai amar și mai adult; pune 10 g de miere în plus.' },
-        { label: 'Mai ieftin', text: 'Scoate fulgii de ciocolată (sunt cel mai scump ingredient pe gram) și pune 15 g de cacao în aluat. Cobori cu ~20 kcal pe baton.' }
+        { label: 'Mai ieftin', text: 'Scoate ciocolata neagră și pune 15 g de cacao în aluat. Cobori cu ~25 kcal pe baton și pierzi bucățile, nu și gustul.' }
       ],
       warnings: [
-        'Conține arahide, lactate (zer, lapte) și ovăz.',
-        'Fulgii de ciocolată fără zahăr aduc aproximativ 2 g de polioli pe baton. Puțin la unul, dar dacă mănânci trei pe zi ajungi la 6 g doar de aici.',
-        'Are 7,5 g de miere pe baton, adică zahăr adevărat. Nu sunt batoane „fără zahăr".'
+        'Conține arahide, soia (izolat proteic), lactate (lapte) și ovăz.',
+        'Are 7,5 g de miere și ~0,7 g de zahăr din ciocolată pe baton — zahăr adevărat. Nu sunt batoane „fără zahăr".',
+        'Ciocolata neagră poate conține urme de lapte.'
       ],
 
       taste: {
@@ -954,7 +962,7 @@
         { id: 'v-fulgi-ovaz-mari', g: 240 },
         { id: 'v-migdale', g: 70 },
         { p: 'seminte-dovleac', g: 60 },
-        { id: 's-whey-isolate-ostrovit', g: 60 },
+        { id: 's-soy-protein-isolate', g: 60 },
         { id: 'd-praf-albus', g: 50 },
         { p: 'sirop-artar', g: 70 },
         { p: 'ulei-cocos', g: 28 },
@@ -972,7 +980,7 @@
       steps: [
         'Încinge cuptorul la 150°C. Nu mai mult — vezi primul sfat.',
         'Bate praful de albuș cu cei 80 ml de apă într-un bol mare, până se face o spumă subțire. Adaugă siropul de arțar, uleiul de cocos topit, scorțișoara și sarea.',
-        'Amestecă izolatul de zer DIRECT ÎN LICHID, nu peste fulgi. Trebuie să se dizolve complet în amestecul umed, ca să îmbrace fiecare fulg în loc să rămână praf pe fundul tăvii.',
+        'Amestecă izolatul de soia DIRECT ÎN LICHID, nu peste fulgi. Trebuie să se dizolve complet în amestecul umed, ca să îmbrace fiecare fulg în loc să rămână praf pe fundul tăvii.',
         'Toarnă peste ovăz, migdalele tăiate grosier, semințele de dovleac și fulgii de cocos. Amestecă până totul e umed, uniform.',
         'Întinde pe tavă și PRESEAZĂ cu spatula într-un strat compact de 1,5 cm. Bulgării se formează din presiune, nu din noroc.',
         'Coace 25 de minute. La minutul 15 rotește tava, dar NU amesteca — dacă amesteci, spargi bulgării și obții fulgi.',
@@ -980,17 +988,17 @@
         'Rupe placa în bulgări cu mâna și pune-o în borcan.'
       ],
       tips: [
-        '150°C, nu 180°C. Zerul se rumenește mult mai repede decât ovăzul și trece direct în amar. La 150°C ai 25 de minute de fereastră; la 180°C ai șapte, și îi ratezi.',
+        '150°C, nu 180°C. Pudra proteică se rumenește mult mai repede decât ovăzul și trece direct în amar. La 150°C ai 25 de minute de fereastră; la 180°C ai șapte, și îi ratezi.',
         'Praful de albuș e liantul, nu decorul. Albușul bătut e trucul standard din granola de patiserie: se coagulează în jurul fulgilor și îi lipește în bulgări. Aici face și proteină.',
         'REGULA CARE STRICĂ TOTUL: nu închide borcanul cât granola e cât de cât caldă. Un pic de abur închis în borcan condensează pe pereți, se întoarce în granola și în două zile ai fulgi moi în loc de bulgări. Complet rece înseamnă rece la atingere, nu „aproape".',
         'O porție e 55 g, adică două lingurițe mari — arată puțin într-un bol pentru că e densă. Cântărește-o o dată, ca să știi cum arată, apoi nu mai cântări niciodată.'
       ],
       swaps: [
         { label: 'Fără nuci', text: '70 g semințe de floarea-soarelui sau încă 60 g de semințe de dovleac în loc de migdale.' },
-        { label: 'Mai puțin dulce', text: '45 g sirop de arțar plus 15 g de eritritol. Bulgării ies mai fragili — siropul e și el liant, nu doar îndulcitor.' }
+        { label: 'Mai puțin dulce', text: '45 g sirop de arțar și 20 ml de apă în plus. Bulgării ies mai fragili — siropul e și liant, nu doar dulceață.' }
       ],
       warnings: [
-        'Conține migdale, lactate (izolat din zer), ou (praf de albuș) și ovăz.',
+        'Conține migdale, soia (izolat proteic), ou (praf de albuș) și ovăz.',
         'Are 7 g de sirop de arțar pe porție, adică ~4 g de zahăr adevărat. Mai puțin decât granola comercială, dar nu zero.'
       ],
 
@@ -1028,11 +1036,11 @@
       ing: [
         { id: 'v-fulgi-ovaz-mari', g: 130 },
         { p: 'chia', g: 40 },
-        { id: 's-casein-micellar-ostrovit', g: 90 },
+        { id: 's-soy-protein-isolate', g: 90 },
         { id: 'd-lapte-15', g: 700 },
         { id: 'd-iaurt-grecesc-olympus-0', g: 250 },
         { p: 'gem-fara-zahar', g: 100 },
-        { p: 'eritritol', g: 25 },
+        { p: 'miere', g: 15 },
         { p: 'vanilie', g: 5, free: true },
         { p: 'sare', g: 1, free: true }
       ],
@@ -1043,8 +1051,8 @@
       equipment: ['bol mare', '5 borcane cu capac', 'lingura'],
 
       steps: [
-        'Într-un bol mare, amestecă întâi cazeina cu laptele RECE, puțin câte puțin. Toarnă 150 ml, freacă până e pastă, apoi restul. Dacă torni tot laptele deodată peste 90 g de cazeină, faci cocoloașe pe care nu le mai desfaci.',
-        'Adaugă iaurtul, eritritolul, vanilia și sarea. Amestecă.',
+        'Într-un bol mare, amestecă întâi izolatul de soia cu laptele RECE, puțin câte puțin. Toarnă 150 ml, freacă până e pastă, apoi restul. Dacă torni tot laptele deodată peste 90 g de pudră, faci cocoloașe pe care nu le mai desfaci.',
+        'Adaugă iaurtul, mierea, vanilia și sarea. Amestecă până se topește mierea în lapte.',
         'Pune ovăzul și chia. Amestecă 30 de secunde — chia se așează la fund dacă nu insiști.',
         'Împarte în 5 borcane, aproximativ 270 g în fiecare. Nu le umple până sus: amestecul se umflă peste noapte.',
         'Pune 20 g de gem deasupra fiecăruia, fără să amesteci. Rămâne un strat separat și fiecare borcan arată a desert, nu a terci.',
@@ -1052,8 +1060,8 @@
       ],
       tips: [
         'Patru zile, nu șapte, și nu ne prefacem altfel. În ziua a cincea ovăzul devine mucilaginos și chia amară. Dacă vrei acoperire pe toată săptămâna, fă trei borcane duminica și trei miercurea — tot 15 minute de fiecare dată.',
-        'Cazeina e obligatorie aici, nu preferință. Zerul lăsat 8 ore în lapte se separă și dimineața găsești zeamă deasupra și un strat lipicios dedesubt. Cazeina leagă apa și se îngroașă exact ca o budincă.',
-        'La 319 kcal e cea mai calorică porție din fișier, dar e și singura de mărimea unui mic dejun întreg: 270 g și 29 g de proteină. Ca desert e prea mult; ca masă e corect.',
+        'Izolatul de soia leagă apa peste noapte și borcanul se îngroașă ca un terci-budincă. Nu e la fel de catifelat ca o budincă de lapte — dimineața amestecă-l o dată și, dacă e prea gros, o lingură de lapte.',
+        'La ~335 kcal e cea mai calorică porție din fișier, dar e și singura de mărimea unui mic dejun întreg: 270 g și 30 g de proteină. Ca desert e prea mult; ca masă e corect.',
         'Gemul deasupra, nu amestecat. E o chestiune de moral: un borcan cu un strat roșu deasupra se mănâncă, o pastă maro uniformă rămâne în frigider.'
       ],
       swaps: [
@@ -1061,8 +1069,8 @@
         { label: 'Cu ciocolată', text: '25 g de cacao în amestecul de bază și fără gem. Devin borcane de budincă de ciocolată.' }
       ],
       warnings: [
-        'Conține lactate (lapte, iaurt, cazeină) și ovăz.',
-        'Are 5 g de eritritol pe borcan, plus zahărul din fructele gemului.',
+        'Conține soia (izolat proteic), lactate (lapte, iaurt) și ovăz.',
+        'Are 3 g de miere pe borcan, plus ~5 g de zahăr din fructele gemului. Gemul „fără zahăr adăugat" tot zahăr are.',
         'Cele 8 g de chia pe borcan aduc mult balast. Dacă nu mănânci de obicei fibre, începe cu jumătate de borcan — altfel o simți.'
       ],
 
@@ -1079,7 +1087,7 @@
       },
       vsSource: 'Valori tipice de etichetă pentru desert lactat cu cereale la borcan, 250 g, 2026',
 
-      sweetener: { kind: 'eritritol', gPerServing: 5 },
+      sweetener: { kind: 'miere', gPerServing: 3 },
 
       storage: 'Frigider, 4 zile, cu capacul pus. Ziua a cincea nu mai e bună — ovăzul se face cleios. Nu se congelează: se separă la dezghețare.',
 
@@ -1100,12 +1108,12 @@
       ing: [
         { id: 'd-branza-vaci-covalact-05', g: 400 },
         { id: 'd-oua-gaina-l', g: 150 },
-        { id: 's-casein-micellar-ostrovit', g: 90 },
+        { id: 's-soy-protein-isolate', g: 90 },
         { p: 'cacao', g: 45 },
         { p: 'faina-ovaz', g: 80 },
         { p: 'unt-arahide', g: 50 },
-        { p: 'eritritol', g: 80 },
-        { p: 'fulgi-ciocolata', g: 45 },
+        { p: 'miere', g: 45 },
+        { p: 'ciocolata-neagra', g: 40 },
         { p: 'praf-copt', g: 6, free: true },
         { p: 'vanilie', g: 5, free: true },
         { p: 'sare', g: 1.5, free: true }
@@ -1119,26 +1127,27 @@
       steps: [
         'Cuptor la 165°C. Tapetează o tavă de 20x20 cm cu hârtie de copt, lăsând margini care ies afară — de ele o să tragi prăjitura din tavă.',
         'Pasează brânza de vaci cu blenderul vertical, 20 de secunde, până nu mai are niciun grunj. Nu sări peste pasul ăsta: grunjii de brânză rămân grunji și după coacere.',
-        'Adaugă ouăle, untul de arahide și vanilia. Blenduiește încă 15 secunde.',
-        'Într-un alt vas amestecă uscatele: cazeina, cacaoa, făina de ovăz, eritritolul, praful de copt și sarea. Apoi toarnă-le peste amestecul umed și amestecă CU LINGURA, nu cu blenderul — nu vrei să bați aer în el.',
-        'Amestecă fulgii de ciocolată. Toarnă în tavă și nivelează.',
+        'Adaugă ouăle, untul de arahide, mierea și vanilia. Blenduiește încă 15 secunde.',
+        'Într-un alt vas amestecă uscatele: izolatul de soia, cacaoa, făina de ovăz, praful de copt și sarea. Apoi toarnă-le peste amestecul umed și amestecă CU LINGURA, nu cu blenderul — nu vrei să bați aer în el.',
+        'Amestecă ciocolata neagră tocată. Toarnă în tavă și nivelează.',
         'Coace 28-32 de minute la 165°C. Scobitoarea trebuie să iasă cu firimituri umede lipite de ea, nu curată. Curată înseamnă că ai copt-o prea mult și mâine va fi uscată.',
         'Lasă în tavă până e complet rece — cel puțin o oră. Caldă se rupe la tăiere.',
         'Trage-o afară de hârtie și taie 9 pătrate. Se taie cel mai curat cu un cuțit lung, șters între tăieturi.'
       ],
       tips: [
         'Brânza de vaci slabă face aici munca pe care în rețeta clasică o fac untul și zahărul: dă volum, umezeală și structură, cu 81 kcal la 100 g în loc de 740. Din cele 400 g de brânză vine mai mult de o treime din proteina totală.',
-        '165°C și nu mai mult, plus scoaterea cu firimituri pe scobitoare. O prăjitură cu cazeină scoasă la momentul „perfect" e o prăjitură uscată a doua zi, pentru că se mai gătește 5 minute din căldura proprie a tăvii.',
-        'La ~11 g de polioli pe porție e cea mai încărcată din fișier. E sub pragul de 15 g la care apar de obicei probleme, dar dacă mănânci două pătrate la rând ai trecut de 20 g — asta e limita practică, nu foamea.',
-        'Cele 200 kcal pe porție de ~105 g o fac cea mai eficientă rețetă din fișier. Motivul e simplu și nu e magie: brânză slabă în loc de unt, eritritol în loc de zahăr.'
+        '165°C și nu mai mult, plus scoaterea cu firimituri pe scobitoare. O prăjitură cu pudră proteică scoasă la momentul „perfect" e o prăjitură uscată a doua zi, pentru că se mai gătește 5 minute din căldura proprie a tăvii.',
+        'Mierea se rumenește mai repede decât zahărul. Dacă după 20 de minute marginile s-au închis prea tare la culoare, acoperă tava cu folie până la final.',
+        'Sub 220 kcal pe porție de ~100 g. Motivul e simplu și nu e magie: brânză slabă în loc de unt, și 45 g de miere pe toată tava, unde rețeta de cofetărie pune 200 g de zahăr. E mai puțin dulce — cacao și ciocolata neagră duc restul.'
       ],
       swaps: [
         { label: 'Fără arahide', text: '50 g iaurt grecesc în loc de unt de arahide. Cobori cu ~28 kcal pe porție, dar iese mai puțin fragedă.' },
         { label: 'Fără ovăz', text: '60 g făină de migdale în loc de făină de ovăz. Textura e mai densă și mai umedă, aproape de brownie.' }
       ],
       warnings: [
-        'Conține lactate (brânză de vaci, cazeină), ou, arahide și ovăz.',
-        'Are aproximativ 11 g de polioli pe porție (80 g de eritritol plus poliolii din fulgii de ciocolată, împărțiți la 9). O porție e în regulă pentru majoritatea oamenilor; două la rând, mai puțin.'
+        'Conține soia (izolat proteic), lactate (brânză de vaci), ou, arahide și ovăz.',
+        'Are 5 g de miere și ~0,6 g de zahăr din ciocolată pe porție — zahăr adevărat, de vreo 5 ori mai puțin decât într-o felie de cofetărie.',
+        'Ciocolata neagră poate conține urme de lapte.'
       ],
 
       taste: {
@@ -1154,7 +1163,7 @@
       },
       vsSource: 'Valori tipice pentru felie de tort/prăjitură cu ciocolată din vitrina de cofetărie, 2026',
 
-      sweetener: { kind: 'eritritol', gPerServing: 8.9 },
+      sweetener: { kind: 'miere', gPerServing: 5 },
 
       storage: 'Cutie etanșă la frigider, 5 zile — brânza de vaci e limita, nu prăjitura. La congelator 2 luni, tăiată în pătrate, cu hârtie de copt între ele; se dezgheață în 20 de minute pe blat sau 25 de secunde la microunde.',
 
